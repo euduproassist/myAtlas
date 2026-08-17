@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlas College - Online Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            width: 100%;
+            overflow-x: hidden;
+            color: #111;
+            background-color: #fff;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: #0066ff;
+            color: white;
+            padding: 10px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .top-bar-left {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .top-bar-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .top-bar-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .btn-status {
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-login {
+            background-color: transparent;
+            border: 1px solid white;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn-login:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Navbar */
+        .navbar {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            height: 45px;
+        }
+
+        .logo-container img {
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #0066ff;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 40px 5% 80px 5%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(circle at top right, rgba(0,102,255,0.08), transparent 50%);
+        }
+
+        .hero-content h1 {
+            font-size: clamp(36px, 5vw, 56px);
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #111;
+        }
+
+        .hero-content h1 span {
+            color: #0066ff;
+        }
+
+        .hero-content p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+
+        .open-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            padding: 10px 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .open-status span.icon {
+            color: #10b981;
+            font-size: 18px;
+        }
+
+        .open-status span.dates {
+            color: #0066ff;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+            max-width: 450px;
+        }
+
+        .btn-primary-action {
+            background-color: #0066ff;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 6px 20px rgba(0,102,255,0.3);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .btn-primary-action:hover {
+            background-color: #0052cc;
+        }
+
+        .btn-secondary-action {
+            background-color: #fff;
+            color: #0066ff;
+            border: 2px solid #e0e7ff;
+            padding: 16px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.2s;
+        }
+
+        .btn-secondary-action:hover {
+            border-color: #0066ff;
+        }
+
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #4b5563;
+            font-weight: 500;
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-bg-shape {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #0066ff;
+            border-radius: 50% 20% 50% 30% / 30% 50% 20% 50%;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .hero-image-wrapper img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 16px;
+            object-fit: contain;
+        }
+
+        /* Features Grid */
+        .features-section {
+            padding: 40px 5% 80px 5%;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            background: #f8fafc;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .feature-icon {
+            font-size: 36px;
+            color: #0066ff;
+            margin-bottom: 20px;
+            display: inline-flex;
+            padding: 15px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #111;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 40px 5% 80px 5%;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 50px;
+            color: #111;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            position: relative;
+        }
+
+        .step-card {
+            background: white;
+            padding: 20px;
+            position: relative;
+            text-align: center;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            background: #0066ff;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .step-icon-img {
+            font-size: 32px;
+            color: #0066ff;
+        }
+
+        .step-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #111;
+        }
+
+        .step-card p {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Promo Banner */
+        .promo-banner-wrapper {
+            padding: 0 5% 80px 5%;
+        }
+
+        .promo-banner {
+            background: #f0f6ff;
+            border-radius: 20px;
+            padding: 40px 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            border: 1px solid #d1e2ff;
+        }
+
+        .promo-content h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #0066ff;
+            margin-bottom: 15px;
+        }
+
+        .promo-content p {
+            font-size: 16px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .promo-image-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .promo-img {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        /* Footer */
+        .footer {
+            background: white;
+            padding: 60px 5% 30px 5%;
+            border-top: 1px solid #eaeaea;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1.5fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #111;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-col ul li a {
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul li a:hover {
+            color: #0066ff;
+        }
+
+        .contact-info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            background: #f3f4f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .social-icon:hover {
+            background: #0066ff;
+            color: white;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 25px;
+            border-top: 1px solid #eaeaea;
+            font-size: 13px;
+            color: #666;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-bottom-links a {
+            text-decoration: none;
+            color: #666;
+        }
+
+        .footer-bottom-links a:hover {
+            color: #0066ff;
+        }
+
+        /* Responsive Breakpoints for Mobile/Tablet to Prevent Horizontal Scroll */
+        @media (max-width: 1024px) {
+            .features-grid, .steps-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero, .promo-banner, .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .promo-image-container {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .features-grid, .steps-container {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none; /* Can add a mobile hamburger menu toggle if needed */
+            }
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .promo-banner {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <a href="tel:+27183891234" class="top-bar-item">📞 +27 18 389 1234</a>
+            <a href="mailto:admissions@nwu.ac.za" class="top-bar-item">✉️ admissions@nwu.ac.za</a>
+        </div>
+        <div class="top-bar-right">
+            <a href="#" class="btn-status">Application Status</a>
+            <a href="#" class="btn-login">Log in</a>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="assets/logos.png" alt="Atlas College Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Programmes</a></li>
+            <li><a href="#">How to Apply</a></li>
+            <li><a href="#">Prospectus</a></li>
+            <li><a href="#">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Your future<br><span>Starts Here</span></h1>
+            <p>Apply to ATLAS College and take the next step towards your bright future. Our easy online application helps you apply, upload documents and track your application every step of the way.</p>
+            
+            <div class="open-status">
+                <span class="icon">✔</span> Applications are OPEN <span class="dates">See dates ▾</span>
+            </div>
+
+            <div class="hero-buttons">
+                <a href="#" class="btn-primary-action">
+                    <span>Start New Application</span>
+                    <span>➔</span>
+                </a>
+                <a href="#" class="btn-secondary-action">
+                    <span>Continue Application</span>
+                    <span>➔</span>
+                </a>
+            </div>
+
+            <div class="secure-badge">
+                <span>🔒</span> Safe. Secure. Encrypted.
+            </div>
+        </div>
+
+        <div class="hero-image-wrapper">
+            <div class="hero-bg-shape"></div>
+            <img src="assets/buildings.png" alt="Application Progress & Campus">
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>Simple Application</h3>
+                <p>Apply online in just a few easy steps. No paperwork, no hassle.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">☁️</div>
+                <h3>Secure Documents</h3>
+                <p>Upload your documents safely. We keep your information secure.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>Track Your Progress</h3>
+                <p>Check your application status anytime using your application number.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔔</div>
+                <h3>Stay Updated</h3>
+                <p>Receive important updates about your application via email and SMS.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-icon-img">👤</div>
+                </div>
+                <h3>Start Application</h3>
+                <p>Create your profile and choose the programme you want to apply for.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-icon-img">📄</div>
+                </div>
+                <h3>Complete Details</h3>
+                <p>Fill in your personal, academic and contact information.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-icon-img">☁️</div>
+                </div>
+                <h3>Upload Documents</h3>
+                <p>Upload the required supporting documents for your application.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-icon-img">✔</div>
+                </div>
+                <h3>Track Application</h3>
+                <p>Submit your application and track your progress online.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promo Banner Section -->
+    <div class="promo-banner-wrapper">
+        <div class="promo-banner">
+            <div class="promo-content">
+                <h2>Ready to Apply?</h2>
+                <p>Join thousands of students who have already taken the first step towards their future.</p>
+            </div>
+            <div class="promo-image-container">
+                <img src="assets/peoples.png" alt="Students with laptop" class="promo-img">
+                <a href="#" class="btn-primary-action" style="max-width: 250px;">
+                    <span>Start Your Application</span>
+                    <span>➔</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo-container" style="margin-bottom: 15px;">
+                    <img src="assets/logos.png" alt="Atlas College Logo">
+                </div>
+                <p style="font-size: 13px; color: #666; line-height: 1.6; max-width: 250px;">Empowering students through quality education and innovative learning.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Programmes</a></li>
+                    <li><a href="#">How to Apply</a></li>
+                    <li><a href="#">Prospectus</a></li>
+                    <li><a href="#">Fees & Funding</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <div class="contact-info-list">
+                    <div class="contact-info-item"><span>📞</span> +27 18 389 1234</div>
+                    <div class="contact-info-item"><span>✉️</span> admissions@atlascollege.ac.za</div>
+                    <div class="contact-info-item"><span>📍</span> Mafikeng Campus<br>Private Bag X2046, Mmabatho<br>2735, South Africa</div>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">in</a>
+                    <a href="#" class="social-icon">𝕏</a>
+                    <a href="#" class="social-icon">▶</a>
+                    <a href="#" class="social-icon">ig</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Atlas College. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms & Conditions</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
