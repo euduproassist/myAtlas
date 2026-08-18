@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>New Application | Atlas College</title>
+
+    <style>
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            width: 100%;
+            min-width: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            width: 100%;
+            min-width: 0;
+            overflow-x: hidden;
+
+            font-family:
+                Inter,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+
+            color: #071947;
+            background: #ffffff;
+
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================================================
+           VARIABLES
+        ========================================================= */
+
+        :root {
+            --blue: #0957e8;
+            --blue-dark: #062b73;
+            --blue-light: #ffffff;
+
+            --navy: #071947;
+            --text: #1d2c49;
+            --muted: #64728a;
+
+            --green: #159447;
+            --green-bg: #ffffff;
+
+            --orange: #c97700;
+            --orange-bg: #ffffff;
+
+            --red: #c93636;
+            --red-bg: #ffffff;
+
+            --border: #e2e8f0;
+            --background: #ffffff;
+            --white: #ffffff;
+
+            --shadow:
+                0 4px 20px rgba(7, 25, 71, 0.04);
+
+            --shadow-hover:
+                0 10px 25px rgba(7, 25, 71, 0.08);
+
+            --radius: 12px;
+        }
+
+        /* =========================================================
+           UTILITIES
+        ========================================================= */
+
+        .hidden {
+            display: none !important;
+        }
+
+        .page {
+            width: 100%;
+            min-width: 0;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+
+            padding-left: clamp(18px, 4vw, 40px);
+            padding-right: clamp(18px, 4vw, 40px);
+        }
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .header {
+            width: 100%;
+            height: 75px;
+
+            background: #ffffff;
+            border-bottom: 1px solid #eaeef4;
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            width: 100%;
+            max-width: 1300px;
+            height: 100%;
+
+            margin: 0 auto;
+
+            padding:
+                0
+                clamp(18px, 4vw, 40px);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+
+            min-width: 0;
+        }
+
+        .brand img {
+            width: 125px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .help-link {
+            color: #53627b;
+            font-size: 13px;
+            font-weight: 600;
+
+            transition:
+                color 0.2s ease;
+        }
+
+        .help-link:hover {
+            color: var(--blue);
+        }
+
+        .home-button {
+            height: 38px;
+            padding: 0 18px;
+
+            border: 1px solid #d7e0ed;
+            border-radius: 6px;
+
+            background: #ffffff;
+            color: var(--navy);
+
+            font-size: 13px;
+            font-weight: 700;
+
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .home-button:hover {
+            border-color: #b7c9e5;
+            background: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        /* =========================================================
+           PAGE TOP
+        ========================================================= */
+
+        .main {
+            width: 100%;
+            padding: 40px 0 80px;
+            background: #ffffff;
+        }
+
+        .page-heading {
+            margin-bottom: 30px;
+        }
+
+        .eyebrow {
+            margin: 0 0 7px;
+
+            color: var(--blue);
+
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+        }
+
+        .page-heading h1 {
+            margin: 0;
+
+            color: var(--navy);
+
+            font-size: clamp(26px, 3vw, 36px);
+            line-height: 1.15;
+            letter-spacing: -0.5px;
+        }
+
+        .page-heading p {
+            margin: 8px 0 0;
+
+            color: var(--muted);
+
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* =========================================================
+           CARDS & FORMS
+        ========================================================= */
+
+        .card {
+            width: 100%;
+            min-width: 0;
+
+            background: #ffffff;
+
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+
+            box-shadow: var(--shadow);
+
+            margin-bottom: 24px;
+
+            animation: fadeUp 0.55s ease both;
+        }
+
+        .card-header {
+            padding: 22px 24px;
+
+            border-bottom: 1px solid #eaeef4;
+        }
+
+        .card-title h2 {
+            margin: 0;
+
+            color: var(--navy);
+
+            font-size: 16px;
+            line-height: 1.25;
+            font-weight: 800;
+        }
+
+        .card-title p {
+            margin: 4px 0 0;
+
+            color: var(--muted);
+
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            color: var(--navy);
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 42px;
+            padding: 0 14px;
+
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+
+            color: var(--navy);
+            font-size: 13px;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        textarea.form-control {
+            height: auto;
+            padding: 12px 14px;
+            resize: vertical;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(9, 87, 232, 0.08);
+        }
+
+        .submit-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .submit-button {
+            height: 46px;
+            padding: 0 32px;
+
+            border: 0;
+            border-radius: 6px;
+
+            background: var(--blue);
+            color: #ffffff;
+
+            font-size: 14px;
+            font-weight: 800;
+
+            box-shadow: 0 4px 12px rgba(9, 87, 232, 0.15);
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .submit-button:hover {
+            background: #064dd2;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(9, 87, 232, 0.2);
+        }
+
+        /* =========================================================
+           MODAL & POST-SUBMISSION PROMPT
+        ========================================================= */
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            background: rgba(7, 25, 71, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 500px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transform: translateY(10px) scale(0.98);
+            transition: transform 0.25s ease;
+        }
+
+        .modal-backdrop.open .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-body {
+            padding: 30px 24px;
+            text-align: center;
+        }
+
+        .modal-icon {
+            width: 52px;
+            height: 52px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 1px solid #d1e2ff;
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .modal-body h2 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 18px;
+            font-weight: 850;
+        }
+
+        .modal-body p {
+            margin: 8px 0 24px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            width: 100%;
+            height: 42px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 800;
+            transition: all 0.2s ease;
+        }
+
+        .modal-btn.primary {
+            background: var(--blue);
+            color: #ffffff;
+            border: 0;
+            box-shadow: 0 4px 12px rgba(9, 87, 232, 0.15);
+        }
+
+        .modal-btn.primary:hover {
+            background: #064dd2;
+            transform: translateY(-1px);
+        }
+
+        .modal-btn.secondary {
+            background: #ffffff;
+            color: var(--navy);
+            border: 1px solid var(--border);
+        }
+
+        .modal-btn.secondary:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        .toast-container {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 500;
+            width: min(350px, calc(100vw - 40px));
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            padding: 12px 14px;
+            border-radius: 6px;
+            background: #071947;
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            font-size: 12px;
+            line-height: 1.4;
+            font-weight: 650;
+            transform: translateY(15px);
+            opacity: 0;
+            animation: toastIn 0.3s ease forwards;
+        }
+
+        .toast.success { background: #159447; }
+        .toast.error { background: #c93636; }
+
+        @keyframes toastIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .footer {
+            width: 100%;
+            padding: 24px 0;
+            background: #ffffff;
+            border-top: 1px solid #eaeef4;
+            color: var(--muted);
+        }
+
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .footer-copy, .footer-links {
+            font-size: 11px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links span {
+            cursor: pointer;
+        }
+
+        .footer-links span:hover {
+            color: var(--blue);
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full {
+                grid-column: span 1;
+            }
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="brand">
+                <img src="assets/logos.png" alt="Atlas College">
+            </div>
+            <div class="header-right">
+                <span class="help-link">Need help?</span>
+                <button class="home-button" type="button" id="homeButton">Atlas College</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="main">
+        <div class="container">
+
+            <div class="page-heading">
+                <p class="eyebrow">Online Application</p>
+                <h1>New Student Admission</h1>
+                <p>Complete all sections below to submit your application for admission to Atlas College.</p>
+            </div>
+
+            <form id="applicationForm">
+
+                <!-- CARD 1: PERSONAL DETAILS -->
+                <section class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h2>Personal Details</h2>
+                            <p>Provide your legal identity information.</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Full Name(s)</label>
+                                <input type="text" class="form-control" id="fullName" placeholder="e.g. Thabo" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Surname</label>
+                                <input type="text" class="form-control" id="surname" placeholder="e.g. Mokoena" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">ID or Passport Number</label>
+                                <input type="text" class="form-control" id="idNumber" placeholder="e.g. 0405125800088" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="dob" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" placeholder="e.g. thabo@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Mobile Number</label>
+                                <input type="tel" class="form-control" id="phone" placeholder="e.g. 082 123 4567" required>
+                            </div>
+                            <div class="form-group full">
+                                <label class="form-label">Residential Address</label>
+                                <textarea class="form-control" id="address" rows="2" placeholder="Street address, City, Postal Code" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CARD 2: COURSE & CAMPUS SELECTION -->
+                <section class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h2>Course &amp; Campus Selection</h2>
+                            <p>Select your preferred program, study location, and academic year.</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Programme of Study</label>
+                                <select class="form-control" id="programme" required>
+                                    <option value="">Select Programme</option>
+                                    <option value="Information Technology">Information Technology</option>
+                                    <option value="Business Management">Business Management</option>
+                                    <option value="Financial Accounting">Financial Accounting</option>
+                                    <option value="Graphic Design">Graphic Design</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Campus</label>
+                                <select class="form-control" id="campus" required>
+                                    <option value="">Select Campus</option>
+                                    <option value="Pretoria Main Campus">Pretoria Main Campus</option>
+                                    <option value="Johannesburg CBD Campus">Johannesburg CBD Campus</option>
+                                    <option value="Polokwane Campus">Polokwane Campus</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Academic Year / Intake</label>
+                                <select class="form-control" id="intake" required>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Study Mode</label>
+                                <select class="form-control" id="studyMode" required>
+                                    <option value="Full-time">Full-time</option>
+                                    <option value="Part-time">Part-time</option>
+                                    <option value="Distance Learning">Distance Learning</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CARD 3: ACADEMIC HISTORY -->
+                <section class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h2>Academic History</h2>
+                            <p>Enter your high school or previous tertiary education details.</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Highest Qualification Completed</label>
+                                <select class="form-control" id="qualification" required>
+                                    <option value="">Select Qualification</option>
+                                    <option value="Grade 12 (Matric)">Grade 12 (Matric)</option>
+                                    <option value="National Certificate (N3/N4/N5/N6)">National Certificate (N3 - N6)</option>
+                                    <option value="Higher Certificate">Higher Certificate</option>
+                                    <option value="Diploma / Degree">Diploma / Degree</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Name of School / Institution</label>
+                                <input type="text" class="form-control" id="schoolName" placeholder="e.g. Soshanguve High School" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Year Completed</label>
+                                <input type="number" class="form-control" id="yearCompleted" placeholder="e.g. 2025" min="1990" max="2026" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Final Grade / Achievement</label>
+                                <input type="text" class="form-control" id="achievement" placeholder="e.g. Bachelor Pass / Diploma Pass" required>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="submit-section">
+                    <button type="submit" class="submit-button">Submit Application</button>
+                </div>
+
+            </form>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-copy">© 2026 Atlas College. All rights reserved.</div>
+                <div class="footer-links">
+                    <span>Privacy Policy</span>
+                    <span>Terms &amp; Conditions</span>
+                    <span>Help</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SUBMISSION PROMPT MODAL -->
+    <div class="modal-backdrop" id="promptModal">
+        <div class="modal">
+            <div class="modal-body">
+                <div class="modal-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <h2>Application Submitted Successfully!</h2>
+                <p>Your application won't be considered until you upload all required documents and pay the application fee.</p>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn primary" id="payLaterBtn">Upload &amp; Pay Later</button>
+                    <button type="button" class="modal-btn secondary" id="payNowBtn">Upload &amp; Pay Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOASTS -->
+    <div class="toast-container" id="toastContainer"></div>
+
+</div>
+
+<script>
+    const STORAGE_KEY = "atlas_college_application_v1";
+
+    const form = document.getElementById("applicationForm");
+    const promptModal = document.getElementById("promptModal");
+    const toastContainer = document.getElementById("toastContainer");
+
+    form.addEventListener("submit", e => {
+        e.preventDefault();
+
+        const applicationData = {
+            reference: "ATL-2026-" + Math.floor(10000 + Math.random() * 90000),
+            applicant: document.getElementById("fullName").value + " " + document.getElementById("surname").value,
+            idNumber: document.getElementById("idNumber").value,
+            dob: document.getElementById("dob").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            address: document.getElementById("address").value,
+            programme: document.getElementById("programme").value,
+            campus: document.getElementById("campus").value,
+            intake: document.getElementById("intake").value,
+            studyMode: document.getElementById("studyMode").value,
+            qualification: document.getElementById("qualification").value,
+            schoolName: document.getElementById("schoolName").value,
+            yearCompleted: document.getElementById("yearCompleted").value,
+            achievement: document.getElementById("achievement").value,
+            submittedDate: new Date().toLocaleDateString("en-GB", { day: 'numeric', month: 'long', year: 'numeric' }),
+            documents: { id: null, matric: null, results: null, address: null },
+            payment: { paid: false, amount: 250, method: null, receipt: null, date: null },
+            decision: null
+        };
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(applicationData));
+        promptModal.classList.add("open");
+        document.body.style.overflow = "hidden";
+    });
+
+    document.getElementById("payLaterBtn").addEventListener("click", () => {
+        window.location.href = "status.html";
+    });
+
+    document.getElementById("payNowBtn").addEventListener("click", () => {
+        window.location.href = "status.html";
+    });
+
+    document.getElementById("homeButton").addEventListener("click", () => {
+        window.location.href = "index.html";
+    });
+
+    function showToast(message, type = "") {
+        const toast = document.createElement("div");
+        toast.className = "toast " + type;
+        toast.textContent = message;
+        toastContainer.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            toast.style.transform = "translateY(10px)";
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+</script>
+
+</body>
+</html>
