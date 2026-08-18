@@ -15,6 +15,7 @@
 
         body {
             width: 100%;
+            max-width: 100vw;
             overflow-x: hidden;
             color: #111;
             background-color: #fff;
@@ -148,12 +149,7 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 16px;
-            transition: background 0.2s;
             box-shadow: 0 4px 12px rgba(0, 86, 251, 0.2);
-        }
-
-        .btn-primary:hover {
-            background-color: #0040cc;
         }
 
         .btn-outline {
@@ -168,12 +164,6 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 16px;
-            transition: all 0.2s;
-        }
-
-        .btn-outline:hover {
-            border-color: #0056fb;
-            background-color: #f4f8ff;
         }
 
         .secure-text {
@@ -188,7 +178,7 @@
             color: #0056fb;
         }
 
-        /* Hero Right Card & Building Background Split */
+        /* Hero Right & Building Background Split */
         .hero-right-wrapper {
             position: absolute;
             right: 0;
@@ -209,22 +199,6 @@
             height: 100%;
             object-fit: cover;
             z-index: 1;
-        }
-
-        .application-progress-card {
-            position: relative;
-            z-index: 2;
-            width: 480px;
-            margin-right: 80px;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .application-progress-card img {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-            display: block;
         }
 
         /* Features Cards Section */
@@ -407,11 +381,6 @@
             align-items: center;
             gap: 10px;
             box-shadow: 0 4px 12px rgba(0, 86, 251, 0.2);
-            transition: background 0.2s;
-        }
-
-        .cta-button .btn-primary-large:hover {
-            background-color: #0040cc;
         }
 
         /* Footer */
@@ -452,11 +421,6 @@
             justify-content: center;
             text-decoration: none;
             font-size: 14px;
-            transition: background 0.2s;
-        }
-
-        .social-icons a:hover {
-            background-color: #eaeaea;
         }
 
         .footer-col h4 {
@@ -477,12 +441,6 @@
             color: #e0e8ff;
             text-decoration: none;
             font-size: 13px;
-            transition: color 0.2s;
-        }
-
-        .footer-col ul li a:hover {
-            color: #fff;
-            text-decoration: underline;
         }
 
         .contact-info-list {
@@ -497,10 +455,6 @@
             display: flex;
             gap: 10px;
             align-items: flex-start;
-        }
-
-        .contact-info-list i {
-            margin-top: 3px;
         }
 
         .footer-bottom {
@@ -522,45 +476,21 @@
             text-decoration: none;
         }
 
-        .footer-bottom-links a:hover {
-            text-decoration: underline;
-        }
-
-        /* Fully Responsive & Fluid Breakpoints to Prevent Horizontal Overflow */
-        @media (max-width: 1200px) {
-            .hero {
-                padding: 40px 30px;
-            }
-            .application-progress-card {
-                width: 400px;
-                margin-right: 40px;
-            }
-        }
-
+        /* Responsive Breakpoints */
         @media (max-width: 1024px) {
             .hero {
                 flex-direction: column;
                 padding: 40px 20px;
             }
-            .hero-left {
-                max-width: 100%;
-            }
             .hero-right-wrapper {
                 position: relative;
                 width: 100%;
-                height: 300px;
-                margin-top: 40px;
-                justify-content: center;
-                display: flex;
-                align-items: center;
-            }
-            .building-bg {
-                border-radius: 12px;
-            }
-            .application-progress-card {
-                margin-right: 0;
-                width: 90%;
-                max-width: 480px;
+                aspect-ratio: 1 / 1;
+                max-width: 400px;
+                margin: 30px auto 0 auto;
+                border-radius: 16px;
+                overflow: hidden;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             }
             .features-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -568,7 +498,6 @@
             .steps-container {
                 flex-direction: column;
                 gap: 30px;
-                max-width: 100%;
             }
             .steps-container::before {
                 display: none;
@@ -587,18 +516,14 @@
         }
 
         @media (max-width: 768px) {
-            header nav {
+            nav {
                 display: none;
             }
             .hero-left h1 {
                 font-size: 38px;
             }
-            .hero-right-wrapper {
-                height: 240px;
-            }
             .features-grid {
                 grid-template-columns: 1fr;
-                padding: 30px 20px;
             }
             .cta-banner {
                 flex-direction: column;
@@ -610,54 +535,13 @@
                 flex-direction: column;
                 gap: 15px;
             }
-            .cta-left img {
-                width: 100%;
-                max-width: 220px;
-                height: auto;
-            }
             .footer-top {
                 grid-template-columns: 1fr;
-                gap: 30px;
             }
             .footer-bottom {
                 flex-direction: column;
                 gap: 15px;
                 text-align: center;
-            }
-            .application-progress-card {
-                width: 95%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 12px 15px;
-            }
-            .logo-container img {
-                height: 35px;
-            }
-            .lang-nav {
-                font-size: 12px;
-                gap: 8px;
-            }
-            .hero {
-                padding: 30px 15px;
-            }
-            .hero-left h1 {
-                font-size: 32px;
-            }
-            .hero-left p {
-                font-size: 14px;
-            }
-            .hero-right-wrapper {
-                height: 200px;
-            }
-            .features-section, .how-it-works, .cta-banner-wrapper {
-                padding-left: 15px;
-                padding-right: 15px;
-            }
-            footer {
-                padding: 40px 15px 20px 15px;
             }
         }
     </style>
@@ -713,9 +597,6 @@
 
         <div class="hero-right-wrapper">
             <img src="assets/buildings.png" alt="ATLAS College Building" class="building-bg">
-            <div class="application-progress-card">
-                <img src="assets/buildings.png" alt="ATlass College Building Card">
-            </div>
         </div>
     </section>
 
