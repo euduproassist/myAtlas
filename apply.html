@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Application | Atlas College</title>
+    <style>
+        /* =========================================================
+           RESET & BASE STYLES
+        ========================================================= */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            width: 100%;
+            min-width: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            width: 100%;
+            min-width: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+
+            font-family:
+                Inter,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+
+            color: #071947;
+            background: #ffffff;
+
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================================================
+           VARIABLES
+        ========================================================= */
+        :root {
+            --blue: #0957e8;
+            --blue-dark: #062b73;
+            --navy: #071947;
+            --text: #1d2c49;
+            --muted: #64728a;
+            --border: #e2e8f0;
+            --white: #ffffff;
+            --red: #c93636;
+            --green: #159447;
+
+            --shadow: 0 4px 20px rgba(7, 25, 71, 0.04);
+            --shadow-hover: 0 10px 25px rgba(7, 25, 71, 0.08);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* =========================================================
+           UTILITIES
+        ========================================================= */
+        .hidden {
+            display: none !important;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding-left: clamp(18px, 4vw, 40px);
+            padding-right: clamp(18px, 4vw, 40px);
+        }
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+        .header {
+            width: 100%;
+            height: 75px;
+            background: #ffffff;
+            border-bottom: 1px solid #eaeef4;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            margin: 0 auto;
+            padding: 0 clamp(18px, 4vw, 40px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand img {
+            width: 125px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .help-link {
+            color: #53627b;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .help-link:hover {
+            color: var(--blue);
+        }
+
+        /* =========================================================
+           MAIN APPLICATION CONTAINER & STEPS
+        ========================================================= */
+        .main {
+            width: 100%;
+            padding: 40px 0;
+            flex: 1;
+        }
+
+        .page-title-box {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease both;
+        }
+
+        .eyebrow {
+            margin: 0 0 5px;
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .page-title-box h1 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 26px;
+            letter-spacing: -0.5px;
+        }
+
+        .page-title-box p {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* STEPPER INDICATORS */
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            max-width: 700px;
+            margin: 0 auto 35px;
+            position: relative;
+        }
+
+        .stepper::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 40px;
+            right: 40px;
+            height: 2px;
+            background: var(--border);
+            z-index: 1;
+        }
+
+        .step-item {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: transparent;
+            border: none;
+        }
+
+        .step-bubble {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid var(--border);
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .step-item.active .step-bubble {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #ffffff;
+            transform: scale(1.1);
+            box-shadow: 0 0 0 4px rgba(9, 87, 232, 0.12);
+        }
+
+        .step-item.completed .step-bubble {
+            background: var(--green);
+            border-color: var(--green);
+            color: #ffffff;
+        }
+
+        .step-label {
+            margin-top: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--muted);
+            transition: var(--transition);
+        }
+
+        .step-item.active .step-label {
+            color: var(--navy);
+        }
+
+        /* FORM CARDS */
+        .form-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 35px;
+            transition: var(--transition);
+            animation: fadeUp 0.4s ease both;
+        }
+
+        .form-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .section-heading {
+            margin: 0 0 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            color: var(--navy);
+            font-size: 17px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--navy);
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            height: 44px;
+            padding: 0 14px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: #ffffff;
+            color: var(--navy);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364728a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+        }
+
+        .form-textarea {
+            height: auto;
+            padding: 12px 14px;
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(9, 87, 232, 0.08);
+            transform: translateY(-1px);
+        }
+
+        /* BUTTONS */
+        .form-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            height: 44px;
+            padding: 0 24px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--blue);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(9, 87, 232, 0.15);
+        }
+
+        .btn-primary:hover {
+            background: #064dd2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(9, 87, 232, 0.25);
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            color: var(--navy);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--green);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(21, 148, 71, 0.15);
+        }
+
+        .btn-success:hover {
+            background: #117a3a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(21, 148, 71, 0.25);
+        }
+
+        /* SUCCESS / SUBMISSION MODAL / VIEW */
+        .success-card {
+            text-align: center;
+            padding: 40px 20px;
+            animation: scaleUp 0.4s ease both;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #f0fdf4;
+            color: var(--green);
+            border: 2px solid #bbf7d0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 20px;
+            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        .reference-badge {
+            display: inline-block;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--blue);
+            margin: 15px 0 25px;
+        }
+
+        .action-button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        /* TOAST NOTIFICATIONS */
+        .toast-container {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 500;
+            width: min(350px, calc(100vw - 40px));
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            padding: 12px 14px;
+            border-radius: 6px;
+            background: #071947;
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            font-size: 12px;
+            line-height: 1.4;
+            font-weight: 650;
+            transform: translateY(15px);
+            opacity: 0;
+            animation: toastIn 0.3s ease forwards;
+        }
+
+        .toast.success { background: var(--green); }
+        .toast.error { background: var(--red); }
+
+        @keyframes toastIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleUp {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .form-card {
+                padding: 20px;
+            }
+            .action-button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div style="display: flex; flex-direction: column; min-height: 100vh; width: 100%;">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="brand">
+                <img src="assets/logos.png" alt="Atlas College">
+            </div>
+            <div class="header-right">
+                <a href="login.html" class="help-link">Already applied? Track Status</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN APPLICATION WIZARD -->
+    <main class="main">
+        <div class="container">
+            
+            <div class="page-title-box" id="pageTitleBox">
+                <p class="eyebrow">Admissions Portal</p>
+                <h1>New Student Application</h1>
+                <p>Complete all required fields below to submit your study application for 2026.</p>
+            </div>
+
+            <!-- STEPPER INDICATOR -->
+            <div class="stepper" id="wizardStepper">
+                <div class="step-item active" data-step="1">
+                    <div class="step-bubble">1</div>
+                    <span class="step-label">Personal Details</span>
+                </div>
+                <div class="step-item" data-step="2">
+                    <div class="step-bubble">2</div>
+                    <span class="step-label">Course &amp; Campus</span>
+                </div>
+                <div class="step-item" data-step="3">
+                    <div class="step-bubble">3</div>
+                    <span class="step-label">Academic History</span>
+                </div>
+            </div>
+
+            <!-- FORM CONTAINER -->
+            <div class="form-card">
+                <form id="applicationForm">
+                    
+                    <!-- STEP 1: PERSONAL DETAILS -->
+                    <div class="form-step" id="step1">
+                        <h2 class="section-heading">Personal Information</h2>
+                        
+                        <div class="grid-3">
+                            <div class="form-group">
+                                <label class="form-label" for="firstName">First Name(s) *</label>
+                                <input type="text" id="firstName" class="form-input" placeholder="e.g. Thabo" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" class="form-input" placeholder="e.g. Molefe" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="idNumber">ID / Passport Number *</label>
+                                <input type="text" id="idNumber" class="form-input" placeholder="Identity document number" required>
+                            </div>
+                        </div>
+
+                        <div class="grid-3">
+                            <div class="form-group">
+                                <label class="form-label" for="dob">Date of Birth *</label>
+                                <input type="date" id="dob" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="gender">Gender *</label>
+                                <select id="gender" class="form-select" required>
+                                    <option value="">Select gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other / Prefer not to say</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="citizenship">Citizenship Status *</label>
+                                <select id="citizenship" class="form-select" required>
+                                    <option value="">Select citizenship</option>
+                                    <option value="South African">South African Citizen</option>
+                                    <option value="Permanent Resident">Permanent Resident</option>
+                                    <option value="International">International Student</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <h2 class="section-heading" style="margin-top: 30px;">Contact Information</h2>
+                        
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label" for="email">Email Address *</label>
+                                <input type="email" id="email" class="form-input" placeholder="e.g. thabom@gmail.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="phone">Mobile Phone Number *</label>
+                                <input type="tel" id="phone" class="form-input" placeholder="e.g. 072 123 4567" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="address">Physical Residential Address *</label>
+                            <textarea id="address" class="form-textarea" placeholder="Street address, suburb, city, postal code" required></textarea>
+                        </div>
+
+                        <div class="form-buttons" style="justify-content: flex-end;">
+                            <button type="button" class="btn btn-primary" onclick="nextStep(2)">
+                                Next: Course &amp; Campus →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: COURSE & CAMPUS -->
+                    <div class="form-step hidden" id="step2">
+                        <h2 class="section-heading">Course &amp; Academic Year Selection</h2>
+
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label" for="academicYear">Academic Year *</label>
+                                <select id="academicYear" class="form-select" required>
+                                    <option value="2026">2026 Academic Year</option>
+                                    <option value="2027">2027 Academic Year</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="campus">Preferred Campus *</label>
+                                <select id="campus" class="form-select" required>
+                                    <option value="">Select campus</option>
+                                    <option value="Pretoria Main Campus">Pretoria Main Campus</option>
+                                    <option value="Johannesburg City Campus">Johannesburg City Campus</option>
+                                    <option value="Polokwane Campus">Polokwane Campus</option>
+                                    <option value="Distance Learning / Online">Distance Learning / Online</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="qualification">Qualification / Course *</label>
+                            <select id="qualification" class="form-select" required>
+                                <option value="">Select study program</option>
+                                <option value="Higher Certificate in Information Technology">Higher Certificate in Information Technology</option>
+                                <option value="Diploma in Software Development">Diploma in Software Development</option>
+                                <option value="Bachelor of Business Administration">Bachelor of Business Administration</option>
+                                <option value="Higher Certificate in Accounting">Higher Certificate in Accounting</option>
+                                <option value="Diploma in Public Relations">Diploma in Public Relations</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="studyMode">Study Mode *</label>
+                            <select id="studyMode" class="form-select" required>
+                                <option value="">Select mode</option>
+                                <option value="Full-Time (Day Classes)">Full-Time (Day Classes)</option>
+                                <option value="Part-Time (Evening Classes)">Part-Time (Evening Classes)</option>
+                                <option value="Distance Learning">Distance Learning</option>
+                            </select>
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep(1)">
+                                ← Back
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="nextStep(3)">
+                                Next: Academic History →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: ACADEMIC HISTORY -->
+                    <div class="form-step hidden" id="step3">
+                        <h2 class="section-heading">High School / Prior Education History</h2>
+
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label" for="schoolName">Name of High School / Institution *</label>
+                                <input type="text" id="schoolName" class="form-input" placeholder="e.g. Soshanguve High School" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="matricYear">Year Completed / Matriculated *</label>
+                                <input type="number" id="matricYear" class="form-input" placeholder="e.g. 2025" min="1990" max="2026" required>
+                            </div>
+                        </div>
+
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label" for="highestGrade">Highest Grade / Qualification Passed *</label>
+                                <select id="highestGrade" class="form-select" required>
+                                    <option value="">Select qualification</option>
+                                    <option value="National Senior Certificate (Matric)">National Senior Certificate (Matric)</option>
+                                    <option value="Senior Certificate (Old Curriculum)">Senior Certificate (Old Curriculum)</option>
+                                    <option value="Certificate / Higher Certificate">Certificate / Higher Certificate</option>
+                                    <option value="Diploma / Degree">Diploma / Degree</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="overallAverage">Approximate Average / Performance (%)</label>
+                                <input type="text" id="overallAverage" class="form-input" placeholder="e.g. 65% or Bachelor Pass">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="previousStudies">Previous Tertiary Education (If applicable)</label>
+                            <textarea id="previousStudies" class="form-textarea" placeholder="List any prior college or university attendance, or type 'None'"></textarea>
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-secondary" onclick="prevStep(2)">
+                                ← Back
+                            </button>
+                            <button type="submit" class="btn btn-success" id="submitAppBtn">
+                                Submit Application ✓
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+
+                <!-- SUCCESS & STATUS INSTRUCTION VIEW (HIDDEN INITIALLY) -->
+                <div id="successView" class="hidden success-card">
+                    <div class="success-icon">✓</div>
+                    <h2 style="color: var(--navy); margin: 0 0 8px; font-size: 22px;">Application Successfully Submitted!</h2>
+                    <p style="color: var(--muted); font-size: 13px; max-width: 500px; margin: 0 auto 15px;">
+                        Your application has been registered in our local system. Please note that your application 
+                        <strong>will not be considered for admission</strong> until you upload all required supporting documents and pay the standard application fee.
+                    </p>
+                    
+                    <div class="reference-badge" id="generatedReferenceDisplay">ATL-2026-XXXX</div>
+
+                    <p style="color: var(--navy); font-weight: 700; font-size: 13px; margin-bottom: 10px;">Choose how you want to proceed:</p>
+
+                    <div class="action-button-group">
+                        <button type="button" class="btn btn-secondary" id="payLaterBtn">
+                            Upload &amp; Pay Later
+                        </button>
+                        <button type="button" class="btn btn-primary" id="payNowBtn">
+                            Upload &amp; Pay Now
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+</div>
+
+<script>
+    /* ============================================================
+       APPLICATION WIZARD & LOCAL STORAGE LOGIC
+    ============================================================ */
+
+    let currentStep = 1;
+    const STORAGE_KEY = "atlas_college_application_v1";
+
+    function updateStepper(step) {
+        currentStep = step;
+        document.querySelectorAll(".form-step").forEach((el, idx) => {
+            if (idx + 1 === step) {
+                el.classList.remove("hidden");
+                el.style.animation = "fadeUp 0.4s ease both";
+            } else {
+                el.classList.add("hidden");
+            }
+        });
+
+        document.querySelectorAll(".step-item").forEach((item, idx) => {
+            const stepNum = idx + 1;
+            item.classList.remove("active", "completed");
+            if (stepNum === step) {
+                item.classList.add("active");
+            } else if (stepNum < step) {
+                item.classList.add("completed");
+                item.querySelector(".step-bubble").innerHTML = "✓";
+            } else {
+                item.querySelector(".step-bubble").innerHTML = stepNum;
+            }
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function validateStep(step) {
+        const stepEl = document.getElementById("step" + step);
+        const inputs = stepEl.querySelectorAll("[required]");
+        let valid = true;
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                valid = false;
+                input.style.borderColor = "var(--red)";
+            } else {
+                input.style.borderColor = "var(--border)";
+            }
+        });
+        return valid;
+    }
+
+    function nextStep(targetStep) {
+        if (targetStep > currentStep) {
+            if (!validateStep(currentStep)) {
+                showToast("Please fill in all required fields before proceeding.", "error");
+                return;
+            }
+        }
+        updateStepper(targetStep);
+    }
+
+    function prevStep(targetStep) {
+        updateStepper(targetStep);
+    }
+
+    const applicationForm = document.getElementById("applicationForm");
+    applicationForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (!validateStep(3)) {
+            showToast("Please complete all required fields in the academic history.", "error");
+            return;
+        }
+
+        // Gather all data
+        const formData = {
+            firstName: document.getElementById("firstName").value.trim(),
+            lastName: document.getElementById("lastName").value.trim(),
+            idNumber: document.getElementById("idNumber").value.trim(),
+            dob: document.getElementById("dob").value,
+            gender: document.getElementById("gender").value,
+            citizenship: document.getElementById("citizenship").value,
+            email: document.getElementById("email").value.trim(),
+            phone: document.getElementById("phone").value.trim(),
+            address: document.getElementById("address").value.trim(),
+            academicYear: document.getElementById("academicYear").value,
+            campus: document.getElementById("campus").value,
+            qualification: document.getElementById("qualification").value,
+            studyMode: document.getElementById("studyMode").value,
+            schoolName: document.getElementById("schoolName").value.trim(),
+            matricYear: document.getElementById("matricYear").value,
+            highestGrade: document.getElementById("highestGrade").value,
+            overallAverage: document.getElementById("overallAverage").value.trim(),
+            previousStudies: document.getElementById("previousStudies").value.trim(),
+            referenceNumber: "ATL-2026-" + Math.floor(10000 + Math.random() * 90000),
+            pin: Math.floor(1000 + Math.random() * 9000).toString(),
+            status: "Pending Documents & Fee Payment",
+            createdAt: new Date().toISOString()
+        };
+
+        // Save to Local Storage
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+
+        // Switch view to Success State
+        applicationForm.classList.add("hidden");
+        document.getElementById("wizardStepper").classList.add("hidden");
+        document.getElementById("pageTitleBox").classList.add("hidden");
+        
+        const successView = document.getElementById("successView");
+        successView.classList.remove("hidden");
+        document.getElementById("generatedReferenceDisplay").textContent = formData.referenceNumber;
+
+        showToast("Application submitted successfully!", "success");
+    });
+
+    document.getElementById("payLaterBtn").addEventListener("click", () => {
+        showToast("Saved! You can log in anytime with your reference number and PIN to complete payment & uploads.", "success");
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 1500);
+    });
+
+    document.getElementById("payNowBtn").addEventListener("click", () => {
+        showToast("Redirecting to secure document upload & payment portal...", "success");
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 1500);
+    });
+
+    function showToast(message, type = "") {
+        const toastContainer = document.getElementById("toastContainer");
+        const toast = document.createElement("div");
+        toast.className = "toast " + type;
+        toast.textContent = message;
+        toastContainer.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            toast.style.transform = "translateY(10px)";
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+</script>
+
+</body>
+</html>
