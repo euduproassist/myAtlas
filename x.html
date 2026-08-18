@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Atlas College — Learn. Grow. Succeed.">
+<title>Atlas College | Learn. Grow. Succeed.</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{width:100%;max-width:100%;overflow-x:hidden;scroll-behavior:smooth;}
+body{width:100%;max-width:100%;min-height:100vh;overflow-x:hidden;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#10284d;background:#ffffff;line-height:1.55;-webkit-font-smoothing:antialiased;}
+img{display:block;max-width:100%;}
+button,input,select,textarea{font:inherit;}
+button{cursor:pointer;}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+:root{
+    --blue:#0867ee;
+    --blue-dark:#06489f;
+    --blue-deep:#032d68;
+    --navy:#062c63;
+    --text:#10284d;
+    --muted:#687992;
+    --white:#ffffff;
+    --soft:#f5f9ff;
+    --soft-blue:#edf6ff;
+    --border:#dce7f5;
+    --shadow:0 12px 35px rgba(7,54,115,.10);
+    --shadow-hover:0 20px 45px rgba(7,54,115,.16);
+    --radius:12px;
+}
+.site{width:100%;max-width:100%;overflow:hidden;}
+.section{width:100%;}
+.section-inner{width:100%;padding-left:clamp(18px,4vw,64px);padding-right:clamp(18px,4vw,64px);}
+.header{position:sticky;top:0;z-index:1000;width:100%;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(220,231,245,.8);transition:box-shadow .3s ease,transform .3s ease;}
+.header.scrolled{box-shadow:0 8px 30px rgba(5,45,100,.10);}
+.nav{width:100%;min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:8px clamp(18px,4vw,60px);}
+.logo{flex:0 0 auto;display:flex;align-items:center;}
+.logo img{width:clamp(110px,10vw,150px);height:auto;object-fit:contain;}
+.nav-links{display:flex;align-items:center;justify-content:center;gap:clamp(14px,2vw,34px);flex:1;}
+.nav-item{position:relative;display:flex;align-items:center;gap:5px;padding:10px 0;color:#122a4f;font-size:clamp(11px,.72vw,14px);font-weight:700;white-space:nowrap;transition:color .25s ease,transform .25s ease;}
+.nav-item:hover{color:var(--blue);transform:translateY(-1px);}
+.nav-arrow{font-size:9px;transition:transform .25s ease;}
+.nav-item:hover .nav-arrow{transform:rotate(180deg);}
+.nav-actions{display:flex;align-items:center;gap:10px;flex:0 0 auto;}
+.search-button{width:40px;height:40px;display:grid;place-items:center;background:none;border:0;color:#10284d;font-size:19px;}
+.primary-btn,.secondary-btn{border-radius:6px;min-height:42px;padding:0 clamp(16px,1.5vw,26px);display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:800;border:1px solid transparent;transition:transform .25s ease,box-shadow .25s ease,background .25s ease;}
+.primary-btn{color:#fff;background:var(--blue);box-shadow:0 8px 20px rgba(8,103,238,.18);}
+.primary-btn:hover{transform:translateY(-2px);box-shadow:0 12px 25px rgba(8,103,238,.28);background:#005be0;}
+.secondary-btn{color:var(--blue);background:#fff;border-color:#347ff0;}
+.secondary-btn:hover{transform:translateY(-2px);background:#f2f7ff;}
+.mobile-menu-btn{display:none;width:42px;height:42px;border:1px solid var(--border);background:#fff;border-radius:7px;font-size:22px;color:var(--navy);}
+.mobile-menu{display:none;width:100%;background:#fff;border-top:1px solid var(--border);padding:10px 18px 20px;}
+.mobile-menu.open{display:block;animation:menuOpen .25s ease;}
+@keyframes menuOpen{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+.mobile-link{display:flex;align-items:center;justify-content:space-between;padding:14px 4px;border-bottom:1px solid #edf2f8;font-size:14px;font-weight:700;}
+.hero{position:relative;width:100%;min-height:clamp(500px,52vw,720px);overflow:hidden;background:linear-gradient(90deg,#f4f9ff 0%,#eef6ff 43%,#dfeaf7 62%,#c9d7e5 100%);}
+.hero-grid{width:100%;min-height:inherit;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
+.hero-copy{position:relative;z-index:3;display:flex;flex-direction:column;justify-content:center;padding:clamp(45px,7vw,100px) clamp(24px,6vw,100px);}
+.hero-eyebrow{margin-bottom:12px;color:var(--blue);font-size:clamp(10px,.75vw,14px);font-weight:900;letter-spacing:.08em;}
+.hero-title{max-width:750px;color:#10284d;font-size:clamp(42px,5.2vw,82px);line-height:.98;letter-spacing:-.045em;font-weight:850;}
+.hero-title span{color:var(--blue);}
+.hero-description{max-width:570px;margin-top:24px;color:#536883;font-size:clamp(13px,1.05vw,18px);line-height:1.7;}
+.hero-buttons{display:flex;flex-wrap:wrap;gap:12px;margin-top:27px;}
+.hero-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2vw,28px);max-width:650px;margin-top:40px;}
+.hero-stat{min-width:0;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;}
+.stat-icon{width:24px;height:24px;display:grid;place-items:center;color:var(--blue);font-size:20px;}
+.stat-number{color:#10284d;font-size:clamp(16px,1.45vw,24px);font-weight:900;}
+.stat-label{color:#697a91;font-size:clamp(9px,.65vw,12px);line-height:1.35;}
+.hero-visual{position:relative;min-height:inherit;overflow:hidden;}
+.hero-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;transform:scale(1.05);transition:opacity 1s ease,transform 5s ease;}
+.hero-image.active{opacity:1;transform:scale(1);}
+.hero-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(244,249,255,.35),transparent 28%);pointer-events:none;}
+.hero-dots{position:absolute;bottom:25px;left:50%;transform:translateX(-50%);z-index:5;display:flex;gap:6px;}
+.hero-dot{width:7px;height:7px;border-radius:50%;border:0;background:#9ec6fa;transition:width .3s ease,background .3s ease;}
+.hero-dot.active{width:22px;border-radius:10px;background:var(--blue);}
+.search-wrap{position:relative;z-index:10;width:100%;margin-top:-38px;padding:0 clamp(18px,5vw,70px);}
+.program-search{width:100%;display:grid;grid-template-columns:1.05fr 1.1fr .75fr .75fr auto;align-items:end;gap:14px;padding:clamp(20px,2.5vw,30px);background:linear-gradient(110deg,#062d67,#073c85);border-radius:8px;box-shadow:0 18px 35px rgba(4,43,96,.20);}
+.search-heading{color:#fff;}
+.search-heading h2{font-size:clamp(16px,1.3vw,22px);line-height:1.2;}
+.search-heading p{margin-top:7px;color:#d3e2f8;font-size:clamp(10px,.7vw,12px);}
+.field{min-width:0;}
+.field label{display:block;margin-bottom:6px;color:#fff;font-size:clamp(9px,.65vw,11px);font-weight:800;}
+.input,.select{width:100%;min-width:0;height:43px;padding:0 12px;border:1px solid #dbe7f8;border-radius:5px;background:#fff;color:#18365f;outline:none;transition:box-shadow .2s ease,border-color .2s ease;}
+.input:focus,.select:focus{border-color:#70a8ff;box-shadow:0 0 0 3px rgba(71,139,244,.18);}
+.search-submit{height:43px;padding:0 24px;border:0;border-radius:5px;background:var(--blue);color:#fff;font-weight:800;font-size:12px;transition:transform .25s ease,background .25s ease;}
+.search-submit:hover{transform:translateY(-2px);background:#1680ff;}
+.quick-links{width:100%;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-bottom:1px solid #edf2f7;background:#fff;}
+.quick-link{min-width:0;display:flex;align-items:center;justify-content:center;gap:12px;padding:19px clamp(8px,2vw,28px);border-right:1px solid #edf2f7;transition:background .25s ease,transform .25s ease;}
+.quick-link:last-child{border-right:0;}
+.quick-link:hover{background:#f7fbff;transform:translateY(-2px);}
+.quick-icon{width:32px;height:32px;flex:0 0 32px;display:grid;place-items:center;border:1px solid #d9e9ff;border-radius:50%;color:var(--blue);font-size:15px;}
+.quick-title{color:#19355d;font-size:12px;font-weight:900;}
+.quick-subtitle{color:#72839a;font-size:10px;}
+.section-heading{text-align:center;padding:clamp(60px,6vw,90px) 18px 32px;}
+.section-kicker{color:var(--blue);font-size:clamp(9px,.7vw,12px);font-weight:900;letter-spacing:.08em;}
+.section-title{margin-top:8px;color:#10284d;font-size:clamp(25px,2.7vw,44px);line-height:1.1;letter-spacing:-.03em;}
+.why-section{width:100%;background:#fff;}
+.why-grid{width:100%;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding:0 clamp(18px,5vw,70px) clamp(55px,6vw,85px);}
+.feature-card{min-width:0;padding:clamp(20px,2vw,30px);background:#fff;border:1px solid #e2eaf4;border-radius:8px;box-shadow:0 3px 12px rgba(7,53,111,.035);transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease,border-color .35s ease;}
+.feature-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-hover);border-color:#b9d5fb;}
+.feature-icon{width:42px;height:42px;display:grid;place-items:center;margin-bottom:24px;color:var(--blue);border:1px solid #d8e8fc;border-radius:8px;font-size:20px;transition:transform .35s ease,background .35s ease;}
+.feature-card:hover .feature-icon{transform:rotate(-6deg) scale(1.08);background:#eef6ff;}
+.feature-card h3{color:#19355d;font-size:clamp(13px,1vw,16px);line-height:1.3;}
+.feature-card p{margin-top:12px;color:#718096;font-size:clamp(10px,.72vw,12px);line-height:1.65;}
+.center-button{display:flex;justify-content:center;padding-bottom:clamp(50px,5vw,80px);}
+.programs-section{width:100%;background:#fff;border-top:1px solid #f1f4f8;}
+.program-grid{width:100%;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;padding:0 clamp(18px,5vw,70px) 35px;}
+.program-card{min-width:0;overflow:hidden;background:#fff;border:1px solid #dfe8f3;border-radius:7px;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease;}
+.program-card:hover{transform:translateY(-8px);box-shadow:0 18px 35px rgba(8,53,112,.14);}
+.program-image-wrap{position:relative;width:100%;aspect-ratio:1.5 / 1;overflow:hidden;}
+.program-image{width:100%;height:100%;object-fit:cover;transition:transform .55s cubic-bezier(.2,.8,.2,1);}
+.program-card:hover .program-image{transform:scale(1.07);}
+.program-content{padding:clamp(14px,1.5vw,21px);}
+.program-content h3{color:#18365e;font-size:clamp(12px,1vw,15px);}
+.program-type{margin-top:3px;color:#8290a5;font-size:10px;}
+.program-description{margin-top:12px;min-height:48px;color:#687991;font-size:clamp(10px,.72vw,12px);line-height:1.55;}
+.program-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;color:var(--blue);font-size:11px;font-weight:900;transition:gap .25s ease;}
+.program-link:hover{gap:11px;}
+.admissions{width:100%;margin-top:10px;padding:clamp(55px,5vw,80px) clamp(18px,5vw,70px) clamp(60px,6vw,85px);background:linear-gradient(110deg,#073e87,#064fa6);color:#fff;}
+.admissions-heading{text-align:center;}
+.admissions-heading .section-kicker{color:#d8ebff;}
+.admissions-heading .section-title{color:#fff;}
+.steps{position:relative;width:100%;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:15px;margin-top:55px;}
+.steps::before{content:"";position:absolute;top:22px;left:10%;right:10%;height:1px;background:repeating-linear-gradient(to right,rgba(255,255,255,.55) 0 5px,transparent 5px 10px);}
+.step{position:relative;z-index:2;text-align:center;min-width:0;}
+.step-number{width:44px;height:44px;margin:0 auto 17px;display:grid;place-items:center;background:#fff;color:#0752a8;border-radius:50%;font-size:13px;font-weight:900;border:4px solid #0752a8;box-shadow:0 0 0 1px rgba(255,255,255,.5);}
+.step h3{font-size:clamp(11px,1vw,15px);line-height:1.3;}
+.step p{max-width:180px;margin:9px auto 0;color:#d3e4fb;font-size:clamp(9px,.7vw,11px);line-height:1.55;}
+.admissions-button{display:flex;justify-content:center;margin-top:35px;}
+.admissions-button .primary-btn{background:#fff;color:#0752a8;}
+.admissions-button .primary-btn:hover{background:#f1f7ff;}
+.stories{width:100%;background:#fff;padding:clamp(55px,6vw,85px) clamp(18px,5vw,70px);}
+.story-grid{width:100%;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.35fr) minmax(230px,.7fr);gap:20px;align-items:stretch;}
+.story-copy{min-width:0;display:flex;flex-direction:column;justify-content:center;}
+.story-kicker{color:var(--blue);font-size:10px;font-weight:900;letter-spacing:.08em;}
+.story-copy h2{margin-top:8px;color:#10284d;font-size:clamp(25px,2.8vw,43px);line-height:1.05;}
+.story-quote{margin-top:20px;color:#667991;font-size:clamp(11px,.85vw,14px);line-height:1.7;}
+.student{display:flex;align-items:center;gap:11px;margin-top:25px;}
+.student-avatar{width:44px;height:44px;object-fit:cover;border-radius:50%;}
+.student-name{color:#16345d;font-size:11px;font-weight:900;}
+.student-detail{color:#7b899c;font-size:9px;}
+.story-controls{display:flex;gap:8px;margin-top:18px;}
+.story-control{width:34px;height:34px;display:grid;place-items:center;border:1px solid #dce7f5;background:#fff;border-radius:50%;color:#2b5e9c;transition:background .25s ease,transform .25s ease;}
+.story-control:hover{background:#f0f6ff;transform:translateY(-2px);}
+.story-photo{position:relative;min-width:0;overflow:hidden;border-radius:7px;min-height:280px;}
+.story-photo img{width:100%;height:100%;min-height:280px;object-fit:cover;transition:transform .6s ease;}
+.story-photo:hover img{transform:scale(1.04);}
+.numbers{min-width:0;padding:clamp(20px,2vw,28px);border:1px solid #e2eaf4;border-radius:8px;box-shadow:0 5px 18px rgba(7,53,111,.06);}
+.numbers h3{color:var(--blue);font-size:10px;letter-spacing:.07em;}
+.number-row{display:grid;grid-template-columns:35px 1fr;align-items:center;gap:10px;padding:17px 0;border-bottom:1px solid #edf2f7;}
+.number-row:last-child{border-bottom:0;}
+.number-icon{color:var(--blue);font-size:20px;}
+.number-big{color:#122e57;font-size:clamp(17px,1.4vw,24px);font-weight:900;}
+.number-label{color:#718197;font-size:10px;}
+.newsletter{width:100%;padding:clamp(20px,2vw,30px) clamp(18px,5vw,70px);background:#f2f8ff;}
+.newsletter-box{width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,1fr);align-items:center;gap:30px;padding:clamp(20px,3vw,35px);border:1px solid #dfeafa;border-radius:8px;background:linear-gradient(105deg,#f7fbff,#eef6ff);}
+.newsletter-info{display:flex;align-items:center;gap:18px;min-width:0;}
+.newsletter-icon{width:58px;height:58px;flex:0 0 58px;display:grid;place-items:center;border:2px solid #3789f6;color:var(--blue);border-radius:7px;font-size:25px;}
+.newsletter-info h2{color:#16345d;font-size:clamp(19px,1.7vw,28px);}
+.newsletter-info p{margin-top:5px;color:#718197;font-size:clamp(10px,.75vw,12px);}
+.newsletter-form{display:flex;width:100%;}
+.newsletter-input{flex:1;min-width:0;height:48px;border:1px solid #d7e2ef;border-right:0;border-radius:5px 0 0 5px;padding:0 14px;background:#fff;outline:none;}
+.newsletter-submit{flex:0 0 auto;min-width:125px;border:0;border-radius:0 5px 5px 0;background:var(--blue);color:#fff;font-size:12px;font-weight:900;}
+.footer{width:100%;background:linear-gradient(115deg,#032b62,#041f48);color:#fff;padding:clamp(45px,5vw,70px) clamp(18px,5vw,70px) 20px;}
+.footer-grid{width:100%;display:grid;grid-template-columns:1.4fr repeat(4,minmax(0,1fr));gap:clamp(20px,4vw,60px);padding-bottom:35px;border-bottom:1px solid rgba(255,255,255,.13);}
+.footer-brand{min-width:0;}
+.footer-logo{width:145px;max-width:100%;margin-bottom:18px;filter:brightness(0) invert(1);}
+.footer-description{max-width:280px;color:#bfd1e9;font-size:11px;line-height:1.7;}
+.socials{display:flex;gap:9px;margin-top:18px;}
+.social{width:30px;height:30px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.3);border-radius:50%;color:#fff;font-size:11px;transition:background .25s ease,transform .25s ease;}
+.social:hover{background:var(--blue);transform:translateY(-3px);}
+.footer-column{min-width:0;}
+.footer-column h3{margin-bottom:14px;color:#fff;font-size:12px;}
+.footer-column a{display:block;padding:4px 0;color:#b9cbe2;font-size:10px;transition:color .25s ease,transform .25s ease;}
+.footer-column a:hover{color:#fff;transform:translateX(3px);}
+.contact-item{display:flex;align-items:flex-start;gap:9px;margin-bottom:11px;color:#b9cbe2;font-size:10px;}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;padding-top:17px;color:#aabed9;font-size:9px;}
+.footer-legal{display:flex;flex-wrap:wrap;gap:18px;}
+.reveal{opacity:0;transform:translateY(35px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.modal{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(2,24,55,.68);backdrop-filter:blur(6px);}
+.modal.open{display:flex;}
+.modal-card{position:relative;width:min(560px,100%);max-height:90vh;overflow:auto;padding:clamp(25px,4vw,40px);background:#fff;border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.25);animation:modalIn .3s ease;}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+.modal-close{position:absolute;top:15px;right:15px;width:35px;height:35px;border:0;border-radius:50%;background:#f0f5fb;color:#17365f;font-size:18px;}
+.modal-card h2{color:#10284d;font-size:clamp(23px,3vw,34px);}
+.modal-card > p{margin-top:7px;color:#718096;font-size:12px;}
+.apply-form{margin-top:24px;}
+.form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:13px;}
+.form-group{min-width:0;}
+.form-group.full{grid-column:1 / -1;}
+.form-group label{display:block;margin-bottom:6px;color:#17355e;font-size:11px;font-weight:800;}
+.form-control{width:100%;height:44px;border:1px solid #d7e2ef;border-radius:5px;padding:0 12px;outline:none;}
+.form-control:focus{border-color:#4a8ff4;box-shadow:0 0 0 3px rgba(74,143,244,.12);}
+.modal-submit{width:100%;margin-top:7px;}
+.toast{position:fixed;right:20px;bottom:20px;z-index:3000;max-width:min(380px,calc(100vw - 40px));padding:13px 17px;border-radius:7px;background:#092f68;color:#fff;box-shadow:0 15px 35px rgba(0,0,0,.2);font-size:12px;font-weight:700;opacity:0;pointer-events:none;transform:translateY(15px);transition:opacity .3s ease,transform .3s ease;}
+.toast.show{opacity:1;transform:translateY(0);}
+.back-top{position:fixed;right:20px;bottom:80px;z-index:900;width:42px;height:42px;display:grid;place-items:center;border:0;border-radius:50%;background:var(--blue);color:#fff;box-shadow:0 10px 25px rgba(8,103,238,.3);opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .25s ease,visibility .25s ease,transform .25s ease;}
+.back-top.visible{opacity:1;visibility:visible;transform:translateY(0);}
+.results-panel{display:none;position:absolute;left:0;right:0;top:100%;z-index:20;margin-top:8px;padding:20px;border-radius:8px;background:#fff;box-shadow:0 20px 50px rgba(5,45,100,.18);border:1px solid var(--border);}
+.search-wrap{position:relative;}
+.results-panel.show{display:block;animation:resultIn .25s ease;}
+@keyframes resultIn{from{opacity:0;transform:translateY(-5px);}to{opacity:1;transform:translateY(0);}}
+.result-title{color:#17365f;font-size:14px;font-weight:900;}
+.result-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:12px;}
+.result-item{padding:12px;border:1px solid #e3ebf5;border-radius:6px;color:#536983;font-size:11px;transition:background .2s ease,border-color .2s ease;}
+.result-item:hover{background:#f3f8ff;border-color:#b9d5fb;}
+.result-item strong{display:block;color:#17365f;margin-bottom:3px;}
+@media (min-width:1800px){
+    .nav{padding-left:5vw;padding-right:5vw;}
+    .hero-copy{padding-left:7vw;padding-right:5vw;}
+    .search-wrap,.program-grid,.why-grid,.stories,.newsletter,.footer{padding-left:5vw;padding-right:5vw;}
+    .hero-title{font-size:clamp(64px,4.5vw,100px);}
+    .hero-description{max-width:700px;}
+    .feature-card,.program-content{padding:30px;}
+}
+@media (max-width:1100px){
+    .nav-links{gap:15px;}
+    .nav-actions .secondary-btn{display:none;}
+    .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,.9fr);}
+    .program-search{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .search-heading{grid-column:1 / -1;}
+    .search-submit{width:100%;}
+    .quick-links{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .quick-link:nth-child(3){border-right:0;}
+    .why-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .program-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .steps{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:35px;}
+    .steps::before{display:none;}
+    .story-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
+    .numbers{grid-column:1 / -1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
+    .number-row{border-bottom:0;border-right:1px solid #edf2f7;padding:10px;}
+    .number-row:last-child{border-right:0;}
+    .footer-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .footer-brand{grid-column:1 / -1;}
+}
+@media (max-width:760px){
+    .header{position:sticky;}
+    .nav{min-height:62px;padding:7px 15px;}
+    .logo img{width:112px;}
+    .nav-links{display:none;}
+    .nav-actions{margin-left:auto;}
+    .nav-actions .search-button{display:none;}
+    .nav-actions .primary-btn{min-height:37px;padding:0 13px;font-size:11px;}
+    .mobile-menu-btn{display:block;}
+    .hero{min-height:auto;}
+    .hero-grid{display:flex;flex-direction:column;}
+    .hero-copy{order:1;padding:45px 20px 38px;}
+    .hero-title{font-size:clamp(40px,12vw,62px);}
+    .hero-description{margin-top:18px;}
+    .hero-buttons{margin-top:21px;}
+    .hero-stats{margin-top:30px;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;}
+    .hero-visual{order:2;min-height:min(82vw,500px);}
+    .search-wrap{margin-top:0;padding:15px;}
+    .program-search{grid-template-columns:1fr;padding:18px;}
+    .search-heading{grid-column:auto;}
+    .quick-links{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .quick-link{justify-content:flex-start;padding:15px 14px;border-bottom:1px solid #edf2f7;}
+    .quick-link:nth-child(odd){border-right:1px solid #edf2f7;}
+    .quick-link:nth-child(even){border-right:0;}
+    .quick-link:last-child{grid-column:1 / -1;}
+    .section-heading{padding-top:55px;}
+    .why-grid{grid-template-columns:1fr 1fr;padding:0 15px 50px;}
+    .feature-card{padding:18px;}
+    .program-grid{grid-template-columns:1fr 1fr;padding:0 15px 30px;}
+    .program-description{min-height:0;}
+    .admissions{padding:55px 15px 60px;}
+    .steps{grid-template-columns:1fr 1fr;margin-top:38px;}
+    .step:last-child{grid-column:1 / -1;}
+    .stories{padding:55px 15px;}
+    .story-grid{grid-template-columns:1fr;}
+    .story-photo{order:-1;min-height:240px;}
+    .story-photo img{min-height:240px;}
+    .numbers{grid-template-columns:1fr 1fr;}
+    .number-row{border-right:0;border-bottom:1px solid #edf2f7;}
+    .number-row:nth-child(odd){border-right:1px solid #edf2f7;}
+    .newsletter{padding:15px;}
+    .newsletter-box{grid-template-columns:1fr;gap:20px;}
+    .newsletter-form{width:100%;}
+    .footer{padding:45px 15px 20px;}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+    .footer-brand{grid-column:1 / -1;}
+    .footer-bottom{flex-direction:column;align-items:flex-start;}
+}
+@media (max-width:430px){
+    .hero-copy{padding:38px 17px 32px;}
+    .hero-title{font-size:42px;}
+    .hero-buttons{flex-direction:column;}
+    .hero-buttons a{width:100%;}
+    .hero-stats{gap:18px 10px;}
+    .quick-links{grid-template-columns:1fr;}
+    .quick-link,.quick-link:nth-child(odd),.quick-link:nth-child(even){grid-column:auto;border-right:0;}
+    .why-grid{grid-template-columns:1fr;}
+    .program-grid{grid-template-columns:1fr;}
+    .steps{grid-template-columns:1fr;}
+    .step:last-child{grid-column:auto;}
+    .numbers{grid-template-columns:1fr;}
+    .number-row,.number-row:nth-child(odd){border-right:0;}
+    .newsletter-form{flex-direction:column;gap:8px;}
+    .newsletter-input{border-right:1px solid #d7e2ef;border-radius:5px;}
+    .newsletter-submit{min-height:44px;border-radius:5px;}
+    .form-row{grid-template-columns:1fr;}
+    .form-group.full{grid-column:auto;}
+    .footer-grid{grid-template-columns:1fr;}
+    .footer-brand{grid-column:auto;}
+}
+@media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{scroll-behavior:auto !important;animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+}
+</style>
+</head>
+<body>
+<div class="site">
+
+<header class="header" id="header">
+    <nav class="nav">
+        <a href="#home" class="logo" aria-label="Atlas College home">
+            <img src="assets/logos.png" alt="Atlas College">
+        </a>
+        <div class="nav-links">
+            <a href="#home" class="nav-item">Home</a>
+            <a href="#programs" class="nav-item">Courses<span class="nav-arrow">⌄</span></a>
+            <a href="#admissions" class="nav-item">Admissions<span class="nav-arrow">⌄</span></a>
+            <a href="#student-life" class="nav-item">Student Life<span class="nav-arrow">⌄</span></a>
+            <a href="#about" class="nav-item">About Us<span class="nav-arrow">⌄</span></a>
+            <a href="#contact" class="nav-item">Contact</a>
+        </div>
+        <div class="nav-actions">
+            <button class="search-button" id="topSearch" aria-label="Search" title="Search">⌕</button>
+            <a href="#apply" class="primary-btn">Apply Now</a>
+            <button class="mobile-menu-btn" id="mobileMenuButton" aria-label="Open menu">☰</button>
+        </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#home" class="mobile-link">Home<span>›</span></a>
+        <a href="#programs" class="mobile-link">Courses<span>›</span></a>
+        <a href="#admissions" class="mobile-link">Admissions<span>›</span></a>
+        <a href="#student-life" class="mobile-link">Student Life<span>›</span></a>
+        <a href="#about" class="mobile-link">About Us<span>›</span></a>
+        <a href="#contact" class="mobile-link">Contact<span>›</span></a>
+    </div>
+</header>
+
+<main>
+
+<section class="hero section" id="home">
+    <div class="hero-grid">
+        <div class="hero-copy reveal">
+            <div class="hero-eyebrow">LEARN. GROW. SUCCEED.</div>
+            <h1 class="hero-title">Your Future.<br><span>Our Mission.</span></h1>
+            <p class="hero-description">Quality education. Practical skills. Real opportunities. Join thousands of students building brighter futures with Atlas College.</p>
+            <div class="hero-buttons">
+                <a href="#apply" class="primary-btn">Apply Now</a>
+                <a href="#programs" class="secondary-btn">Explore Courses</a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="stat-icon">♙</div>
+                    <div><div class="stat-number">20+</div><div class="stat-label">Programs</div></div>
+                </div>
+                <div class="hero-stat">
+                    <div class="stat-icon">♧</div>
+                    <div><div class="stat-number">98%</div><div class="stat-label">Graduate<br>Employability</div></div>
+                </div>
+                <div class="hero-stat">
+                    <div class="stat-icon">♙</div>
+                    <div><div class="stat-number">10+</div><div class="stat-label">Campuses</div></div>
+                </div>
+                <div class="hero-stat">
+                    <div class="stat-icon">♧</div>
+                    <div><div class="stat-number">15+</div><div class="stat-label">Years of<br>Excellence</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <img class="hero-image active" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1800&q=85" alt="Atlas College students">
+            <img class="hero-image" src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1800&q=85" alt="Students on campus">
+            <img class="hero-image" src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1800&q=85" alt="College campus">
+            <img class="hero-image" src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=85" alt="Students studying">
+            <div class="hero-dots">
+                <button class="hero-dot active"></button>
+                <button class="hero-dot"></button>
+                <button class="hero-dot"></button>
+                <button class="hero-dot"></button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="search-wrap">
+    <form class="program-search" id="programSearch">
+        <div class="search-heading">
+            <h2>Find Your Perfect Program</h2>
+            <p>Search from a wide range of accredited programs</p>
+        </div>
+        <div class="field">
+            <label for="programInput">Search Programs</label>
+            <input id="programInput" class="input" type="search" placeholder="e.g. Business, IT, Marketing..." autocomplete="off">
+        </div>
+        <div class="field">
+            <label for="levelInput">Study Level</label>
+            <select id="levelInput" class="select">
+                <option value="all">All Levels</option>
+                <option value="certificate">Certificate</option>
+                <option value="diploma">Diploma</option>
+                <option value="advanced">Advanced Diploma</option>
+            </select>
+        </div>
+        <div class="field">
+            <label for="categoryInput">Category</label>
+            <select id="categoryInput" class="select">
+                <option value="all">All Categories</option>
+                <option value="technology">IT & Computing</option>
+                <option value="business">Business</option>
+                <option value="marketing">Marketing</option>
+                <option value="finance">Accounting</option>
+                <option value="education">Education</option>
+            </select>
+        </div>
+        <button type="submit" class="search-submit">Find Programs</button>
+    </form>
+    <div class="results-panel" id="resultsPanel">
+        <div class="result-title" id="resultTitle">Available Programs</div>
+        <div class="result-list" id="resultList"></div>
+    </div>
+</div>
+
+<section class="quick-links">
+    <a href="#admissions" class="quick-link">
+        <div class="quick-icon">▣</div>
+        <div><div class="quick-title">How to Apply</div><div class="quick-subtitle">Step-by-step guide</div></div>
+    </a>
+    <a href="#funding" class="quick-link">
+        <div class="quick-icon">◇</div>
+        <div><div class="quick-title">Fees & Funding</div><div class="quick-subtitle">Payment options</div></div>
+    </a>
+    <a href="#dates" class="quick-link">
+        <div class="quick-icon">□</div>
+        <div><div class="quick-title">Important Dates</div><div class="quick-subtitle">Never miss a deadline</div></div>
+    </a>
+    <a href="#student-life" class="quick-link">
+        <div class="quick-icon">♧</div>
+        <div><div class="quick-title">Campus Life</div><div class="quick-subtitle">Events & activities</div></div>
+    </a>
+    <a href="#contact" class="quick-link">
+        <div class="quick-icon">◯</div>
+        <div><div class="quick-title">Talk to Us</div><div class="quick-subtitle">We're here to help</div></div>
+    </a>
+</section>
+
+<section class="why-section section" id="about">
+    <div class="section-heading reveal">
+        <div class="section-kicker">WHY CHOOSE ATLAS COLLEGE?</div>
+        <h2 class="section-title">Education That Works<br>For Your Future</h2>
+    </div>
+    <div class="why-grid">
+        <article class="feature-card reveal">
+            <div class="feature-icon">◉</div>
+            <h3>Industry-Focused Programs</h3>
+            <p>Curriculum designed with employers to give you real-world skills.</p>
+        </article>
+        <article class="feature-card reveal">
+            <div class="feature-icon">◇</div>
+            <h3>Practical Learning</h3>
+            <p>Hands-on training, modern facilities, and experienced lecturers.</p>
+        </article>
+        <article class="feature-card reveal">
+            <div class="feature-icon">♧</div>
+            <h3>Career Support</h3>
+            <p>From CV prep to job placement — we're here to support your success.</p>
+        </article>
+        <article class="feature-card reveal" id="funding">
+            <div class="feature-icon">♢</div>
+            <h3>Affordable Education</h3>
+            <p>Quality education with flexible payment and funding options.</p>
+        </article>
+        <article class="feature-card reveal">
+            <div class="feature-icon">♡</div>
+            <h3>Diverse Community</h3>
+            <p>A welcoming environment where everyone belongs and grows.</p>
+        </article>
+    </div>
+    <div class="center-button">
+        <a href="#contact" class="secondary-btn">Learn More About Us</a>
+    </div>
+</section>
+
+<section class="programs-section section" id="programs">
+    <div class="section-heading reveal">
+        <div class="section-kicker">POPULAR PROGRAMS</div>
+        <h2 class="section-title">Explore Our Most In-Demand Courses</h2>
+    </div>
+    <div class="program-grid">
+        <article class="program-card reveal" data-category="technology" data-level="diploma" data-name="Information Technology">
+            <div class="program-image-wrap">
+                <img class="program-image" src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=900&q=80" alt="Information Technology" loading="lazy">
+            </div>
+            <div class="program-content">
+                <h3>Information Technology</h3>
+                <div class="program-type">Diploma</div>
+                <p class="program-description">Build the future with in-demand IT skills.</p>
+                <a href="#apply" class="program-link">Learn More →</a>
+            </div>
+        </article>
+        <article class="program-card reveal" data-category="business" data-level="diploma" data-name="Business Management">
+            <div class="program-image-wrap">
+                <img class="program-image" src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80" alt="Business Management" loading="lazy">
+            </div>
+            <div class="program-content">
+                <h3>Business Management</h3>
+                <div class="program-type">Diploma</div>
+                <p class="program-description">Lead, innovate, and make an impact in any industry.</p>
+                <a href="#apply" class="program-link">Learn More →</a>
+            </div>
+        </article>
+        <article class="program-card reveal" data-category="marketing" data-level="diploma" data-name="Marketing Management">
+            <div class="program-image-wrap">
+                <img class="program-image" src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=80" alt="Marketing Management" loading="lazy">
+            </div>
+            <div class="program-content">
+                <h3>Marketing Management</h3>
+                <div class="program-type">Diploma</div>
+                <p class="program-description">Learn to connect brands with people.</p>
+                <a href="#apply" class="program-link">Learn More →</a>
+            </div>
+        </article>
+        <article class="program-card reveal" data-category="finance" data-level="diploma" data-name="Accounting">
+            <div class="program-image-wrap">
+                <img class="program-image" src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=900&q=80" alt="Accounting" loading="lazy">
+            </div>
+            <div class="program-content">
+                <h3>Accounting</h3>
+                <div class="program-type">Diploma</div>
+                <p class="program-description">Master the numbers. Build your future.</p>
+                <a href="#apply" class="program-link">Learn More →</a>
+            </div>
+        </article>
+        <article class="program-card reveal" data-category="education" data-level="certificate" data-name="Education Support">
+            <div class="program-image-wrap">
+                <img class="program-image" src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80" alt="Education Support" loading="lazy">
+            </div>
+            <div class="program-content">
+                <h3>Education Support</h3>
+                <div class="program-type">Certificate</div>
+                <p class="program-description">Make a difference in education and communities.</p>
+                <a href="#apply" class="program-link">Learn More →</a>
+            </div>
+        </article>
+    </div>
+    <div class="center-button">
+        <button class="secondary-btn" id="viewPrograms">View All Programs</button>
+    </div>
+</section>
+
+<section class="admissions section" id="admissions">
+    <div class="admissions-heading reveal">
+        <div class="section-kicker">ADMISSIONS</div>
+        <h2 class="section-title">Simple Steps to Join Atlas College</h2>
+    </div>
+    <div class="steps">
+        <div class="step reveal">
+            <div class="step-number">1</div>
+            <h3>Choose Your Program</h3>
+            <p>Explore and select the program that's right for you.</p>
+        </div>
+        <div class="step reveal">
+            <div class="step-number">2</div>
+            <h3>Apply Online</h3>
+            <p>Fill in your application form in minutes.</p>
+        </div>
+        <div class="step reveal">
+            <div class="step-number">3</div>
+            <h3>Submit Documents</h3>
+            <p>Upload the required documents.</p>
+        </div>
+        <div class="step reveal">
+            <div class="step-number">4</div>
+            <h3>Get Accepted</h3>
+            <p>Receive your offer and confirmation.</p>
+        </div>
+        <div class="step reveal">
+            <div class="step-number">5</div>
+            <h3>Start Your Journey</h3>
+            <p>Enrol and begin your future with us.</p>
+        </div>
+    </div>
+    <div class="admissions-button">
+        <a href="#apply" class="primary-btn">Apply Now</a>
+    </div>
+</section>
+
+<section class="stories section" id="student-life">
+    <div class="story-grid">
+        <div class="story-copy reveal">
+            <div class="story-kicker">STUDENT SUCCESS STORIES</div>
+            <h2>Real Students.<br>Real Success.</h2>
+            <p class="story-quote" id="storyQuote">"Atlas College gave me the skills and confidence to build a career I love. The support from lecturers and staff is amazing!"</p>
+            <div class="student">
+                <img class="student-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80" alt="Student">
+                <div>
+                    <div class="student-name" id="studentName">Thabo M.</div>
+                    <div class="student-detail">Marketing Graduate</div>
+                    <div class="student-detail">Class of 2023</div>
+                </div>
+            </div>
+            <div class="story-controls">
+                <button class="story-control" id="previousStory" aria-label="Previous story">←</button>
+                <button class="story-control" id="nextStory" aria-label="Next story">→</button>
+            </div>
+        </div>
+        <div class="story-photo reveal">
+            <img id="storyImage" src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1400&q=85" alt="Atlas College students">
+        </div>
+        <aside class="numbers reveal">
+            <h3>ATLAS BY THE NUMBERS</h3>
+            <div class="number-row">
+                <div class="number-icon">♧</div>
+                <div>
+                    <div class="number-big">5,000+</div>
+                    <div class="number-label">Active Students</div>
+                </div>
+            </div>
+            <div class="number-row">
+                <div class="number-icon">▣</div>
+                <div>
+                    <div class="number-big">30+</div>
+                    <div class="number-label">Accredited Programs</div>
+                </div>
+            </div>
+            <div class="number-row">
+                <div class="number-icon">◇</div>
+                <div>
+                    <div class="number-big">100+</div>
+                    <div class="number-label">Industry Partnerships</div>
+                </div>
+            </div>
+            <div class="number-row">
+                <div class="number-icon">♢</div>
+                <div>
+                    <div class="number-big">98%</div>
+                    <div class="number-label">Graduate Employability</div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<section class="section" id="dates" style="background:#fff;padding:0 clamp(18px,5vw,70px) 55px;">
+    <div class="reveal" style="width:100%;padding:clamp(25px,3vw,40px);border:1px solid #e2eaf4;border-radius:8px;background:#f8fbff;">
+        <div style="color:#0867ee;font-size:10px;font-weight:900;letter-spacing:.08em;">IMPORTANT DATES</div>
+        <h2 style="margin-top:7px;color:#10284d;font-size:clamp(22px,2.3vw,34px);">Plan Your Application</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:22px;">
+            <div style="padding:18px;background:#fff;border:1px solid #e1eaf4;border-radius:7px;">
+                <strong style="display:block;color:#17365f;font-size:13px;">Applications Open</strong>
+                <span style="display:block;margin-top:5px;color:#73839a;font-size:11px;">Applications are currently open.</span>
+            </div>
+            <div style="padding:18px;background:#fff;border:1px solid #e1eaf4;border-radius:7px;">
+                <strong style="display:block;color:#17365f;font-size:13px;">Document Submission</strong>
+                <span style="display:block;margin-top:5px;color:#73839a;font-size:11px;">Submit all required documents.</span>
+            </div>
+            <div style="padding:18px;background:#fff;border:1px solid #e1eaf4;border-radius:7px;">
+                <strong style="display:block;color:#17365f;font-size:13px;">Registration</strong>
+                <span style="display:block;margin-top:5px;color:#73839a;font-size:11px;">Accepted students can begin enrolment.</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="newsletter">
+    <div class="newsletter-box reveal">
+        <div class="newsletter-info">
+            <div class="newsletter-icon">✉</div>
+            <div>
+                <h2>Stay Connected</h2>
+                <p>Get the latest updates on programs, events and important news straight to your inbox.</p>
+            </div>
+        </div>
+        <form class="newsletter-form" id="newsletterForm">
+            <input type="email" class="newsletter-input" id="newsletterEmail" placeholder="Enter your email" required>
+            <button class="newsletter-submit" type="submit">Subscribe</button>
+        </form>
+    </div>
+</section>
+
+</main>
+
+<footer class="footer" id="contact">
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <img src="assets/logos.png" alt="Atlas College" class="footer-logo">
+            <p class="footer-description">Empowering today's students for tomorrow's success. Your future starts here.</p>
+            <div class="socials">
+                <a href="#" class="social" aria-label="Facebook">f</a>
+                <a href="#" class="social" aria-label="Instagram">◎</a>
+                <a href="#" class="social" aria-label="LinkedIn">in</a>
+                <a href="#" class="social" aria-label="TikTok">♪</a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3>Programs</h3>
+            <a href="#programs">Business</a>
+            <a href="#programs">IT & Computing</a>
+            <a href="#programs">Management</a>
+            <a href="#programs">Marketing</a>
+            <a href="#programs">View All Programs</a>
+        </div>
+        <div class="footer-column">
+            <h3>Admissions</h3>
+            <a href="#admissions">How to Apply</a>
+            <a href="#dates">Entry Requirements</a>
+            <a href="#funding">Fees & Funding</a>
+            <a href="#dates">Important Dates</a>
+        </div>
+        <div class="footer-column">
+            <h3>Student Life</h3>
+            <a href="#student-life">Campus Life</a>
+            <a href="#student-life">Student Support</a>
+            <a href="#student-life">Events</a>
+            <a href="#student-life">Blog</a>
+        </div>
+        <div class="footer-column">
+            <h3>About Us</h3>
+            <a href="#about">Our Story</a>
+            <a href="#about">Accreditations</a>
+            <a href="#about">Careers</a>
+            <a href="#contact">Contact Us</a>
+        </div>
+        <div class="footer-column">
+            <h3>Contact Us</h3>
+            <div class="contact-item">
+                <span>⌕</span>
+                <span>0861 000 123</span>
+            </div>
+            <div class="contact-item">
+                <span>✉</span>
+                <span>info@atlascollege.edu.za</span>
+            </div>
+            <div class="contact-item">
+                <span>⌖</span>
+                <span>Find a Campus Near You</span>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div>© 2025 Atlas College. All rights reserved.</div>
+        <div class="footer-legal">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">PAIA</a>
+            <a href="#">Sitemap</a>
+        </div>
+    </div>
+</footer>
+
+<div class="modal" id="applyModal" aria-hidden="true">
+    <div class="modal-card">
+        <button class="modal-close" id="closeModal" aria-label="Close">×</button>
+        <h2>Start Your Atlas Journey</h2>
+        <p>Take the first step toward your future.</p>
+        <form class="apply-form" id="applyForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input class="form-control" id="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input class="form-control" id="lastName" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input class="form-control" id="email" type="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input class="form-control" id="phone" type="tel" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group full">
+                    <label for="course">Preferred Program</label>
+                    <select class="form-control" id="course" required>
+                        <option value="">Select a program</option>
+                        <option>Information Technology</option>
+                        <option>Business Management</option>
+                        <option>Marketing Management</option>
+                        <option>Accounting</option>
+                        <option>Education Support</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="primary-btn modal-submit">Continue Application</button>
+        </form>
+    </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<button class="back-top" id="backTop" aria-label="Back to top">↑</button>
+
+<script>
+const header = document.getElementById("header");
+const backTop = document.getElementById("backTop");
+
+function updateScrollState(){
+    const scrolled = window.scrollY > 20;
+    header.classList.toggle("scrolled", scrolled);
+    backTop.classList.toggle("visible", window.scrollY > 500);
+}
+
+window.addEventListener("scroll", updateScrollState, { passive:true });
+updateScrollState();
+
+backTop.addEventListener("click", () => {
+    window.scrollTo({ top:0, behavior:"smooth" });
+});
+
+const mobileMenuButton = document.getElementById("mobileMenuButton");
+const mobileMenu = document.getElementById("mobileMenu");
+
+mobileMenuButton.addEventListener("click", () => {
+    mobileMenu.classList.toggle("open");
+});
+
+document.querySelectorAll(".mobile-link").forEach(link => {
+    link.addEventListener("click", () => {
+        mobileMenu.classList.remove("open");
+    });
+});
+
+const heroImages = Array.from(document.querySelectorAll(".hero-image"));
+const heroDots = Array.from(document.querySelectorAll(".hero-dot"));
+let heroIndex = 0;
+
+function showHero(index){
+    heroImages.forEach((image,i) => {
+        image.classList.toggle("active", i === index);
+    });
+    heroDots.forEach((dot,i) => {
+        dot.classList.toggle("active", i === index);
+    });
+}
+
+function nextHero(){
+    heroIndex = (heroIndex + 1) % heroImages.length;
+    showHero(heroIndex);
+}
+
+let heroTimer = setInterval(nextHero, 5000);
+
+heroDots.forEach((dot,index) => {
+    dot.addEventListener("click", () => {
+        heroIndex = index;
+        showHero(heroIndex);
+        clearInterval(heroTimer);
+        heroTimer = setInterval(nextHero, 5000);
+    });
+});
+
+const revealElements = document.querySelectorAll(".reveal");
+const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting){
+            entry.target.classList.add("visible");
+            revealObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold:.12 });
+
+revealElements.forEach(element => {
+    revealObserver.observe(element);
+});
+
+const programSearch = document.getElementById("programSearch");
+const programInput = document.getElementById("programInput");
+const levelInput = document.getElementById("levelInput");
+const categoryInput = document.getElementById("categoryInput");
+const resultsPanel = document.getElementById("resultsPanel");
+const resultList = document.getElementById("resultList");
+const resultTitle = document.getElementById("resultTitle");
+const programCards = Array.from(document.querySelectorAll(".program-card"));
+
+function searchPrograms(){
+    const query = programInput.value.trim().toLowerCase();
+    const level = levelInput.value;
+    const category = categoryInput.value;
+
+    const matches = programCards.filter(card => {
+        const name = card.dataset.name.toLowerCase();
+        const cardCategory = card.dataset.category;
+        const cardLevel = card.dataset.level;
+
+        const matchesName = !query || name.includes(query);
+        const matchesLevel = level === "all" || cardLevel === level;
+        const matchesCategory = category === "all" || cardCategory === category;
+
+        return matchesName && matchesLevel && matchesCategory;
+    });
+
+    resultList.innerHTML = "";
+
+    if(matches.length === 0){
+        resultTitle.textContent = "No programs found";
+        resultList.innerHTML = `<div class="result-item">Try changing your search or filters.</div>`;
+    }else{
+        resultTitle.textContent = `${matches.length} program${matches.length === 1 ? "" : "s"} found`;
+        matches.forEach(card => {
+            const item = document.createElement("div");
+            item.className = "result-item";
+            item.innerHTML = `<strong>${card.dataset.name}</strong>${card.dataset.level === "diploma" ? "Diploma" : "Certificate"}`;
+            item.addEventListener("click", () => {
+                card.scrollIntoView({ behavior:"smooth", block:"center" });
+                resultsPanel.classList.remove("show");
+            });
+            resultList.appendChild(item);
+        });
+    }
+    resultsPanel.classList.add("show");
+}
+
+programSearch.addEventListener("submit", event => {
+    event.preventDefault();
+    searchPrograms();
+});
+
+[programInput, levelInput, categoryInput].forEach(element => {
+    element.addEventListener("change", searchPrograms);
+});
+
+document.addEventListener("click", event => {
+    if(!event.target.closest(".search-wrap")){
+        resultsPanel.classList.remove("show");
+    }
+});
+
+const viewPrograms = document.getElementById("viewPrograms");
+viewPrograms.addEventListener("click", () => {
+    programInput.value = "";
+    levelInput.value = "all";
+    categoryInput.value = "all";
+    searchPrograms();
+    document.getElementById("programs").scrollIntoView({ behavior:"smooth", block:"start" });
+});
+
+const applyModal = document.getElementById("applyModal");
+const closeModal = document.getElementById("closeModal");
+
+function openApplyModal(){
+    applyModal.classList.add("open");
+    applyModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+}
+
+function closeApplyModal(){
+    applyModal.classList.remove("open");
+    applyModal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+}
+
+document.querySelectorAll('a[href="#apply"]').forEach(button => {
+    button.addEventListener("click", event => {
+        event.preventDefault();
+        openApplyModal();
+    });
+});
+
+closeModal.addEventListener("click", closeApplyModal);
+
+applyModal.addEventListener("click", event => {
+    if(event.target === applyModal){
+        closeApplyModal();
+    }
+});
+
+document.addEventListener("keydown", event => {
+    if(event.key === "Escape"){
+        closeApplyModal();
+    }
+});
+
+const applyForm = document.getElementById("applyForm");
+applyForm.addEventListener("submit", event => {
+    event.preventDefault();
+    showToast("Application started successfully. Your details are ready for the next step.");
+    applyForm.reset();
+    closeApplyModal();
+});
+
+const newsletterForm = document.getElementById("newsletterForm");
+newsletterForm.addEventListener("submit", event => {
+    event.preventDefault();
+    const email = document.getElementById("newsletterEmail").value.trim();
+    if(!email){ return; }
+    showToast("You're subscribed! Atlas College updates will be sent to your inbox.");
+    newsletterForm.reset();
+});
+
+const storiesData = [
+    {
+        name:"Thabo M.",
+        quote:`"Atlas College gave me the skills and confidence to build a career I love. The support from lecturers and staff is amazing!"`,
+        image:"https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1400&q=85"
+    },
+    {
+        name:"Lerato M.",
+        quote:`"The practical experience helped me understand what employers actually expect. I felt prepared from day one."`,
+        image:"https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=85"
+    },
+    {
+        name:"David K.",
+        quote:`"The lecturers were supportive and the learning environment gave me the confidence to pursue my goals."`,
+        image:"https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=85"
+    }
+];
+
+let storyIndex = 0;
+const storyImage = document.getElementById("storyImage");
+const storyQuote = document.getElementById("storyQuote");
+const studentName = document.getElementById("studentName");
+
+function renderStory(){
+    const story = storiesData[storyIndex];
+    storyImage.style.opacity = "0";
+    setTimeout(() => {
+        storyImage.src = story.image;
+        storyQuote.textContent = story.quote;
+        studentName.textContent = story.name;
+        storyImage.style.opacity = "1";
+    }, 180);
+}
+
+document.getElementById("nextStory").addEventListener("click", () => {
+    storyIndex = (storyIndex + 1) % storiesData.length;
+    renderStory();
+});
+
+document.getElementById("previousStory").addEventListener("click", () => {
+    storyIndex = (storyIndex - 1 + storiesData.length) % storiesData.length;
+    renderStory();
+});
+
+const toast = document.getElementById("toast");
+let toastTimer;
+
+function showToast(message){
+    toast.textContent = message;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3500);
+}
+
+document.getElementById("topSearch").addEventListener("click", () => {
+    programInput.focus();
+    programInput.scrollIntoView({ behavior:"smooth", block:"center" });
+});
+
+document.querySelectorAll('a[href="#contact"]').forEach(link => {
+    link.addEventListener("click", event => {
+        const target = document.getElementById("contact");
+        if(target){
+            event.preventDefault();
+            target.scrollIntoView({ behavior:"smooth" });
+        }
+    });
+});
+
+document.querySelectorAll("img").forEach(image => {
+    image.addEventListener("error", () => {
+        image.style.background = "linear-gradient(135deg,#dcecff,#9dc8fa)";
+        image.style.objectFit = "cover";
+    });
+});
+
+function enforceViewport(){
+    document.documentElement.style.maxWidth = "100%";
+    document.body.style.maxWidth = "100%";
+}
+
+window.addEventListener("resize", enforceViewport);
+enforceViewport();
+
+const yearText = document.querySelector(".footer-bottom");
+if(yearText){
+    yearText.innerHTML = yearText.innerHTML.replace("2025", new Date().getFullYear());
+}
+</script>
+</div>
+</body>
+</html>
