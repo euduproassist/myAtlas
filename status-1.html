@@ -2,38 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Application Status | Atlas College</title>
 
     <style>
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        :root {
-            --blue: #123b68;
-            --blue-dark: #0b2949;
-            --blue-light: #eaf3fb;
-            --blue-soft: #f4f8fc;
-
-            --text: #17283a;
-            --muted: #6c7b8a;
-            --border: #e3e9ef;
-            --white: #ffffff;
-
-            --green: #16834b;
-            --green-bg: #e9f8f0;
-
-            --orange: #d98212;
-            --orange-bg: #fff5e5;
-
-            --red: #c83b3b;
-            --red-bg: #fff0f0;
-
-            --shadow: 0 10px 30px rgba(17, 42, 68, 0.07);
         }
 
         html {
@@ -41,10 +26,17 @@
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f6f8fb;
-            color: var(--text);
+            font-family:
+                Inter,
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #ffffff;
+            color: #172b42;
+
             min-height: 100vh;
+
             overflow-x: hidden;
         }
 
@@ -57,302 +49,477 @@
             cursor: pointer;
         }
 
-        /* =========================
-           HEADER
-        ========================= */
 
-        .header {
+        /* =========================================================
+           COLORS
+        ========================================================= */
+
+        :root {
+
+            --blue: #145da0;
+            --blue-dark: #0d3f70;
+            --blue-light: #eaf4fc;
+
+            --text: #172b42;
+            --muted: #718096;
+
+            --border: #e8eef4;
+
+            --green: #17834b;
+            --green-light: #eaf8f0;
+
+            --orange: #d98518;
+            --orange-light: #fff5e6;
+
+            --red: #c93d3d;
+            --red-light: #fff0f0;
+
+            --shadow:
+                0 8px 30px rgba(20, 93, 160, 0.07);
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .site-header {
             width: 100%;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            background: #ffffff;
+            border-bottom: 1px solid #edf1f5;
         }
 
         .header-inner {
-            width: min(1400px, 100%);
-            margin: auto;
-            padding: 16px 28px;
+            width: min(1280px, 100%);
+            margin: 0 auto;
+
+            min-height: 82px;
+
+            padding: 14px 28px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 25px;
+
+            gap: 30px;
         }
 
         .brand {
             display: flex;
             align-items: center;
+
             gap: 12px;
+
             min-width: 0;
         }
 
         .brand-logo {
-            width: 52px;
-            height: 52px;
+            width: 55px;
+            height: 55px;
+
             object-fit: contain;
+
             flex-shrink: 0;
         }
 
-        .brand-text {
+        .brand-info {
             min-width: 0;
         }
 
         .brand-name {
+            color: var(--blue-dark);
+
             font-size: 20px;
             font-weight: 800;
-            color: var(--blue);
+
+            line-height: 1.1;
         }
 
         .brand-subtitle {
-            font-size: 12px;
             color: var(--muted);
-            margin-top: 3px;
+
+            font-size: 11px;
+
+            margin-top: 4px;
         }
 
         .header-actions {
             display: flex;
             align-items: center;
+
             gap: 10px;
         }
 
-        .header-btn {
-            border: 1px solid var(--border);
-            background: white;
+        .header-button {
+            border: 1px solid #dfe8f0;
+
+            background: #ffffff;
             color: var(--blue);
-            padding: 11px 17px;
-            border-radius: 9px;
+
+            border-radius: 8px;
+
+            padding: 10px 16px;
+
+            font-size: 13px;
             font-weight: 700;
-            transition: 0.2s ease;
+
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                background 0.2s ease;
         }
 
-        .header-btn:hover {
-            background: var(--blue-soft);
+        .header-button:hover {
+            background: var(--blue-light);
+
+            border-color: #c9ddeb;
+
             transform: translateY(-1px);
         }
 
-        /* =========================
+
+        /* =========================================================
            PAGE
-        ========================= */
+        ========================================================= */
 
         .page {
-            width: min(1400px, 100%);
-            margin: auto;
-            padding: 42px 28px 70px;
+            width: min(1280px, 100%);
+
+            margin: 0 auto;
+
+            padding:
+                55px 28px
+                80px;
         }
 
-        .page-heading {
-            margin-bottom: 28px;
+        .page-intro {
+            margin-bottom: 32px;
         }
 
-        .eyebrow {
+        .page-label {
             color: var(--blue);
-            font-size: 13px;
+
+            font-size: 12px;
             font-weight: 800;
+
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+
+            letter-spacing: 0.1em;
+
             margin-bottom: 9px;
         }
 
-        .page-heading h1 {
-            font-size: clamp(28px, 4vw, 42px);
-            line-height: 1.1;
-            margin-bottom: 9px;
+        .page-title {
             color: var(--blue-dark);
+
+            font-size: clamp(30px, 4vw, 44px);
+
+            line-height: 1.1;
+
+            font-weight: 800;
+
+            margin-bottom: 11px;
         }
 
-        .page-heading p {
+        .page-description {
             color: var(--muted);
-            font-size: 15px;
-            line-height: 1.6;
-            max-width: 700px;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            max-width: 720px;
         }
 
-        /* =========================
-           CARD SYSTEM
-        ========================= */
+
+        /* =========================================================
+           GENERAL CARD
+        ========================================================= */
 
         .card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 18px;
+            background: #ffffff;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 16px;
+
             box-shadow: var(--shadow);
         }
 
         .card-header {
-            padding: 24px 26px 20px;
-            border-bottom: 1px solid var(--border);
+            padding: 22px 24px;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             gap: 20px;
+
+            border-bottom:
+                1px solid
+                var(--border);
         }
 
-        .card-title-area {
+        .card-title-wrapper {
             display: flex;
             align-items: center;
-            gap: 13px;
+
+            gap: 12px;
+
             min-width: 0;
         }
 
         .card-icon {
-            width: 43px;
-            height: 43px;
-            border-radius: 11px;
-            background: var(--blue-light);
-            color: var(--blue);
+            width: 42px;
+            height: 42px;
+
+            flex-shrink: 0;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 19px;
-            flex-shrink: 0;
+
+            border-radius: 10px;
+
+            background: var(--blue-light);
+            color: var(--blue);
+
+            font-size: 17px;
+            font-weight: 800;
         }
 
         .card-title {
-            font-size: 18px;
-            font-weight: 800;
             color: var(--blue-dark);
+
+            font-size: 17px;
+            font-weight: 800;
         }
 
-        .card-description {
-            font-size: 13px;
+        .card-subtitle {
             color: var(--muted);
+
+            font-size: 12px;
+
             margin-top: 4px;
         }
 
         .card-body {
-            padding: 26px;
+            padding: 24px;
         }
 
-        /* =========================
-           APPLICATION SUMMARY
-        ========================= */
 
-        .summary-card {
-            margin-bottom: 24px;
-        }
+        /* =========================================================
+           STATUS BADGE
+        ========================================================= */
 
         .status-badge {
             display: inline-flex;
             align-items: center;
+
             gap: 7px;
-            padding: 8px 12px;
-            border-radius: 30px;
-            background: var(--orange-bg);
-            color: var(--orange);
-            font-size: 12px;
+
+            border-radius: 50px;
+
+            padding: 7px 12px;
+
+            font-size: 11px;
             font-weight: 800;
+
             white-space: nowrap;
+
+            background: var(--orange-light);
+            color: var(--orange);
         }
 
         .status-dot {
             width: 7px;
             height: 7px;
-            background: currentColor;
+
             border-radius: 50%;
+
+            background: currentColor;
+        }
+
+
+        /* =========================================================
+           CARD 1
+           APPLICATION SUMMARY & STATUS
+        ========================================================= */
+
+        .summary-card {
+            margin-bottom: 24px;
         }
 
         .summary-top {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 25px;
-            margin-bottom: 30px;
+
+            grid-template-columns:
+                minmax(0, 1.25fr)
+                minmax(280px, 0.75fr);
+
+            gap: 18px;
+
+            margin-bottom: 24px;
         }
 
-        .application-reference {
+        .reference-box {
             background: var(--blue-dark);
-            color: white;
-            border-radius: 14px;
-            padding: 24px;
+
+            color: #ffffff;
+
+            border-radius: 13px;
+
+            padding: 23px;
         }
 
         .reference-label {
-            color: rgba(255,255,255,0.7);
-            font-size: 12px;
-            font-weight: 700;
+            color:
+                rgba(255,255,255,0.65);
+
+            font-size: 10px;
+
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+
+            font-weight: 800;
+
+            letter-spacing: 0.08em;
+
             margin-bottom: 8px;
         }
 
-        .reference-number {
+        .reference-row {
             display: flex;
             align-items: center;
+
             gap: 10px;
-            font-size: clamp(22px, 4vw, 30px);
+
+            min-width: 0;
+        }
+
+        .reference-number {
+            font-size: clamp(21px, 3vw, 29px);
+
             font-weight: 800;
+
             word-break: break-word;
         }
 
-        .copy-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.1);
-            color: white;
-            font-size: 15px;
+        .copy-button {
+            width: 34px;
+            height: 34px;
+
             flex-shrink: 0;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.18);
+
+            border-radius: 8px;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            color: #ffffff;
+
+            transition:
+                background 0.2s ease;
         }
 
-        .copy-btn:hover {
-            background: rgba(255,255,255,0.18);
+        .copy-button:hover {
+            background:
+                rgba(255,255,255,0.17);
         }
 
-        .reference-note {
+        .reference-help {
+            color:
+                rgba(255,255,255,0.65);
+
+            font-size: 11px;
+
+            line-height: 1.6;
+
             margin-top: 10px;
-            color: rgba(255,255,255,0.68);
-            font-size: 12px;
-            line-height: 1.5;
         }
 
-        .current-status {
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 24px;
+
+        .current-status-box {
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 13px;
+
+            padding: 23px;
+
             display: flex;
+
             flex-direction: column;
+
             justify-content: center;
         }
 
         .current-status-label {
-            font-size: 12px;
             color: var(--muted);
-            font-weight: 700;
+
+            font-size: 10px;
+
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 9px;
+
+            letter-spacing: 0.08em;
+
+            font-weight: 800;
+
+            margin-bottom: 8px;
         }
 
         .current-status-title {
-            font-size: 22px;
-            font-weight: 800;
             color: var(--blue-dark);
-            margin-bottom: 7px;
+
+            font-size: 22px;
+
+            font-weight: 800;
+
+            margin-bottom: 6px;
         }
 
-        .current-status-text {
-            font-size: 13px;
+        .current-status-description {
             color: var(--muted);
-            line-height: 1.5;
+
+            font-size: 12px;
+
+            line-height: 1.6;
         }
 
-        /* =========================
-           APPLICATION DETAILS
-        ========================= */
+
+        /* =========================================================
+           DETAILS
+        ========================================================= */
 
         .details-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            border: 1px solid var(--border);
-            border-radius: 13px;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 12px;
+
             overflow: hidden;
-            margin-bottom: 32px;
+
+            margin-bottom: 27px;
         }
 
         .detail {
-            padding: 18px;
-            border-right: 1px solid var(--border);
+            padding: 17px;
+
+            border-right:
+                1px solid
+                var(--border);
         }
 
         .detail:last-child {
@@ -360,104 +527,139 @@
         }
 
         .detail-label {
-            font-size: 11px;
             color: var(--muted);
+
+            font-size: 9px;
+
             text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            margin-bottom: 7px;
+
+            letter-spacing: 0.08em;
+
+            font-weight: 800;
+
+            margin-bottom: 6px;
         }
 
         .detail-value {
-            font-size: 14px;
-            font-weight: 800;
             color: var(--text);
+
+            font-size: 13px;
+
+            font-weight: 800;
+
             line-height: 1.4;
         }
 
-        /* =========================
-           PROGRESS
-        ========================= */
+
+        /* =========================================================
+           APPLICATION PROGRESS
+        ========================================================= */
 
         .progress-heading {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 18px;
+
+            margin-bottom: 10px;
         }
 
         .progress-heading strong {
-            font-size: 14px;
+            color: var(--text);
+
+            font-size: 13px;
         }
 
-        .progress-percent {
+        .progress-percentage {
             color: var(--blue);
-            font-size: 13px;
+
+            font-size: 12px;
+
             font-weight: 800;
         }
 
         .progress-track {
             width: 100%;
-            height: 7px;
-            background: #e9edf2;
-            border-radius: 20px;
+            height: 6px;
+
+            background: #edf2f6;
+
+            border-radius: 50px;
+
             overflow: hidden;
-            margin-bottom: 26px;
+
+            margin-bottom: 22px;
         }
 
         .progress-fill {
             height: 100%;
-            width: 50%;
+
+            width: 25%;
+
             background: var(--blue);
+
             border-radius: inherit;
-            transition: width 0.5s ease;
+
+            transition:
+                width 0.4s ease;
         }
 
         .steps {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 8px;
         }
 
         .step {
-            position: relative;
             text-align: center;
         }
 
         .step-circle {
-            width: 34px;
-            height: 34px;
-            margin: auto;
+            width: 31px;
+            height: 31px;
+
+            margin: 0 auto;
+
             border-radius: 50%;
-            background: #edf1f5;
-            color: #8090a0;
+
+            background: #f1f4f7;
+
+            color: #8a98a7;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+
+            font-size: 10px;
+
             font-weight: 800;
-            position: relative;
-            z-index: 2;
-            border: 2px solid white;
+
+            transition:
+                background 0.25s ease,
+                color 0.25s ease;
         }
 
         .step.completed .step-circle {
             background: var(--green);
-            color: white;
+            color: #ffffff;
         }
 
         .step.active .step-circle {
             background: var(--blue);
-            color: white;
+            color: #ffffff;
         }
 
         .step-name {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--muted);
-            margin-top: 9px;
+            color: #8a98a7;
+
+            font-size: 9px;
+
             line-height: 1.35;
+
+            font-weight: 700;
+
+            margin-top: 7px;
         }
 
         .step.completed .step-name,
@@ -465,64 +667,93 @@
             color: var(--text);
         }
 
-        /* =========================
-           LOWER CARDS
-        ========================= */
 
-        .lower-grid {
+        /* =========================================================
+           LOWER LAYOUT
+        ========================================================= */
+
+        .lower-layout {
             display: grid;
-            grid-template-columns: 1.35fr 0.65fr;
+
+            grid-template-columns:
+                minmax(0, 1.45fr)
+                minmax(320px, 0.75fr);
+
             gap: 24px;
+
+            align-items: start;
         }
 
-        .documents-card {
-            min-width: 0;
-        }
 
-        /* =========================
+        /* =========================================================
+           CARD 2
            DOCUMENTS
-        ========================= */
+        ========================================================= */
 
         .documents-list {
             display: flex;
+
             flex-direction: column;
-            gap: 12px;
+
+            gap: 10px;
         }
 
         .document-row {
-            border: 1px solid var(--border);
-            border-radius: 13px;
-            padding: 17px;
             display: grid;
-            grid-template-columns: minmax(0, 1fr) auto;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                auto;
+
             align-items: center;
-            gap: 20px;
-            transition: 0.2s ease;
+
+            gap: 15px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+            transition:
+                border-color 0.2s ease,
+                transform 0.2s ease;
         }
 
         .document-row:hover {
-            border-color: #cfdbe7;
+            border-color: #cdddea;
+
             transform: translateY(-1px);
         }
 
         .document-main {
             display: flex;
             align-items: center;
-            gap: 13px;
+
+            gap: 12px;
+
             min-width: 0;
         }
 
         .document-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: #f0f4f8;
+            width: 38px;
+            height: 38px;
+
+            flex-shrink: 0;
+
+            border-radius: 9px;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
+            background: var(--blue-light);
             color: var(--blue);
+
+            font-size: 12px;
             font-weight: 800;
-            flex-shrink: 0;
         }
 
         .document-info {
@@ -530,241 +761,364 @@
         }
 
         .document-name {
-            font-size: 14px;
-            font-weight: 800;
             color: var(--text);
+
+            font-size: 13px;
+
+            font-weight: 800;
         }
 
-        .document-note {
+        .document-description {
             color: var(--muted);
-            font-size: 11px;
+
+            font-size: 10px;
+
             margin-top: 4px;
+
             white-space: nowrap;
+
             overflow: hidden;
+
             text-overflow: ellipsis;
         }
 
         .document-actions {
             display: flex;
+
             align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
+
             justify-content: flex-end;
+
+            gap: 7px;
+
+            flex-wrap: wrap;
         }
 
         .document-status {
+            display: inline-flex;
+
+            align-items: center;
+
+            border-radius: 50px;
+
             padding: 6px 9px;
-            border-radius: 20px;
-            font-size: 10px;
+
+            font-size: 9px;
+
             font-weight: 800;
+
             white-space: nowrap;
         }
 
-        .status-required {
-            background: var(--orange-bg);
+        .document-status.required {
+            background: var(--orange-light);
             color: var(--orange);
         }
 
-        .status-uploaded {
-            background: var(--green-bg);
+        .document-status.uploaded {
+            background: var(--green-light);
             color: var(--green);
         }
 
-        .btn {
+
+        /* =========================================================
+           BUTTONS
+        ========================================================= */
+
+        .button {
             border: none;
+
             border-radius: 8px;
+
             padding: 9px 13px;
-            font-size: 12px;
+
+            font-size: 11px;
+
             font-weight: 800;
-            transition: 0.2s ease;
+
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease,
+                opacity 0.2s ease;
         }
 
-        .btn-primary {
-            background: var(--blue);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--blue-dark);
+        .button:hover {
             transform: translateY(-1px);
         }
 
-        .btn-secondary {
+        .button-primary {
+            background: var(--blue);
+            color: #ffffff;
+        }
+
+        .button-primary:hover {
+            background: var(--blue-dark);
+        }
+
+        .button-secondary {
             background: var(--blue-light);
             color: var(--blue);
         }
 
-        .btn-secondary:hover {
-            background: #dcebf7;
+        .button-secondary:hover {
+            background: #dcecf9;
         }
 
-        .btn-danger {
-            background: var(--red-bg);
+        .button-danger {
+            background: var(--red-light);
             color: var(--red);
         }
 
-        .btn-danger:hover {
-            background: #ffe1e1;
+        .button-danger:hover {
+            background: #ffe2e2;
         }
 
-        .btn:disabled {
+        .button:disabled {
             opacity: 0.5;
+
             cursor: not-allowed;
-            transform: none !important;
+
+            transform: none;
         }
 
-        /* =========================
+
+        /* =========================================================
+           RIGHT COLUMN
+        ========================================================= */
+
+        .right-column {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 24px;
+        }
+
+
+        /* =========================================================
+           CARD 3
            PAYMENT
-        ========================= */
+        ========================================================= */
 
-        .payment-card {
-            height: fit-content;
-        }
+        .payment-summary {
+            border:
+                1px solid
+                var(--border);
 
-        .payment-box {
-            border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 12px;
+
             overflow: hidden;
         }
 
-        .payment-status {
-            padding: 18px;
-            background: var(--blue-soft);
+        .payment-status-row {
+            padding: 15px 17px;
+
+            background: #ffffff;
+
+            border-bottom:
+                1px solid
+                var(--border);
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
-            gap: 15px;
-        }
 
-        .payment-status-text {
-            font-size: 13px;
-            font-weight: 800;
-        }
-
-        .payment-paid {
-            color: var(--green);
-        }
-
-        .payment-unpaid {
-            color: var(--orange);
-        }
-
-        .payment-details {
-            padding: 21px;
-        }
-
-        .fee-label {
-            font-size: 12px;
-            color: var(--muted);
-            margin-bottom: 5px;
-        }
-
-        .fee-amount {
-            font-size: 31px;
-            font-weight: 900;
-            color: var(--blue-dark);
-            margin-bottom: 18px;
-        }
-
-        .payment-description {
-            font-size: 12px;
-            color: var(--muted);
-            line-height: 1.6;
-            margin-bottom: 18px;
-        }
-
-        .payment-receipt {
-            border-top: 1px solid var(--border);
-            margin-top: 17px;
-            padding-top: 17px;
-        }
-
-        .receipt-line {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            font-size: 12px;
-            margin-bottom: 9px;
-        }
-
-        .receipt-line span:first-child {
-            color: var(--muted);
-        }
-
-        .receipt-line strong {
-            text-align: right;
-        }
-
-        /* =========================
-           HELP
-        ========================= */
-
-        .help-card {
-            margin-top: 24px;
-        }
-
-        .help-content {
-            padding: 23px;
-        }
-
-        .help-text {
-            font-size: 13px;
-            color: var(--muted);
-            line-height: 1.65;
-            margin-bottom: 19px;
-        }
-
-        .help-options {
-            display: flex;
-            flex-direction: column;
             gap: 10px;
         }
 
-        .help-option {
-            border: 1px solid var(--border);
-            border-radius: 11px;
-            padding: 13px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .help-option-icon {
-            width: 35px;
-            height: 35px;
-            background: var(--blue-light);
-            color: var(--blue);
-            border-radius: 9px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .help-option strong {
+        .payment-status-text {
             font-size: 12px;
-            display: block;
-            margin-bottom: 3px;
+
+            font-weight: 800;
         }
 
-        .help-option span {
+        .payment-status-text.unpaid {
+            color: var(--orange);
+        }
+
+        .payment-status-text.paid {
+            color: var(--green);
+        }
+
+        .payment-content {
+            padding: 19px;
+        }
+
+        .payment-label {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            margin-bottom: 5px;
+        }
+
+        .payment-amount {
+            color: var(--blue-dark);
+
+            font-size: 32px;
+
+            font-weight: 900;
+
+            line-height: 1;
+
+            margin-bottom: 13px;
+        }
+
+        .payment-description {
+            color: var(--muted);
+
             font-size: 11px;
+
+            line-height: 1.65;
+
+            margin-bottom: 16px;
+        }
+
+        .payment-button {
+            width: 100%;
+        }
+
+        .receipt {
+            border-top:
+                1px solid
+                var(--border);
+
+            margin-top: 17px;
+
+            padding-top: 16px;
+        }
+
+        .receipt-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 9px;
+
+            font-size: 10px;
+        }
+
+        .receipt-row span {
             color: var(--muted);
         }
 
-        /* =========================
-           MODAL
-        ========================= */
+        .receipt-row strong {
+            color: var(--text);
+
+            text-align: right;
+        }
+
+
+        /* =========================================================
+           CARD 4
+           NEED HELP
+        ========================================================= */
+
+        .help-description {
+            color: var(--muted);
+
+            font-size: 11px;
+
+            line-height: 1.65;
+
+            margin-bottom: 16px;
+        }
+
+        .help-list {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 9px;
+
+            margin-bottom: 14px;
+        }
+
+        .help-item {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 11px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 10px;
+        }
+
+        .help-icon {
+            width: 32px;
+            height: 32px;
+
+            flex-shrink: 0;
+
+            border-radius: 8px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: var(--blue-light);
+
+            color: var(--blue);
+
+            font-size: 12px;
+
+            font-weight: 800;
+        }
+
+        .help-item strong {
+            display: block;
+
+            color: var(--text);
+
+            font-size: 11px;
+
+            margin-bottom: 3px;
+        }
+
+        .help-item span {
+            color: var(--muted);
+
+            font-size: 10px;
+        }
+
+        .help-button {
+            width: 100%;
+        }
+
+
+        /* =========================================================
+           MODALS
+        ========================================================= */
 
         .modal-overlay {
             position: fixed;
+
             inset: 0;
-            background: rgba(7, 25, 43, 0.58);
+
+            z-index: 1000;
+
             display: none;
+
             align-items: center;
             justify-content: center;
+
             padding: 20px;
-            z-index: 500;
+
+            background:
+                rgba(13, 63, 112, 0.35);
+
             backdrop-filter: blur(4px);
         }
 
@@ -773,101 +1127,165 @@
         }
 
         .modal {
-            width: min(520px, 100%);
+            width: min(510px, 100%);
+
             max-height: 90vh;
+
             overflow-y: auto;
-            background: white;
-            border-radius: 18px;
-            box-shadow: 0 25px 70px rgba(0,0,0,0.22);
-            animation: modalIn 0.2s ease;
+
+            background: #ffffff;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 25px 70px
+                rgba(13, 63, 112, 0.2);
+
+            animation:
+                modalAppear 0.2s ease;
         }
 
-        @keyframes modalIn {
+        @keyframes modalAppear {
+
             from {
                 opacity: 0;
-                transform: translateY(15px) scale(0.98);
+
+                transform:
+                    translateY(12px)
+                    scale(0.98);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0) scale(1);
+
+                transform:
+                    translateY(0)
+                    scale(1);
             }
         }
 
         .modal-header {
-            padding: 22px;
-            border-bottom: 1px solid var(--border);
+            padding: 20px 22px;
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
+
             gap: 15px;
+
+            border-bottom:
+                1px solid
+                var(--border);
         }
 
         .modal-title {
-            font-size: 18px;
-            font-weight: 800;
             color: var(--blue-dark);
+
+            font-size: 17px;
+
+            font-weight: 800;
         }
 
-        .close-btn {
-            width: 34px;
-            height: 34px;
+        .close-button {
+            width: 33px;
+            height: 33px;
+
             border: none;
-            background: #f1f4f7;
+
             border-radius: 8px;
+
+            background: #f6f9fb;
+
             color: var(--muted);
+
             font-size: 18px;
         }
 
         .modal-body {
-            padding: 23px;
+            padding: 22px;
         }
 
         .modal-footer {
-            padding: 17px 23px;
-            border-top: 1px solid var(--border);
+            padding: 17px 22px;
+
             display: flex;
+
             justify-content: flex-end;
-            gap: 9px;
+
+            gap: 8px;
+
+            border-top:
+                1px solid
+                var(--border);
         }
 
+
+        /* =========================================================
+           UPLOAD
+        ========================================================= */
+
         .upload-area {
-            border: 2px dashed #cbd7e3;
-            border-radius: 14px;
+            border:
+                2px dashed
+                #d6e2ec;
+
+            border-radius: 13px;
+
             padding: 35px 20px;
+
             text-align: center;
-            background: #fafcfe;
-            transition: 0.2s ease;
+
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease;
         }
 
         .upload-area.dragging {
             border-color: var(--blue);
+
             background: var(--blue-light);
         }
 
         .upload-icon {
-            width: 52px;
-            height: 52px;
+            width: 50px;
+            height: 50px;
+
+            margin: 0 auto 13px;
+
+            border-radius: 12px;
+
             background: var(--blue-light);
+
             color: var(--blue);
-            border-radius: 13px;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 14px;
-            font-size: 21px;
+
+            font-size: 20px;
+
+            font-weight: 800;
         }
 
         .upload-title {
+            color: var(--text);
+
             font-size: 14px;
+
             font-weight: 800;
+
             margin-bottom: 6px;
         }
 
         .upload-description {
             color: var(--muted);
-            font-size: 12px;
-            line-height: 1.5;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+
             margin-bottom: 17px;
         }
 
@@ -877,11 +1295,21 @@
 
         .selected-file {
             display: none;
-            margin-top: 15px;
-            border: 1px solid var(--border);
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 12px;
+
+            margin-top: 14px;
+
+            padding: 11px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 9px;
+
+            color: var(--text);
+
+            font-size: 11px;
+
             text-align: left;
         }
 
@@ -889,33 +1317,45 @@
             display: block;
         }
 
-        /* =========================
+
+        /* =========================================================
            PAYMENT MODAL
-        ========================= */
+        ========================================================= */
 
         .payment-methods {
-            display: grid;
-            gap: 10px;
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 9px;
         }
 
         .payment-method {
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 15px;
             display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: 0.2s ease;
-        }
 
-        .payment-method:hover {
-            border-color: #b8c9d9;
+            align-items: center;
+
+            gap: 11px;
+
+            padding: 14px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 11px;
+
+            cursor: pointer;
+
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease;
         }
 
         .payment-method.selected {
             border-color: var(--blue);
-            background: var(--blue-soft);
+
+            background: var(--blue-light);
         }
 
         .payment-method input {
@@ -924,127 +1364,247 @@
 
         .payment-method strong {
             display: block;
-            font-size: 13px;
+
+            color: var(--text);
+
+            font-size: 12px;
+
             margin-bottom: 3px;
         }
 
         .payment-method span {
             color: var(--muted);
-            font-size: 11px;
+
+            font-size: 10px;
         }
 
-        .payment-info {
-            margin-top: 17px;
-            padding: 15px;
-            background: #f7f9fb;
-            border-radius: 10px;
-            font-size: 12px;
+        .local-payment-note {
+            margin-top: 16px;
+
+            padding: 13px;
+
+            border-radius: 9px;
+
+            background: #f8fbfd;
+
             color: var(--muted);
+
+            font-size: 10px;
+
             line-height: 1.6;
         }
 
-        /* =========================
+
+        /* =========================================================
+           DOCUMENT VIEW
+        ========================================================= */
+
+        .document-preview {
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 11px;
+
+            background: #ffffff;
+
+            padding: 15px;
+        }
+
+        .document-preview img {
+            display: block;
+
+            width: 100%;
+
+            max-height: 500px;
+
+            object-fit: contain;
+        }
+
+        .document-preview iframe {
+            display: block;
+
+            width: 100%;
+
+            height: 500px;
+
+            border: none;
+        }
+
+
+        /* =========================================================
            TOAST
-        ========================= */
+        ========================================================= */
 
         .toast-container {
             position: fixed;
+
             right: 20px;
             bottom: 20px;
-            z-index: 1000;
+
+            z-index: 2000;
+
             display: flex;
+
             flex-direction: column;
-            gap: 10px;
-            width: min(370px, calc(100% - 40px));
+
+            gap: 8px;
+
+            width:
+                min(360px, calc(100% - 40px));
         }
 
         .toast {
             background: var(--blue-dark);
-            color: white;
-            border-radius: 11px;
-            padding: 14px 16px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.18);
-            font-size: 12px;
+
+            color: #ffffff;
+
+            padding: 13px 15px;
+
+            border-radius: 9px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(13,63,112,0.2);
+
+            font-size: 11px;
+
             line-height: 1.5;
-            animation: toastIn 0.25s ease;
+
+            animation:
+                toastIn 0.2s ease;
         }
 
         @keyframes toastIn {
+
             from {
                 opacity: 0;
-                transform: translateY(10px);
+
+                transform:
+                    translateY(8px);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0);
+
+                transform:
+                    translateY(0);
             }
         }
 
-        /* =========================
-           FOOTER
-        ========================= */
 
-        .footer {
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .site-footer {
             width: 100%;
+
             background: var(--blue-dark);
-            color: white;
-            padding: 25px 28px;
+
+            color: #ffffff;
+
+            padding: 23px 28px;
         }
 
         .footer-inner {
-            width: min(1400px, 100%);
-            margin: auto;
+            width: min(1280px, 100%);
+
+            margin: 0 auto;
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
+
             gap: 20px;
+
             flex-wrap: wrap;
         }
 
-        .footer p {
-            color: rgba(255,255,255,0.65);
-            font-size: 11px;
+        .footer-text {
+            color:
+                rgba(255,255,255,0.65);
+
+            font-size: 10px;
         }
 
-        /* =========================
-           RESPONSIVE
-        ========================= */
 
-        @media (max-width: 1000px) {
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 950px) {
+
             .summary-top {
                 grid-template-columns: 1fr;
             }
 
+            .lower-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .right-column {
+                display: grid;
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+                align-items: start;
+            }
+
+        }
+
+
+        @media (max-width: 750px) {
+
+            .header-inner {
+                padding: 13px 17px;
+            }
+
+            .page {
+                padding:
+                    40px 17px
+                    60px;
+            }
+
             .details-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .detail {
+                border-bottom:
+                    1px solid
+                    var(--border);
             }
 
             .detail:nth-child(2) {
                 border-right: none;
             }
 
-            .detail:nth-child(-n+2) {
-                border-bottom: 1px solid var(--border);
+            .detail:nth-child(3),
+            .detail:nth-child(4) {
+                border-bottom: none;
             }
 
-            .lower-grid {
+            .right-column {
                 grid-template-columns: 1fr;
             }
 
-            .payment-card {
-                height: auto;
+            .document-row {
+                grid-template-columns: 1fr;
             }
 
-            .help-card {
-                margin-top: 0;
+            .document-actions {
+                justify-content: flex-start;
             }
+
         }
 
-        @media (max-width: 700px) {
-            .header-inner {
-                padding: 13px 17px;
-            }
+
+        @media (max-width: 520px) {
 
             .brand-logo {
                 width: 44px;
@@ -1056,28 +1616,45 @@
             }
 
             .brand-subtitle {
+                font-size: 9px;
+            }
+
+            .header-actions .header-button:first-child {
+                display: none;
+            }
+
+            .header-button {
+                padding:
+                    9px 11px;
+
                 font-size: 10px;
             }
 
-            .header-btn {
-                padding: 9px 11px;
-                font-size: 11px;
+            .page-title {
+                font-size: 30px;
             }
 
-            .page {
-                padding: 28px 15px 50px;
+            .page-description {
+                font-size: 13px;
             }
 
             .card-header {
-                padding: 19px;
+                padding:
+                    18px;
             }
 
             .card-body {
-                padding: 19px;
+                padding:
+                    18px;
             }
 
-            .status-badge {
-                font-size: 10px;
+            .summary-top {
+                gap: 12px;
+            }
+
+            .reference-box,
+            .current-status-box {
+                padding: 19px;
             }
 
             .details-grid {
@@ -1086,174 +1663,181 @@
 
             .detail {
                 border-right: none !important;
-                border-bottom: 1px solid var(--border);
+
+                border-bottom:
+                    1px solid
+                    var(--border) !important;
             }
 
             .detail:last-child {
-                border-bottom: none;
+                border-bottom: none !important;
             }
 
             .steps {
-                gap: 3px;
+                gap: 2px;
             }
 
             .step-circle {
-                width: 29px;
-                height: 29px;
-                font-size: 10px;
+                width: 27px;
+                height: 27px;
             }
 
             .step-name {
-                font-size: 9px;
-            }
-
-            .document-row {
-                grid-template-columns: 1fr;
-                gap: 13px;
+                font-size: 8px;
             }
 
             .document-actions {
-                justify-content: flex-start;
+                width: 100%;
             }
 
-            .reference-number {
-                font-size: 21px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header-actions .header-btn:first-child {
-                display: none;
+            .document-actions .button {
+                flex: 0 0 auto;
             }
 
-            .page-heading h1 {
-                font-size: 29px;
+            .modal-overlay {
+                padding: 12px;
             }
 
-            .summary-top {
-                gap: 13px;
-            }
-
-            .application-reference,
-            .current-status {
+            .modal-body {
                 padding: 18px;
             }
 
-            .card-title {
-                font-size: 16px;
-            }
-
-            .card-description {
-                font-size: 11px;
-            }
-
-            .payment-status {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .footer {
-                padding: 22px 15px;
-            }
         }
+
     </style>
 </head>
 
+
 <body>
 
-    <!-- =========================
-         HEADER
-    ========================= -->
 
-    <header class="header">
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+
+    <header class="site-header">
+
         <div class="header-inner">
 
             <div class="brand">
+
                 <img
                     src="assets/logos.png"
                     alt="Atlas College"
                     class="brand-logo"
                 >
 
-                <div class="brand-text">
-                    <div class="brand-name">Atlas College</div>
-                    <div class="brand-subtitle">Admissions Portal</div>
+                <div class="brand-info">
+
+                    <div class="brand-name">
+                        Atlas College
+                    </div>
+
+                    <div class="brand-subtitle">
+                        Admissions Portal
+                    </div>
+
                 </div>
+
             </div>
 
+
             <div class="header-actions">
+
                 <button
-                    class="header-btn"
                     type="button"
+                    class="header-button"
                     onclick="goHome()"
                 >
                     Home
                 </button>
 
                 <button
-                    class="header-btn"
                     type="button"
+                    class="header-button"
                     onclick="scrollToHelp()"
                 >
                     Need Help?
                 </button>
+
             </div>
 
         </div>
+
     </header>
 
 
-    <!-- =========================
-         MAIN PAGE
-    ========================= -->
+
+    <!-- =========================================================
+         MAIN
+    ========================================================== -->
 
     <main class="page">
 
-        <section class="page-heading">
-            <div class="eyebrow">Admissions Portal</div>
 
-            <h1>Application Status</h1>
+        <!-- PAGE INTRO -->
 
-            <p>
+        <section class="page-intro">
+
+            <div class="page-label">
+                Atlas College Admissions
+            </div>
+
+            <h1 class="page-title">
+                Application Status
+            </h1>
+
+            <p class="page-description">
                 Track your application, submit outstanding documents,
                 complete your application fee payment, and follow your
-                admission progress in one place.
+                admission progress all in one place.
             </p>
+
         </section>
 
 
-        <!-- ==========================================
-             CARD 1 — APPLICATION SUMMARY & STATUS
-        =========================================== -->
+
+        <!-- =====================================================
+             CARD 1
+             APPLICATION SUMMARY & STATUS
+        ====================================================== -->
 
         <section class="card summary-card">
 
             <div class="card-header">
 
-                <div class="card-title-area">
+                <div class="card-title-wrapper">
 
                     <div class="card-icon">
                         ✓
                     </div>
 
                     <div>
+
                         <div class="card-title">
                             Application Summary &amp; Status
                         </div>
 
-                        <div class="card-description">
-                            Your application information and current progress
+                        <div class="card-subtitle">
+                            Your application information and progress
                         </div>
+
                     </div>
 
                 </div>
 
+
                 <div
-                    id="headerStatus"
                     class="status-badge"
+                    id="headerStatus"
                 >
+
                     <span class="status-dot"></span>
-                    Action Required
+
+                    <span id="headerStatusText">
+                        Action Required
+                    </span>
+
                 </div>
 
             </div>
@@ -1261,58 +1845,68 @@
 
             <div class="card-body">
 
+
+                <!-- REFERENCE + CURRENT STATUS -->
+
                 <div class="summary-top">
 
-                    <div class="application-reference">
+
+                    <div class="reference-box">
 
                         <div class="reference-label">
                             Application Number
                         </div>
 
-                        <div class="reference-number">
+                        <div class="reference-row">
 
-                            <span id="applicationReference">
+                            <div
+                                class="reference-number"
+                                id="applicationReference"
+                            >
                                 ATL-2026-10482
-                            </span>
+                            </div>
 
                             <button
                                 type="button"
-                                class="copy-btn"
-                                title="Copy application number"
+                                class="copy-button"
                                 onclick="copyReference()"
+                                title="Copy application number"
                             >
                                 ⧉
                             </button>
 
                         </div>
 
-                        <div class="reference-note">
-                            Keep this number safe. You may need it when
-                            contacting the admissions office.
+                        <div class="reference-help">
+                            Keep your application number safe.
+                            You may need it when contacting
+                            Atlas College admissions.
                         </div>
 
                     </div>
 
 
-                    <div class="current-status">
+
+                    <div class="current-status-box">
 
                         <div class="current-status-label">
                             Current Status
                         </div>
 
                         <div
-                            id="currentStatusTitle"
                             class="current-status-title"
+                            id="currentStatusTitle"
                         >
                             Action Required
                         </div>
 
                         <div
-                            id="currentStatusText"
-                            class="current-status-text"
+                            class="current-status-description"
+                            id="currentStatusDescription"
                         >
-                            Please complete the outstanding requirements
-                            before your application can be reviewed.
+                            Please complete the outstanding
+                            requirements before your application
+                            can be reviewed.
                         </div>
 
                     </div>
@@ -1320,11 +1914,14 @@
                 </div>
 
 
+
                 <!-- APPLICATION DETAILS -->
 
                 <div class="details-grid">
 
+
                     <div class="detail">
+
                         <div class="detail-label">
                             Applicant
                         </div>
@@ -1335,9 +1932,12 @@
                         >
                             Thabo Mokoena
                         </div>
+
                     </div>
 
+
                     <div class="detail">
+
                         <div class="detail-label">
                             Programme
                         </div>
@@ -1348,9 +1948,12 @@
                         >
                             Information Technology
                         </div>
+
                     </div>
 
+
                     <div class="detail">
+
                         <div class="detail-label">
                             Intake
                         </div>
@@ -1361,9 +1964,12 @@
                         >
                             2026
                         </div>
+
                     </div>
 
+
                     <div class="detail">
+
                         <div class="detail-label">
                             Study Mode
                         </div>
@@ -1374,9 +1980,11 @@
                         >
                             Full-time
                         </div>
+
                     </div>
 
                 </div>
+
 
 
                 <!-- PROGRESS -->
@@ -1388,35 +1996,45 @@
                     </strong>
 
                     <span
-                        class="progress-percent"
-                        id="progressPercent"
+                        class="progress-percentage"
+                        id="progressPercentage"
                     >
-                        50%
+                        25%
                     </span>
 
                 </div>
 
+
                 <div class="progress-track">
+
                     <div
                         class="progress-fill"
                         id="progressFill"
                     ></div>
+
                 </div>
 
 
+
+                <!-- STEPS -->
+
                 <div class="steps">
+
 
                     <div
                         class="step completed"
                         data-step="1"
                     >
+
                         <div class="step-circle">
                             ✓
                         </div>
 
                         <div class="step-name">
-                            Application<br>Submitted
+                            Application<br>
+                            Submitted
                         </div>
+
                     </div>
 
 
@@ -1424,6 +2042,7 @@
                         class="step active"
                         data-step="2"
                     >
+
                         <div class="step-circle">
                             2
                         </div>
@@ -1431,6 +2050,7 @@
                         <div class="step-name">
                             Documents
                         </div>
+
                     </div>
 
 
@@ -1438,6 +2058,7 @@
                         class="step"
                         data-step="3"
                     >
+
                         <div class="step-circle">
                             3
                         </div>
@@ -1445,6 +2066,7 @@
                         <div class="step-name">
                             Payment
                         </div>
+
                     </div>
 
 
@@ -1452,6 +2074,7 @@
                         class="step"
                         data-step="4"
                     >
+
                         <div class="step-circle">
                             4
                         </div>
@@ -1459,6 +2082,7 @@
                         <div class="step-name">
                             Review
                         </div>
+
                     </div>
 
 
@@ -1466,6 +2090,7 @@
                         class="step"
                         data-step="5"
                     >
+
                         <div class="step-circle">
                             5
                         </div>
@@ -1473,6 +2098,7 @@
                         <div class="step-name">
                             Decision
                         </div>
+
                     </div>
 
                 </div>
@@ -1482,35 +2108,40 @@
         </section>
 
 
-        <!-- ==========================================
-             LOWER CONTENT
-        =========================================== -->
 
-        <div class="lower-grid">
+        <!-- =====================================================
+             LOWER SECTION
+        ====================================================== -->
+
+        <div class="lower-layout">
 
 
-            <!-- ======================================
-                 CARD 2 — DOCUMENTS
-            ======================================= -->
+            <!-- =================================================
+                 CARD 2
+                 DOCUMENTS
+            ================================================== -->
 
-            <section class="card documents-card">
+            <section class="card">
 
                 <div class="card-header">
 
-                    <div class="card-title-area">
+                    <div class="card-title-wrapper">
 
                         <div class="card-icon">
                             ▣
                         </div>
 
                         <div>
+
                             <div class="card-title">
                                 Documents
                             </div>
 
-                            <div class="card-description">
-                                Upload the documents required for your application
+                            <div class="card-subtitle">
+                                Submit the documents required
+                                for your application
                             </div>
+
                         </div>
 
                     </div>
@@ -1530,33 +2161,37 @@
             </section>
 
 
-            <!-- RIGHT SIDE -->
 
-            <div>
+            <!-- RIGHT COLUMN -->
+
+            <div class="right-column">
 
 
-                <!-- ==================================
-                     CARD 3 — PAYMENT
-                =================================== -->
+                <!-- =============================================
+                     CARD 3
+                     PAYMENT
+                ============================================== -->
 
-                <section class="card payment-card">
+                <section class="card">
 
                     <div class="card-header">
 
-                        <div class="card-title-area">
+                        <div class="card-title-wrapper">
 
                             <div class="card-icon">
                                 R
                             </div>
 
                             <div>
+
                                 <div class="card-title">
                                     Payment
                                 </div>
 
-                                <div class="card-description">
+                                <div class="card-subtitle">
                                     Application fee
                                 </div>
+
                             </div>
 
                         </div>
@@ -1566,19 +2201,20 @@
 
                     <div class="card-body">
 
-                        <div class="payment-box">
+                        <div class="payment-summary">
 
-                            <div class="payment-status">
+
+                            <div class="payment-status-row">
 
                                 <span
-                                    class="payment-status-text payment-unpaid"
+                                    class="payment-status-text unpaid"
                                     id="paymentStatusText"
                                 >
                                     Application Fee Unpaid
                                 </span>
 
                                 <span
-                                    class="document-status status-required"
+                                    class="document-status required"
                                     id="paymentBadge"
                                 >
                                     Unpaid
@@ -1587,61 +2223,71 @@
                             </div>
 
 
-                            <div class="payment-details">
+                            <div class="payment-content">
 
-                                <div class="fee-label">
+                                <div class="payment-label">
                                     Application Fee
                                 </div>
 
-                                <div class="fee-amount">
+                                <div class="payment-amount">
                                     R250
                                 </div>
 
                                 <div class="payment-description">
-                                    Complete the application fee payment
-                                    to allow your application to move to
-                                    the review stage.
+                                    Complete your application fee
+                                    payment before your application
+                                    can move to the review stage.
                                 </div>
 
 
                                 <button
                                     type="button"
-                                    class="btn btn-primary"
+                                    class="button button-primary payment-button"
                                     id="payButton"
                                     onclick="openPaymentModal()"
-                                    style="width:100%;"
                                 >
                                     Pay Application Fee
                                 </button>
 
 
                                 <div
-                                    class="payment-receipt"
+                                    class="receipt"
                                     id="paymentReceipt"
                                     style="display:none;"
                                 >
 
-                                    <div class="receipt-line">
+                                    <div class="receipt-row">
+
                                         <span>
                                             Payment Reference
                                         </span>
 
-                                        <strong id="paymentReference">
+                                        <strong
+                                            id="paymentReference"
+                                        >
                                             —
                                         </strong>
+
                                     </div>
 
-                                    <div class="receipt-line">
+
+                                    <div class="receipt-row">
+
                                         <span>
-                                            Date
+                                            Payment Date
                                         </span>
 
-                                        <strong id="paymentDate">
+                                        <strong
+                                            id="paymentDate"
+                                        >
                                             —
                                         </strong>
+
                                     </div>
 
-                                    <div class="receipt-line">
+
+                                    <div class="receipt-row">
+
                                         <span>
                                             Amount
                                         </span>
@@ -1649,6 +2295,7 @@
                                         <strong>
                                             R250
                                         </strong>
+
                                     </div>
 
                                 </div>
@@ -1662,31 +2309,35 @@
                 </section>
 
 
-                <!-- ==================================
-                     CARD 4 — NEED HELP
-                =================================== -->
+
+                <!-- =============================================
+                     CARD 4
+                     NEED HELP
+                ============================================== -->
 
                 <section
-                    class="card help-card"
+                    class="card"
                     id="helpCard"
                 >
 
                     <div class="card-header">
 
-                        <div class="card-title-area">
+                        <div class="card-title-wrapper">
 
                             <div class="card-icon">
                                 ?
                             </div>
 
                             <div>
+
                                 <div class="card-title">
                                     Need Help?
                                 </div>
 
-                                <div class="card-description">
-                                    We're here to help
+                                <div class="card-subtitle">
+                                    Admissions support
                                 </div>
+
                             </div>
 
                         </div>
@@ -1694,24 +2345,26 @@
                     </div>
 
 
-                    <div class="help-content">
+                    <div class="card-body">
 
-                        <div class="help-text">
+                        <div class="help-description">
                             Having trouble with your application,
-                            documents, or payment? Contact the Atlas
-                            College admissions office.
+                            documents, or payment? Our admissions
+                            team is here to help.
                         </div>
 
 
-                        <div class="help-options">
+                        <div class="help-list">
 
-                            <div class="help-option">
 
-                                <div class="help-option-icon">
+                            <div class="help-item">
+
+                                <div class="help-icon">
                                     @
                                 </div>
 
                                 <div>
+
                                     <strong>
                                         Email Admissions
                                     </strong>
@@ -1719,18 +2372,20 @@
                                     <span>
                                         admissions@atlascollege.co.za
                                     </span>
+
                                 </div>
 
                             </div>
 
 
-                            <div class="help-option">
+                            <div class="help-item">
 
-                                <div class="help-option-icon">
+                                <div class="help-icon">
                                     ☎
                                 </div>
 
                                 <div>
+
                                     <strong>
                                         Admissions Office
                                     </strong>
@@ -1738,20 +2393,21 @@
                                     <span>
                                         011 000 0000
                                     </span>
+
                                 </div>
 
                             </div>
 
-
-                            <button
-                                type="button"
-                                class="btn btn-secondary"
-                                onclick="showSupportMessage()"
-                            >
-                                Contact Admissions
-                            </button>
-
                         </div>
+
+
+                        <button
+                            type="button"
+                            class="button button-secondary help-button"
+                            onclick="showSupportMessage()"
+                        >
+                            Contact Admissions
+                        </button>
 
                     </div>
 
@@ -1764,30 +2420,32 @@
     </main>
 
 
-    <!-- =========================
-         FOOTER
-    ========================= -->
 
-    <footer class="footer">
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+
+    <footer class="site-footer">
 
         <div class="footer-inner">
 
-            <p>
+            <div class="footer-text">
                 © 2026 Atlas College. All rights reserved.
-            </p>
+            </div>
 
-            <p>
+            <div class="footer-text">
                 Admissions Portal
-            </p>
+            </div>
 
         </div>
 
     </footer>
 
 
-    <!-- =========================
+
+    <!-- =========================================================
          UPLOAD MODAL
-    ========================= -->
+    ========================================================== -->
 
     <div
         class="modal-overlay"
@@ -1804,7 +2462,7 @@
 
                 <button
                     type="button"
-                    class="close-btn"
+                    class="close-button"
                     onclick="closeUploadModal()"
                 >
                     ×
@@ -1829,9 +2487,10 @@
                     </div>
 
                     <div class="upload-description">
-                        Select a PDF, JPG, or PNG file.
+                        PDF, JPG or PNG files only.
                         Maximum file size: 2MB.
                     </div>
+
 
                     <input
                         type="file"
@@ -1840,13 +2499,15 @@
                         accept=".pdf,.jpg,.jpeg,.png"
                     >
 
+
                     <button
                         type="button"
-                        class="btn btn-primary"
+                        class="button button-primary"
                         onclick="document.getElementById('documentInput').click()"
                     >
                         Choose File
                     </button>
+
 
                     <div
                         class="selected-file"
@@ -1862,7 +2523,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="button button-secondary"
                     onclick="closeUploadModal()"
                 >
                     Cancel
@@ -1870,7 +2531,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-primary"
+                    class="button button-primary"
                     id="saveDocumentButton"
                     onclick="saveDocument()"
                     disabled
@@ -1885,9 +2546,10 @@
     </div>
 
 
-    <!-- =========================
+
+    <!-- =========================================================
          PAYMENT MODAL
-    ========================= -->
+    ========================================================== -->
 
     <div
         class="modal-overlay"
@@ -1904,7 +2566,7 @@
 
                 <button
                     type="button"
-                    class="close-btn"
+                    class="close-button"
                     onclick="closePaymentModal()"
                 >
                     ×
@@ -1915,22 +2577,23 @@
 
             <div class="modal-body">
 
-                <p
+                <div
                     style="
-                    font-size:13px;
-                    color:#6c7b8a;
-                    line-height:1.6;
-                    margin-bottom:20px;
+                        color:#718096;
+                        font-size:12px;
+                        line-height:1.6;
+                        margin-bottom:18px;
                     "
                 >
                     Application fee:
-                    <strong style="color:#123b68;">
+                    <strong style="color:#0d3f70;">
                         R250
                     </strong>
-                </p>
+                </div>
 
 
                 <div class="payment-methods">
+
 
                     <label
                         class="payment-method selected"
@@ -1944,6 +2607,7 @@
                         >
 
                         <div>
+
                             <strong>
                                 Card
                             </strong>
@@ -1951,6 +2615,7 @@
                             <span>
                                 Visa, Mastercard or bank card
                             </span>
+
                         </div>
 
                     </label>
@@ -1967,6 +2632,7 @@
                         >
 
                         <div>
+
                             <strong>
                                 EFT
                             </strong>
@@ -1974,6 +2640,7 @@
                             <span>
                                 Electronic funds transfer
                             </span>
+
                         </div>
 
                     </label>
@@ -1981,12 +2648,12 @@
                 </div>
 
 
-                <div class="payment-info">
+                <div class="local-payment-note">
 
-                    This page is operating in local-only mode.
-                    Clicking <strong>Confirm Payment</strong> records
-                    the payment status in this browser's LocalStorage.
-                    No real money will be charged.
+                    This version runs entirely on your device.
+                    Confirming payment below only records the
+                    payment status in LocalStorage. No real
+                    payment or money transfer takes place.
 
                 </div>
 
@@ -1997,7 +2664,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="button button-secondary"
                     onclick="closePaymentModal()"
                 >
                     Cancel
@@ -2005,7 +2672,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-primary"
+                    class="button button-primary"
                     onclick="confirmPayment()"
                 >
                     Confirm Payment
@@ -2018,9 +2685,10 @@
     </div>
 
 
-    <!-- =========================
-         VIEW DOCUMENT MODAL
-    ========================= -->
+
+    <!-- =========================================================
+         DOCUMENT VIEW MODAL
+    ========================================================== -->
 
     <div
         class="modal-overlay"
@@ -2040,7 +2708,7 @@
 
                 <button
                     type="button"
-                    class="close-btn"
+                    class="close-button"
                     onclick="closeViewDocumentModal()"
                 >
                     ×
@@ -2052,13 +2720,8 @@
             <div class="modal-body">
 
                 <div
+                    class="document-preview"
                     id="documentPreview"
-                    style="
-                    border:1px solid #e3e9ef;
-                    border-radius:12px;
-                    padding:20px;
-                    background:#f8fafc;
-                    "
                 ></div>
 
             </div>
@@ -2068,7 +2731,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="button button-secondary"
                     onclick="closeViewDocumentModal()"
                 >
                     Close
@@ -2081,7 +2744,10 @@
     </div>
 
 
-    <!-- TOAST -->
+
+    <!-- =========================================================
+         TOAST
+    ========================================================== -->
 
     <div
         class="toast-container"
@@ -2089,21 +2755,24 @@
     ></div>
 
 
+
+    <!-- =========================================================
+         JAVASCRIPT
+         LOCAL STORAGE ONLY
+    ========================================================== -->
+
     <script>
 
         /* =====================================================
-           ATLAS COLLEGE
-           LOCAL STORAGE APPLICATION STATUS
-           
-           NO BACKEND
-           NO API
-           NO FIREBASE
-           NO SERVER
+           STORAGE
         ===================================================== */
 
-        const STORAGE_KEY = "atlas_college_application_v1";
+        const STORAGE_KEY =
+            "atlas_college_application_v1";
 
-        const MAX_FILE_SIZE = 2 * 1024 * 1024;
+
+        const MAX_FILE_SIZE =
+            2 * 1024 * 1024;
 
 
         /* =====================================================
@@ -2112,17 +2781,23 @@
 
         const defaultApplication = {
 
-            reference: "ATL-2026-10482",
+            reference:
+                "ATL-2026-10482",
 
-            applicant: "Thabo Mokoena",
+            applicant:
+                "Thabo Mokoena",
 
-            programme: "Information Technology",
+            programme:
+                "Information Technology",
 
-            intake: "2026",
+            intake:
+                "2026",
 
-            studyMode: "Full-time",
+            studyMode:
+                "Full-time",
 
-            submittedDate: "18 August 2026",
+            submittedDate:
+                "18 August 2026",
 
             documents: {
 
@@ -2148,64 +2823,94 @@
 
             },
 
-            decision: null
+            decision:
+                null
 
         };
 
 
         /* =====================================================
-           LOAD / SAVE
+           LOAD APPLICATION
         ===================================================== */
 
         function loadApplication() {
 
             const saved =
-                localStorage.getItem(STORAGE_KEY);
+                localStorage.getItem(
+                    STORAGE_KEY
+                );
+
 
             if (!saved) {
 
                 localStorage.setItem(
                     STORAGE_KEY,
-                    JSON.stringify(defaultApplication)
+                    JSON.stringify(
+                        defaultApplication
+                    )
                 );
 
+
                 return JSON.parse(
-                    JSON.stringify(defaultApplication)
+                    JSON.stringify(
+                        defaultApplication
+                    )
                 );
+
             }
+
 
             try {
 
                 return JSON.parse(saved);
 
-            } catch (error) {
+            } catch {
 
                 localStorage.setItem(
                     STORAGE_KEY,
-                    JSON.stringify(defaultApplication)
+                    JSON.stringify(
+                        defaultApplication
+                    )
                 );
+
 
                 return JSON.parse(
-                    JSON.stringify(defaultApplication)
+                    JSON.stringify(
+                        defaultApplication
+                    )
                 );
+
             }
+
         }
 
+
+        let application =
+            loadApplication();
+
+
+        let activeDocumentKey =
+            null;
+
+
+        let selectedFileData =
+            null;
+
+
+        /* =====================================================
+           SAVE
+        ===================================================== */
 
         function saveApplication() {
 
             localStorage.setItem(
                 STORAGE_KEY,
-                JSON.stringify(application)
+                JSON.stringify(
+                    application
+                )
             );
+
         }
-
-
-        let application = loadApplication();
-
-        let activeDocumentKey = null;
-
-        let selectedFileData = null;
 
 
         /* =====================================================
@@ -2216,26 +2921,46 @@
 
             {
                 key: "id",
-                name: "ID / Passport",
-                description: "Official identification document"
+
+                name:
+                    "ID / Passport",
+
+                description:
+                    "Official identification document"
+
             },
 
             {
                 key: "matric",
-                name: "Matric Certificate",
-                description: "Final matric certificate or equivalent"
+
+                name:
+                    "Matric Certificate",
+
+                description:
+                    "Final matric certificate or equivalent"
+
             },
 
             {
                 key: "results",
-                name: "Latest School Results",
-                description: "Most recent academic results"
+
+                name:
+                    "Latest School Results",
+
+                description:
+                    "Most recent academic results"
+
             },
 
             {
                 key: "address",
-                name: "Proof of Address",
-                description: "Recent proof of residential address"
+
+                name:
+                    "Proof of Address",
+
+                description:
+                    "Recent proof of residential address"
+
             }
 
         ];
@@ -2249,50 +2974,59 @@
             "DOMContentLoaded",
             function () {
 
-                renderApplication();
+                renderPage();
 
                 setupFileInput();
 
                 setupDragAndDrop();
 
-                setupPaymentMethodStyling();
+                setupPaymentMethods();
 
             }
         );
 
 
         /* =====================================================
-           RENDER EVERYTHING
+           RENDER PAGE
         ===================================================== */
 
-        function renderApplication() {
+        function renderPage() {
 
             document.getElementById(
                 "applicationReference"
-            ).textContent = application.reference;
+            ).textContent =
+                application.reference;
+
 
             document.getElementById(
                 "applicantName"
-            ).textContent = application.applicant;
+            ).textContent =
+                application.applicant;
+
 
             document.getElementById(
                 "programmeName"
-            ).textContent = application.programme;
+            ).textContent =
+                application.programme;
+
 
             document.getElementById(
                 "intakeName"
-            ).textContent = application.intake;
+            ).textContent =
+                application.intake;
+
 
             document.getElementById(
                 "studyMode"
-            ).textContent = application.studyMode;
+            ).textContent =
+                application.studyMode;
 
 
             renderDocuments();
 
             renderPayment();
 
-            updateApplicationStatus();
+            updateStatus();
 
         }
 
@@ -2303,59 +3037,75 @@
 
         function renderDocuments() {
 
-            const container =
-                document.getElementById("documentsList");
+            const list =
+                document.getElementById(
+                    "documentsList"
+                );
 
-            container.innerHTML = "";
+
+            list.innerHTML = "";
+
 
             documentDefinitions.forEach(
                 function (definition) {
 
                     const document =
-                        application.documents[definition.key];
+                        application.documents[
+                            definition.key
+                        ];
+
 
                     const row =
                         document.createElement("div");
 
-                    row.className = "document-row";
+                    row.className =
+                        "document-row";
 
 
                     const main =
                         document.createElement("div");
 
-                    main.className = "document-main";
+                    main.className =
+                        "document-main";
 
 
                     const icon =
                         document.createElement("div");
 
-                    icon.className = "document-icon";
+                    icon.className =
+                        "document-icon";
 
                     icon.textContent =
-                        document ? "✓" : "DOC";
+                        document
+                        ? "✓"
+                        : "DOC";
 
 
                     const info =
                         document.createElement("div");
 
-                    info.className = "document-info";
+                    info.className =
+                        "document-info";
 
 
                     const name =
                         document.createElement("div");
 
-                    name.className = "document-name";
+                    name.className =
+                        "document-name";
 
                     name.textContent =
                         definition.name;
 
 
-                    const note =
+                    const description =
                         document.createElement("div");
 
-                    note.className = "document-note";
+                    description.className =
+                        "document-description";
 
-                    note.textContent =
+
+                    description.textContent =
                         document
                         ? document.name
                         : definition.description;
@@ -2363,7 +3113,9 @@
 
                     info.appendChild(name);
 
-                    info.appendChild(note);
+                    info.appendChild(
+                        description
+                    );
 
 
                     main.appendChild(icon);
@@ -2374,7 +3126,8 @@
                     const actions =
                         document.createElement("div");
 
-                    actions.className = "document-actions";
+                    actions.className =
+                        "document-actions";
 
 
                     const status =
@@ -2384,9 +3137,10 @@
                         "document-status " +
                         (
                             document
-                            ? "status-uploaded"
-                            : "status-required"
+                            ? "uploaded"
+                            : "required"
                         );
+
 
                     status.textContent =
                         document
@@ -2394,23 +3148,21 @@
                         : "Required";
 
 
-                    actions.appendChild(status);
+                    actions.appendChild(
+                        status
+                    );
 
 
                     if (document) {
 
-                        const viewButton =
-                            document.createElement("button");
+                        const view =
+                            createButton(
+                                "View",
+                                "button-secondary"
+                            );
 
-                        viewButton.type = "button";
 
-                        viewButton.className =
-                            "btn btn-secondary";
-
-                        viewButton.textContent =
-                            "View";
-
-                        viewButton.onclick =
+                        view.onclick =
                             function () {
 
                                 viewDocument(
@@ -2420,18 +3172,14 @@
                             };
 
 
-                        const replaceButton =
-                            document.createElement("button");
+                        const replace =
+                            createButton(
+                                "Replace",
+                                "button-secondary"
+                            );
 
-                        replaceButton.type = "button";
 
-                        replaceButton.className =
-                            "btn btn-secondary";
-
-                        replaceButton.textContent =
-                            "Replace";
-
-                        replaceButton.onclick =
+                        replace.onclick =
                             function () {
 
                                 openUploadModal(
@@ -2441,18 +3189,14 @@
                             };
 
 
-                        const removeButton =
-                            document.createElement("button");
+                        const remove =
+                            createButton(
+                                "Remove",
+                                "button-danger"
+                            );
 
-                        removeButton.type = "button";
 
-                        removeButton.className =
-                            "btn btn-danger";
-
-                        removeButton.textContent =
-                            "Remove";
-
-                        removeButton.onclick =
+                        remove.onclick =
                             function () {
 
                                 removeDocument(
@@ -2462,26 +3206,22 @@
                             };
 
 
-                        actions.appendChild(viewButton);
+                        actions.appendChild(view);
 
-                        actions.appendChild(replaceButton);
+                        actions.appendChild(replace);
 
-                        actions.appendChild(removeButton);
+                        actions.appendChild(remove);
 
                     } else {
 
-                        const uploadButton =
-                            document.createElement("button");
+                        const upload =
+                            createButton(
+                                "Upload",
+                                "button-primary"
+                            );
 
-                        uploadButton.type = "button";
 
-                        uploadButton.className =
-                            "btn btn-primary";
-
-                        uploadButton.textContent =
-                            "Upload";
-
-                        uploadButton.onclick =
+                        upload.onclick =
                             function () {
 
                                 openUploadModal(
@@ -2491,7 +3231,7 @@
                             };
 
 
-                        actions.appendChild(uploadButton);
+                        actions.appendChild(upload);
 
                     }
 
@@ -2500,7 +3240,7 @@
 
                     row.appendChild(actions);
 
-                    container.appendChild(row);
+                    list.appendChild(row);
 
                 }
             );
@@ -2509,30 +3249,73 @@
 
 
         /* =====================================================
-           OPEN UPLOAD MODAL
+           BUTTON FACTORY
+        ===================================================== */
+
+        function createButton(
+            text,
+            className
+        ) {
+
+            const button =
+                document.createElement("button");
+
+
+            button.type =
+                "button";
+
+
+            button.className =
+                "button " +
+                className;
+
+
+            button.textContent =
+                text;
+
+
+            return button;
+
+        }
+
+
+        /* =====================================================
+           UPLOAD MODAL
         ===================================================== */
 
         function openUploadModal(key) {
 
-            activeDocumentKey = key;
+            activeDocumentKey =
+                key;
 
-            selectedFileData = null;
+
+            selectedFileData =
+                null;
+
 
             document.getElementById(
                 "documentInput"
             ).value = "";
 
+
             document.getElementById(
                 "selectedFile"
-            ).classList.remove("show");
+            ).classList.remove(
+                "show"
+            );
+
 
             document.getElementById(
                 "saveDocumentButton"
-            ).disabled = true;
+            ).disabled =
+                true;
+
 
             document.getElementById(
                 "uploadModal"
-            ).classList.add("show");
+            ).classList.add(
+                "show"
+            );
 
         }
 
@@ -2541,11 +3324,17 @@
 
             document.getElementById(
                 "uploadModal"
-            ).classList.remove("show");
+            ).classList.remove(
+                "show"
+            );
 
-            activeDocumentKey = null;
 
-            selectedFileData = null;
+            activeDocumentKey =
+                null;
+
+
+            selectedFileData =
+                null;
 
         }
 
@@ -2567,7 +3356,7 @@
                         event.target.files[0]
                     ) {
 
-                        processSelectedFile(
+                        processFile(
                             event.target.files[0]
                         );
 
@@ -2579,15 +3368,20 @@
         }
 
 
-        function processSelectedFile(file) {
+        function processFile(file) {
 
-            if (!file) return;
+            if (!file) {
+                return;
+            }
 
 
-            if (file.size > MAX_FILE_SIZE) {
+            if (
+                file.size >
+                MAX_FILE_SIZE
+            ) {
 
                 showToast(
-                    "This file is larger than 2MB."
+                    "File is larger than 2MB."
                 );
 
                 return;
@@ -2595,23 +3389,22 @@
             }
 
 
-            const allowedTypes = [
-
-                "application/pdf",
-
-                "image/jpeg",
-
-                "image/png"
-
-            ];
+            const allowed =
+                [
+                    "application/pdf",
+                    "image/jpeg",
+                    "image/png"
+                ];
 
 
             if (
-                !allowedTypes.includes(file.type)
+                !allowed.includes(
+                    file.type
+                )
             ) {
 
                 showToast(
-                    "Please upload a PDF, JPG or PNG file."
+                    "Please choose a PDF, JPG or PNG file."
                 );
 
                 return;
@@ -2623,42 +3416,48 @@
                 new FileReader();
 
 
-            reader.onload = function (event) {
+            reader.onload =
+                function (event) {
 
-                selectedFileData = {
+                    selectedFileData = {
 
-                    name: file.name,
+                        name:
+                            file.name,
 
-                    type: file.type,
+                        type:
+                            file.type,
 
-                    size: file.size,
+                        size:
+                            file.size,
 
-                    data: event.target.result
+                        data:
+                            event.target.result
 
-                };
+                    };
 
 
-                const selected =
-                    document.getElementById(
-                        "selectedFile"
+                    const selected =
+                        document.getElementById(
+                            "selectedFile"
+                        );
+
+
+                    selected.textContent =
+                        "Selected: " +
+                        file.name;
+
+
+                    selected.classList.add(
+                        "show"
                     );
 
 
-                selected.textContent =
-                    "Selected: " +
-                    file.name;
+                    document.getElementById(
+                        "saveDocumentButton"
+                    ).disabled =
+                        false;
 
-
-                selected.classList.add(
-                    "show"
-                );
-
-
-                document.getElementById(
-                    "saveDocumentButton"
-                ).disabled = false;
-
-            };
+                };
 
 
             reader.readAsDataURL(file);
@@ -2678,46 +3477,26 @@
                 );
 
 
-            [
-                "dragenter",
-                "dragover"
-            ].forEach(
-                function (eventName) {
+            area.addEventListener(
+                "dragover",
+                function (event) {
 
-                    area.addEventListener(
-                        eventName,
-                        function (event) {
+                    event.preventDefault();
 
-                            event.preventDefault();
-
-                            area.classList.add(
-                                "dragging"
-                            );
-
-                        }
+                    area.classList.add(
+                        "dragging"
                     );
 
                 }
             );
 
 
-            [
+            area.addEventListener(
                 "dragleave",
-                "drop"
-            ].forEach(
-                function (eventName) {
+                function () {
 
-                    area.addEventListener(
-                        eventName,
-                        function (event) {
-
-                            event.preventDefault();
-
-                            area.classList.remove(
-                                "dragging"
-                            );
-
-                        }
+                    area.classList.remove(
+                        "dragging"
                     );
 
                 }
@@ -2728,16 +3507,20 @@
                 "drop",
                 function (event) {
 
-                    const files =
-                        event.dataTransfer.files;
+                    event.preventDefault();
+
+                    area.classList.remove(
+                        "dragging"
+                    );
+
 
                     if (
-                        files &&
-                        files.length
+                        event.dataTransfer.files &&
+                        event.dataTransfer.files[0]
                     ) {
 
-                        processSelectedFile(
-                            files[0]
+                        processFile(
+                            event.dataTransfer.files[0]
                         );
 
                     }
@@ -2766,14 +3549,15 @@
 
             application.documents[
                 activeDocumentKey
-            ] = selectedFileData;
+            ] =
+                selectedFileData;
 
 
             saveApplication();
 
             closeUploadModal();
 
-            renderApplication();
+            renderPage();
 
             showToast(
                 "Document uploaded successfully."
@@ -2798,9 +3582,6 @@
                 );
 
 
-            if (!definition) return;
-
-
             const confirmed =
                 window.confirm(
                     "Remove " +
@@ -2809,7 +3590,9 @@
                 );
 
 
-            if (!confirmed) return;
+            if (!confirmed) {
+                return;
+            }
 
 
             application.documents[key] =
@@ -2818,7 +3601,7 @@
 
             saveApplication();
 
-            renderApplication();
+            renderPage();
 
             showToast(
                 "Document removed."
@@ -2833,11 +3616,13 @@
 
         function viewDocument(key) {
 
-            const documentData =
+            const data =
                 application.documents[key];
 
 
-            if (!documentData) return;
+            if (!data) {
+                return;
+            }
 
 
             const definition =
@@ -2862,28 +3647,24 @@
                 );
 
 
-            preview.innerHTML = "";
+            preview.innerHTML =
+                "";
 
 
             if (
-                documentData.type ===
+                data.type ===
                 "application/pdf"
             ) {
 
                 const iframe =
-                    document.createElement("iframe");
+                    document.createElement(
+                        "iframe"
+                    );
+
 
                 iframe.src =
-                    documentData.data;
+                    data.data;
 
-                iframe.style.width =
-                    "100%";
-
-                iframe.style.height =
-                    "500px";
-
-                iframe.style.border =
-                    "none";
 
                 preview.appendChild(
                     iframe
@@ -2892,22 +3673,18 @@
             } else {
 
                 const image =
-                    document.createElement("img");
+                    document.createElement(
+                        "img"
+                    );
+
 
                 image.src =
-                    documentData.data;
+                    data.data;
+
 
                 image.alt =
-                    documentData.name;
+                    data.name;
 
-                image.style.width =
-                    "100%";
-
-                image.style.maxHeight =
-                    "500px";
-
-                image.style.objectFit =
-                    "contain";
 
                 preview.appendChild(
                     image
@@ -2918,7 +3695,9 @@
 
             document.getElementById(
                 "viewDocumentModal"
-            ).classList.add("show");
+            ).classList.add(
+                "show"
+            );
 
         }
 
@@ -2927,7 +3706,9 @@
 
             document.getElementById(
                 "viewDocumentModal"
-            ).classList.remove("show");
+            ).classList.remove(
+                "show"
+            );
 
         }
 
@@ -2938,20 +3719,23 @@
 
         function renderPayment() {
 
-            const statusText =
+            const text =
                 document.getElementById(
                     "paymentStatusText"
                 );
+
 
             const badge =
                 document.getElementById(
                     "paymentBadge"
                 );
 
-            const payButton =
+
+            const button =
                 document.getElementById(
                     "payButton"
                 );
+
 
             const receipt =
                 document.getElementById(
@@ -2959,26 +3743,31 @@
                 );
 
 
-            if (application.payment.paid) {
+            if (
+                application.payment.paid
+            ) {
 
-                statusText.textContent =
+                text.textContent =
                     "Application Fee Paid";
 
-                statusText.className =
-                    "payment-status-text payment-paid";
+
+                text.className =
+                    "payment-status-text paid";
 
 
                 badge.textContent =
                     "Paid";
 
+
                 badge.className =
-                    "document-status status-uploaded";
+                    "document-status uploaded";
 
 
-                payButton.textContent =
+                button.textContent =
                     "Payment Complete";
 
-                payButton.disabled =
+
+                button.disabled =
                     true;
 
 
@@ -2999,24 +3788,27 @@
 
             } else {
 
-                statusText.textContent =
+                text.textContent =
                     "Application Fee Unpaid";
 
-                statusText.className =
-                    "payment-status-text payment-unpaid";
+
+                text.className =
+                    "payment-status-text unpaid";
 
 
                 badge.textContent =
                     "Unpaid";
 
+
                 badge.className =
-                    "document-status status-required";
+                    "document-status required";
 
 
-                payButton.textContent =
+                button.textContent =
                     "Pay Application Fee";
 
-                payButton.disabled =
+
+                button.disabled =
                     false;
 
 
@@ -3030,16 +3822,18 @@
 
         function openPaymentModal() {
 
-            if (application.payment.paid) {
-
+            if (
+                application.payment.paid
+            ) {
                 return;
-
             }
 
 
             document.getElementById(
                 "paymentModal"
-            ).classList.add("show");
+            ).classList.add(
+                "show"
+            );
 
         }
 
@@ -3048,7 +3842,9 @@
 
             document.getElementById(
                 "paymentModal"
-            ).classList.remove("show");
+            ).classList.remove(
+                "show"
+            );
 
         }
 
@@ -3065,7 +3861,7 @@
                 new Date();
 
 
-            const paymentReference =
+            const reference =
                 "PAY-" +
                 now.getFullYear() +
                 "-" +
@@ -3077,22 +3873,29 @@
 
             application.payment = {
 
-                paid: true,
+                paid:
+                    true,
 
                 reference:
-                    paymentReference,
+                    reference,
 
                 date:
                     now.toLocaleDateString(
                         "en-ZA",
                         {
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric"
+                            day:
+                                "2-digit",
+
+                            month:
+                                "long",
+
+                            year:
+                                "numeric"
                         }
                     ),
 
-                method: method
+                method:
+                    method
 
             };
 
@@ -3101,7 +3904,7 @@
 
             closePaymentModal();
 
-            renderApplication();
+            renderPage();
 
             showToast(
                 "Payment recorded successfully."
@@ -3111,319 +3914,10 @@
 
 
         /* =====================================================
-           APPLICATION STATUS
+           PAYMENT METHODS
         ===================================================== */
 
-        function getStatus() {
-
-            const documentsComplete =
-                documentDefinitions.every(
-                    function (definition) {
-
-                        return Boolean(
-                            application.documents[
-                                definition.key
-                            ]
-                        );
-
-                    }
-                );
-
-
-            const paymentComplete =
-                application.payment.paid;
-
-
-            if (application.decision === "accepted") {
-
-                return "Accepted";
-
-            }
-
-
-            if (application.decision === "rejected") {
-
-                return "Unsuccessful";
-
-            }
-
-
-            if (
-                documentsComplete &&
-                paymentComplete
-            ) {
-
-                return "Under Review";
-
-            }
-
-
-            return "Action Required";
-
-        }
-
-
-        function updateApplicationStatus() {
-
-            const status =
-                getStatus();
-
-
-            const headerStatus =
-                document.getElementById(
-                    "headerStatus"
-                );
-
-
-            const currentTitle =
-                document.getElementById(
-                    "currentStatusTitle"
-                );
-
-
-            const currentText =
-                document.getElementById(
-                    "currentStatusText"
-                );
-
-
-            const progressFill =
-                document.getElementById(
-                    "progressFill"
-                );
-
-
-            const progressPercent =
-                document.getElementById(
-                    "progressPercent"
-                );
-
-
-            let progress = 25;
-
-            let activeStep = 2;
-
-
-            if (status === "Action Required") {
-
-                const documentsComplete =
-                    documentDefinitions.every(
-                        function (definition) {
-
-                            return Boolean(
-                                application.documents[
-                                    definition.key
-                                ]
-                            );
-
-                        }
-                    );
-
-
-                if (
-                    documentsComplete &&
-                    !application.payment.paid
-                ) {
-
-                    progress = 45;
-
-                    activeStep = 3;
-
-                } else {
-
-                    progress = 25;
-
-                    activeStep = 2;
-
-                }
-
-            }
-
-
-            if (status === "Under Review") {
-
-                progress = 75;
-
-                activeStep = 4;
-
-            }
-
-
-            if (
-                status === "Accepted" ||
-                status === "Unsuccessful"
-            ) {
-
-                progress = 100;
-
-                activeStep = 5;
-
-            }
-
-
-            progressFill.style.width =
-                progress + "%";
-
-
-            progressPercent.textContent =
-                progress + "%";
-
-
-            currentTitle.textContent =
-                status;
-
-
-            if (status === "Action Required") {
-
-                currentText.textContent =
-                    "Please complete the outstanding requirements before your application can be reviewed.";
-
-                headerStatus.innerHTML =
-                    '<span class="status-dot"></span> Action Required';
-
-                headerStatus.style.background =
-                    "var(--orange-bg)";
-
-                headerStatus.style.color =
-                    "var(--orange)";
-
-            }
-
-
-            if (status === "Under Review") {
-
-                currentText.textContent =
-                    "Your application is complete and has been submitted for review by the admissions team.";
-
-                headerStatus.innerHTML =
-                    '<span class="status-dot"></span> Under Review';
-
-                headerStatus.style.background =
-                    "var(--blue-light)";
-
-                headerStatus.style.color =
-                    "var(--blue)";
-
-            }
-
-
-            if (status === "Accepted") {
-
-                currentText.textContent =
-                    "Congratulations. Your application has been accepted.";
-
-                headerStatus.innerHTML =
-                    '<span class="status-dot"></span> Accepted';
-
-                headerStatus.style.background =
-                    "var(--green-bg)";
-
-                headerStatus.style.color =
-                    "var(--green)";
-
-            }
-
-
-            if (status === "Unsuccessful") {
-
-                currentText.textContent =
-                    "Your application was not successful.";
-
-                headerStatus.innerHTML =
-                    '<span class="status-dot"></span> Unsuccessful';
-
-                headerStatus.style.background =
-                    "var(--red-bg)";
-
-                headerStatus.style.color =
-                    "var(--red)";
-
-            }
-
-
-            updateSteps(activeStep);
-
-        }
-
-
-        /* =====================================================
-           PROGRESS STEPS
-        ===================================================== */
-
-        function updateSteps(activeStep) {
-
-            const steps =
-                document.querySelectorAll(
-                    ".step"
-                );
-
-
-            steps.forEach(
-                function (step, index) {
-
-                    const stepNumber =
-                        index + 1;
-
-                    step.classList.remove(
-                        "completed",
-                        "active"
-                    );
-
-
-                    const circle =
-                        step.querySelector(
-                            ".step-circle"
-                        );
-
-
-                    if (
-                        stepNumber <
-                        activeStep
-                    ) {
-
-                        step.classList.add(
-                            "completed"
-                        );
-
-                        circle.textContent =
-                            "✓";
-
-                    }
-
-
-                    else if (
-                        stepNumber ===
-                        activeStep
-                    ) {
-
-                        step.classList.add(
-                            "active"
-                        );
-
-                        circle.textContent =
-                            stepNumber;
-
-                    }
-
-
-                    else {
-
-                        circle.textContent =
-                            stepNumber;
-
-                    }
-
-                }
-            );
-
-        }
-
-
-        /* =====================================================
-           PAYMENT METHOD UI
-        ===================================================== */
-
-        function setupPaymentMethodStyling() {
+        function setupPaymentMethods() {
 
             const methods =
                 document.querySelectorAll(
@@ -3469,7 +3963,365 @@
 
 
         /* =====================================================
-           COPY APPLICATION NUMBER
+           STATUS
+        ===================================================== */
+
+        function getApplicationStatus() {
+
+            const documentsComplete =
+                documentDefinitions.every(
+                    function (definition) {
+
+                        return Boolean(
+                            application.documents[
+                                definition.key
+                            ]
+                        );
+
+                    }
+                );
+
+
+            if (
+                application.decision ===
+                "accepted"
+            ) {
+
+                return "Accepted";
+
+            }
+
+
+            if (
+                application.decision ===
+                "rejected"
+            ) {
+
+                return "Unsuccessful";
+
+            }
+
+
+            if (
+                documentsComplete &&
+                application.payment.paid
+            ) {
+
+                return "Under Review";
+
+            }
+
+
+            return "Action Required";
+
+        }
+
+
+        function updateStatus() {
+
+            const status =
+                getApplicationStatus();
+
+
+            const title =
+                document.getElementById(
+                    "currentStatusTitle"
+                );
+
+
+            const description =
+                document.getElementById(
+                    "currentStatusDescription"
+                );
+
+
+            const headerBadge =
+                document.getElementById(
+                    "headerStatus"
+                );
+
+
+            const headerText =
+                document.getElementById(
+                    "headerStatusText"
+                );
+
+
+            const progress =
+                document.getElementById(
+                    "progressFill"
+                );
+
+
+            const percentage =
+                document.getElementById(
+                    "progressPercentage"
+                );
+
+
+            let progressValue =
+                25;
+
+
+            let activeStep =
+                2;
+
+
+            if (
+                status ===
+                "Action Required"
+            ) {
+
+                const documentsComplete =
+                    documentDefinitions.every(
+                        function (definition) {
+
+                            return Boolean(
+                                application.documents[
+                                    definition.key
+                                ]
+                            );
+
+                        }
+                    );
+
+
+                if (
+                    documentsComplete &&
+                    !application.payment.paid
+                ) {
+
+                    progressValue =
+                        45;
+
+                    activeStep =
+                        3;
+
+                } else {
+
+                    progressValue =
+                        25;
+
+                    activeStep =
+                        2;
+
+                }
+
+            }
+
+
+            if (
+                status ===
+                "Under Review"
+            ) {
+
+                progressValue =
+                    75;
+
+                activeStep =
+                    4;
+
+            }
+
+
+            if (
+                status ===
+                "Accepted" ||
+                status ===
+                "Unsuccessful"
+            ) {
+
+                progressValue =
+                    100;
+
+                activeStep =
+                    5;
+
+            }
+
+
+            progress.style.width =
+                progressValue + "%";
+
+
+            percentage.textContent =
+                progressValue + "%";
+
+
+            title.textContent =
+                status;
+
+
+            headerText.textContent =
+                status;
+
+
+            if (
+                status ===
+                "Action Required"
+            ) {
+
+                description.textContent =
+                    "Please complete the outstanding requirements before your application can be reviewed.";
+
+
+                headerBadge.style.background =
+                    "var(--orange-light)";
+
+
+                headerBadge.style.color =
+                    "var(--orange)";
+
+            }
+
+
+            if (
+                status ===
+                "Under Review"
+            ) {
+
+                description.textContent =
+                    "Your application is complete and has been submitted to the admissions team for review.";
+
+
+                headerBadge.style.background =
+                    "var(--blue-light)";
+
+
+                headerBadge.style.color =
+                    "var(--blue)";
+
+            }
+
+
+            if (
+                status ===
+                "Accepted"
+            ) {
+
+                description.textContent =
+                    "Congratulations. Your application has been accepted by Atlas College.";
+
+
+                headerBadge.style.background =
+                    "var(--green-light)";
+
+
+                headerBadge.style.color =
+                    "var(--green)";
+
+            }
+
+
+            if (
+                status ===
+                "Unsuccessful"
+            ) {
+
+                description.textContent =
+                    "Your application was not successful.";
+
+
+                headerBadge.style.background =
+                    "var(--red-light)";
+
+
+                headerBadge.style.color =
+                    "var(--red)";
+
+            }
+
+
+            updateSteps(
+                activeStep
+            );
+
+        }
+
+
+        /* =====================================================
+           STEPS
+        ===================================================== */
+
+        function updateSteps(
+            activeStep
+        ) {
+
+            const steps =
+                document.querySelectorAll(
+                    ".step"
+                );
+
+
+            steps.forEach(
+                function (
+                    step,
+                    index
+                ) {
+
+                    const number =
+                        index + 1;
+
+
+                    const circle =
+                        step.querySelector(
+                            ".step-circle"
+                        );
+
+
+                    step.classList.remove(
+                        "completed",
+                        "active"
+                    );
+
+
+                    if (
+                        number <
+                        activeStep
+                    ) {
+
+                        step.classList.add(
+                            "completed"
+                        );
+
+
+                        circle.textContent =
+                            "✓";
+
+                    }
+
+
+                    else if (
+                        number ===
+                        activeStep
+                    ) {
+
+                        step.classList.add(
+                            "active"
+                        );
+
+
+                        circle.textContent =
+                            number;
+
+                    }
+
+
+                    else {
+
+                        circle.textContent =
+                            number;
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           COPY
         ===================================================== */
 
         function copyReference() {
@@ -3479,8 +4331,7 @@
 
 
             if (
-                navigator.clipboard &&
-                navigator.clipboard.writeText
+                navigator.clipboard
             ) {
 
                 navigator.clipboard.writeText(
@@ -3516,8 +4367,11 @@
             document.getElementById(
                 "helpCard"
             ).scrollIntoView({
-                behavior: "smooth",
-                block: "center"
+                behavior:
+                    "smooth",
+
+                block:
+                    "center"
             });
 
         }
@@ -3526,7 +4380,7 @@
         function showSupportMessage() {
 
             showToast(
-                "Admissions support: admissions@atlascollege.co.za"
+                "Admissions: admissions@atlascollege.co.za"
             );
 
         }
@@ -3557,10 +4411,14 @@
 
 
             const toast =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             toast.className =
                 "toast";
+
 
             toast.textContent =
                 message;
@@ -3577,8 +4435,9 @@
                     toast.style.opacity =
                         "0";
 
+
                     toast.style.transform =
-                        "translateY(10px)";
+                        "translateY(8px)";
 
 
                     setTimeout(
@@ -3598,7 +4457,7 @@
 
 
         /* =====================================================
-           CLOSE MODALS WHEN CLICKING OUTSIDE
+           CLOSE MODALS BY CLICKING OUTSIDE
         ===================================================== */
 
         document.addEventListener(
@@ -3622,14 +4481,17 @@
 
 
         /* =====================================================
-           ESCAPE KEY
+           ESCAPE
         ===================================================== */
 
         document.addEventListener(
             "keydown",
             function (event) {
 
-                if (event.key === "Escape") {
+                if (
+                    event.key ===
+                    "Escape"
+                ) {
 
                     document.querySelectorAll(
                         ".modal-overlay.show"
@@ -3651,4 +4513,4 @@
     </script>
 
 </body>
-                      </html>
+    </html>
