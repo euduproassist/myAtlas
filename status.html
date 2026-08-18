@@ -1,0 +1,5034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Application Status | Atlas College</title>
+
+    <style>
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            width: 100%;
+            min-width: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            width: 100%;
+            min-width: 0;
+            overflow-x: hidden;
+
+            font-family:
+                Inter,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+
+            color: #071947;
+            background: #f5f8fc;
+
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================================================
+           VARIABLES
+        ========================================================= */
+
+        :root {
+            --blue: #0957e8;
+            --blue-dark: #062b73;
+            --blue-light: #eef5ff;
+
+            --navy: #071947;
+            --text: #1d2c49;
+            --muted: #64728a;
+
+            --green: #159447;
+            --green-bg: #eaf8ef;
+
+            --orange: #c97700;
+            --orange-bg: #fff5df;
+
+            --red: #c93636;
+            --red-bg: #fff0f0;
+
+            --border: #dfe6f0;
+            --background: #f5f8fc;
+            --white: #ffffff;
+
+            --shadow:
+                0 8px 30px rgba(7, 25, 71, 0.06);
+
+            --shadow-hover:
+                0 15px 35px rgba(7, 25, 71, 0.10);
+
+            --radius: 9px;
+        }
+
+        /* =========================================================
+           UTILITIES
+        ========================================================= */
+
+        .hidden {
+            display: none !important;
+        }
+
+        .page {
+            width: 100%;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1440px;
+            margin: 0 auto;
+
+            padding-left: clamp(18px, 4vw, 60px);
+            padding-right: clamp(18px, 4vw, 60px);
+        }
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .header {
+            width: 100%;
+            height: 70px;
+
+            background: #ffffff;
+            border-bottom: 1px solid #e6ebf2;
+
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            width: 100%;
+            max-width: 1500px;
+            height: 100%;
+
+            margin: 0 auto;
+
+            padding:
+                0
+                clamp(18px, 4.5vw, 65px);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+
+            min-width: 0;
+        }
+
+        .brand img {
+            width: 125px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .help-link {
+            color: #53627b;
+            font-size: 13px;
+            font-weight: 600;
+
+            transition:
+                color 0.2s ease;
+        }
+
+        .help-link:hover {
+            color: var(--blue);
+        }
+
+        .home-button {
+            height: 38px;
+            padding: 0 17px;
+
+            border: 1px solid #d7e0ed;
+            border-radius: 5px;
+
+            background: #ffffff;
+            color: var(--navy);
+
+            font-size: 13px;
+            font-weight: 700;
+
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .home-button:hover {
+            border-color: #b7c9e5;
+            background: #f7faff;
+            transform: translateY(-1px);
+        }
+
+        /* =========================================================
+           PAGE TOP
+        ========================================================= */
+
+        .main {
+            width: 100%;
+            padding: 34px 0 60px;
+        }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+
+            gap: 25px;
+            margin-bottom: 24px;
+        }
+
+        .heading-copy {
+            min-width: 0;
+        }
+
+        .eyebrow {
+            margin: 0 0 7px;
+
+            color: var(--blue);
+
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+        }
+
+        .page-heading h1 {
+            margin: 0;
+
+            color: var(--navy);
+
+            font-size: clamp(28px, 3vw, 39px);
+            line-height: 1.15;
+            letter-spacing: -1px;
+        }
+
+        .page-heading p {
+            margin: 9px 0 0;
+
+            color: var(--muted);
+
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
+        /* =========================================================
+           APPLICATION IDENTIFICATION CARD
+        ========================================================= */
+
+        .application-card {
+            width: 100%;
+
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+
+            box-shadow: var(--shadow);
+
+            padding: 22px 25px;
+
+            margin-bottom: 20px;
+
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .application-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 25px;
+        }
+
+        .application-info {
+            min-width: 0;
+        }
+
+        .application-number {
+            margin: 0;
+
+            color: var(--navy);
+
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .application-number span {
+            color: var(--blue);
+        }
+
+        .application-details {
+            margin-top: 7px;
+
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+
+            gap: 8px 18px;
+
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .application-details strong {
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        /* =========================================================
+           STATUS BADGE
+        ========================================================= */
+
+        .status-badge {
+            flex: 0 0 auto;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 12px;
+
+            border-radius: 30px;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            white-space: nowrap;
+        }
+
+        .status-badge::before {
+            content: "";
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: currentColor;
+        }
+
+        .status-action {
+            color: var(--orange);
+            background: var(--orange-bg);
+        }
+
+        .status-review {
+            color: var(--blue);
+            background: var(--blue-light);
+        }
+
+        .status-accepted {
+            color: var(--green);
+            background: var(--green-bg);
+        }
+
+        .status-unsuccessful {
+            color: var(--red);
+            background: var(--red-bg);
+        }
+
+        /* =========================================================
+           PROGRESS TRACKER
+        ========================================================= */
+
+        .progress-section {
+            margin-top: 25px;
+
+            padding-top: 22px;
+
+            border-top: 1px solid #edf1f6;
+        }
+
+        .progress-track {
+            width: 100%;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, minmax(0, 1fr));
+
+            position: relative;
+        }
+
+        .progress-track::before {
+            content: "";
+
+            position: absolute;
+
+            top: 17px;
+            left: 8%;
+            right: 8%;
+
+            height: 2px;
+
+            background: #e2e8f1;
+
+            z-index: 0;
+        }
+
+        .progress-line-complete {
+            position: absolute;
+
+            top: 17px;
+            left: 8%;
+
+            height: 2px;
+
+            background: var(--blue);
+
+            z-index: 1;
+
+            width: var(--progress-width, 0%);
+
+            transition:
+                width 0.7s ease;
+        }
+
+        .progress-step {
+            position: relative;
+            z-index: 2;
+
+            min-width: 0;
+
+            text-align: center;
+        }
+
+        .progress-circle {
+            width: 35px;
+            height: 35px;
+
+            margin: 0 auto 9px;
+
+            border-radius: 50%;
+
+            border: 2px solid #dbe3ef;
+
+            background: #ffffff;
+
+            color: #8490a4;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            transition:
+                all 0.35s ease;
+        }
+
+        .progress-step.completed .progress-circle {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #ffffff;
+        }
+
+        .progress-step.current .progress-circle {
+            border-color: var(--blue);
+            color: var(--blue);
+            box-shadow:
+                0 0 0 5px rgba(9, 87, 232, 0.08);
+        }
+
+        .progress-label {
+            color: #78859a;
+
+            font-size: 11px;
+            line-height: 1.35;
+            font-weight: 700;
+        }
+
+        .progress-step.completed .progress-label,
+        .progress-step.current .progress-label {
+            color: var(--navy);
+        }
+
+        /* =========================================================
+           MAIN GRID
+        ========================================================= */
+
+        .dashboard-grid {
+            width: 100%;
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                minmax(300px, 360px);
+
+            gap: 20px;
+
+            align-items: start;
+        }
+
+        .left-column,
+        .right-column {
+            min-width: 0;
+
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* =========================================================
+           CARDS
+        ========================================================= */
+
+        .card {
+            width: 100%;
+            min-width: 0;
+
+            background: #ffffff;
+
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+
+            box-shadow: var(--shadow);
+
+            animation: fadeUp 0.55s ease both;
+        }
+
+        .card-header {
+            padding: 20px 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            border-bottom: 1px solid #edf1f6;
+        }
+
+        .card-title {
+            min-width: 0;
+        }
+
+        .card-title h2 {
+            margin: 0;
+
+            color: var(--navy);
+
+            font-size: 17px;
+            line-height: 1.25;
+            font-weight: 800;
+        }
+
+        .card-title p {
+            margin: 5px 0 0;
+
+            color: var(--muted);
+
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .card-body {
+            padding: 20px 22px;
+        }
+
+        /* =========================================================
+           REQUIREMENTS TABLE
+        ========================================================= */
+
+        .requirements-list {
+            width: 100%;
+        }
+
+        .requirement {
+            width: 100%;
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                auto
+                auto;
+
+            align-items: center;
+
+            gap: 18px;
+
+            padding: 17px 0;
+
+            border-bottom: 1px solid #edf1f6;
+        }
+
+        .requirement:first-child {
+            padding-top: 0;
+        }
+
+        .requirement:last-child {
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+
+        .requirement-info {
+            min-width: 0;
+
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+        }
+
+        .requirement-icon {
+            width: 42px;
+            height: 42px;
+
+            flex: 0 0 42px;
+
+            border-radius: 8px;
+
+            background: var(--blue-light);
+
+            color: var(--blue);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .requirement-icon svg {
+            width: 21px;
+            height: 21px;
+
+            fill: none;
+            stroke: currentColor;
+
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .requirement-text {
+            min-width: 0;
+        }
+
+        .requirement-text h3 {
+            margin: 0;
+
+            color: var(--navy);
+
+            font-size: 13px;
+            line-height: 1.35;
+            font-weight: 750;
+        }
+
+        .requirement-text p {
+            margin: 4px 0 0;
+
+            color: var(--muted);
+
+            font-size: 11px;
+            line-height: 1.4;
+
+            overflow-wrap: anywhere;
+        }
+
+        .requirement-status {
+            white-space: nowrap;
+
+            font-size: 11px;
+            font-weight: 800;
+
+            padding: 6px 9px;
+
+            border-radius: 20px;
+        }
+
+        .received {
+            color: var(--green);
+            background: var(--green-bg);
+        }
+
+        .required {
+            color: var(--orange);
+            background: var(--orange-bg);
+        }
+
+        .outstanding {
+            color: var(--red);
+            background: var(--red-bg);
+        }
+
+        .requirement-action {
+            min-width: 82px;
+            height: 34px;
+
+            padding: 0 13px;
+
+            border-radius: 5px;
+
+            border: 1px solid #d3deec;
+
+            background: #ffffff;
+
+            color: var(--navy);
+
+            font-size: 11px;
+            font-weight: 800;
+
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .requirement-action:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+            background: #f6f9ff;
+            transform: translateY(-1px);
+        }
+
+        .requirement-action.primary {
+            border-color: var(--blue);
+            background: var(--blue);
+            color: #ffffff;
+        }
+
+        .requirement-action.primary:hover {
+            background: #064dd2;
+            color: #ffffff;
+        }
+
+        /* =========================================================
+           APPLICATION OVERVIEW
+        ========================================================= */
+
+        .overview-list {
+            width: 100%;
+        }
+
+        .overview-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding: 12px 0;
+
+            border-bottom: 1px solid #edf1f6;
+        }
+
+        .overview-row:first-child {
+            padding-top: 0;
+        }
+
+        .overview-row:last-child {
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+
+        .overview-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .overview-value {
+            color: var(--navy);
+
+            font-size: 12px;
+            font-weight: 750;
+
+            text-align: right;
+
+            overflow-wrap: anywhere;
+        }
+
+        /* =========================================================
+           FEE CARD
+        ========================================================= */
+
+        .fee-card {
+            background:
+                linear-gradient(
+                    135deg,
+                    #f5f9ff 0%,
+                    #ffffff 100%
+                );
+        }
+
+        .fee-summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .fee-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .fee-description {
+            margin-top: 4px;
+
+            color: var(--navy);
+
+            font-size: 13px;
+            font-weight: 750;
+        }
+
+        .fee-amount {
+            color: var(--navy);
+
+            font-size: 25px;
+            line-height: 1;
+            font-weight: 850;
+
+            white-space: nowrap;
+        }
+
+        .payment-note {
+            margin: 17px 0 0;
+
+            padding: 11px 12px;
+
+            background: #ffffff;
+
+            border: 1px solid #e2e9f3;
+            border-radius: 6px;
+
+            color: var(--muted);
+
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .pay-button {
+            width: 100%;
+            height: 43px;
+
+            margin-top: 16px;
+
+            border: 0;
+            border-radius: 5px;
+
+            background: var(--blue);
+            color: #ffffff;
+
+            font-size: 13px;
+            font-weight: 800;
+
+            box-shadow:
+                0 6px 16px rgba(9, 87, 232, 0.15);
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .pay-button:hover {
+            background: #064dd2;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 9px 20px rgba(9, 87, 232, 0.22);
+        }
+
+        .paid-box {
+            margin-top: 17px;
+
+            padding: 13px;
+
+            border-radius: 7px;
+
+            background: var(--green-bg);
+            border: 1px solid #cdebd7;
+
+            color: var(--green);
+
+            font-size: 12px;
+            font-weight: 750;
+
+            line-height: 1.5;
+        }
+
+        /* =========================================================
+           REVIEW CARD
+        ========================================================= */
+
+        .review-state {
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+        }
+
+        .review-icon {
+            width: 43px;
+            height: 43px;
+
+            flex: 0 0 43px;
+
+            border-radius: 50%;
+
+            background: var(--blue-light);
+            color: var(--blue);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .review-icon svg {
+            width: 21px;
+            height: 21px;
+
+            fill: none;
+            stroke: currentColor;
+
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .review-copy {
+            min-width: 0;
+        }
+
+        .review-copy h3 {
+            margin: 0;
+
+            color: var(--navy);
+
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .review-copy p {
+            margin: 6px 0 0;
+
+            color: var(--muted);
+
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        /* =========================================================
+           SUPPORT CARD
+        ========================================================= */
+
+        .support-box {
+            padding: 18px;
+
+            border-radius: 7px;
+
+            background: #f7faff;
+            border: 1px solid #e2eaf5;
+        }
+
+        .support-box h3 {
+            margin: 0;
+
+            color: var(--navy);
+
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .support-box p {
+            margin: 7px 0 0;
+
+            color: var(--muted);
+
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .support-button {
+            width: 100%;
+            height: 36px;
+
+            margin-top: 13px;
+
+            border: 1px solid #cbd8ea;
+            border-radius: 5px;
+
+            background: #ffffff;
+            color: var(--blue);
+
+            font-size: 12px;
+            font-weight: 800;
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .support-button:hover {
+            background: #f0f5ff;
+            transform: translateY(-1px);
+        }
+
+        /* =========================================================
+           UPLOAD MODAL
+        ========================================================= */
+
+        .modal-backdrop {
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 300;
+
+            background:
+                rgba(4, 16, 42, 0.55);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            opacity: 0;
+            pointer-events: none;
+
+            transition:
+                opacity 0.25s ease;
+        }
+
+        .modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 530px;
+
+            background: #ffffff;
+
+            border-radius: 10px;
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,0.20);
+
+            transform:
+                translateY(12px)
+                scale(0.98);
+
+            transition:
+                transform 0.25s ease;
+        }
+
+        .modal-backdrop.open .modal {
+            transform:
+                translateY(0)
+                scale(1);
+        }
+
+        .modal-header {
+            padding: 19px 21px;
+
+            border-bottom: 1px solid #edf1f6;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+
+            color: var(--navy);
+
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .close-modal {
+            width: 32px;
+            height: 32px;
+
+            border: 0;
+            border-radius: 5px;
+
+            background: #f2f5f9;
+            color: #53627a;
+
+            font-size: 20px;
+            line-height: 1;
+
+            transition:
+                background 0.2s ease;
+        }
+
+        .close-modal:hover {
+            background: #e7edf5;
+        }
+
+        .modal-body {
+            padding: 21px;
+        }
+
+        .upload-description {
+            margin: 0 0 15px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .drop-zone {
+            width: 100%;
+
+            min-height: 170px;
+
+            border: 1.5px dashed #b9c9de;
+            border-radius: 8px;
+
+            background: #f9fbfe;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            padding: 25px;
+
+            text-align: center;
+
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            border-color: var(--blue);
+            background: #f2f7ff;
+        }
+
+        .upload-icon {
+            width: 45px;
+            height: 45px;
+
+            border-radius: 50%;
+
+            background: var(--blue-light);
+            color: var(--blue);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 10px;
+        }
+
+        .upload-icon svg {
+            width: 22px;
+            height: 22px;
+
+            fill: none;
+            stroke: currentColor;
+
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .drop-zone strong {
+            color: var(--navy);
+
+            font-size: 13px;
+        }
+
+        .drop-zone span {
+            margin-top: 5px;
+
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+        .choose-file {
+            margin-top: 12px;
+
+            height: 34px;
+            padding: 0 15px;
+
+            border: 1px solid #cbd8e9;
+            border-radius: 5px;
+
+            background: #ffffff;
+            color: var(--blue);
+
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .selected-file {
+            margin-top: 13px;
+
+            padding: 11px 12px;
+
+            background: #f3f7fc;
+
+            border-radius: 6px;
+
+            color: var(--navy);
+
+            font-size: 11px;
+            font-weight: 700;
+
+            overflow-wrap: anywhere;
+        }
+
+        .modal-actions {
+            margin-top: 19px;
+
+            display: flex;
+            justify-content: flex-end;
+
+            gap: 9px;
+        }
+
+        .modal-button {
+            height: 38px;
+
+            padding: 0 17px;
+
+            border-radius: 5px;
+
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .modal-button.cancel {
+            border: 1px solid #d4dfec;
+            background: #ffffff;
+            color: var(--navy);
+        }
+
+        .modal-button.save {
+            border: 0;
+            background: var(--blue);
+            color: #ffffff;
+        }
+
+        /* =========================================================
+           DOCUMENT VIEW MODAL
+        ========================================================= */
+
+        .document-preview {
+            width: 100%;
+            min-height: 130px;
+
+            padding: 20px;
+
+            border-radius: 8px;
+
+            background: #f6f9fd;
+            border: 1px solid #e1e8f2;
+
+            text-align: center;
+        }
+
+        .document-preview-icon {
+            width: 48px;
+            height: 48px;
+
+            margin: 0 auto 11px;
+
+            border-radius: 8px;
+
+            background: var(--blue-light);
+            color: var(--blue);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .document-preview strong {
+            display: block;
+
+            color: var(--navy);
+
+            font-size: 13px;
+
+            overflow-wrap: anywhere;
+        }
+
+        .document-preview small {
+            display: block;
+
+            margin-top: 5px;
+
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+        /* =========================================================
+           PAYMENT MODAL
+        ========================================================= */
+
+        .payment-summary {
+            width: 100%;
+
+            padding: 17px;
+
+            border-radius: 8px;
+
+            background: #f7faff;
+            border: 1px solid #e1e9f4;
+        }
+
+        .payment-summary-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 8px 0;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        .payment-summary-row strong {
+            color: var(--navy);
+        }
+
+        .payment-total {
+            margin-top: 7px;
+            padding-top: 13px;
+
+            border-top: 1px solid #dce5f0;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            color: var(--navy);
+
+            font-size: 15px;
+            font-weight: 850;
+        }
+
+        .payment-methods {
+            margin-top: 17px;
+
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+
+            gap: 10px;
+        }
+
+        .payment-method {
+            min-height: 58px;
+
+            border: 1px solid #d7e1ee;
+            border-radius: 7px;
+
+            background: #ffffff;
+
+            color: var(--navy);
+
+            font-size: 11px;
+            font-weight: 750;
+
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .payment-method:hover {
+            border-color: var(--blue);
+            background: #f6f9ff;
+        }
+
+        .payment-method.selected {
+            border-color: var(--blue);
+            background: var(--blue-light);
+            color: var(--blue);
+        }
+
+        /* =========================================================
+           SUCCESS MODAL
+        ========================================================= */
+
+        .success-content {
+            padding: 30px 25px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 63px;
+            height: 63px;
+
+            margin: 0 auto 15px;
+
+            border-radius: 50%;
+
+            background: var(--green-bg);
+            color: var(--green);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-icon svg {
+            width: 30px;
+            height: 30px;
+
+            fill: none;
+            stroke: currentColor;
+
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .success-content h2 {
+            margin: 0;
+
+            color: var(--navy);
+
+            font-size: 21px;
+            font-weight: 850;
+        }
+
+        .success-content p {
+            max-width: 400px;
+
+            margin: 9px auto 0;
+
+            color: var(--muted);
+
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .receipt {
+            margin-top: 18px;
+
+            padding: 14px;
+
+            background: #f7faff;
+            border: 1px solid #e0e8f3;
+            border-radius: 7px;
+
+            text-align: left;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 6px 0;
+
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+        .receipt-row strong {
+            color: var(--navy);
+            text-align: right;
+        }
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        .toast-container {
+            position: fixed;
+
+            right: 20px;
+            bottom: 20px;
+
+            z-index: 500;
+
+            width: min(360px, calc(100vw - 40px));
+
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            pointer-events: none;
+        }
+
+        .toast {
+            padding: 13px 15px;
+
+            border-radius: 7px;
+
+            background: #071947;
+            color: #ffffff;
+
+            box-shadow:
+                0 12px 30px rgba(0,0,0,0.16);
+
+            font-size: 12px;
+            line-height: 1.45;
+            font-weight: 650;
+
+            transform:
+                translateY(15px);
+
+            opacity: 0;
+
+            animation:
+                toastIn 0.3s ease forwards;
+        }
+
+        .toast.success {
+            background: #087c39;
+        }
+
+        .toast.error {
+            background: #a82d2d;
+        }
+
+        @keyframes toastIn {
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        /* =========================================================
+           EMPTY / NO APPLICATION STATE
+        ========================================================= */
+
+        .lookup-panel {
+            width: 100%;
+            max-width: 580px;
+
+            margin: 30px auto 0;
+
+            background: #ffffff;
+
+            border: 1px solid var(--border);
+            border-radius: 10px;
+
+            box-shadow: var(--shadow);
+
+            padding: 30px;
+        }
+
+        .lookup-panel h2 {
+            margin: 0;
+
+            color: var(--navy);
+
+            font-size: 22px;
+        }
+
+        .lookup-panel p {
+            margin: 8px 0 20px;
+
+            color: var(--muted);
+
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 6px;
+
+            color: var(--navy);
+
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 43px;
+
+            padding: 0 13px;
+
+            border: 1px solid #d6e0ed;
+            border-radius: 5px;
+
+            outline: none;
+
+            color: var(--navy);
+            background: #ffffff;
+
+            font-size: 13px;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .form-group input:focus {
+            border-color: var(--blue);
+
+            box-shadow:
+                0 0 0 3px rgba(9, 87, 232, 0.08);
+        }
+
+        .lookup-button {
+            width: 100%;
+            height: 43px;
+
+            border: 0;
+            border-radius: 5px;
+
+            background: var(--blue);
+            color: #ffffff;
+
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .demo-note {
+            margin-top: 15px;
+
+            padding: 11px 12px;
+
+            border-radius: 6px;
+
+            background: #fff8e8;
+            border: 1px solid #f2dfb1;
+
+            color: #765400;
+
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .footer {
+            width: 100%;
+
+            padding: 24px 0;
+
+            background: #06265f;
+
+            color: rgba(255,255,255,0.78);
+        }
+
+        .footer-inner {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .footer-copy {
+            font-size: 11px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+
+            font-size: 11px;
+        }
+
+        .footer-links span {
+            cursor: pointer;
+        }
+
+        /* =========================================================
+           ANIMATIONS
+        ========================================================= */
+
+        @keyframes fadeUp {
+
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        /* =========================================================
+           TABLET
+        ========================================================= */
+
+        @media (max-width: 1050px) {
+
+            .dashboard-grid {
+                grid-template-columns:
+                    minmax(0, 1fr)
+                    minmax(270px, 320px);
+            }
+
+            .requirement {
+                gap: 12px;
+            }
+
+            .requirement-status {
+                font-size: 10px;
+            }
+
+            .requirement-action {
+                min-width: 70px;
+                padding: 0 9px;
+            }
+
+        }
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 780px) {
+
+            .header {
+                height: 64px;
+            }
+
+            .header-inner {
+                padding-left: 17px;
+                padding-right: 17px;
+            }
+
+            .brand img {
+                width: 105px;
+            }
+
+            .help-link {
+                display: none;
+            }
+
+            .home-button {
+                height: 35px;
+                font-size: 11px;
+            }
+
+            .main {
+                padding-top: 24px;
+            }
+
+            .page-heading {
+                display: block;
+            }
+
+            .page-heading h1 {
+                font-size: 29px;
+            }
+
+            .page-heading p {
+                max-width: 500px;
+            }
+
+            .application-card {
+                padding: 19px;
+            }
+
+            .application-top {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .status-badge {
+                align-self: flex-start;
+            }
+
+            .progress-section {
+                overflow-x: auto;
+                padding-bottom: 4px;
+            }
+
+            .progress-track {
+                min-width: 600px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .right-column {
+                display: grid;
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+                align-items: start;
+            }
+
+            .right-column .card:last-child {
+                grid-column: 1 / -1;
+            }
+
+            .footer-inner {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+        }
+
+        /* =========================================================
+           SMALL MOBILE
+        ========================================================= */
+
+        @media (max-width: 540px) {
+
+            .container {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .header-right {
+                gap: 8px;
+            }
+
+            .home-button {
+                padding: 0 11px;
+            }
+
+            .application-details {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .card-header {
+                padding: 17px;
+            }
+
+            .card-body {
+                padding: 17px;
+            }
+
+            .requirement {
+                grid-template-columns:
+                    minmax(0, 1fr)
+                    auto;
+
+                gap: 10px;
+            }
+
+            .requirement-status {
+                grid-column: 2;
+                grid-row: 1;
+
+                align-self: center;
+            }
+
+            .requirement-action {
+                grid-column: 1 / -1;
+
+                width: 100%;
+            }
+
+            .requirement-info {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            .right-column {
+                display: flex;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .lookup-panel {
+                padding: 22px 17px;
+            }
+
+            .modal-backdrop {
+                padding: 10px;
+            }
+
+            .modal-body {
+                padding: 17px;
+            }
+
+            .modal-actions {
+                flex-direction: column-reverse;
+            }
+
+            .modal-button {
+                width: 100%;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                gap: 10px 18px;
+            }
+
+        }
+
+        /* =========================================================
+           REDUCED MOTION
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            html {
+                scroll-behavior: auto;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="page">
+
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+
+    <header class="header">
+
+        <div class="header-inner">
+
+            <div class="brand">
+
+                <img
+                    src="assets/logos.png"
+                    alt="Atlas College"
+                >
+
+            </div>
+
+
+            <div class="header-right">
+
+                <span class="help-link">
+                    Need help?
+                </span>
+
+                <button
+                    class="home-button"
+                    type="button"
+                    id="homeButton"
+                >
+                    Atlas College
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         MAIN
+    ========================================================== -->
+
+    <main class="main">
+
+        <div class="container">
+
+
+            <!-- =================================================
+                 PAGE HEADING
+            ================================================== -->
+
+            <div class="page-heading">
+
+                <div class="heading-copy">
+
+                    <p class="eyebrow">
+                        Applicant Portal
+                    </p>
+
+                    <h1>
+                        Your Application
+                    </h1>
+
+                    <p>
+                        Track your application, complete outstanding
+                        requirements and view your admission decision.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 APPLICATION CARD
+            ================================================== -->
+
+            <section
+                class="application-card"
+                id="applicationCard"
+            >
+
+                <div class="application-top">
+
+                    <div class="application-info">
+
+                        <p class="application-number">
+                            Application
+                            <span id="applicationReference">
+                                ATL-2026-10482
+                            </span>
+                        </p>
+
+                        <div class="application-details">
+
+                            <span>
+                                Programme:
+                                <strong id="programmeName">
+                                    Information Technology
+                                </strong>
+                            </span>
+
+                            <span>
+                                Intake:
+                                <strong id="intakeName">
+                                    2026
+                                </strong>
+                            </span>
+
+                            <span>
+                                Submitted:
+                                <strong id="submittedDate">
+                                    18 August 2026
+                                </strong>
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="status-badge status-action"
+                        id="mainStatusBadge"
+                    >
+                        Action Required
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     PROGRESS
+                ============================================== -->
+
+                <div class="progress-section">
+
+                    <div
+                        class="progress-track"
+                        id="progressTrack"
+                    >
+
+                        <div
+                            class="progress-line-complete"
+                            id="progressLine"
+                        ></div>
+
+
+                        <div
+                            class="progress-step completed"
+                            id="stepApplication"
+                        >
+
+                            <div class="progress-circle">
+                                ✓
+                            </div>
+
+                            <div class="progress-label">
+                                Application
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="progress-step"
+                            id="stepDocuments"
+                        >
+
+                            <div class="progress-circle">
+                                2
+                            </div>
+
+                            <div class="progress-label">
+                                Documents
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="progress-step"
+                            id="stepPayment"
+                        >
+
+                            <div class="progress-circle">
+                                3
+                            </div>
+
+                            <div class="progress-label">
+                                Payment
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="progress-step"
+                            id="stepReview"
+                        >
+
+                            <div class="progress-circle">
+                                4
+                            </div>
+
+                            <div class="progress-label">
+                                Review
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="progress-step"
+                            id="stepDecision"
+                        >
+
+                            <div class="progress-circle">
+                                5
+                            </div>
+
+                            <div class="progress-label">
+                                Decision
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 DASHBOARD
+            ================================================== -->
+
+            <div class="dashboard-grid">
+
+
+                <!-- =============================================
+                     LEFT COLUMN
+                ============================================== -->
+
+                <div class="left-column">
+
+
+                    <!-- =========================================
+                         REQUIREMENTS
+                    ========================================== -->
+
+                    <section class="card">
+
+                        <div class="card-header">
+
+                            <div class="card-title">
+
+                                <h2>
+                                    Application Requirements
+                                </h2>
+
+                                <p>
+                                    Complete the items below to move your
+                                    application forward.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card-body">
+
+                            <div
+                                class="requirements-list"
+                                id="requirementsList"
+                            >
+
+
+                                <!-- ID DOCUMENT -->
+
+                                <div
+                                    class="requirement"
+                                    id="requirement-id"
+                                >
+
+                                    <div class="requirement-info">
+
+                                        <div class="requirement-icon">
+
+                                            <svg viewBox="0 0 24 24">
+
+                                                <rect
+                                                    x="3"
+                                                    y="5"
+                                                    width="18"
+                                                    height="14"
+                                                    rx="2"
+                                                />
+
+                                                <circle
+                                                    cx="8"
+                                                    cy="12"
+                                                    r="2"
+                                                />
+
+                                                <path
+                                                    d="M13 10h5"
+                                                />
+
+                                                <path
+                                                    d="M13 14h4"
+                                                />
+
+                                            </svg>
+
+                                        </div>
+
+
+                                        <div class="requirement-text">
+
+                                            <h3>
+                                                ID / Passport
+                                            </h3>
+
+                                            <p id="idDescription">
+                                                Government-issued identity
+                                                document
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <span
+                                        class="requirement-status required"
+                                        id="idStatus"
+                                    >
+                                        Required
+                                    </span>
+
+
+                                    <button
+                                        type="button"
+                                        class="requirement-action primary"
+                                        id="idAction"
+                                        data-document="id"
+                                    >
+                                        Upload
+                                    </button>
+
+                                </div>
+
+
+                                <!-- MATRIC -->
+
+                                <div
+                                    class="requirement"
+                                    id="requirement-matric"
+                                >
+
+                                    <div class="requirement-info">
+
+                                        <div class="requirement-icon">
+
+                                            <svg viewBox="0 0 24 24">
+
+                                                <path
+                                                    d="M3 7l9-4 9 4-9 4z"
+                                                />
+
+                                                <path
+                                                    d="M6 10v5"
+                                                />
+
+                                                <path
+                                                    d="M18 10v5"
+                                                />
+
+                                                <path
+                                                    d="M6 15c2 2 4 3 6 3s4-1 6-3"
+                                                />
+
+                                            </svg>
+
+                                        </div>
+
+
+                                        <div class="requirement-text">
+
+                                            <h3>
+                                                Matric Certificate
+                                            </h3>
+
+                                            <p id="matricDescription">
+                                                Final school certificate
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <span
+                                        class="requirement-status required"
+                                        id="matricStatus"
+                                    >
+                                        Required
+                                    </span>
+
+
+                                    <button
+                                        type="button"
+                                        class="requirement-action primary"
+                                        id="matricAction"
+                                        data-document="matric"
+                                    >
+                                        Upload
+                                    </button>
+
+                                </div>
+
+
+                                <!-- RESULTS -->
+
+                                <div
+                                    class="requirement"
+                                    id="requirement-results"
+                                >
+
+                                    <div class="requirement-info">
+
+                                        <div class="requirement-icon">
+
+                                            <svg viewBox="0 0 24 24">
+
+                                                <path
+                                                    d="M5 3h10l4 4v14H5z"
+                                                />
+
+                                                <path
+                                                    d="M14 3v5h5"
+                                                />
+
+                                                <path
+                                                    d="M8 13h8"
+                                                />
+
+                                                <path
+                                                    d="M8 17h6"
+                                                />
+
+                                            </svg>
+
+                                        </div>
+
+
+                                        <div class="requirement-text">
+
+                                            <h3>
+                                                Latest School Results
+                                            </h3>
+
+                                            <p id="resultsDescription">
+                                                Most recent academic results
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <span
+                                        class="requirement-status required"
+                                        id="resultsStatus"
+                                    >
+                                        Required
+                                    </span>
+
+
+                                    <button
+                                        type="button"
+                                        class="requirement-action primary"
+                                        id="resultsAction"
+                                        data-document="results"
+                                    >
+                                        Upload
+                                    </button>
+
+                                </div>
+
+
+                                <!-- ADDRESS -->
+
+                                <div
+                                    class="requirement"
+                                    id="requirement-address"
+                                >
+
+                                    <div class="requirement-info">
+
+                                        <div class="requirement-icon">
+
+                                            <svg viewBox="0 0 24 24">
+
+                                                <path
+                                                    d="M4 10l8-6 8 6"
+                                                />
+
+                                                <path
+                                                    d="M6 9v10h12V9"
+                                                />
+
+                                                <path
+                                                    d="M9 19v-5h6v5"
+                                                />
+
+                                            </svg>
+
+                                        </div>
+
+
+                                        <div class="requirement-text">
+
+                                            <h3>
+                                                Proof of Address
+                                            </h3>
+
+                                            <p id="addressDescription">
+                                                Recent document showing
+                                                residential address
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <span
+                                        class="requirement-status required"
+                                        id="addressStatus"
+                                    >
+                                        Required
+                                    </span>
+
+
+                                    <button
+                                        type="button"
+                                        class="requirement-action primary"
+                                        id="addressAction"
+                                        data-document="address"
+                                    >
+                                        Upload
+                                    </button>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =========================================
+                         REVIEW STATUS
+                    ========================================== -->
+
+                    <section class="card">
+
+                        <div class="card-header">
+
+                            <div class="card-title">
+
+                                <h2>
+                                    Application Review
+                                </h2>
+
+                                <p>
+                                    What happens after you complete
+                                    your requirements.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card-body">
+
+                            <div class="review-state">
+
+                                <div class="review-icon">
+
+                                    <svg viewBox="0 0 24 24">
+
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="9"
+                                        />
+
+                                        <path
+                                            d="M12 7v5l3 2"
+                                        />
+
+                                    </svg>
+
+                                </div>
+
+
+                                <div class="review-copy">
+
+                                    <h3 id="reviewTitle">
+                                        Complete your application
+                                    </h3>
+
+                                    <p id="reviewDescription">
+                                        Atlas College will begin reviewing
+                                        your application once all required
+                                        documents and the application fee
+                                        have been received.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                </div>
+
+
+                <!-- =============================================
+                     RIGHT COLUMN
+                ============================================== -->
+
+                <aside class="right-column">
+
+
+                    <!-- =========================================
+                         APPLICATION OVERVIEW
+                    ========================================== -->
+
+                    <section class="card">
+
+                        <div class="card-header">
+
+                            <div class="card-title">
+
+                                <h2>
+                                    Application Overview
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card-body">
+
+                            <div class="overview-list">
+
+
+                                <div class="overview-row">
+
+                                    <span class="overview-label">
+                                        Applicant
+                                    </span>
+
+                                    <span
+                                        class="overview-value"
+                                        id="applicantName"
+                                    >
+                                        Thabo Mokoena
+                                    </span>
+
+                                </div>
+
+
+                                <div class="overview-row">
+
+                                    <span class="overview-label">
+                                        Programme
+                                    </span>
+
+                                    <span
+                                        class="overview-value"
+                                        id="overviewProgramme"
+                                    >
+                                        Information Technology
+                                    </span>
+
+                                </div>
+
+
+                                <div class="overview-row">
+
+                                    <span class="overview-label">
+                                        Study Mode
+                                    </span>
+
+                                    <span
+                                        class="overview-value"
+                                    >
+                                        Full-time
+                                    </span>
+
+                                </div>
+
+
+                                <div class="overview-row">
+
+                                    <span class="overview-label">
+                                        Intake
+                                    </span>
+
+                                    <span
+                                        class="overview-value"
+                                    >
+                                        2026
+                                    </span>
+
+                                </div>
+
+
+                                <div class="overview-row">
+
+                                    <span class="overview-label">
+                                        Application Date
+                                    </span>
+
+                                    <span
+                                        class="overview-value"
+                                        id="overviewDate"
+                                    >
+                                        18 August 2026
+                                    </span>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =========================================
+                         APPLICATION FEE
+                    ========================================== -->
+
+                    <section class="card fee-card">
+
+                        <div class="card-header">
+
+                            <div class="card-title">
+
+                                <h2>
+                                    Application Fee
+                                </h2>
+
+                                <p>
+                                    Required before review begins.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="card-body">
+
+                            <div class="fee-summary">
+
+                                <div>
+
+                                    <div class="fee-label">
+                                        Application Fee
+                                    </div>
+
+                                    <div class="fee-description">
+                                        2026 Application
+                                    </div>
+
+                                </div>
+
+
+                                <div class="fee-amount">
+                                    R250
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="payment-note"
+                                id="paymentNote"
+                            >
+                                Your application fee is still
+                                outstanding. Payment is required before
+                                your application can enter the review stage.
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="pay-button"
+                                id="payButton"
+                            >
+                                Pay Application Fee
+                            </button>
+
+
+                            <div
+                                class="paid-box hidden"
+                                id="paidBox"
+                            >
+                                ✓ Payment received successfully.
+                                <br>
+                                Receipt:
+                                <span id="receiptNumber">
+                                    --
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =========================================
+                         SUPPORT
+                    ========================================== -->
+
+                    <section class="card">
+
+                        <div class="card-body">
+
+                            <div class="support-box">
+
+                                <h3>
+                                    Need help?
+                                </h3>
+
+                                <p>
+                                    If you're having trouble completing
+                                    your application, contact Atlas
+                                    College admissions.
+                                </p>
+
+                                <button
+                                    type="button"
+                                    class="support-button"
+                                    id="supportButton"
+                                >
+                                    Contact Admissions
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                </aside>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+
+    <footer class="footer">
+
+        <div class="container">
+
+            <div class="footer-inner">
+
+                <div class="footer-copy">
+                    © 2026 Atlas College. All rights reserved.
+                </div>
+
+                <div class="footer-links">
+
+                    <span>
+                        Privacy Policy
+                    </span>
+
+                    <span>
+                        Terms &amp; Conditions
+                    </span>
+
+                    <span>
+                        Help
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =========================================================
+         UPLOAD MODAL
+    ========================================================== -->
+
+    <div
+        class="modal-backdrop"
+        id="uploadModal"
+    >
+
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+        >
+
+            <div class="modal-header">
+
+                <h2 id="uploadModalTitle">
+                    Upload Document
+                </h2>
+
+                <button
+                    type="button"
+                    class="close-modal"
+                    id="closeUploadModal"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <p
+                    class="upload-description"
+                    id="uploadDescription"
+                >
+                    Upload your required document below.
+                </p>
+
+
+                <div
+                    class="drop-zone"
+                    id="dropZone"
+                >
+
+                    <div class="upload-icon">
+
+                        <svg viewBox="0 0 24 24">
+
+                            <path
+                                d="M12 16V4"
+                            />
+
+                            <path
+                                d="M8 8l4-4 4 4"
+                            />
+
+                            <path
+                                d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"
+                            />
+
+                        </svg>
+
+                    </div>
+
+
+                    <strong>
+                        Choose a document
+                    </strong>
+
+                    <span>
+                        PDF, JPG or PNG
+                    </span>
+
+
+                    <button
+                        type="button"
+                        class="choose-file"
+                        id="chooseFileButton"
+                    >
+                        Choose File
+                    </button>
+
+
+                    <input
+                        type="file"
+                        id="fileInput"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                    >
+
+
+                </div>
+
+
+                <div
+                    class="selected-file hidden"
+                    id="selectedFile"
+                ></div>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="modal-button cancel"
+                        id="cancelUpload"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        class="modal-button save"
+                        id="saveDocument"
+                    >
+                        Save Document
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         DOCUMENT VIEW MODAL
+    ========================================================== -->
+
+    <div
+        class="modal-backdrop"
+        id="documentModal"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <h2>
+                    Document
+                </h2>
+
+                <button
+                    type="button"
+                    class="close-modal"
+                    id="closeDocumentModal"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="document-preview">
+
+                    <div class="document-preview-icon">
+
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+
+                            <path d="M5 3h10l4 4v14H5z"></path>
+                            <path d="M14 3v5h5"></path>
+
+                        </svg>
+
+                    </div>
+
+
+                    <strong id="viewDocumentName">
+                        Document.pdf
+                    </strong>
+
+                    <small id="viewDocumentDetails">
+                        Uploaded document
+                    </small>
+
+                </div>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="modal-button cancel"
+                        id="closeDocumentButton"
+                    >
+                        Close
+                    </button>
+
+                    <button
+                        type="button"
+                        class="modal-button save"
+                        id="replaceDocumentButton"
+                    >
+                        Replace Document
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         PAYMENT MODAL
+    ========================================================== -->
+
+    <div
+        class="modal-backdrop"
+        id="paymentModal"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <h2>
+                    Application Fee
+                </h2>
+
+                <button
+                    type="button"
+                    class="close-modal"
+                    id="closePaymentModal"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="payment-summary">
+
+                    <div class="payment-summary-row">
+
+                        <span>
+                            Applicant
+                        </span>
+
+                        <strong id="paymentApplicant">
+                            Thabo Mokoena
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-summary-row">
+
+                        <span>
+                            Application
+                        </span>
+
+                        <strong>
+                            ATL-2026-10482
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-summary-row">
+
+                        <span>
+                            Programme
+                        </span>
+
+                        <strong id="paymentProgramme">
+                            Information Technology
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            R250.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="payment-methods">
+
+                    <button
+                        type="button"
+                        class="payment-method selected"
+                        data-method="Card"
+                    >
+                        💳 Card
+                    </button>
+
+                    <button
+                        type="button"
+                        class="payment-method"
+                        data-method="EFT"
+                    >
+                        🏦 EFT
+                    </button>
+
+                </div>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="modal-button cancel"
+                        id="cancelPayment"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        class="modal-button save"
+                        id="confirmPayment"
+                    >
+                        Confirm Payment
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         PAYMENT SUCCESS MODAL
+    ========================================================== -->
+
+    <div
+        class="modal-backdrop"
+        id="successModal"
+    >
+
+        <div class="modal">
+
+            <div class="success-content">
+
+                <div class="success-icon">
+
+                    <svg viewBox="0 0 24 24">
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                        />
+
+                        <path
+                            d="M8 12l2.5 2.5L16 9"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <h2>
+                    Payment Received
+                </h2>
+
+
+                <p>
+                    Your application fee has been recorded.
+                    Your application can now move forward once
+                    all required documents have been submitted.
+                </p>
+
+
+                <div class="receipt">
+
+                    <div class="receipt-row">
+
+                        <span>
+                            Receipt
+                        </span>
+
+                        <strong id="successReceipt">
+                            ATL-PAY-000000
+                        </strong>
+
+                    </div>
+
+
+                    <div class="receipt-row">
+
+                        <span>
+                            Amount
+                        </span>
+
+                        <strong>
+                            R250.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="receipt-row">
+
+                        <span>
+                            Method
+                        </span>
+
+                        <strong id="successMethod">
+                            Card
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="modal-button save"
+                        id="closeSuccess"
+                    >
+                        Done
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         TOASTS
+    ========================================================== -->
+
+    <div
+        class="toast-container"
+        id="toastContainer"
+    ></div>
+
+
+</div>
+
+
+<script>
+
+    /* ============================================================
+       ATLAS COLLEGE
+       LOCAL APPLICATION STATUS SYSTEM
+       NO BACKEND
+       NO API
+       NO FIREBASE
+    ============================================================ */
+
+
+    /* ============================================================
+       STORAGE
+    ============================================================ */
+
+    const STORAGE_KEY = "atlas_college_application_v1";
+
+
+    /* ============================================================
+       DEFAULT APPLICATION
+    ============================================================ */
+
+    const defaultApplication = {
+
+        reference: "ATL-2026-10482",
+
+        applicant: "Thabo Mokoena",
+
+        programme: "Information Technology",
+
+        intake: "2026",
+
+        studyMode: "Full-time",
+
+        submittedDate: "18 August 2026",
+
+        documents: {
+
+            id: null,
+
+            matric: null,
+
+            results: null,
+
+            address: null
+
+        },
+
+        payment: {
+
+            paid: false,
+
+            amount: 250,
+
+            method: null,
+
+            receipt: null,
+
+            date: null
+
+        },
+
+        decision: null
+
+    };
+
+
+    /* ============================================================
+       LOAD APPLICATION
+    ============================================================ */
+
+    let application = loadApplication();
+
+
+    function loadApplication() {
+
+        try {
+
+            const stored =
+                localStorage.getItem(STORAGE_KEY);
+
+            if (!stored) {
+
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify(defaultApplication)
+                );
+
+                return structuredClone(defaultApplication);
+            }
+
+            const parsed = JSON.parse(stored);
+
+            return {
+
+                ...structuredClone(defaultApplication),
+
+                ...parsed,
+
+                documents: {
+                    ...defaultApplication.documents,
+                    ...(parsed.documents || {})
+                },
+
+                payment: {
+                    ...defaultApplication.payment,
+                    ...(parsed.payment || {})
+                }
+
+            };
+
+        } catch (error) {
+
+            console.error(
+                "Could not load local application:",
+                error
+            );
+
+            return structuredClone(defaultApplication);
+        }
+    }
+
+
+    function saveApplication() {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(application)
+        );
+
+    }
+
+
+    /* ============================================================
+       ELEMENTS
+    ============================================================ */
+
+    const applicationReference =
+        document.getElementById("applicationReference");
+
+    const programmeName =
+        document.getElementById("programmeName");
+
+    const overviewProgramme =
+        document.getElementById("overviewProgramme");
+
+    const applicantName =
+        document.getElementById("applicantName");
+
+    const submittedDate =
+        document.getElementById("submittedDate");
+
+    const overviewDate =
+        document.getElementById("overviewDate");
+
+    const mainStatusBadge =
+        document.getElementById("mainStatusBadge");
+
+    const progressLine =
+        document.getElementById("progressLine");
+
+    const reviewTitle =
+        document.getElementById("reviewTitle");
+
+    const reviewDescription =
+        document.getElementById("reviewDescription");
+
+    const paymentNote =
+        document.getElementById("paymentNote");
+
+    const payButton =
+        document.getElementById("payButton");
+
+    const paidBox =
+        document.getElementById("paidBox");
+
+    const receiptNumber =
+        document.getElementById("receiptNumber");
+
+    const toastContainer =
+        document.getElementById("toastContainer");
+
+
+    /* ============================================================
+       INITIALISE BASIC DATA
+    ============================================================ */
+
+    function renderBasicInformation() {
+
+        applicationReference.textContent =
+            application.reference;
+
+        programmeName.textContent =
+            application.programme;
+
+        overviewProgramme.textContent =
+            application.programme;
+
+        applicantName.textContent =
+            application.applicant;
+
+        submittedDate.textContent =
+            application.submittedDate;
+
+        overviewDate.textContent =
+            application.submittedDate;
+
+        document.getElementById(
+            "paymentApplicant"
+        ).textContent =
+            application.applicant;
+
+        document.getElementById(
+            "paymentProgramme"
+        ).textContent =
+            application.programme;
+
+    }
+
+
+    /* ============================================================
+       DOCUMENT CONFIGURATION
+    ============================================================ */
+
+    const documentConfig = {
+
+        id: {
+
+            name: "ID / Passport",
+
+            description:
+                "Government-issued identity document"
+
+        },
+
+        matric: {
+
+            name: "Matric Certificate",
+
+            description:
+                "Final school certificate"
+
+        },
+
+        results: {
+
+            name: "Latest School Results",
+
+            description:
+                "Most recent academic results"
+
+        },
+
+        address: {
+
+            name: "Proof of Address",
+
+            description:
+                "Recent document showing residential address"
+
+        }
+
+    };
+
+
+    /* ============================================================
+       CURRENT DOCUMENT
+    ============================================================ */
+
+    let currentDocumentType = null;
+
+    let selectedFile = null;
+
+
+    /* ============================================================
+       MODALS
+    ============================================================ */
+
+    const uploadModal =
+        document.getElementById("uploadModal");
+
+    const documentModal =
+        document.getElementById("documentModal");
+
+    const paymentModal =
+        document.getElementById("paymentModal");
+
+    const successModal =
+        document.getElementById("successModal");
+
+
+    function openModal(modal) {
+
+        modal.classList.add("open");
+
+        document.body.style.overflow = "hidden";
+
+    }
+
+
+    function closeModal(modal) {
+
+        modal.classList.remove("open");
+
+        document.body.style.overflow = "";
+
+    }
+
+
+    /* ============================================================
+       UPLOAD MODAL
+    ============================================================ */
+
+    const uploadModalTitle =
+        document.getElementById(
+            "uploadModalTitle"
+        );
+
+    const uploadDescription =
+        document.getElementById(
+            "uploadDescription"
+        );
+
+    const fileInput =
+        document.getElementById("fileInput");
+
+    const selectedFileBox =
+        document.getElementById("selectedFile");
+
+
+    function openUploadModal(type) {
+
+        currentDocumentType = type;
+
+        selectedFile = null;
+
+        fileInput.value = "";
+
+        selectedFileBox.textContent = "";
+
+        selectedFileBox.classList.add("hidden");
+
+        const config =
+            documentConfig[type];
+
+        uploadModalTitle.textContent =
+            "Upload " + config.name;
+
+        uploadDescription.textContent =
+            "Upload your " +
+            config.name.toLowerCase() +
+            " below. Accepted formats are PDF, JPG and PNG.";
+
+        openModal(uploadModal);
+
+    }
+
+
+    /* ============================================================
+       DOCUMENT BUTTONS
+    ============================================================ */
+
+    document
+        .querySelectorAll(
+            "[data-document]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const type =
+                        button.dataset.document;
+
+                    if (
+                        application.documents[type]
+                    ) {
+
+                        openDocumentModal(type);
+
+                    } else {
+
+                        openUploadModal(type);
+
+                    }
+
+                }
+            );
+
+        });
+
+
+    /* ============================================================
+       FILE PICKER
+    ============================================================ */
+
+    document
+        .getElementById("chooseFileButton")
+        .addEventListener(
+            "click",
+            () => {
+
+                fileInput.click();
+
+            }
+        );
+
+
+    fileInput.addEventListener(
+        "change",
+        event => {
+
+            const file =
+                event.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            selectFile(file);
+
+        }
+    );
+
+
+    function selectFile(file) {
+
+        const allowedTypes = [
+
+            "application/pdf",
+
+            "image/jpeg",
+
+            "image/png"
+
+        ];
+
+        if (
+            !allowedTypes.includes(
+                file.type
+            )
+        ) {
+
+            showToast(
+                "Please choose a PDF, JPG or PNG file.",
+                "error"
+            );
+
+            fileInput.value = "";
+
+            return;
+
+        }
+
+
+        /*
+         * LocalStorage has limited storage capacity.
+         * To keep this demo reliable, large files are rejected.
+         */
+
+        const maxSize =
+            2 * 1024 * 1024;
+
+
+        if (file.size > maxSize) {
+
+            showToast(
+                "For this local-only demo, please use a file smaller than 2 MB.",
+                "error"
+            );
+
+            fileInput.value = "";
+
+            return;
+
+        }
+
+
+        selectedFile = file;
+
+        selectedFileBox.textContent =
+            file.name +
+            " • " +
+            formatFileSize(file.size);
+
+        selectedFileBox.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    function formatFileSize(bytes) {
+
+        if (bytes < 1024) {
+
+            return bytes + " B";
+
+        }
+
+        if (bytes < 1024 * 1024) {
+
+            return (
+                (bytes / 1024).toFixed(1) +
+                " KB"
+            );
+
+        }
+
+        return (
+            (bytes / (1024 * 1024)).toFixed(1) +
+            " MB"
+        );
+
+    }
+
+
+    /* ============================================================
+       DRAG AND DROP
+    ============================================================ */
+
+    const dropZone =
+        document.getElementById("dropZone");
+
+
+    dropZone.addEventListener(
+        "dragover",
+        event => {
+
+            event.preventDefault();
+
+            dropZone.classList.add(
+                "dragover"
+            );
+
+        }
+    );
+
+
+    dropZone.addEventListener(
+        "dragleave",
+        () => {
+
+            dropZone.classList.remove(
+                "dragover"
+            );
+
+        }
+    );
+
+
+    dropZone.addEventListener(
+        "drop",
+        event => {
+
+            event.preventDefault();
+
+            dropZone.classList.remove(
+                "dragover"
+            );
+
+            const file =
+                event.dataTransfer.files[0];
+
+            if (file) {
+
+                selectFile(file);
+
+            }
+
+        }
+    );
+
+
+    /* ============================================================
+       SAVE DOCUMENT
+    ============================================================ */
+
+    document
+        .getElementById("saveDocument")
+        .addEventListener(
+            "click",
+            () => {
+
+                if (!selectedFile) {
+
+                    showToast(
+                        "Please choose a document first.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload = () => {
+
+                    application.documents[
+                        currentDocumentType
+                    ] = {
+
+                        name:
+                            selectedFile.name,
+
+                        type:
+                            selectedFile.type,
+
+                        size:
+                            selectedFile.size,
+
+                        data:
+                            reader.result,
+
+                        uploadedAt:
+                            new Date().toISOString()
+
+                    };
+
+
+                    saveApplication();
+
+                    closeModal(
+                        uploadModal
+                    );
+
+                    showToast(
+                        documentConfig[
+                            currentDocumentType
+                        ].name +
+                        " uploaded successfully.",
+                        "success"
+                    );
+
+                    updateInterface();
+
+                };
+
+
+                reader.onerror = () => {
+
+                    showToast(
+                        "The document could not be saved.",
+                        "error"
+                    );
+
+                };
+
+
+                reader.readAsDataURL(
+                    selectedFile
+                );
+
+            }
+        );
+
+
+    /* ============================================================
+       VIEW DOCUMENT
+    ============================================================ */
+
+    function openDocumentModal(type) {
+
+        const documentData =
+            application.documents[type];
+
+        if (!documentData) {
+
+            openUploadModal(type);
+
+            return;
+
+        }
+
+
+        document.getElementById(
+            "viewDocumentName"
+        ).textContent =
+            documentData.name;
+
+
+        document.getElementById(
+            "viewDocumentDetails"
+        ).textContent =
+            "Uploaded " +
+            formatDate(
+                documentData.uploadedAt
+            ) +
+            " • " +
+            formatFileSize(
+                documentData.size
+            );
+
+
+        currentDocumentType = type;
+
+        openModal(
+            documentModal
+        );
+
+    }
+
+
+    /* ============================================================
+       REPLACE DOCUMENT
+    ============================================================ */
+
+    document
+        .getElementById("replaceDocumentButton")
+        .addEventListener(
+            "click",
+            () => {
+
+                closeModal(
+                    documentModal
+                );
+
+                openUploadModal(
+                    currentDocumentType
+                );
+
+            }
+        );
+
+
+    /* ============================================================
+       CLOSE UPLOAD MODAL
+    ============================================================ */
+
+    document
+        .getElementById("closeUploadModal")
+        .addEventListener(
+            "click",
+            () => {
+
+                closeModal(
+                    uploadModal
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("cancelUpload")
+        .addEventListener(
+            "click",
+            () => {
+
+                closeModal(
+                    uploadModal
+                );
+
+            }
+        );
+
+
+    /* ============================================================
+       CLOSE DOCUMENT MODAL
+    ============================================================ */
+
+    document
+        .getElementById("closeDocumentModal")
+        .addEventListener(
+            "click",
+            () => {
+
+                closeModal(
+                    documentModal
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("closeDocumentButton")
+        .addEventListener(
+            "click",
+            () => {
+
+                closeModal(
+                    documentModal
+                );
+
+            }
+        );
+
+
+    /* ============================================================
+       PAYMENT
+    ============================================================ */
+
+    let selectedPaymentMethod = "Card";
+
+
+    payButton.addEventListener(
+        "click",
+        () => {
+
+            if (application.payment.paid) {
+
+                return;
+
+            }
+
+            openModal(
+                paymentModal
+            );
+
+        }
+    );
+
+
+    document
+        .querySelectorAll(
+            ".payment-method"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(
+                            ".payment-method"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList.remove(
+                                    "selected"
+                                )
+                        );
+
+                    button.classList.add(
+                        "selected"
+                    );
+
+                    selectedPaymentMethod =
+                        button.dataset.method;
+
+                }
+            );
+
+        });
+
+
+    /* ============================================================
+       CONFIRM PAYMENT
+    ============================================================ */
+
+    document
+        .getElementById("confirmPayment")
+        .addEventListener(
+            "click",
+            () => {
+
+                const receipt =
+                    generateReceipt();
+
+
+                application.payment = {
+
+                    paid: true,
+
+                    amount: 250,
+
+                    method:
+                        selectedPaymentMethod,
+
+                    receipt:
+                        receipt,
+
+                    date:
+                        new Date().toISOString()
+
+                };
+
+
+                saveApplication();
+
+                closeModal(
+                    paymentModal
+                );
+
+
+                document.getElementById(
+                    "successReceipt"
+                ).textContent =
+                    receipt;
+
+
+                document.getElementById(
+                    "successMethod"
+                ).textContent =
+                    selectedPaymentMethod;
+
+
+                openModal(
+                    successModal
+                );
+
+
+                updateInterface();
+
+            }
+        );
+
+
+    /* ============================================================
+       PAYMENT CLOSE
+    ============================================================ */
+
+    document
+        .getElementById("closePaymentModal")
+        .addEventListener(
+            "click",
+            () => {
+
+                closeModal(
+                    paymentModal
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("cancelPayment")
+        .addEventListener(
+            "click",
+            () => {
+
+                closeModal(
+                    paymentModal
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("closeSuccess")
+        .addEventListener(
+            "click",
+            () => {
+
+                closeModal(
+                    successModal
+                );
+
+            }
+        );
+
+
+    /* ============================================================
+       RECEIPT GENERATOR
+    ============================================================ */
+
+    function generateReceipt() {
+
+        const random =
+            Math.floor(
+                100000 +
+                Math.random() * 900000
+            );
+
+        return (
+            "ATL-PAY-" +
+            random
+        );
+
+    }
+
+
+    /* ============================================================
+       APPLICATION STATE
+    ============================================================ */
+
+    function getDocumentCount() {
+
+        return Object.values(
+            application.documents
+        )
+        .filter(Boolean)
+        .length;
+
+    }
+
+
+    function allDocumentsUploaded() {
+
+        return (
+            getDocumentCount() === 4
+        );
+
+    }
+
+
+    function getApplicationState() {
+
+        if (
+            application.decision === "accepted"
+        ) {
+
+            return "accepted";
+
+        }
+
+
+        if (
+            application.decision === "unsuccessful"
+        ) {
+
+            return "unsuccessful";
+
+        }
+
+
+        if (
+            allDocumentsUploaded() &&
+            application.payment.paid
+        ) {
+
+            return "review";
+
+        }
+
+
+        return "action";
+
+    }
+
+
+    /* ============================================================
+       STATUS
+    ============================================================ */
+
+    function updateMainStatus() {
+
+        const state =
+            getApplicationState();
+
+
+        mainStatusBadge.className =
+            "status-badge";
+
+
+        if (state === "action") {
+
+            mainStatusBadge.classList.add(
+                "status-action"
+            );
+
+            mainStatusBadge.textContent =
+                "Action Required";
+
+        }
+
+
+        if (state === "review") {
+
+            mainStatusBadge.classList.add(
+                "status-review"
+            );
+
+            mainStatusBadge.textContent =
+                "Under Review";
+
+        }
+
+
+        if (state === "accepted") {
+
+            mainStatusBadge.classList.add(
+                "status-accepted"
+            );
+
+            mainStatusBadge.textContent =
+                "Accepted";
+
+        }
+
+
+        if (state === "unsuccessful") {
+
+            mainStatusBadge.classList.add(
+                "status-unsuccessful"
+            );
+
+            mainStatusBadge.textContent =
+                "Unsuccessful";
+
+        }
+
+    }
+
+
+    /* ============================================================
+       REQUIREMENT RENDERING
+    ============================================================ */
+
+    function renderRequirement(
+        type
+    ) {
+
+        const data =
+            application.documents[type];
+
+
+        const status =
+            document.getElementById(
+                type + "Status"
+            );
+
+
+        const action =
+            document.getElementById(
+                type + "Action"
+            );
+
+
+        const description =
+            document.getElementById(
+                type + "Description"
+            );
+
+
+        if (data) {
+
+            status.className =
+                "requirement-status received";
+
+            status.textContent =
+                "Received";
+
+            action.className =
+                "requirement-action";
+
+            action.textContent =
+                "View";
+
+
+            description.textContent =
+                data.name +
+                " • " +
+                formatFileSize(
+                    data.size
+                );
+
+        } else {
+
+            status.className =
+                "requirement-status required";
+
+            status.textContent =
+                "Required";
+
+            action.className =
+                "requirement-action primary";
+
+            action.textContent =
+                "Upload";
+
+
+            description.textContent =
+                documentConfig[
+                    type
+                ].description;
+
+        }
+
+    }
+
+
+    /* ============================================================
+       PAYMENT UI
+    ============================================================ */
+
+    function updatePaymentUI() {
+
+        if (
+            application.payment.paid
+        ) {
+
+            paymentNote.classList.add(
+                "hidden"
+            );
+
+            payButton.classList.add(
+                "hidden"
+            );
+
+            paidBox.classList.remove(
+                "hidden"
+            );
+
+            receiptNumber.textContent =
+                application.payment.receipt;
+
+        } else {
+
+            paymentNote.classList.remove(
+                "hidden"
+            );
+
+            payButton.classList.remove(
+                "hidden"
+            );
+
+            paidBox.classList.add(
+                "hidden"
+            );
+
+        }
+
+    }
+
+
+    /* ============================================================
+       PROGRESS
+    ============================================================ */
+
+    function updateProgress() {
+
+        const documentsComplete =
+            allDocumentsUploaded();
+
+        const paymentComplete =
+            application.payment.paid;
+
+        const reviewComplete =
+            documentsComplete &&
+            paymentComplete;
+
+
+        const steps = {
+
+            documents:
+                document.getElementById(
+                    "stepDocuments"
+                ),
+
+            payment:
+                document.getElementById(
+                    "stepPayment"
+                ),
+
+            review:
+                document.getElementById(
+                    "stepReview"
+                ),
+
+            decision:
+                document.getElementById(
+                    "stepDecision"
+                )
+
+        };
+
+
+        Object.values(steps)
+            .forEach(step => {
+
+                step.classList.remove(
+                    "completed",
+                    "current"
+                );
+
+            });
+
+
+        let progress = 0;
+
+
+        if (documentsComplete) {
+
+            steps.documents.classList.add(
+                "completed"
+            );
+
+            progress = 25;
+
+        } else {
+
+            steps.documents.classList.add(
+                "current"
+            );
+
+        }
+
+
+        if (paymentComplete) {
+
+            steps.payment.classList.add(
+                "completed"
+            );
+
+            progress = 50;
+
+        } else if (documentsComplete) {
+
+            steps.payment.classList.add(
+                "current"
+            );
+
+        }
+
+
+        if (reviewComplete) {
+
+            steps.review.classList.add(
+                "completed"
+            );
+
+            progress = 75;
+
+        } else if (
+            documentsComplete &&
+            paymentComplete
+        ) {
+
+            steps.review.classList.add(
+                "current"
+            );
+
+        }
+
+
+        if (
+            application.decision
+        ) {
+
+            steps.decision.classList.add(
+                "completed"
+            );
+
+            progress = 100;
+
+        } else if (reviewComplete) {
+
+            steps.decision.classList.add(
+                "current"
+            );
+
+        }
+
+
+        progressLine.style.setProperty(
+            "--progress-width",
+            progress + "%"
+        );
+
+    }
+
+
+    /* ============================================================
+       REVIEW TEXT
+    ============================================================ */
+
+    function updateReviewText() {
+
+        const state =
+            getApplicationState();
+
+
+        if (state === "action") {
+
+            reviewTitle.textContent =
+                "Complete your application";
+
+            reviewDescription.textContent =
+                "Atlas College will begin reviewing your application once all required documents and the application fee have been received.";
+
+            return;
+
+        }
+
+
+        if (state === "review") {
+
+            reviewTitle.textContent =
+                "Your application is under review";
+
+            reviewDescription.textContent =
+                "Your application is complete and has been submitted for review. You will receive an admission decision once the review has been completed.";
+
+            return;
+
+        }
+
+
+        if (state === "accepted") {
+
+            reviewTitle.textContent =
+                "Congratulations! You have been accepted.";
+
+            reviewDescription.textContent =
+                "Your Atlas College application has been accepted. Please follow the admission instructions provided by the college.";
+
+            return;
+
+        }
+
+
+        if (state === "unsuccessful") {
+
+            reviewTitle.textContent =
+                "Application decision";
+
+            reviewDescription.textContent =
+                "Unfortunately, your application was unsuccessful for this intake.";
+
+        }
+
+    }
+
+
+    /* ============================================================
+       FULL UI UPDATE
+    ============================================================ */
+
+    function updateInterface() {
+
+        renderBasicInformation();
+
+        renderRequirement("id");
+
+        renderRequirement("matric");
+
+        renderRequirement("results");
+
+        renderRequirement("address");
+
+        updatePaymentUI();
+
+        updateMainStatus();
+
+        updateProgress();
+
+        updateReviewText();
+
+    }
+
+
+    /* ============================================================
+       TOAST
+    ============================================================ */
+
+    function showToast(
+        message,
+        type = ""
+    ) {
+
+        const toast =
+            document.createElement(
+                "div"
+            );
+
+        toast.className =
+            "toast " + type;
+
+        toast.textContent =
+            message;
+
+        toastContainer.appendChild(
+            toast
+        );
+
+
+        setTimeout(
+            () => {
+
+                toast.style.opacity =
+                    "0";
+
+                toast.style.transform =
+                    "translateY(10px)";
+
+                setTimeout(
+                    () => {
+
+                        toast.remove();
+
+                    },
+                    300
+                );
+
+            },
+            3000
+        );
+
+    }
+
+
+    /* ============================================================
+       DATE FORMAT
+    ============================================================ */
+
+    function formatDate(
+        isoDate
+    ) {
+
+        if (!isoDate) {
+
+            return "Unknown date";
+
+        }
+
+
+        const date =
+            new Date(isoDate);
+
+
+        return date.toLocaleDateString(
+            "en-ZA",
+            {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+    }
+
+
+    /* ============================================================
+       SUPPORT BUTTON
+    ============================================================ */
+
+    document
+        .getElementById("supportButton")
+        .addEventListener(
+            "click",
+            () => {
+
+                showToast(
+                    "Admissions support: info@atlascollege.edu",
+                    ""
+                );
+
+            }
+        );
+
+
+    /* ============================================================
+       HOME BUTTON
+    ============================================================ */
+
+    document
+        .getElementById("homeButton")
+        .addEventListener(
+            "click",
+            () => {
+
+                /*
+                 * Change this to index.html if the status page
+                 * sits in the same directory as your landing page.
+                 */
+
+                window.location.href =
+                    "index.html";
+
+            }
+        );
+
+
+    /* ============================================================
+       CLOSE MODAL WHEN CLICKING OUTSIDE
+    ============================================================ */
+
+    [
+        uploadModal,
+        documentModal,
+        paymentModal,
+        successModal
+
+    ].forEach(modal => {
+
+        modal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closeModal(
+                        modal
+                    );
+
+                }
+
+            }
+        );
+
+    });
+
+
+    /* ============================================================
+       ESCAPE KEY
+    ============================================================ */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key !== "Escape"
+            ) {
+
+                return;
+
+            }
+
+
+            [
+                uploadModal,
+                documentModal,
+                paymentModal,
+                successModal
+
+            ].forEach(
+                modal => {
+
+                    closeModal(
+                        modal
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+    /* ============================================================
+       DEMO / DEVELOPMENT HELPER
+       ------------------------------------------------------------
+       This creates an initial application locally.
+       It does NOT communicate with a server.
+    ============================================================ */
+
+    if (
+        !localStorage.getItem(
+            STORAGE_KEY
+        )
+    ) {
+
+        saveApplication();
+
+    }
+
+
+    /* ============================================================
+       INITIAL RENDER
+    ============================================================ */
+
+    updateInterface();
+
+
+</script>
+
+</body>
+  </html>
