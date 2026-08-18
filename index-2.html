@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Northwood University — Admissions</title>
+
+<style>
+  :root{
+    --navy:#092c5c;
+    --blue:#1667c9;
+    --light-blue:#f3f8fd;
+    --text:#15253a;
+    --muted:#617086;
+    --border:#dfe6ee;
+    --white:#fff;
+    --max:1160px;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    color:var(--text);
+    background:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+  }
+  button,a{font:inherit}
+  a{text-decoration:none}
+  img{display:block;width:100%}
+
+  .container{
+    width:min(var(--max),calc(100% - 64px));
+    margin:auto;
+  }
+
+  /* =========================
+     HEADER — only what appears
+     in the supplied screenshot
+     ========================= */
+  .header{
+    height:72px;
+    background:#fff;
+    border-bottom:1px solid #e9edf2;
+    display:flex;
+    align-items:center;
+  }
+
+  .nav{
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:30px;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--navy);
+    min-width:190px;
+  }
+
+  .crest{
+    width:38px;
+    height:42px;
+    border:2px solid var(--navy);
+    border-radius:5px 5px 12px 12px;
+    position:relative;
+    display:grid;
+    place-items:center;
+    font-family:Georgia,serif;
+    font-weight:700;
+    font-size:20px;
+  }
+
+  .crest:before{
+    content:"";
+    position:absolute;
+    inset:5px;
+    border:1px solid #7895b8;
+    border-radius:3px 3px 8px 8px;
+  }
+
+  .brand-name{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:17px;
+    font-weight:700;
+    letter-spacing:.04em;
+    line-height:1;
+  }
+
+  .brand-name small{
+    display:block;
+    text-align:center;
+    font-size:8px;
+    letter-spacing:.2em;
+    margin-top:5px;
+  }
+
+  .nav-links{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:29px;
+    flex:1;
+  }
+
+  .nav-links a{
+    color:#1e2d41;
+    font-size:12px;
+    font-weight:600;
+  }
+
+  .nav-links a:hover{color:var(--blue)}
+
+  .apply-btn{
+    border:0;
+    border-radius:5px;
+    background:var(--navy);
+    color:#fff;
+    padding:12px 21px;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+  }
+
+  /* =========================
+     HERO
+     ========================= */
+  .hero{
+    height:560px;
+    position:relative;
+    background:
+      linear-gradient(90deg,
+        rgba(2,17,36,.91) 0%,
+        rgba(3,23,47,.74) 38%,
+        rgba(4,25,49,.18) 72%,
+        rgba(4,25,49,.05) 100%),
+      url("https://images.unsplash.com/photo-1564981797816-1043664bf78d?auto=format&fit=crop&w=1800&q=88")
+      center 48% / cover no-repeat;
+  }
+
+  .hero-inner{
+    height:100%;
+    display:flex;
+    align-items:center;
+  }
+
+  .hero-copy{
+    width:52%;
+    color:#fff;
+    padding-bottom:15px;
+  }
+
+  .hero-label{
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:13px;
+  }
+
+  .hero h1{
+    margin:0;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:56px;
+    line-height:1.01;
+    letter-spacing:-1.7px;
+    color:#fff;
+  }
+
+  .hero p{
+    margin:22px 0 27px;
+    font-size:15px;
+    line-height:1.65;
+    color:#f4f7fb;
+    max-width:430px;
+  }
+
+  .hero-buttons{
+    display:flex;
+    gap:12px;
+  }
+
+  .hero-buttons button,
+  .hero-buttons a{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:95px;
+    padding:12px 20px;
+    border-radius:4px;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+  }
+
+  .hero-primary{
+    border:1px solid #1769d2;
+    background:#1769d2;
+    color:#fff;
+  }
+
+  .hero-secondary{
+    border:1px solid #fff;
+    background:rgba(0,0,0,.08);
+    color:#fff;
+  }
+
+  /* =========================
+     STATS CARD
+     ========================= */
+  .stats-wrap{
+    position:relative;
+    height:0;
+  }
+
+  .stats{
+    position:absolute;
+    z-index:4;
+    left:50%;
+    top:-61px;
+    transform:translateX(-50%);
+    width:min(var(--max),calc(100% - 64px));
+    height:84px;
+    background:var(--navy);
+    border-radius:9px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    align-items:center;
+    color:#fff;
+    padding:0 28px;
+    box-shadow:0 8px 22px rgba(0,0,0,.12);
+  }
+
+  .stat{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    min-width:0;
+    padding:0 25px;
+    border-right:1px solid rgba(255,255,255,.2);
+  }
+
+  .stat:first-child{padding-left:0}
+  .stat:last-child{
+    border-right:0;
+    padding-right:0;
+  }
+
+  .stat-icon{
+    width:39px;
+    height:39px;
+    flex:0 0 39px;
+    border:2px solid rgba(255,255,255,.9);
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    font-size:17px;
+  }
+
+  .stat strong{
+    display:block;
+    font-size:19px;
+    line-height:1;
+  }
+
+  .stat span{
+    display:block;
+    margin-top:6px;
+    color:#dce8f7;
+    font-size:10px;
+    white-space:nowrap;
+  }
+
+  /* =========================
+     HOW TO APPLY
+     ========================= */
+  .apply-section{
+    padding:125px 0 72px;
+    background:#fff;
+  }
+
+  .apply-heading{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:70px;
+    align-items:start;
+    margin-bottom:43px;
+  }
+
+  .section-label{
+    color:#2879d4;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    margin-bottom:13px;
+  }
+
+  .section-title{
+    margin:0;
+    font-family:Georgia,"Times New Roman",serif;
+    color:var(--navy);
+    font-size:38px;
+    line-height:1.13;
+    letter-spacing:-.7px;
+  }
+
+  .apply-heading .description{
+    max-width:340px;
+    color:#657286;
+    font-size:12px;
+    line-height:1.75;
+    margin:20px 0 0 auto;
+  }
+
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+  }
+
+  .step{
+    min-height:225px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:#fff;
+    text-align:center;
+    padding:28px 14px 20px;
+  }
+
+  .step-icon{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:#eef6ff;
+    color:#1261bd;
+    display:grid;
+    place-items:center;
+    margin:0 auto 22px;
+    font-size:22px;
+  }
+
+  .step h3{
+    margin:0 0 13px;
+    color:#132c50;
+    font-size:11px;
+    font-weight:800;
+  }
+
+  .step p{
+    margin:0 auto;
+    max-width:125px;
+    color:#66758a;
+    font-size:10px;
+    line-height:1.7;
+  }
+
+  .start{
+    display:block;
+    margin:27px auto 0;
+    background:var(--navy);
+    color:#fff;
+    border:0;
+    border-radius:4px;
+    padding:12px 22px;
+    font-size:11px;
+    font-weight:700;
+    cursor:pointer;
+  }
+
+  /* =========================
+     PROGRAMS — exact final
+     section shown in supplied
+     screenshot
+     ========================= */
+  .programs{
+    background:#f3f8fd;
+    padding:72px 0 70px;
+  }
+
+  .program-heading{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:70px;
+    align-items:start;
+    margin-bottom:28px;
+  }
+
+  .program-heading .description{
+    max-width:340px;
+    color:#647388;
+    font-size:12px;
+    line-height:1.7;
+    margin:18px 0 0 auto;
+  }
+
+  .filters{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-bottom:28px;
+    flex-wrap:wrap;
+  }
+
+  .filter{
+    background:#fff;
+    color:#47586d;
+    border:1px solid #dce4ec;
+    border-radius:5px;
+    padding:9px 15px;
+    font-size:10px;
+    font-weight:700;
+    cursor:pointer;
+  }
+
+  .filter.active,
+  .filter:hover{
+    color:#fff;
+    background:var(--navy);
+    border-color:var(--navy);
+  }
+
+  .program-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:13px;
+  }
+
+  .program-card{
+    background:#fff;
+    border:1px solid #dfe6ee;
+    border-radius:9px;
+    overflow:hidden;
+    min-width:0;
+  }
+
+  .program-card img{
+    height:132px;
+    object-fit:cover;
+  }
+
+  .program-content{
+    padding:17px 14px 18px;
+  }
+
+  .program-card h3{
+    margin:0 0 10px;
+    color:#15345d;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:15px;
+    line-height:1.2;
+  }
+
+  .program-card p{
+    margin:0;
+    color:#657388;
+    font-size:10px;
+    line-height:1.65;
+    min-height:50px;
+  }
+
+  .learn{
+    display:inline-block;
+    margin-top:18px;
+    color:#1767c7;
+    font-size:10px;
+    font-weight:800;
+  }
+
+  .view-all{
+    display:block;
+    margin:28px auto 0;
+    padding:11px 24px;
+    color:var(--navy);
+    background:#fff;
+    border:1px solid #8ba4c0;
+    border-radius:4px;
+    font-size:10px;
+    font-weight:700;
+    cursor:pointer;
+  }
+
+  /* Simple demo modal */
+  .modal{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:none;
+    place-items:center;
+    background:rgba(3,18,38,.62);
+    padding:20px;
+  }
+
+  .modal.show{display:grid}
+
+  .modal-card{
+    position:relative;
+    width:min(430px,100%);
+    background:#fff;
+    border-radius:10px;
+    padding:30px;
+    box-shadow:0 25px 70px rgba(0,0,0,.25);
+  }
+
+  .modal-card h2{
+    margin:0 0 8px;
+    color:var(--navy);
+    font-family:Georgia,serif;
+  }
+
+  .modal-card p{
+    color:#657388;
+    font-size:13px;
+    line-height:1.6;
+    margin:0 0 20px;
+  }
+
+  .close{
+    position:absolute;
+    right:14px;
+    top:10px;
+    border:0;
+    background:none;
+    font-size:25px;
+    color:#6b7788;
+    cursor:pointer;
+  }
+
+  /* =========================
+     RESPONSIVE
+     ========================= */
+  @media(max-width:950px){
+    .container{width:min(var(--max),calc(100% - 36px))}
+    .nav-links{display:none}
+    .brand{min-width:auto}
+    .stats{
+      width:calc(100% - 36px);
+      grid-template-columns:repeat(2,1fr);
+      height:auto;
+      padding:18px;
+      top:-54px;
+      gap:16px;
+    }
+    .stat{
+      padding:8px 12px;
+      border-right:0;
+    }
+    .stat:nth-child(odd){padding-left:0}
+    .stat span{white-space:normal}
+    .hero{height:590px}
+    .hero-copy{width:60%}
+    .hero h1{font-size:48px}
+    .steps{grid-template-columns:repeat(2,1fr)}
+    .program-grid{grid-template-columns:repeat(2,1fr)}
+  }
+
+  @media(max-width:650px){
+    .container{width:calc(100% - 28px)}
+    .header{height:64px}
+    .brand-name{font-size:14px}
+    .brand-name small{font-size:7px}
+    .crest{width:31px;height:35px}
+    .nav .apply-btn{padding:9px 12px;font-size:10px}
+
+    .hero{
+      height:610px;
+      background-position:62% center;
+    }
+
+    .hero-inner{align-items:flex-start}
+    .hero-copy{
+      width:100%;
+      padding-top:90px;
+    }
+    .hero h1{font-size:44px}
+    .hero p{font-size:13px;max-width:330px}
+    .stats{
+      top:-64px;
+      width:calc(100% - 28px);
+    }
+
+    .apply-section{padding-top:145px}
+    .apply-heading,
+    .program-heading{
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+
+    .apply-heading .description,
+    .program-heading .description{
+      margin:5px 0 0;
+    }
+
+    .steps{grid-template-columns:1fr}
+    .program-grid{grid-template-columns:1fr}
+    .program-card img{height:180px}
+  }
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container nav">
+    <a class="brand" href="#">
+      <span class="crest">N</span>
+      <span class="brand-name">NORTHWOOD<small>UNIVERSITY</small></span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="#about">About Us</a>
+      <a href="#programs">Programs</a>
+      <a href="#apply">Admissions</a>
+      <a href="#campus">Campus Life</a>
+      <a href="#support">Tuition &amp; Aid</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <button class="apply-btn" data-demo>Apply Now</button>
+  </div>
+</header>
+
+<section class="hero" id="about">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <div class="hero-label">Your Future Starts Here</div>
+      <h1>Apply Today,<br>Shape Tomorrow</h1>
+      <p>Join a community of innovators and leaders.<br>Start your journey with Northwood University.</p>
+
+      <div class="hero-buttons">
+        <button class="hero-primary" data-demo>Apply Now</button>
+        <a class="hero-secondary" href="#programs">Explore Programs</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-wrap">
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-icon">🎓</div>
+      <div><strong>100+</strong><span>Academic Programs</span></div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">♙</div>
+      <div><strong>20:1</strong><span>Student to Faculty Ratio</span></div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">✦</div>
+      <div><strong>50+</strong><span>Student Clubs</span></div>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">✓</div>
+      <div><strong>95%</strong><span>Career Success Rate</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="apply-section" id="apply">
+  <div class="container">
+
+    <div class="apply-heading">
+      <div>
+        <div class="section-label">How to Apply</div>
+        <h2 class="section-title">Your Path to<br>Northwood</h2>
+      </div>
+
+      <p class="description">
+        Our application process is designed to be simple and straightforward.
+        Follow these easy steps to join our dynamic community.
+      </p>
+    </div>
+
+    <div class="steps">
+      <article class="step">
+        <div class="step-icon">♙</div>
+        <h3>1. Create Account</h3>
+        <p>Sign up and create your personal application account.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-icon">🎓</div>
+        <h3>2. Choose Program</h3>
+        <p>Explore programs and select the one that fits your goals.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-icon">▤</div>
+        <h3>3. Complete Application</h3>
+        <p>Fill in your details and academic information.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-icon">☁</div>
+        <h3>4. Submit Documents</h3>
+        <p>Upload required documents and supporting files.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-icon">▣</div>
+        <h3>5. Pay Application Fee</h3>
+        <p>Securely pay the application fee online.</p>
+      </article>
+    </div>
+
+    <button class="start" data-demo>Start Your Application</button>
+  </div>
+</section>
+
+<section class="programs" id="programs">
+  <div class="container">
+
+    <div class="program-heading">
+      <div>
+        <div class="section-label">Explore Programs</div>
+        <h2 class="section-title">Find the Right Program<br>for Your Future</h2>
+      </div>
+
+      <p class="description">
+        Discover a wide range of undergraduate and graduate programs designed
+        to help you achieve your goals.
+      </p>
+    </div>
+
+    <div class="filters">
+      <button class="filter active" data-filter="all">All Programs</button>
+      <button class="filter" data-filter="business">Business</button>
+      <button class="filter" data-filter="engineering">Engineering</button>
+      <button class="filter" data-filter="health">Health Sciences</button>
+      <button class="filter" data-filter="arts">Arts &amp; Humanities</button>
+      <button class="filter" data-filter="education">Education</button>
+      <button class="filter" data-filter="law">Law</button>
+    </div>
+
+    <div class="program-grid">
+
+      <article class="program-card" data-category="business">
+        <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=85" alt="Business students">
+        <div class="program-content">
+          <h3>Bachelor of Business<br>Administration</h3>
+          <p>Build a strong foundation in business principles and leadership skills.</p>
+          <a class="learn" href="#" data-demo>Learn More →</a>
+        </div>
+      </article>
+
+      <article class="program-card" data-category="engineering">
+        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=900&q=85" alt="Engineering student">
+        <div class="program-content">
+          <h3>Bachelor of Science in<br>Engineering</h3>
+          <p>Innovate and solve real-world problems through hands-on engineering education.</p>
+          <a class="learn" href="#" data-demo>Learn More →</a>
+        </div>
+      </article>
+
+      <article class="program-card" data-category="health">
+        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=900&q=85" alt="Nursing students">
+        <div class="program-content">
+          <h3>Bachelor of Science in<br>Nursing</h3>
+          <p>Prepare for a rewarding career in healthcare with our comprehensive nursing program.</p>
+          <a class="learn" href="#" data-demo>Learn More →</a>
+        </div>
+      </article>
+
+      <article class="program-card" data-category="arts">
+        <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=900&q=85" alt="Student studying in a library">
+        <div class="program-content">
+          <h3>Bachelor of Arts in<br>Psychology</h3>
+          <p>Explore human behavior and mental processes with expert faculty guidance.</p>
+          <a class="learn" href="#" data-demo>Learn More →</a>
+        </div>
+      </article>
+
+    </div>
+
+    <button class="view-all" data-demo>View All Programs</button>
+  </div>
+</section>
+
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <button class="close" id="close">×</button>
+    <h2>Demo Button</h2>
+    <p>This button is intentionally disabled for now. Connect it to your real admissions system when the application backend is ready.</p>
+    <button class="apply-btn" id="closeBottom">Close</button>
+  </div>
+</div>
+
+<script>
+  /* Demo buttons */
+  const modal = document.getElementById("modal");
+
+  document.querySelectorAll("[data-demo]").forEach(button => {
+    button.addEventListener("click", event => {
+      event.preventDefault();
+      modal.classList.add("show");
+    });
+  });
+
+  function closeModal(){
+    modal.classList.remove("show");
+  }
+
+  document.getElementById("close").addEventListener("click", closeModal);
+  document.getElementById("closeBottom").addEventListener("click", closeModal);
+
+  modal.addEventListener("click", e => {
+    if(e.target === modal) closeModal();
+  });
+
+  document.addEventListener("keydown", e => {
+    if(e.key === "Escape") closeModal();
+  });
+
+  /* Program filters */
+  const filterButtons = document.querySelectorAll(".filter");
+  const cards = document.querySelectorAll(".program-card");
+
+  filterButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      filterButtons.forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
+
+      const filter = button.dataset.filter;
+
+      cards.forEach(card => {
+        card.style.display =
+          filter === "all" || card.dataset.category === filter
+            ? ""
+            : "none";
+      });
+    });
+  });
+
+  /* Prevent placeholder Learn More links from navigating */
+  document.querySelectorAll(".learn").forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      modal.classList.add("show");
+    });
+  });
+</script>
+
+</body>
+</html>
