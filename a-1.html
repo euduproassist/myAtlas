@@ -3,1561 +3,1601 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Application Status | Atlas College</title>
+    <title>Atlas College</title>
+    <meta name="description" content="Atlas College — quality education, practical skills and real opportunities for your future.">
     <style>
         /* =========================================================
-           RESET & BASE STYLES (STRETCHED EDGE-TO-EDGE)
+           RESET
         ========================================================= */
-        *,
-        *::before,
-        *::after {
+        *, *::before, *::after {
             box-sizing: border-box;
         }
-
         html {
             width: 100%;
-            min-width: 100%;
-            margin: 0;
-            padding: 0;
+            min-width: 0;
             scroll-behavior: smooth;
         }
-
         body {
             margin: 0;
-            width: 100vw;
-            min-width: 100vw;
-            min-height: 100vh;
+            width: 100%;
+            min-width: 0;
             overflow-x: hidden;
-
-            font-family:
-                Inter,
-                "Segoe UI",
-                Roboto,
-                Helvetica,
-                Arial,
-                sans-serif;
-
+            font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             color: #071947;
             background: #ffffff;
-
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
-
         img {
             display: block;
-            width: 100%;
             max-width: 100%;
         }
-
-        button,
-        input,
-        select {
+        button, input, select, textarea {
             font: inherit;
         }
-
-        button {
-            cursor: pointer;
+        a {
+            color: inherit;
+            text-decoration: none;
         }
 
         /* =========================================================
-           VARIABLES
+           GLOBAL VARIABLES
         ========================================================= */
         :root {
             --blue: #0957e8;
             --blue-dark: #062b73;
             --navy: #071947;
-            --text: #1d2c49;
-            --muted: #64728a;
-            --border: #e2e8f0;
+            --navy-2: #06265f;
+            --light-blue: #f5f9ff;
+            --border: #e1e8f3;
+            --text: #071947;
+            --muted: #596985;
             --white: #ffffff;
-            --red: #c93636;
-            --green: #159447;
-            --orange: #c97700;
-
-            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            --shadow: 0 8px 28px rgba(7, 25, 71, 0.07);
+            --radius: 8px;
         }
 
         /* =========================================================
-           UTILITIES (FULL WIDTH EDGE-TO-EDGE)
+           PAGE WRAPPER (STRETCHED EDGE-TO-EDGE)
         ========================================================= */
-        .hidden {
-            display: none !important;
+        .page {
+            width: 100%;
+            min-width: 0;
+            overflow: hidden;
         }
-
-        /* =========================================================
-           HEADER (PINNED TO EXTREME EDGES, 100% STRETCHED)
-        ========================================================= */
-        .header {
-            width: 100vw;
-            min-width: 100vw;
-            height: 75px;
-            background: #ffffff;
-            border-bottom: 1px solid #eaeef4;
-            flex-shrink: 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        .section {
+            width: 100%;
         }
-
-        .header-inner {
+        .section-inner {
             width: 100%;
             max-width: 100%;
-            height: 100%;
             margin: 0;
-            padding: 0 40px;
+            padding-left: clamp(20px, 4vw, 58px);
+            padding-right: clamp(20px, 4vw, 58px);
+        }
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+        .site-header {
+            width: 100%;
+            height: 66px;
+            background: #ffffff;
+            border-bottom: 1px solid #edf1f7;
+            position: relative;
+            z-index: 50;
+        }
+        .header-inner {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0 clamp(22px, 4.5vw, 62px);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
+            gap: 25px;
         }
-
-        .brand img {
-            width: 125px;
+        .logo-link {
+            display: flex;
+            align-items: center;
+            flex: 0 0 auto;
+        }
+        .logo {
+            width: 126px;
             height: auto;
             object-fit: contain;
         }
-
-        .header-right {
+        .main-nav {
             display: flex;
             align-items: center;
-            gap: 20px;
+            justify-content: center;
+            gap: clamp(25px, 3.3vw, 52px);
+            margin-left: auto;
         }
-
-        .help-link {
-            color: #53627b;
-            font-size: 13px;
+        .nav-link {
+            position: relative;
+            font-size: 14px;
             font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .help-link:hover {
-            color: var(--blue);
-        }
-
-        .home-button {
-            height: 38px;
-            padding: 0 18px;
-            border: 1px solid #d7e0ed;
-            border-radius: 6px;
-            background: #ffffff;
             color: var(--navy);
-            font-size: 13px;
-            font-weight: 700;
-            transition: var(--transition);
+            white-space: nowrap;
+            transition: color 0.25s ease, transform 0.25s ease;
         }
-
-        .home-button:hover {
-            border-color: #b7c9e5;
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -8px;
+            height: 2px;
+            background: var(--blue);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.25s ease;
+        }
+        .nav-link:hover {
+            color: var(--blue);
             transform: translateY(-1px);
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
         }
 
         /* =========================================================
-           MAIN APPLICATION CONTAINER & STEPS (100% WIDE STRETCH)
+           MENU TOGGLE (HAMBURGER) & MOBILE DRAWER
         ========================================================= */
-        .main {
-            width: 100vw;
-            min-width: 100vw;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            flex: 1;
-            background: #ffffff;
-        }
-
-        .application-wrapper {
-            width: 100%;
-            max-width: 100%;
-            margin: 0;
-            background: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        /* APPLICATION IDENTIFICATION CARD */
-        .application-card {
-            width: 100%;
-            max-width: 100%;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 24px 30px;
-            margin-bottom: 24px;
-            animation: fadeUp 0.5s ease both;
-        }
-
-        .application-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 25px;
-            width: 100%;
-        }
-
-        .application-info {
-            min-width: 0;
-            width: 100%;
-        }
-
-        .application-number {
-            margin: 0;
-            color: var(--navy);
-            font-size: 18px;
-            font-weight: 800;
-        }
-
-        .application-number span {
-            color: var(--blue);
-        }
-
-        .application-details {
-            margin-top: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 8px 30px;
-            color: var(--muted);
-            font-size: 13px;
-            width: 100%;
-        }
-
-        .application-details strong {
-            color: var(--text);
-            font-weight: 700;
-        }
-
-        /* STATUS BADGE */
-        .status-badge {
+        .menu-toggle {
             flex: 0 0 auto;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 14px;
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 800;
-            white-space: nowrap;
-        }
-
-        .status-badge::before {
-            content: "";
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: currentColor;
-        }
-
-        .status-action { color: var(--orange); border-color: #fde6c5; }
-        .status-review { color: var(--blue); border-color: #d1e2ff; }
-        .status-accepted { color: var(--green); border-color: #ccefd8; }
-        .status-unsuccessful { color: var(--red); border-color: #fcd5d5; }
-
-        /* MAIN GRID (STRETCHED 100% WIDTH) */
-        .dashboard-grid {
-            width: 100%;
-            max-width: 100%;
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
-            align-items: start;
-        }
-
-        .left-column,
-        .right-column {
-            min-width: 0;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        /* CARDS */
-        .card {
-            width: 100%;
-            max-width: 100%;
-            min-width: 0;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            animation: fadeUp 0.55s ease both;
-        }
-
-        .card-header {
-            padding: 22px 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            border-bottom: 1px solid #eaeef4;
-            width: 100%;
-        }
-
-        .card-title h2 {
-            margin: 0;
-            color: var(--navy);
-            font-size: 16px;
-            line-height: 1.25;
-            font-weight: 800;
-        }
-
-        .card-title p {
-            margin: 4px 0 0;
-            color: var(--muted);
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .card-body {
-            padding: 22px 30px;
-            width: 100%;
-        }
-
-        /* REQUIREMENTS TABLE */
-        .requirements-list {
-            width: 100%;
-        }
-
-        .requirement {
-            width: 100%;
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) auto auto;
-            align-items: center;
-            gap: 20px;
-            padding: 16px 0;
-            border-bottom: 1px solid #eaeef4;
-        }
-
-        .requirement:first-child { padding-top: 0; }
-        .requirement:last-child { padding-bottom: 0; border-bottom: 0; }
-
-        .requirement-info {
-            min-width: 0;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            width: 100%;
-        }
-
-        .requirement-icon {
             width: 40px;
             height: 40px;
-            flex: 0 0 40px;
+            background: transparent;
+            border: 1px solid #dfe6f1;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: border-color 0.25s ease, background 0.25s ease;
+        }
+        .menu-toggle:hover {
+            border-color: var(--blue);
+            background: var(--light-blue);
+        }
+        .menu-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--navy);
+            border-radius: 2px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        #menu-checkbox {
+            display: none;
+        }
+        .mobile-menu-drawer {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            border-bottom: 1px solid #edf1f7;
+            box-shadow: 0 12px 30px rgba(7, 25, 71, 0.08);
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.35s ease;
+            z-index: 100;
+        }
+        .mobile-menu-drawer .nav-link {
+            padding: 14px 24px;
+            font-size: 15px;
+            border-bottom: 1px solid #f2f5fb;
+            width: 100%;
+        }
+        .mobile-menu-drawer .nav-link::after {
+            display: none;
+        }
+        .mobile-menu-drawer .nav-link:hover {
+            background: var(--light-blue);
+            color: var(--blue);
+            transform: none;
+        }
+        #menu-checkbox:checked ~ .mobile-menu-drawer {
+            max-height: 350px;
+            padding: 10px 0;
+        }
+        #menu-checkbox:checked + label .menu-toggle span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        #menu-checkbox:checked + label .menu-toggle span:nth-child(2) {
+            opacity: 0;
+        }
+        #menu-checkbox:checked + label .menu-toggle span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+        .hero {
+            width: 100%;
+            min-height: 445px;
+            background: #ffffff;
+            overflow: hidden;
+        }
+        .hero-inner {
+            width: 100%;
+            min-height: 445px;
+            max-width: 100%;
+            margin: 0;
+            display: grid;
+            grid-template-columns: minmax(43%, 50%) minmax(0, 57%);
+            position: relative;
+        }
+        .hero-content {
+            min-width: 0;
+            min-height: 445px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 55px clamp(30px, 5vw, 75px) 55px clamp(28px, 6vw, 85px);
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(90deg, #ffffff 0%, #ffffff 74%, rgba(255,255,255,0.96) 90%, rgba(255,255,255,0.70) 100%);
+        }
+        .hero-title {
+            margin: 0;
+            max-width: 100%;
+            font-size: clamp(46px, 5.3vw, 76px);
+            line-height: 0.99;
+            letter-spacing: -2.8px;
+            font-weight: 750;
+            color: var(--navy);
+        }
+        .hero-title span {
+            display: block;
+            color: var(--blue);
+            margin-top: 3px;
+        }
+        .hero-description {
+            margin: 24px 0 0;
+            max-width: 100%;
+            font-size: clamp(15px, 1.2vw, 18px);
+            line-height: 1.65;
+            color: #53627d;
+        }
+        .hero-actions {
+            margin-top: 27px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 17px;
+        }
+        .hero-button {
+            height: 45px;
+            padding: 0 25px;
+            border-radius: 5px;
+            border: 1.5px solid var(--blue);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: default;
+            transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .hero-button.primary {
+            background: var(--blue);
+            color: #ffffff;
+            box-shadow: 0 6px 16px rgba(9, 87, 232, 0.17);
+        }
+        .hero-button.secondary {
+            background: #ffffff;
+            color: var(--blue);
+        }
+        .hero-button:hover {
+            transform: translateY(-2px);
+        }
+        .hero-button.primary:hover {
+            box-shadow: 0 9px 22px rgba(9, 87, 232, 0.24);
+        }
+        .hero-button.secondary:hover {
+            background: #f5f8ff;
+        }
+        .hero-image {
+            min-width: 0;
+            min-height: 445px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-image::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.75) 5%, rgba(255,255,255,0.10) 22%, rgba(255,255,255,0) 42%);
+        }
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            min-height: 445px;
+            object-fit: cover;
+            object-position: center center;
+            transform: scale(1.015);
+            animation: heroImageIn 1.1s ease-out both;
+        }
+        @keyframes heroImageIn {
+            from {
+                opacity: 0;
+                transform: scale(1.06);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1.015);
+            }
+        }
+
+        /* =========================================================
+           WHY CHOOSE
+        ========================================================= */
+        .why-section {
+            width: 100%;
+            background: #ffffff;
+            padding: 52px 0 45px;
+        }
+        .section-heading {
+            text-align: center;
+        }
+        .section-heading h2 {
+            margin: 0;
+            color: var(--navy);
+            font-size: clamp(26px, 2.5vw, 34px);
+            line-height: 1.2;
+            font-weight: 750;
+            letter-spacing: -0.6px;
+        }
+        .section-heading p {
+            margin: 12px auto 0;
+            color: #5c6982;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .why-grid {
+            width: 100%;
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+        }
+        .why-card {
+            min-width: 0;
+            min-height: 164px;
+            padding: 27px 25px 22px;
+            border: 1px solid #dfe6f1;
             border-radius: 8px;
             background: #ffffff;
-            border: 1px solid var(--border);
-            color: var(--blue);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .why-card:hover {
+            transform: translateY(-5px);
+            border-color: #cbd9ee;
+            box-shadow: 0 12px 28px rgba(7, 25, 71, 0.08);
+        }
+        .why-icon {
+            width: 42px;
+            height: 42px;
+            margin: 0 auto 15px;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--blue);
         }
-
-        .requirement-icon svg {
-            width: 20px;
-            height: 20px;
-            fill: none;
+        .why-icon svg {
+            width: 38px;
+            height: 38px;
             stroke: currentColor;
+            fill: none;
             stroke-width: 1.8;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
-
-        .requirement-text {
-            width: 100%;
+        .why-card h3 {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.35;
+            color: var(--navy);
+            font-weight: 750;
+        }
+        .why-card p {
+            margin: 10px 0 0;
+            font-size: 14px;
+            line-height: 1.55;
+            color: #596985;
+        }
+        .learn-button-wrap {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+        }
+        .outline-button {
+            height: 42px;
+            padding: 0 24px;
+            border: 1.5px solid var(--blue);
+            border-radius: 5px;
+            color: var(--blue);
+            background: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+            transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+        }
+        .outline-button:hover {
+            background: var(--blue);
+            color: #ffffff;
+            transform: translateY(-2px);
         }
 
-        .requirement-text h3 {
+        /* =========================================================
+           PROGRAMMES
+        ========================================================= */
+        .programmes-section {
+            width: 100%;
+            background: #f7faff;
+            padding: 31px 0 42px;
+        }
+        .programmes-section .section-heading h2 {
+            font-size: clamp(25px, 2.5vw, 32px);
+        }
+        .programmes-grid {
+            width: 100%;
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 16px;
+        }
+        .programme-card {
+            min-width: 0;
+            overflow: hidden;
+            background: #ffffff;
+            border: 1px solid #dfe6f1;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .programme-card:hover {
+            transform: translateY(-6px);
+            border-color: #c8d8f0;
+            box-shadow: 0 14px 30px rgba(7, 25, 71, 0.09);
+        }
+        .programme-image {
+            width: 100%;
+            height: 112px;
+            overflow: hidden;
+            background: #e9eff8;
+        }
+        .programme-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.45s ease;
+        }
+        .programme-card:hover .programme-image img {
+            transform: scale(1.055);
+        }
+        .programme-content {
+            padding: 15px 14px 16px;
+        }
+        .programme-content h3 {
             margin: 0;
             color: var(--navy);
-            font-size: 13px;
+            font-size: 15px;
             line-height: 1.35;
             font-weight: 750;
         }
-
-        .requirement-text p {
-            margin: 3px 0 0;
-            color: var(--muted);
-            font-size: 11px;
-            line-height: 1.4;
-            overflow-wrap: anywhere;
-        }
-
-        .requirement-status {
-            white-space: nowrap;
-            font-size: 11px;
-            font-weight: 800;
-            padding: 5px 10px;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-        }
-
-        .received { color: var(--green); border-color: #ccefd8; }
-        .required { color: var(--orange); border-color: #fde6c5; }
-        .outstanding { color: var(--red); border-color: #fcd5d5; }
-
-        .requirement-action {
-            min-width: 82px;
-            height: 34px;
-            padding: 0 14px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-            background: #ffffff;
-            color: var(--navy);
-            font-size: 11px;
-            font-weight: 800;
-            transition: var(--transition);
-        }
-
-        .requirement-action:hover {
-            border-color: var(--blue);
-            color: var(--blue);
-            transform: translateY(-1px);
-        }
-
-        .requirement-action.primary {
-            border-color: var(--blue);
-            background: var(--blue);
-            color: #ffffff;
-        }
-
-        .requirement-action.primary:hover {
-            background: #064dd2;
-            color: #ffffff;
-        }
-
-        /* FEE CARD */
-        .fee-summary {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            width: 100%;
-        }
-
-        .fee-label {
-            color: var(--muted);
-            font-size: 12px;
-        }
-
-        .fee-description {
-            margin-top: 3px;
-            color: var(--navy);
+        .programme-content p {
+            margin: 9px 0 13px;
+            color: #5a6881;
             font-size: 13px;
-            font-weight: 750;
-        }
-
-        .fee-amount {
-            color: var(--navy);
-            font-size: 24px;
-            line-height: 1;
-            font-weight: 850;
-            white-space: nowrap;
-        }
-
-        .payment-note {
-            margin: 16px 0 0;
-            padding: 12px 14px;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--muted);
-            font-size: 11px;
-            line-height: 1.5;
-            width: 100%;
-        }
-
-        .pay-button {
-            width: 100%;
-            height: 42px;
-            margin-top: 16px;
-            border: 0;
-            border-radius: 6px;
-            background: var(--blue);
-            color: #ffffff;
-            font-size: 13px;
-            font-weight: 800;
-            box-shadow: 0 4px 12px rgba(9, 87, 232, 0.15);
-            transition: var(--transition);
-        }
-
-        .pay-button:hover {
-            background: #064dd2;
-            transform: translateY(-1px);
-        }
-
-        .paid-box {
-            margin-top: 16px;
-            padding: 12px 14px;
-            border-radius: 6px;
-            background: #ffffff;
-            border: 1px solid #ccefd8;
-            color: var(--green);
-            font-size: 12px;
-            font-weight: 750;
-            line-height: 1.5;
-            width: 100%;
-        }
-
-        /* SUPPORT CARD */
-        .support-box h3 {
-            margin: 0;
-            color: var(--navy);
-            font-size: 15px;
-            font-weight: 800;
-        }
-
-        .support-box p {
-            margin: 6px 0 0;
-            color: var(--muted);
-            font-size: 12px;
             line-height: 1.5;
         }
-
-        .support-button {
-            width: 100%;
-            height: 38px;
-            margin-top: 14px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            background: #ffffff;
-            color: var(--blue);
-            font-size: 12px;
-            font-weight: 800;
-            transition: var(--transition);
-        }
-
-        .support-button:hover {
-            border-color: var(--blue);
-            transform: translateY(-1px);
-        }
-
-        /* MODALS */
-        .modal-backdrop {
-            position: fixed;
-            inset: 0;
-            z-index: 300;
-            background: rgba(7, 25, 71, 0.4);
-            display: flex;
+        .programme-more {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.25s ease;
+            gap: 7px;
+            color: var(--blue);
+            font-size: 13px;
+            font-weight: 700;
         }
-
-        .modal-backdrop.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal {
-            width: 100%;
-            max-width: 520px;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            transform: translateY(10px) scale(0.98);
+        .programme-more::after {
+            content: "→";
             transition: transform 0.25s ease;
         }
-
-        .modal-backdrop.open .modal {
-            transform: translateY(0) scale(1);
+        .programme-card:hover .programme-more::after {
+            transform: translateX(4px);
         }
-
-        .modal-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid #eaeef4;
+        .programmes-button-wrap {
+            margin-top: 18px;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
+            justify-content: center;
         }
 
-        .modal-header h2 {
-            margin: 0;
-            color: var(--navy);
-            font-size: 16px;
-            font-weight: 800;
-        }
-
-        .close-modal {
-            width: 32px;
-            height: 32px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            background: #ffffff;
-            color: var(--navy);
-            font-size: 18px;
-            transition: var(--transition);
-        }
-
-        .close-modal:hover {
-            border-color: var(--blue);
-            color: var(--blue);
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        .upload-description {
-            margin: 0 0 16px;
-            color: var(--muted);
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .drop-zone {
+        /* =========================================================
+           ADMISSION PROCESS
+        ========================================================= */
+        .admissions-section {
             width: 100%;
-            min-height: 160px;
-            border: 1.5px dashed var(--border);
-            border-radius: 6px;
             background: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
+            padding: 35px 0 18px;
+        }
+        .admissions-section .section-heading h2 {
+            font-size: clamp(25px, 2.5vw, 32px);
+        }
+        .admissions-section .section-heading p {
+            margin-top: 8px;
+        }
+        .steps {
+            width: 100%;
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr) 40px minmax(0, 1fr) 40px minmax(0, 1fr) 40px minmax(0, 1fr);
+            align-items: start;
+        }
+        .step {
+            min-width: 0;
             text-align: center;
-            transition: var(--transition);
         }
-
-        .drop-zone:hover,
-        .drop-zone.dragover {
-            border-color: var(--blue);
-        }
-
-        .upload-icon {
-            width: 42px;
-            height: 42px;
+        .step-icon {
+            width: 62px;
+            height: 62px;
+            margin: 0 auto;
             border-radius: 50%;
+            border: 1px solid #e0e8f3;
             background: #ffffff;
-            border: 1px solid var(--border);
-            color: var(--blue);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 10px;
+            color: var(--blue);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
-
-        .upload-icon svg {
-            width: 20px;
-            height: 20px;
-            fill: none;
+        .step:hover .step-icon {
+            transform: translateY(-4px);
+            border-color: #b9cdf0;
+            box-shadow: 0 10px 22px rgba(9, 87, 232, 0.10);
+        }
+        .step-icon svg {
+            width: 27px;
+            height: 27px;
             stroke: currentColor;
+            fill: none;
             stroke-width: 1.8;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
-
-        .drop-zone strong { color: var(--navy); font-size: 13px; }
-        .drop-zone span { margin-top: 4px; color: var(--muted); font-size: 11px; }
-
-        .choose-file {
-            margin-top: 12px;
-            height: 34px;
-            padding: 0 14px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            background: #ffffff;
-            color: var(--blue);
-            font-size: 11px;
-            font-weight: 800;
-        }
-
-        #fileInput { display: none; }
-
-        .selected-file {
-            margin-top: 14px;
-            padding: 12px 14px;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--navy);
-            font-size: 11px;
-            font-weight: 700;
-            overflow-wrap: anywhere;
-        }
-
-        .modal-actions {
-            margin-top: 20px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        .modal-button {
-            height: 38px;
-            padding: 0 18px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 800;
-        }
-
-        .modal-button.cancel {
-            border: 1px solid var(--border);
-            background: #ffffff;
-            color: var(--navy);
-        }
-
-        .modal-button.save {
-            border: 0;
+        .step-number {
+            width: 24px;
+            height: 24px;
+            margin: -1px auto 9px;
+            border-radius: 50%;
             background: var(--blue);
             color: #ffffff;
-        }
-
-        .document-preview {
-            width: 100%;
-            min-height: 120px;
-            padding: 20px;
-            border-radius: 6px;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .document-preview-icon {
-            width: 44px;
-            height: 44px;
-            margin: 0 auto 10px;
-            border-radius: 6px;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            color: var(--blue);
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .payment-summary {
-            width: 100%;
-            padding: 16px;
-            border-radius: 6px;
-            background: #ffffff;
-            border: 1px solid var(--border);
-        }
-
-        .payment-summary-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            padding: 7px 0;
-            color: var(--muted);
             font-size: 12px;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
         }
-
-        .payment-summary-row strong { color: var(--navy); }
-
-        .payment-total {
-            margin-top: 6px;
-            padding-top: 12px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: var(--navy);
-            font-size: 15px;
-            font-weight: 850;
-        }
-
-        .payment-methods {
-            margin-top: 16px;
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        .payment-method {
-            min-height: 54px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            background: #ffffff;
-            color: var(--navy);
-            font-size: 12px;
+        .step h3 {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.35;
             font-weight: 750;
-            transition: var(--transition);
+            color: var(--navy);
+        }
+        .step p {
+            max-width: 100%;
+            margin: 7px auto 0;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #596985;
+        }
+        .step-arrow {
+            height: 62px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5e6c86;
+            font-size: 28px;
+            font-weight: 300;
         }
 
-        .payment-method:hover, .payment-method.selected {
-            border-color: var(--blue);
-            color: var(--blue);
-        }
-
-        .success-content {
-            padding: 28px 24px;
-            text-align: center;
-        }
-
-        .success-icon {
-            width: 56px;
-            height: 56px;
-            margin: 0 auto 14px;
-            border-radius: 50%;
+        /* =========================================================
+           CTA
+        ========================================================= */
+        .cta-section {
+            width: 100%;
+            padding: 15px 0 12px;
             background: #ffffff;
-            border: 1px solid #ccefd8;
-            color: var(--green);
+        }
+        .cta-box {
+            width: 100%;
+            min-height: 84px;
+            border-radius: 7px;
+            background: linear-gradient(105deg, #244bd1 0%, #0957e8 48%, #2177e8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 25px;
+            padding: 15px clamp(25px, 5vw, 65px);
+            color: #ffffff;
+            box-shadow: 0 8px 25px rgba(9, 87, 232, 0.13);
+        }
+        .cta-left {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+            gap: 22px;
+        }
+        .cta-icon {
+            width: 57px;
+            height: 57px;
+            flex: 0 0 57px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.25);
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
-        .success-icon svg {
-            width: 26px;
-            height: 26px;
+        .cta-icon svg {
+            width: 28px;
+            height: 28px;
             fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
+            stroke: #ffffff;
+            stroke-width: 1.8;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
-
-        .receipt {
-            margin-top: 16px;
-            padding: 12px;
+        .cta-copy {
+            min-width: 0;
+        }
+        .cta-copy h2 {
+            margin: 0;
+            font-size: clamp(20px, 2vw, 27px);
+            line-height: 1.2;
+        }
+        .cta-copy p {
+            margin: 6px 0 0;
+            font-size: 14px;
+            line-height: 1.45;
+            opacity: 0.94;
+        }
+        .cta-button {
+            min-width: 126px;
+            height: 40px;
+            padding: 0 24px;
+            border: 0;
+            border-radius: 5px;
             background: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            text-align: left;
+            color: var(--blue);
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.14);
         }
 
-        .receipt-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            padding: 5px 0;
-            color: var(--muted);
-            font-size: 11px;
-        }
-
-        .receipt-row strong { color: var(--navy); text-align: right; }
-
-        /* TOASTS */
-        .toast-container {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            z-index: 500;
-            width: min(350px, calc(100vw - 40px));
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            pointer-events: none;
-        }
-
-        .toast {
-            padding: 12px 14px;
-            border-radius: 6px;
-            background: #071947;
-            color: #ffffff;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-            font-size: 12px;
-            line-height: 1.4;
-            font-weight: 650;
-            transform: translateY(15px);
-            opacity: 0;
-            animation: toastIn 0.3s ease forwards;
-        }
-
-        .toast.success { background: #159447; }
-        .toast.error { background: #c93636; }
-
-        @keyframes toastIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* FOOTER (PINNED TO EXTREME EDGES, 100% STRETCHED) */
+        /* =========================================================
+           FOOTER
+        ========================================================= */
         .footer {
-            width: 100vw;
-            min-width: 100vw;
-            padding: 24px 0;
-            background: #ffffff;
-            border-top: 1px solid #eaeef4;
-            color: var(--muted);
-            flex-shrink: 0;
-        }
-
-        .footer-inner {
             width: 100%;
+            background: linear-gradient(110deg, #052b72 0%, #06265f 45%, #031e50 100%);
+            color: #ffffff;
+            padding: 27px 0 13px;
+        }
+        .footer-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+            gap: 40px;
+        }
+        .footer-brand {
+            min-width: 0;
+        }
+        .footer-logo {
+            width: 126px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        .footer-brand p {
             max-width: 100%;
             margin: 0;
-            padding: 0 40px;
+            color: rgba(255,255,255,0.84);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .socials {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .social {
+            width: 23px;
+            height: 23px;
+            border: 1px solid rgba(255,255,255,0.75);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+        .social:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.12);
+        }
+        .footer-column {
+            min-width: 0;
+        }
+        .footer-column h3 {
+            margin: 4px 0 15px;
+            font-size: 15px;
+            line-height: 1.2;
+            font-weight: 750;
+        }
+        .footer-column a {
+            display: block;
+            margin-bottom: 9px;
+            color: rgba(255,255,255,0.82);
+            font-size: 13px;
+            line-height: 1.45;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .footer-column a:hover {
+            color: #ffffff;
+            transform: translateX(3px);
+        }
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: rgba(255,255,255,0.84);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .contact-icon {
+            width: 17px;
+            flex: 0 0 17px;
+            text-align: center;
+        }
+        .footer-bottom {
+            width: 100%;
+            margin-top: 22px;
+            padding-top: 13px;
+            border-top: 1px solid rgba(255,255,255,0.20);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 20px;
+            color: rgba(255,255,255,0.82);
+            font-size: 12px;
         }
-
-        .footer-copy, .footer-links {
-            font-size: 11px;
-        }
-
-        .footer-links {
+        .footer-legal {
             display: flex;
-            gap: 25px;
+            align-items: center;
+            gap: 30px;
+        }
+        .footer-legal a {
+            transition: color 0.2s ease;
+        }
+        .footer-legal a:hover {
+            color: #ffffff;
         }
 
-        .footer-links span { cursor: pointer; }
-        .footer-links span:hover { color: var(--blue); }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* =========================================================
+           SCROLL REVEAL STYLE
+        ========================================================= */
+        .why-card, .programme-card, .step, .cta-box {
+            animation: sectionRise 0.75s ease both;
+        }
+        .why-card:nth-child(2), .programme-card:nth-child(2) {
+            animation-delay: 0.08s;
+        }
+        .why-card:nth-child(3), .programme-card:nth-child(3) {
+            animation-delay: 0.16s;
+        }
+        .why-card:nth-child(4), .programme-card:nth-child(4) {
+            animation-delay: 0.24s;
+        }
+        .programme-card:nth-child(5) {
+            animation-delay: 0.32s;
+        }
+        @keyframes sectionRise {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        @media (max-width: 900px) {
-            .dashboard-grid { grid-template-columns: 1fr; }
+        /* =========================================================
+           TABLETS
+        ========================================================= */
+        @media (max-width: 1050px) {
+            .header-inner {
+                padding-left: 25px;
+                padding-right: 25px;
+            }
+            .main-nav {
+                gap: 21px;
+            }
+            .nav-link {
+                font-size: 13px;
+            }
+            .hero-inner {
+                grid-template-columns: 48% 52%;
+            }
+            .hero-content {
+                padding-left: 35px;
+                padding-right: 25px;
+            }
+            .hero-title {
+                font-size: clamp(42px, 5vw, 61px);
+            }
+            .hero-description {
+                font-size: 14px;
+            }
+            .why-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .programmes-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+            .steps {
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+                gap: 12px;
+            }
+            .step-arrow {
+                display: none;
+            }
+            .footer-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
 
-        @media (max-width: 540px) {
-            .header-inner, .footer-inner, .main { padding-left: 20px; padding-right: 20px; }
-            .application-top { flex-direction: column; align-items: flex-start; }
-            .requirement { grid-template-columns: 1fr; gap: 12px; }
-            .requirement-status { justify-self: start; }
-            .requirement-action { width: 100%; }
-            .payment-methods { grid-template-columns: 1fr; }
+        /* =========================================================
+           MOBILE NAVIGATION
+        ========================================================= */
+        @media (max-width: 760px) {
+            .site-header {
+                height: auto;
+                min-height: 67px;
+            }
+            .header-inner {
+                min-height: 67px;
+                padding: 10px 18px;
+                gap: 14px;
+            }
+            .logo {
+                width: 108px;
+            }
+            .main-nav {
+                display: none;
+            }
+            .hero, .hero-inner {
+                min-height: auto;
+            }
+            .hero-inner {
+                display: flex;
+                flex-direction: column;
+            }
+            .hero-content {
+                order: 1;
+                min-height: auto;
+                padding: 45px 22px 39px;
+                background: #ffffff;
+            }
+            .hero-title {
+                max-width: 100%;
+                font-size: clamp(42px, 12vw, 62px);
+                line-height: 1;
+                letter-spacing: -2px;
+            }
+            .hero-description {
+                max-width: 100%;
+                margin-top: 19px;
+                font-size: 15px;
+                line-height: 1.6;
+            }
+            .hero-actions {
+                margin-top: 23px;
+                gap: 11px;
+            }
+            .hero-button {
+                min-height: 43px;
+                height: auto;
+                padding: 11px 18px;
+                font-size: 13px;
+            }
+            .hero-image {
+                order: 2;
+                width: 100%;
+                height: min(62vw, 410px);
+                min-height: 280px;
+            }
+            .hero-image img {
+                width: 100%;
+                height: 100%;
+                min-height: 0;
+                object-position: center center;
+            }
+            .hero-image::before {
+                background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0));
+            }
+            .section-inner {
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+            .why-section {
+                padding-top: 43px;
+                padding-bottom: 40px;
+            }
+            .section-heading h2 {
+                font-size: 26px;
+            }
+            .section-heading p {
+                font-size: 14px;
+            }
+            .why-grid {
+                grid-template-columns: 1fr;
+                gap: 13px;
+                margin-top: 24px;
+            }
+            .why-card {
+                min-height: 145px;
+                padding: 23px 20px;
+            }
+            .programmes-section {
+                padding-top: 34px;
+            }
+            .programmes-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+            .programme-image {
+                height: 125px;
+            }
+            .programme-content {
+                padding: 13px 12px 15px;
+            }
+            .programme-content h3 {
+                font-size: 14px;
+            }
+            .programme-content p {
+                font-size: 12px;
+            }
+            .steps {
+                grid-template-columns: 1fr;
+                gap: 18px;
+                margin-top: 25px;
+            }
+            .step-arrow {
+                display: none;
+            }
+            .step-icon {
+                width: 58px;
+                height: 58px;
+            }
+            .step p {
+                max-width: 100%;
+            }
+            .cta-box {
+                min-height: auto;
+                padding: 22px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .cta-left {
+                width: 100%;
+            }
+            .cta-button {
+                width: 100%;
+            }
+            .footer {
+                padding-top: 30px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+            .footer-brand p {
+                max-width: 100%;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .footer-legal {
+                flex-wrap: wrap;
+                gap: 14px 24px;
+            }
+        }
+
+        /* =========================================================
+           SMALL PHONES
+        ========================================================= */
+        @media (max-width: 430px) {
+            .header-inner {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+            .logo {
+                width: 101px;
+            }
+            .hero-content {
+                padding: 37px 18px 32px;
+            }
+            .hero-title {
+                font-size: clamp(39px, 12.7vw, 53px);
+                letter-spacing: -1.8px;
+            }
+            .hero-description {
+                font-size: 14px;
+            }
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .hero-button {
+                width: 100%;
+                justify-content: center;
+            }
+            .hero-image {
+                height: 300px;
+                min-height: 300px;
+            }
+            .programmes-grid {
+                grid-template-columns: 1fr;
+            }
+            .programme-image {
+                height: 190px;
+            }
+            .why-card {
+                min-height: 0;
+            }
+            .cta-left {
+                align-items: flex-start;
+            }
+            .cta-icon {
+                width: 50px;
+                height: 50px;
+                flex-basis: 50px;
+            }
+            .cta-copy h2 {
+                font-size: 20px;
+            }
+            .cta-copy p {
+                font-size: 13px;
+            }
+        }
+
+        /* =========================================================
+           VERY SMALL DEVICES
+        ========================================================= */
+        @media (max-width: 330px) {
+            .logo {
+                width: 92px;
+            }
+            .hero-title {
+                font-size: 37px;
+            }
+            .hero-image {
+                height: 265px;
+                min-height: 265px;
+            }
+        }
+
+        /* =========================================================
+           ACCESSIBILITY / MOTION
+        ========================================================= */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 <body>
-
-<div style="display: flex; flex-direction: column; min-height: 100vh; width: 100vw; background: #ffffff;">
-
-    <!-- HEADER -->
-    <header class="header">
+<div class="page">
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+    <header class="site-header">
         <div class="header-inner">
-            <div class="brand">
-                <img src="assets/logos.png" alt="Atlas College">
+            <div class="logo-link">
+                <img class="logo" src="assets/logos.png" alt="Atlas College">
             </div>
-            <div class="header-right">
-                <span class="help-link">Need help?</span>
-                <button class="home-button" type="button" id="homeButton">Atlas College</button>
+            <nav class="main-nav" aria-label="Main navigation">
+                <span class="nav-link">Home</span>
+                <span class="nav-link">Programs</span>
+                <span class="nav-link">Admissions</span>
+                <span class="nav-link">About Us</span>
+                <span class="nav-link">Contact</span>
+            </nav>
+            <input type="checkbox" id="menu-checkbox" aria-label="Toggle navigation menu">
+            <label for="menu-checkbox">
+                <div class="menu-toggle" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </label>
+            <div class="mobile-menu-drawer">
+                <span class="nav-link">Home</span>
+                <span class="nav-link">Programs</span>
+                <span class="nav-link">Admissions</span>
+                <span class="nav-link">About Us</span>
+                <span class="nav-link">Contact</span>
             </div>
         </div>
     </header>
 
-    <!-- MAIN DASHBOARD CONTENT -->
-    <main class="main">
-        <div class="application-wrapper">
-
-            <!-- CARD 1: APPLICATION SUMMARY & STATUS -->
-            <section class="application-card" id="applicationCard">
-                <div class="application-top">
-                    <div class="application-info">
-                        <p class="application-number">
-                            Application Reference:
-                            <span id="applicationReference">ATL-2026-10482</span>
-                        </p>
-                        <div class="application-details">
-                            <span>Programme: <strong id="programmeName">Information Technology</strong></span>
-                            <span>Intake: <strong id="intakeName">2026</strong></span>
-                            <span>Submitted: <strong id="submittedDate">18 August 2026</strong></span>
+    <!-- =========================================================
+         HERO
+    ========================================================== -->
+    <main>
+        <section class="hero">
+            <div class="hero-inner">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Your Future
+                        <span>Starts Here.</span>
+                    </h1>
+                    <p class="hero-description">
+                        Atlas College provides quality education, practical skills,
+                        and real opportunities to help you succeed in your career
+                        and life.
+                    </p>
+                    <div class="hero-actions">
+                        <div class="hero-button primary">
+                            Apply Now
+                        </div>
+                        <div class="hero-button secondary">
+                            View Application Status
                         </div>
                     </div>
-                    <div class="status-badge status-action" id="mainStatusBadge">Action Required</div>
                 </div>
-            </section>
-
-            <!-- DASHBOARD GRID -->
-            <div class="dashboard-grid">
-                <!-- LEFT COLUMN -->
-                <div class="left-column">
-                    <section class="card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <h2>Required Documents</h2>
-                                <p>Please upload the required verification items.</p>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="requirements-list" id="requirementsList">
-                                <!-- ID DOCUMENT -->
-                                <div class="requirement" id="requirement-id">
-                                    <div class="requirement-info">
-                                        <div class="requirement-icon">
-                                            <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M13 10h5"/><path d="M13 14h4"/></svg>
-                                        </div>
-                                        <div class="requirement-text">
-                                            <h3>ID / Passport</h3>
-                                            <p id="idDescription">Government-issued identity document</p>
-                                        </div>
-                                    </div>
-                                    <span class="requirement-status required" id="idStatus">Required</span>
-                                    <button type="button" class="requirement-action primary" id="idAction" data-document="id">Upload</button>
-                                </div>
-                                <!-- MATRIC CERTIFICATE -->
-                                <div class="requirement" id="requirement-matric">
-                                    <div class="requirement-info">
-                                        <div class="requirement-icon">
-                                            <svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4z"/><path d="M6 10v5"/><path d="M18 10v5"/><path d="M6 15c2 2 4 3 6 3s4-1 6-3"/></svg>
-                                        </div>
-                                        <div class="requirement-text">
-                                            <h3>Matric Certificate</h3>
-                                            <p id="matricDescription">Final school certificate</p>
-                                        </div>
-                                    </div>
-                                    <span class="requirement-status required" id="matricStatus">Required</span>
-                                    <button type="button" class="requirement-action primary" id="matricAction" data-document="matric">Upload</button>
-                                </div>
-                                <!-- RESULTS -->
-                                <div class="requirement" id="requirement-results">
-                                    <div class="requirement-info">
-                                        <div class="requirement-icon">
-                                            <svg viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5z"/><path d="M14 3v5h5"/><path d="M8 13h8"/><path d="M8 17h6"/></svg>
-                                        </div>
-                                        <div class="requirement-text">
-                                            <h3>Latest School Results</h3>
-                                            <p id="resultsDescription">Most recent academic records</p>
-                                        </div>
-                                    </div>
-                                    <span class="requirement-status required" id="resultsStatus">Required</span>
-                                    <button type="button" class="requirement-action primary" id="resultsAction" data-document="results">Upload</button>
-                                </div>
-                                <!-- ADDRESS -->
-                                <div class="requirement" id="requirement-address">
-                                    <div class="requirement-info">
-                                        <div class="requirement-icon">
-                                            <svg viewBox="0 0 24 24"><path d="M4 10l8-6 8 6"/><path d="M6 9v10h12V9"/><path d="M9 19v-5h6v5"/></svg>
-                                        </div>
-                                        <div class="requirement-text">
-                                            <h3>Proof of Address</h3>
-                                            <p id="addressDescription">Recent document showing residence</p>
-                                        </div>
-                                    </div>
-                                    <span class="requirement-status required" id="addressStatus">Required</span>
-                                    <button type="button" class="requirement-action primary" id="addressAction" data-document="address">Upload</button>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+                <div class="hero-image">
+                    <img src="assets/hero-student.webp" alt="Atlas College students">
                 </div>
-
-                <!-- RIGHT COLUMN -->
-                <aside class="right-column">
-                    <section class="card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <h2>Application Fee</h2>
-                                <p>Required before review begins.</p>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="fee-summary">
-                                <div>
-                                    <div class="fee-label">Fee Charge</div>
-                                    <div class="fee-description">2026 Application</div>
-                                </div>
-                                <div class="fee-amount">R250</div>
-                            </div>
-                            <div class="payment-note" id="paymentNote">Your application fee is outstanding. Payment is required before review.</div>
-                            <button type="button" class="pay-button" id="payButton">Pay Application Fee</button>
-                            <div class="paid-box hidden" id="paidBox">
-                                ✓ Payment received successfully.<br>Receipt: <span id="receiptNumber">--</span>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="card">
-                        <div class="card-body">
-                            <div class="support-box">
-                                <h3>Need help?</h3>
-                                <p>If you are experiencing issues submitting documents or processing your fee, our support staff is available.</p>
-                                <button type="button" class="support-button" id="supportButton">Contact Admissions</button>
-                            </div>
-                        </div>
-                    </section>
-                </aside>
             </div>
+        </section>
 
-        </div>
+        <!-- =====================================================
+             WHY CHOOSE ATLAS COLLEGE
+        ====================================================== -->
+        <section class="why-section">
+            <div class="section-inner">
+                <div class="section-heading">
+                    <h2>
+                        Why Choose Atlas College?
+                    </h2>
+                    <p>
+                        We focus on your growth, your future, and your success.
+                    </p>
+                </div>
+                <div class="why-grid">
+                    <article class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H12v16H5.5A2.5 2.5 0 0 0 3 21.5z"/>
+                                <path d="M21 5.5A2.5 2.5 0 0 0 18.5 3H12v16h6.5a2.5 2.5 0 0 1 2.5 2.5z"/>
+                            </svg>
+                        </div>
+                        <h3>
+                            Quality Education
+                        </h3>
+                        <p>
+                            Practical learning from experienced lecturers.
+                        </p>
+                    </article>
+                    <article class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="7" width="18" height="13" rx="2"/>
+                                <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                <path d="M3 11h18"/>
+                                <path d="M10 11v2h4v-2"/>
+                            </svg>
+                        </div>
+                        <h3>
+                            Career Focused
+                        </h3>
+                        <p>
+                            Programs designed to prepare you for real jobs.
+                        </p>
+                    </article>
+                    <article class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="9" cy="8" r="3"/>
+                                <circle cx="17" cy="9" r="3"/>
+                                <path d="M3 20c.8-3.2 2.8-5 6-5s5.2 1.8 6 5"/>
+                                <path d="M14 15c3.1-.2 5.5 1.5 6 5"/>
+                            </svg>
+                        </div>
+                        <h3>
+                            Supportive Community
+                        </h3>
+                        <p>
+                            We're here to support you every step of the way.
+                        </p>
+                    </article>
+                    <article class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M3 9l9-5 9 5-9 5z"/>
+                                <path d="M6 11v5c2 2 4 3 6 3s4-1 6-3v-5"/>
+                                <path d="M21 9v6"/>
+                            </svg>
+                        </div>
+                        <h3>
+                            Affordable Fees
+                        </h3>
+                        <p>
+                            Quality education that won't break the bank.
+                        </p>
+                    </article>
+                </div>
+                <div class="learn-button-wrap">
+                    <div class="outline-button">
+                        Learn More About Us
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             PROGRAMMES
+        ====================================================== -->
+        <section class="programmes-section">
+            <div class="section-inner">
+                <div class="section-heading">
+                    <h2>
+                        Explore Our Programmes
+                    </h2>
+                </div>
+                <div class="programmes-grid">
+                    <article class="programme-card">
+                        <div class="programme-image">
+                            <img src="assets/program-it.webp" alt="Information Technology">
+                        </div>
+                        <div class="programme-content">
+                            <h3>
+                                Information Technology
+                            </h3>
+                            <p>
+                                Build the skills to excel in the digital world.
+                            </p>
+                            <span class="programme-more">
+                                View More
+                            </span>
+                        </div>
+                    </article>
+                    <article class="programme-card">
+                        <div class="programme-image">
+                            <img src="assets/program-business.webp" alt="Business Management">
+                        </div>
+                        <div class="programme-content">
+                            <h3>
+                                Business Management
+                            </h3>
+                            <p>
+                                Develop leadership and business acumen.
+                            </p>
+                            <span class="programme-more">
+                                View More
+                            </span>
+                        </div>
+                    </article>
+                    <article class="programme-card">
+                        <div class="programme-image">
+                            <img src="assets/program-accounting.webp" alt="Accounting">
+                        </div>
+                        <div class="programme-content">
+                            <h3>
+                                Accounting
+                            </h3>
+                            <p>
+                                Master financial skills and management.
+                            </p>
+                            <span class="programme-more">
+                                View More
+                            </span>
+                        </div>
+                    </article>
+                    <article class="programme-card">
+                        <div class="programme-image">
+                            <img src="assets/program-health.webp" alt="Health Sciences">
+                        </div>
+                        <div class="programme-content">
+                            <h3>
+                                Health Sciences
+                            </h3>
+                            <p>
+                                Prepare for a rewarding career in healthcare.
+                            </p>
+                            <span class="programme-more">
+                                View More
+                            </span>
+                        </div>
+                    </article>
+                    <article class="programme-card">
+                        <div class="programme-image">
+                            <img src="assets/program-media.webp" alt="Media and Communication">
+                        </div>
+                        <div class="programme-content">
+                            <h3>
+                                Media &amp; Communication
+                            </h3>
+                            <p>
+                                Unleash your creativity and tell impactful stories.
+                            </p>
+                            <span class="programme-more">
+                                View More
+                            </span>
+                        </div>
+                    </article>
+                </div>
+                <div class="programmes-button-wrap">
+                    <div class="outline-button">
+                        View More Programmes
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             ADMISSION PROCESS
+        ====================================================== -->
+        <section class="admissions-section">
+            <div class="section-inner">
+                <div class="section-heading">
+                    <h2>
+                        Our Admission Process
+                    </h2>
+                    <p>
+                        Simple steps to become a part of Atlas College.
+                    </p>
+                </div>
+                <div class="steps">
+                    <article class="step">
+                        <div class="step-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 4h11v16H4z"/>
+                                <path d="M8 8h4"/>
+                                <path d="M8 12h4"/>
+                                <path d="M8 16h3"/>
+                                <path d="M16 15l4-4"/>
+                                <path d="M15 20h4v-4"/>
+                            </svg>
+                        </div>
+                        <div class="step-number">1</div>
+                        <h3>
+                            Fill Application Form
+                        </h3>
+                        <p>
+                            Complete and submit your online application.
+                        </p>
+                    </article>
+                    <div class="step-arrow">
+                        →
+                    </div>
+                    <article class="step">
+                        <div class="step-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 16V3"/>
+                                <path d="M8 7l4-4 4 4"/>
+                                <path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>
+                            </svg>
+                        </div>
+                        <div class="step-number">2</div>
+                        <h3>
+                            Upload Documents
+                        </h3>
+                        <p>
+                            Upload the required documents.
+                        </p>
+                    </article>
+                    <div class="step-arrow">
+                        →
+                    </div>
+                    <article class="step">
+                        <div class="step-icon">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="5" width="18" height="14" rx="2"/>
+                                <path d="M3 10h18"/>
+                                <path d="M7 15h4"/>
+                            </svg>
+                        </div>
+                        <div class="step-number">3</div>
+                        <h3>
+                            Pay Application Fee
+                        </h3>
+                        <p>
+                            Make payment to complete your application.
+                        </p>
+                    </article>
+                    <div class="step-arrow">
+                        →
+                    </div>
+                    <article class="step">
+                        <div class="step-icon">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9"/>
+                                <path d="M12 7v5l3 2"/>
+                            </svg>
+                        </div>
+                        <div class="step-number">4</div>
+                        <h3>
+                            Wait for Review
+                        </h3>
+                        <p>
+                            We review your application and documents.
+                        </p>
+                    </article>
+                    <div class="step-arrow">
+                        →
+                    </div>
+                    <article class="step">
+                        <div class="step-icon">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9"/>
+                                <path d="M8 12l2.5 2.5L16 9"/>
+                            </svg>
+                        </div>
+                        <div class="step-number">5</div>
+                        <h3>
+                            Get Admission Decision
+                        </h3>
+                        <p>
+                            Check your status and get accepted.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             CTA
+        ====================================================== -->
+        <section class="cta-section">
+            <div class="section-inner">
+                <div class="cta-box">
+                    <div class="cta-left">
+                        <div class="cta-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M3 9l9-5 9 5-9 5z"/>
+                                <path d="M6 11v4c2 2 4 3 6 3s4-1 6-3v-4"/>
+                                <path d="M21 9v6"/>
+                            </svg>
+                        </div>
+                        <div class="cta-copy">
+                            <h2>
+                                Ready to Begin Your Journey?
+                            </h2>
+                            <p>
+                                Apply today and take the first step toward a brighter future.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="cta-button">
+                        Apply Now
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- FOOTER -->
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
     <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-copy">© 2026 Atlas College. All rights reserved.</div>
-            <div class="footer-links">
-                <span>Privacy Policy</span>
-                <span>Terms &amp; Conditions</span>
-                <span>Help</span>
+        <div class="section-inner">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img class="footer-logo" src="assets/logos.png" alt="Atlas College">
+                    <p>
+                        Empowering students with education, skills, and opportunities
+                        for a better tomorrow.
+                    </p>
+                    <div class="socials">
+                        <span class="social">f</span>
+                        <span class="social">◎</span>
+                        <span class="social">♥</span>
+                        <span class="social">in</span>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>
+                        Quick Links
+                    </h3>
+                    <a>Programs</a>
+                    <a>Admissions</a>
+                    <a>About Us</a>
+                    <a>Contact</a>
+                </div>
+                <div class="footer-column">
+                    <h3>
+                        Student Info
+                    </h3>
+                    <a>How to Apply</a>
+                    <a>Fees &amp; Payments</a>
+                    <a>Student Support</a>
+                    <a>FAQ</a>
+                </div>
+                <div class="footer-column">
+                    <h3>
+                        Contact Us
+                    </h3>
+                    <div class="contact-item">
+                        <span class="contact-icon">⌖</span>
+                        <span>
+                            123 Education Road<br>
+                            Knowledge City, KC 10001
+                        </span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">⌕</span>
+                        <span>
+                            +1 234 567 8900
+                        </span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">✉</span>
+                        <span>
+                            info@atlascollege.edu
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>
+                    © 2025 Atlas College. All rights reserved.
+                </span>
+                <div class="footer-legal">
+                    <span>Privacy Policy</span>
+                    <span>Terms &amp; Conditions</span>
+                </div>
             </div>
         </div>
     </footer>
-
-    <!-- UPLOAD MODAL -->
-    <div class="modal-backdrop" id="uploadModal">
-        <div class="modal" role="dialog" aria-modal="true">
-            <div class="modal-header">
-                <h2 id="uploadModalTitle">Upload Document</h2>
-                <button type="button" class="close-modal" id="closeUploadModal" aria-label="Close">×</button>
-            </div>
-            <div class="modal-body">
-                <p class="upload-description" id="uploadDescription">Upload your required document below.</p>
-                <div class="drop-zone" id="dropZone">
-                    <div class="upload-icon">
-                        <svg viewBox="0 0 24 24"><path d="M12 16V4"/><path d="M8 8l4-4 4 4"/><path d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
-                    </div>
-                    <strong>Choose a document</strong>
-                    <span>PDF, JPG or PNG</span>
-                    <button type="button" class="choose-file" id="chooseFileButton">Choose File</button>
-                    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png">
-                </div>
-                <div class="selected-file hidden" id="selectedFile"></div>
-                <div class="modal-actions">
-                    <button type="button" class="modal-button cancel" id="cancelUpload">Cancel</button>
-                    <button type="button" class="modal-button save" id="saveDocument">Save Document</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- DOCUMENT VIEW MODAL -->
-    <div class="modal-backdrop" id="documentModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>Document</h2>
-                <button type="button" class="close-modal" id="closeDocumentModal">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="document-preview">
-                    <div class="document-preview-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10l4 4v14H5z"></path><path d="M14 3v5h5"></path></svg>
-                    </div>
-                    <strong id="viewDocumentName">Document.pdf</strong>
-                    <small id="viewDocumentDetails">Uploaded document</small>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="modal-button cancel" id="closeDocumentButton">Close</button>
-                    <button type="button" class="modal-button save" id="replaceDocumentButton">Replace Document</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- PAYMENT MODAL -->
-    <div class="modal-backdrop" id="paymentModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>Application Fee Payment</h2>
-                <button type="button" class="close-modal" id="closePaymentModal">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="payment-summary">
-                    <div class="payment-summary-row">
-                        <span>Applicant</span>
-                        <strong id="paymentApplicant">Thabo Mokoena</strong>
-                    </div>
-                    <div class="payment-summary-row">
-                        <span>Application</span>
-                        <strong>ATL-2026-10482</strong>
-                    </div>
-                    <div class="payment-summary-row">
-                        <span>Programme</span>
-                        <strong id="paymentProgramme">Information Technology</strong>
-                    </div>
-                    <div class="payment-total">
-                        <span>Total</span>
-                        <strong>R250.00</strong>
-                    </div>
-                </div>
-                <div class="payment-methods">
-                    <button type="button" class="payment-method selected" data-method="Card">💳 Card</button>
-                    <button type="button" class="payment-method" data-method="EFT">🏦 EFT</button>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="modal-button cancel" id="cancelPayment">Cancel</button>
-                    <button type="button" class="modal-button save" id="confirmPayment">Confirm Payment</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- PAYMENT SUCCESS MODAL -->
-    <div class="modal-backdrop" id="successModal">
-        <div class="modal">
-            <div class="success-content">
-                <div class="success-icon">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l2.5 2.5L16 9"/></svg>
-                </div>
-                <h2>Payment Received</h2>
-                <p>Your application fee has been recorded successfully.</p>
-                <div class="receipt">
-                    <div class="receipt-row">
-                        <span>Receipt</span>
-                        <strong id="successReceipt">ATL-PAY-000000</strong>
-                    </div>
-                    <div class="receipt-row">
-                        <span>Amount</span>
-                        <strong>R250.00</strong>
-                    </div>
-                    <div class="receipt-row">
-                        <span>Method</span>
-                        <strong id="successMethod">Card</strong>
-                    </div>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="modal-button save" id="closeSuccess">Done</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- TOASTS -->
-    <div class="toast-container" id="toastContainer"></div>
-
 </div>
-
-<script>
-    const STORAGE_KEY = "atlas_college_application_v1";
-
-    const defaultApplication = {
-        reference: "ATL-2026-10482",
-        applicant: "Thabo Mokoena",
-        programme: "Information Technology",
-        intake: "2026",
-        studyMode: "Full-time",
-        submittedDate: "18 August 2026",
-        documents: { id: null, matric: null, results: null, address: null },
-        payment: { paid: false, amount: 250, method: null, receipt: null, date: null },
-        decision: null
-    };
-
-    let application = loadApplication();
-
-    function loadApplication() {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (!stored) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultApplication));
-                return structuredClone(defaultApplication);
-            }
-            const parsed = JSON.parse(stored);
-            return {
-                ...structuredClone(defaultApplication),
-                ...parsed,
-                documents: { ...defaultApplication.documents, ...(parsed.documents || {}) },
-                payment: { ...defaultApplication.payment, ...(parsed.payment || {}) }
-            };
-        } catch (error) {
-            return structuredClone(defaultApplication);
-        }
-    }
-
-    function saveApplication() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(application));
-    }
-
-    const applicationReference = document.getElementById("applicationReference");
-    const programmeName = document.getElementById("programmeName");
-    const submittedDate = document.getElementById("submittedDate");
-    const mainStatusBadge = document.getElementById("mainStatusBadge");
-    const paymentNote = document.getElementById("paymentNote");
-    const payButton = document.getElementById("payButton");
-    const paidBox = document.getElementById("paidBox");
-    const receiptNumber = document.getElementById("receiptNumber");
-    const toastContainer = document.getElementById("toastContainer");
-
-    function renderBasicInformation() {
-        applicationReference.textContent = application.reference;
-        programmeName.textContent = application.programme;
-        submittedDate.textContent = application.submittedDate;
-        document.getElementById("paymentApplicant").textContent = application.applicant;
-        document.getElementById("paymentProgramme").textContent = application.programme;
-    }
-
-    const documentConfig = {
-        id: { name: "ID / Passport", description: "Government-issued identity document" },
-        matric: { name: "Matric Certificate", description: "Final school certificate" },
-        results: { name: "Latest School Results", description: "Most recent academic records" },
-        address: { name: "Proof of Address", description: "Recent document showing residence" }
-    };
-
-    let currentDocumentType = null;
-    let selectedFile = null;
-
-    const uploadModal = document.getElementById("uploadModal");
-    const documentModal = document.getElementById("documentModal");
-    const paymentModal = document.getElementById("paymentModal");
-    const successModal = document.getElementById("successModal");
-
-    function openModal(modal) {
-        modal.classList.add("open");
-        document.body.style.overflow = "hidden";
-    }
-
-    function closeModal(modal) {
-        modal.classList.remove("open");
-        document.body.style.overflow = "";
-    }
-
-    const uploadModalTitle = document.getElementById("uploadModalTitle");
-    const uploadDescription = document.getElementById("uploadDescription");
-    const fileInput = document.getElementById("fileInput");
-    const selectedFileBox = document.getElementById("selectedFile");
-
-    function openUploadModal(type) {
-        currentDocumentType = type;
-        selectedFile = null;
-        fileInput.value = "";
-        selectedFileBox.textContent = "";
-        selectedFileBox.classList.add("hidden");
-
-        const config = documentConfig[type];
-        uploadModalTitle.textContent = "Upload " + config.name;
-        uploadDescription.textContent = "Upload your " + config.name.toLowerCase() + " below. Accepted formats: PDF, JPG, PNG.";
-        openModal(uploadModal);
-    }
-
-    document.querySelectorAll("[data-document]").forEach(button => {
-        button.addEventListener("click", () => {
-            const type = button.dataset.document;
-            if (application.documents[type]) {
-                openDocumentModal(type);
-            } else {
-                openUploadModal(type);
-            }
-        });
-    });
-
-    document.getElementById("chooseFileButton").addEventListener("click", () => {
-        fileInput.click();
-    });
-
-    fileInput.addEventListener("change", event => {
-        const file = event.target.files[0];
-        if (file) selectFile(file);
-    });
-
-    function selectFile(file) {
-        const allowedTypes = ["application/pdf", "image/jpeg", "image/png"];
-        if (!allowedTypes.includes(file.type)) {
-            showToast("Please choose a PDF, JPG or PNG file.", "error");
-            fileInput.value = "";
-            return;
-        }
-        if (file.size > 2 * 1024 * 1024) {
-            showToast("Please use a file smaller than 2 MB.", "error");
-            fileInput.value = "";
-            return;
-        }
-        selectedFile = file;
-        selectedFileBox.textContent = file.name + " • " + formatFileSize(file.size);
-        selectedFileBox.classList.remove("hidden");
-    }
-
-    function formatFileSize(bytes) {
-        if (bytes < 1024) return bytes + " B";
-        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
-    }
-
-    const dropZone = document.getElementById("dropZone");
-    dropZone.addEventListener("dragover", e => { e.preventDefault(); dropZone.classList.add("dragover"); });
-    dropZone.addEventListener("dragleave", () => { dropZone.classList.remove("dragover"); });
-    dropZone.addEventListener("drop", e => {
-        e.preventDefault();
-        dropZone.classList.remove("dragover");
-        if (e.dataTransfer.files[0]) selectFile(e.dataTransfer.files[0]);
-    });
-
-    document.getElementById("saveDocument").addEventListener("click", () => {
-        if (!selectedFile) {
-            showToast("Please choose a document first.", "error");
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = () => {
-            application.documents[currentDocumentType] = {
-                name: selectedFile.name,
-                type: selectedFile.type,
-                size: selectedFile.size,
-                data: reader.result,
-                uploadedAt: new Date().toISOString()
-            };
-            saveApplication();
-            closeModal(uploadModal);
-            showToast(documentConfig[currentDocumentType].name + " uploaded successfully.", "success");
-            updateInterface();
-        };
-        reader.readAsDataURL(selectedFile);
-    });
-
-    function openDocumentModal(type) {
-        const documentData = application.documents[type];
-        if (!documentData) {
-            openUploadModal(type);
-            return;
-        }
-        document.getElementById("viewDocumentName").textContent = documentData.name;
-        document.getElementById("viewDocumentDetails").textContent = "Uploaded " + formatFileSize(documentData.size);
-        currentDocumentType = type;
-        openModal(documentModal);
-    }
-
-    document.getElementById("replaceDocumentButton").addEventListener("click", () => {
-        closeModal(documentModal);
-        openUploadModal(currentDocumentType);
-    });
-
-    document.getElementById("closeUploadModal").addEventListener("click", () => closeModal(uploadModal));
-    document.getElementById("cancelUpload").addEventListener("click", () => closeModal(uploadModal));
-    document.getElementById("closeDocumentModal").addEventListener("click", () => closeModal(documentModal));
-    document.getElementById("closeDocumentButton").addEventListener("click", () => closeModal(documentModal));
-
-    let selectedPaymentMethod = "Card";
-    payButton.addEventListener("click", () => {
-        if (application.payment.paid) return;
-        openModal(paymentModal);
-    });
-
-    document.querySelectorAll(".payment-method").forEach(button => {
-        button.addEventListener("click", () => {
-            document.querySelectorAll(".payment-method").forEach(item => item.classList.remove("selected"));
-            button.classList.add("selected");
-            selectedPaymentMethod = button.dataset.method;
-        });
-    });
-
-    document.getElementById("confirmPayment").addEventListener("click", () => {
-        const receipt = "ATL-PAY-" + Math.floor(100000 + Math.random() * 900000);
-        application.payment = {
-            paid: true,
-            amount: 250,
-            method: selectedPaymentMethod,
-            receipt: receipt,
-            date: new Date().toISOString()
-        };
-        saveApplication();
-        closeModal(paymentModal);
-        document.getElementById("successReceipt").textContent = receipt;
-        document.getElementById("successMethod").textContent = selectedPaymentMethod;
-        openModal(successModal);
-        updateInterface();
-    });
-
-    document.getElementById("closePaymentModal").addEventListener("click", () => closeModal(paymentModal));
-    document.getElementById("cancelPayment").addEventListener("click", () => closeModal(paymentModal));
-    document.getElementById("closeSuccess").addEventListener("click", () => closeModal(successModal));
-
-    function getDocumentCount() {
-        return Object.values(application.documents).filter(Boolean).length;
-    }
-
-    function allDocumentsUploaded() {
-        return getDocumentCount() === 4;
-    }
-
-    function getApplicationState() {
-        if (application.decision === "accepted") return "accepted";
-        if (application.decision === "unsuccessful") return "unsuccessful";
-        if (allDocumentsUploaded() && application.payment.paid) return "review";
-        return "action";
-    }
-
-    function updateMainStatus() {
-        const state = getApplicationState();
-        mainStatusBadge.className = "status-badge";
-        if (state === "action") {
-            mainStatusBadge.classList.add("status-action");
-            mainStatusBadge.textContent = "Action Required";
-        } else if (state === "review") {
-            mainStatusBadge.classList.add("status-review");
-            mainStatusBadge.textContent = "Under Review";
-        } else if (state === "accepted") {
-            mainStatusBadge.classList.add("status-accepted");
-            mainStatusBadge.textContent = "Accepted";
-        } else if (state === "unsuccessful") {
-            mainStatusBadge.classList.add("status-unsuccessful");
-            mainStatusBadge.textContent = "Unsuccessful";
-        }
-    }
-
-    function renderRequirement(type) {
-        const data = application.documents[type];
-        const status = document.getElementById(type + "Status");
-        const action = document.getElementById(type + "Action");
-        const description = document.getElementById(type + "Description");
-
-        if (data) {
-            status.className = "requirement-status received";
-            status.textContent = "Received";
-            action.className = "requirement-action";
-            action.textContent = "View";
-            description.textContent = data.name + " • " + formatFileSize(data.size);
-        } else {
-            status.className = "requirement-status required";
-            status.textContent = "Required";
-            action.className = "requirement-action primary";
-            action.textContent = "Upload";
-            description.textContent = documentConfig[type].description;
-        }
-    }
-
-    function updatePaymentUI() {
-        if (application.payment.paid) {
-            paymentNote.classList.add("hidden");
-            payButton.classList.add("hidden");
-            paidBox.classList.remove("hidden");
-            receiptNumber.textContent = application.payment.receipt;
-        } else {
-            paymentNote.classList.remove("hidden");
-            payButton.classList.remove("hidden");
-            paidBox.classList.add("hidden");
-        }
-    }
-
-    function updateInterface() {
-        renderBasicInformation();
-        renderRequirement("id");
-        renderRequirement("matric");
-        renderRequirement("results");
-        renderRequirement("address");
-        updatePaymentUI();
-        updateMainStatus();
-    }
-
-    function showToast(message, type = "") {
-        const toast = document.createElement("div");
-        toast.className = "toast " + type;
-        toast.textContent = message;
-        toastContainer.appendChild(toast);
-        setTimeout(() => {
-            toast.style.opacity = "0";
-            toast.style.transform = "translateY(10px)";
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
-    }
-
-    document.getElementById("supportButton").addEventListener("click", () => {
-        showToast("Admissions Support: info@atlascollege.edu", "");
-    });
-
-    document.getElementById("homeButton").addEventListener("click", () => {
-        window.location.href = "index.html";
-    });
-
-    [uploadModal, documentModal, paymentModal, successModal].forEach(modal => {
-        modal.addEventListener("click", event => {
-            if (event.target === modal) closeModal(modal);
-        });
-    });
-
-    document.addEventListener("keydown", event => {
-        if (event.key === "Escape") {
-            [uploadModal, documentModal, paymentModal, successModal].forEach(modal => closeModal(modal));
-        }
-    });
-
-    updateInterface();
-</script>
-
 </body>
 </html>
