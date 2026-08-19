@@ -21,12 +21,16 @@
             margin: 0;
             width: 100%;
             min-width: 0;
+            min-height: 100vh;
             overflow-x: hidden;
             font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             color: #071947;
             background: #ffffff;
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         img {
             display: block;
@@ -58,26 +62,32 @@
         }
 
         /* =========================================================
-           PAGE WRAPPER
+           PAGE WRAPPER (STRETCHED EDGE-TO-EDGE)
         ========================================================= */
         .page {
             width: 100%;
+            max-width: 100%;
             min-width: 0;
+            margin: 0;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
         }
         .section {
             width: 100%;
+            max-width: 100%;
         }
         .section-inner {
             width: 100%;
-            max-width: 1440px;
-            margin: 0 auto;
-            padding-left: clamp(20px, 4vw, 58px);
-            padding-right: clamp(20px, 4vw, 58px);
+            max-width: 100%;
+            margin: 0;
+            padding-left: 25px;
+            padding-right: 25px;
         }
 
         /* =========================================================
-           HEADER
+           HEADER (PINNED TO EXTREME EDGES)
         ========================================================= */
         .site-header {
             width: 100%;
@@ -86,13 +96,14 @@
             border-bottom: 1px solid #edf1f7;
             position: relative;
             z-index: 50;
+            flex-shrink: 0;
         }
         .header-inner {
             width: 100%;
             height: 100%;
-            max-width: 1500px;
-            margin: 0 auto;
-            padding: 0 clamp(22px, 4.5vw, 62px);
+            max-width: 100%;
+            margin: 0;
+            padding: 0 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -225,15 +236,16 @@
         ========================================================= */
         .hero {
             width: 100%;
+            max-width: 100%;
             min-height: 445px;
             background: #ffffff;
             overflow: hidden;
         }
         .hero-inner {
             width: 100%;
+            max-width: 100%;
             min-height: 445px;
-            max-width: 1500px;
-            margin: 0 auto;
+            margin: 0;
             display: grid;
             grid-template-columns: minmax(43%, 50%) minmax(0, 57%);
             position: relative;
@@ -244,14 +256,14 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 55px clamp(30px, 5vw, 75px) 55px clamp(28px, 6vw, 85px);
+            padding: 55px 25px 55px 25px;
             position: relative;
             z-index: 2;
             background: linear-gradient(90deg, #ffffff 0%, #ffffff 74%, rgba(255,255,255,0.96) 90%, rgba(255,255,255,0.70) 100%);
         }
         .hero-title {
             margin: 0;
-            max-width: 620px;
+            max-width: 100%;
             font-size: clamp(46px, 5.3vw, 76px);
             line-height: 0.99;
             letter-spacing: -2.8px;
@@ -265,7 +277,7 @@
         }
         .hero-description {
             margin: 24px 0 0;
-            max-width: 480px;
+            max-width: 100%;
             font-size: clamp(15px, 1.2vw, 18px);
             line-height: 1.65;
             color: #53627d;
@@ -348,6 +360,7 @@
         ========================================================= */
         .why-section {
             width: 100%;
+            max-width: 100%;
             background: #ffffff;
             padding: 52px 0 45px;
         }
@@ -370,6 +383,7 @@
         }
         .why-grid {
             width: 100%;
+            max-width: 100%;
             margin-top: 30px;
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -453,6 +467,7 @@
         ========================================================= */
         .programmes-section {
             width: 100%;
+            max-width: 100%;
             background: #f7faff;
             padding: 31px 0 42px;
         }
@@ -461,6 +476,7 @@
         }
         .programmes-grid {
             width: 100%;
+            max-width: 100%;
             margin-top: 25px;
             display: grid;
             grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -537,6 +553,7 @@
         ========================================================= */
         .admissions-section {
             width: 100%;
+            max-width: 100%;
             background: #ffffff;
             padding: 35px 0 18px;
         }
@@ -548,6 +565,7 @@
         }
         .steps {
             width: 100%;
+            max-width: 100%;
             margin-top: 25px;
             display: grid;
             grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr) 40px minmax(0, 1fr) 40px minmax(0, 1fr) 40px minmax(0, 1fr);
@@ -629,11 +647,13 @@
         ========================================================= */
         .cta-section {
             width: 100%;
+            max-width: 100%;
             padding: 15px 0 12px;
             background: #ffffff;
         }
         .cta-box {
             width: 100%;
+            max-width: 100%;
             min-height: 84px;
             border-radius: 7px;
             background: linear-gradient(105deg, #244bd1 0%, #0957e8 48%, #2177e8 100%);
@@ -641,7 +661,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 25px;
-            padding: 15px clamp(25px, 5vw, 65px);
+            padding: 15px 25px;
             color: #ffffff;
             box-shadow: 0 8px 25px rgba(9, 87, 232, 0.13);
         }
@@ -711,12 +731,15 @@
         ========================================================= */
         .footer {
             width: 100%;
+            max-width: 100%;
             background: linear-gradient(110deg, #052b72 0%, #06265f 45%, #031e50 100%);
             color: #ffffff;
             padding: 27px 0 13px;
+            flex-shrink: 0;
         }
         .footer-grid {
             width: 100%;
+            max-width: 100%;
             display: grid;
             grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
             gap: 40px;
@@ -795,6 +818,7 @@
         }
         .footer-bottom {
             width: 100%;
+            max-width: 100%;
             margin-top: 22px;
             padding-top: 13px;
             border-top: 1px solid rgba(255,255,255,0.20);
@@ -898,7 +922,7 @@
                 grid-template-columns: 48% 52%;
             }
             .hero-content {
-                padding-left: 35px;
+                padding-left: 25px;
                 padding-right: 25px;
             }
             .hero-title {
@@ -954,17 +978,17 @@
             .hero-content {
                 order: 1;
                 min-height: auto;
-                padding: 45px 22px 39px;
+                padding: 45px 18px 39px;
                 background: #ffffff;
             }
             .hero-title {
-                max-width: 600px;
+                max-width: 100%;
                 font-size: clamp(42px, 12vw, 62px);
                 line-height: 1;
                 letter-spacing: -2px;
             }
             .hero-description {
-                max-width: 550px;
+                max-width: 100%;
                 margin-top: 19px;
                 font-size: 15px;
                 line-height: 1.6;
@@ -1049,11 +1073,11 @@
                 height: 58px;
             }
             .step p {
-                max-width: 270px;
+                max-width: 100%;
             }
             .cta-box {
                 min-height: auto;
-                padding: 22px 20px;
+                padding: 22px 18px;
                 flex-direction: column;
                 align-items: flex-start;
             }
@@ -1071,7 +1095,7 @@
                 gap: 28px;
             }
             .footer-brand p {
-                max-width: 330px;
+                max-width: 100%;
             }
             .footer-bottom {
                 flex-direction: column;
@@ -1095,7 +1119,7 @@
                 width: 101px;
             }
             .hero-content {
-                padding: 37px 18px 32px;
+                padding: 37px 14px 32px;
             }
             .hero-title {
                 font-size: clamp(39px, 12.7vw, 53px);
