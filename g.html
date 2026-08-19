@@ -3,226 +3,836 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Student Application Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <title>Applicant Login | Atlas College</title>
     <style>
-        :root {
-            --primary-blue: #4a90e2;
-            --text-gray: #666;
-            --border-light: #ddd;
-            --bg-light: #f9fafc;
+        /* =========================================================
+           RESET
+        ========================================================= */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        html {
+            width: 100%;
+            min-width: 0;
+            scroll-behavior: smooth;
         }
 
         body {
-            background-color: var(--bg-light);
+            margin: 0;
+            width: 100%;
+            min-width: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+
+            font-family:
+                Inter,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+
+            color: #071947;
+            background: #ffffff;
+
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
+            justify-content: space-between;
         }
 
-        /* Header Logo Section */
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================================================
+           VARIABLES
+        ========================================================= */
+        :root {
+            --blue: #0957e8;
+            --blue-dark: #062b73;
+            --navy: #071947;
+            --text: #1d2c49;
+            --muted: #64728a;
+            --border: #e2e8f0;
+            --white: #ffffff;
+            --red: #c93636;
+            --green: #159447;
+
+            --shadow: 0 4px 20px rgba(7, 25, 71, 0.04);
+            --shadow-hover: 0 10px 25px rgba(7, 25, 71, 0.08);
+            --radius: 12px;
+        }
+
+        /* =========================================================
+           UTILITIES (FULL WIDTH EDGE-TO-EDGE)
+        ========================================================= */
+        .hidden {
+            display: none !important;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        /* =========================================================
+           HEADER (PINNED TO EXTREME EDGES)
+        ========================================================= */
         .header {
+            width: 100%;
+            height: 75px;
+            background: #ffffff;
+            border-bottom: 1px solid #eaeef4;
+            flex-shrink: 0;
+        }
+
+        .header-inner {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0 25px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 50px;
-            color: #556080;
+            justify-content: space-between;
+            gap: 20px;
         }
 
-        .header i {
-            font-size: 2.5rem;
-            color: var(--primary-blue);
+        .brand img {
+            width: 125px;
+            height: auto;
+            object-fit: contain;
         }
 
-        .header h1 {
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .help-link {
+            color: #53627b;
+            font-size: 13px;
             font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
         }
 
-        /* Login Container */
-        .login-container {
+        .help-link:hover {
+            color: var(--blue);
+        }
+
+        /* =========================================================
+           MAIN LOGIN SECTION
+        ========================================================= */
+        .main {
             width: 100%;
-            max-width: 400px;
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: min(440px, 100%);
+            margin: 0 auto;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .login-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: clamp(24px, 5vw, 40px) clamp(20px, 5vw, 40px);
+            width: 100%;
+        }
+
+        .login-header {
+            margin-bottom: 24px;
             text-align: center;
         }
 
-        .login-container h2 {
-            font-size: 2rem;
-            color: #333;
-            margin-bottom: 30px;
+        .eyebrow {
+            margin: 0 0 7px;
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
         }
 
-        /* Input Styling */
-        .input-group {
-            position: relative;
-            margin-bottom: 15px;
+        .login-header h1 {
+            margin: 0;
+            color: var(--navy);
+            font-size: clamp(22px, 3vw, 26px);
+            line-height: 1.2;
+            letter-spacing: -0.5px;
         }
 
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
+        .login-header p {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.5;
         }
 
-        .input-group input {
-            width: 100%;
-            padding: 15px 15px 15px 45px;
-            border: 1px solid var(--border-light);
-            border-radius: 4px;
-            font-size: 1rem;
-            background-color: #fff;
-            transition: border-color 0.3s;
+        /* =========================================================
+           FORM CONTROLS
+        ========================================================= */
+        .form-group {
+            margin-bottom: 18px;
         }
 
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #999;
-            display: flex;
-            gap: 10px;
-        }
-
-        /* Button */
-        .btn-login {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--primary-blue);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.3s;
-        }
-
-        .btn-login:hover {
-            background-color: #357abd;
-        }
-
-        /* Links */
-        .footer-links {
-            margin-top: 25px;
-        }
-
-        .footer-links a {
-            text-decoration: none;
-            color: var(--primary-blue);
-            font-size: 0.95rem;
+        .form-label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
+            color: var(--navy);
+            font-size: 12px;
+            font-weight: 750;
         }
 
-        .footer-links p {
-            color: var(--text-gray);
-            font-size: 0.95rem;
+        .form-input, .form-select {
+            width: 100%;
+            height: 44px;
+            padding: 0 14px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: #ffffff;
+            color: var(--navy);
+            font-size: 14px;
+            transition: border-color 0.2s ease;
         }
 
-        .footer-links p a {
-            display: inline;
-            font-weight: 600;
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: none; /* Removed the outer glow/circle ring */
         }
 
-        .password-toggle {
-            position: absolute;
-            right: 15px; 
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #999;
+        .form-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            font-size: 12px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .forgot-link {
+            color: var(--blue);
+            background: none;
+            border: none;
+            padding: 0;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .login-button {
+            width: 100%;
+            height: 44px;
+            border: 0;
+            border-radius: 6px;
+            background: var(--blue);
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(9, 87, 232, 0.15);
+            transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .login-button:hover {
+            background: #064dd2;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(9, 87, 232, 0.2);
+        }
+
+        .login-footer-text {
+            margin-top: 20px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .login-footer-text a {
+            color: var(--blue);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .login-footer-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================================================
+           MODALS (FORGOT CREDENTIALS WITH FLUID RESPONSIVE SCROLL)
+        ========================================================= */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            background: rgba(7, 25, 71, 0.45);
+            backdrop-filter: blur(2px);
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 30px; 
-            height: 30px;
-            z-index: 10;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
         }
 
-        #password {
-            padding-right: 50px; 
+        .modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
         }
 
-        @media (max-width: 480px) {
-            .header h1 { font-size: 1rem; }
-            .login-container h2 { font-size: 1.7rem; }
+        .modal {
+            width: 100%;
+            max-width: 480px;
+            max-height: calc(100vh - 32px);
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            display: flex;
+            flex-direction: column;
+            transform: translateY(10px) scale(0.98);
+            transition: transform 0.25s ease;
         }
 
+        .modal-backdrop.open .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid #eaeef4;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .close-modal {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: #ffffff;
+            color: var(--navy);
+            font-size: 18px;
+            line-height: 1;
+            transition: border-color 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .close-modal:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1 1 auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modal-description {
+            margin: 0 0 16px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .modal-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .modal-button {
+            height: 38px;
+            padding: 0 18px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .modal-button.cancel {
+            border: 1px solid var(--border);
+            background: #ffffff;
+            color: var(--navy);
+        }
+
+        .modal-button.save {
+            border: 0;
+            background: var(--blue);
+            color: #ffffff;
+        }
+
+        .feedback-box {
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .feedback-box.success {
+            background: #f0fdf4;
+            border: 1px solid #ccefd8;
+            color: var(--green);
+        }
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+        .toast-container {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 500;
+            width: min(350px, calc(100vw - 40px));
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            padding: 12px 14px;
+            border-radius: 6px;
+            background: #071947;
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            font-size: 12px;
+            line-height: 1.4;
+            font-weight: 650;
+            transform: translateY(15px);
+            opacity: 0;
+            animation: toastIn 0.3s ease forwards;
+        }
+
+        .toast.success {
+            background: #159447;
+        }
+
+        .toast.error {
+            background: #c93636;
+        }
+
+        @keyframes toastIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================================================
+           FOOTER (PINNED TO EXTREME CORNERS)
+        ========================================================= */
+        .footer {
+            width: 100%;
+            padding: 24px 0;
+            background: #ffffff;
+            border-top: 1px solid #eaeef4;
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+
+        .footer-inner {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .footer-copy, .footer-links {
+            font-size: 11px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .footer-links span {
+            cursor: pointer;
+        }
+
+        .footer-links span:hover {
+            color: var(--blue);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 540px) {
+            .footer-inner {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <i class="fas fa-graduation-cap"></i>
-        <h1>Student Application Portal</h1>
-    </div>
+<div class="page" style="display: flex; flex-direction: column; min-height: 100vh; width: 100%;">
 
-    <div class="login-container">
-        <h2>Login</h2>
-        
-        <form id="loginForm">
-            <div class="input-group">
-                <i class="fas fa-user"></i>
-                <input type="email" id="email" placeholder="Email Address" required>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="brand">
+                <img src="assets/logos.png" alt="Atlas College">
             </div>
+            <div class="header-right">
+                <a href="#" class="help-link" id="helpLink">Need help?</a>
+            </div>
+        </div>
+    </header>
 
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="password" placeholder="Password" required>
-                <div class="password-toggle">
-                    <i class="fas fa-eye-slash" id="toggleIcon"></i>
+    <!-- MAIN LOGIN CONTAINER -->
+    <main class="main">
+        <div class="container" style="padding: 0; width: 100%;">
+            <div class="login-wrapper">
+                <div class="login-card">
+                    <div class="login-header">
+                        <p class="eyebrow">Applicant Portal</p>
+                        <h1>Sign In</h1>
+                        <p>Enter your application number and pin to track your status.</p>
+                    </div>
+
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label class="form-label" for="appNumber">Application Number</label>
+                            <input 
+                                type="text" 
+                                id="appNumber" 
+                                class="form-input" 
+                                placeholder="e.g. APP84729103" 
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="appPin">Access PIN</label>
+                            <input 
+                                type="password" 
+                                id="appPin" 
+                                class="form-input" 
+                                placeholder="Enter your 5-digit PIN" 
+                                maxlength="5"
+                            >
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="forgot-link" id="forgotPinBtn">Forgot PIN?</button>
+                            <button type="button" class="forgot-link" id="changePinBtn">Change PIN</button>
+                            <button type="button" class="forgot-link" id="forgotAppBtn">Forgot Application Number?</button>
+                        </div>
+
+                        <button type="submit" class="login-button">
+                            Access Portal
+                        </button>
+                    </form>
+
+                    <div class="login-footer-text">
+                        Don't have an application yet? <a href="index.html">Apply now</a>
+                    </div>
                 </div>
             </div>
+        </div>
+    </main>
 
-            <button type="submit" class="btn-login">Log In</button>
-        </form>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-copy">
+                © 2026 Atlas College. All rights reserved.
+            </div>
+            <div class="footer-links">
+                <span>Privacy Policy</span>
+                <span>Terms &amp; Conditions</span>
+                <span>Help</span>
+            </div>
+        </div>
+    </footer>
 
-        <div class="footer-links">
-            <a href="#" id="forgotPass">Forgot password?</a>
-            <p>New user? <a href="register.html">Register</a></p>
+    <!-- FORGOT PIN MODAL -->
+    <div class="modal-backdrop" id="forgotPinModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Send Access PIN</h2>
+                <button type="button" class="close-modal" id="closePinModal">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">Provide your application details below to receive your PIN.</p>
+                
+                <div class="form-group">
+                    <label class="form-label" for="pinAppInput">Application Number</label>
+                    <input type="text" id="pinAppInput" class="form-input" placeholder="e.g. APP84729103">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="pinIdInput">ID / Passport Number</label>
+                    <input type="text" id="pinIdInput" class="form-input" placeholder="Enter ID number">
+                </div>
+
+                <div id="pinFeedback" class="feedback-box hidden"></div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-button cancel" id="cancelPinModal">Cancel</button>
+                    <button type="button" class="modal-button save" id="submitPinReset">Send PIN</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="pinModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
-    <div class="login-container" style="background: white; padding: 30px; border-radius: 12px; border-top: 5px solid var(--primary-blue);">
-        <div class="header" style="margin-bottom: 20px;">
-            <i class="fas fa-graduation-cap"></i>
-            <h1>Student Portal</h1>
+    <!-- CHANGE PIN MODAL -->
+    <div class="modal-backdrop" id="changePinModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Change Access PIN</h2>
+                <button type="button" class="close-modal" id="closeChangePinModal">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">Provide your details below to update your access PIN.</p>
+                
+                <div class="form-group">
+                    <label class="form-label" for="changeAppInput">Application Number</label>
+                    <input type="text" id="changeAppInput" class="form-input" placeholder="e.g. APP84729103">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="changeIdInput">ID / Passport Number</label>
+                    <input type="text" id="changeIdInput" class="form-input" placeholder="Enter ID number">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="oldPinInput">Old PIN</label>
+                    <input type="password" id="oldPinInput" class="form-input" placeholder="Enter old 5-digit PIN" maxlength="5">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="newPinInput">New PIN</label>
+                    <input type="password" id="newPinInput" class="form-input" placeholder="Enter new 5-digit PIN" maxlength="5">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="confirmNewPinInput">Confirm New PIN</label>
+                    <input type="password" id="confirmNewPinInput" class="form-input" placeholder="Confirm new 5-digit PIN" maxlength="5">
+                </div>
+
+                <div id="changePinFeedback" class="feedback-box hidden"></div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-button cancel" id="cancelChangePinModal">Cancel</button>
+                    <button type="button" class="modal-button save" id="submitChangePin">Update PIN</button>
+                </div>
+            </div>
         </div>
-        <h3>Verify Your Email</h3>
-        <p style="font-size: 0.9rem; color: #666; margin: 15px 0;">Enter the 6-digit code sent to your email.</p>
-        <div class="input-group">
-            <i class="fas fa-key"></i>
-            <input type="text" id="inputPin" placeholder="000000" maxlength="6" style="text-align: center; letter-spacing: 5px; font-weight: bold;">
-        </div>
-        <button id="verifyPinBtn" class="btn-login">Verify & Login</button>
-        <button id="resendPinBtn" style="background:none; border:none; color:#4a90e2; cursor:pointer; margin-top:10px; font-size:0.9rem; text-decoration:underline;">Didn't get a code? Resend PIN</button>
     </div>
+
+    <!-- FORGOT REFERENCE NUMBER MODAL -->
+    <div class="modal-backdrop" id="forgotAppModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Retrieve Application Number</h2>
+                <button type="button" class="close-modal" id="closeAppModal">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">Provide your details below to look up your application number.</p>
+                
+                <div class="form-group">
+                    <label class="form-label" for="idNumberInput">ID / Passport Number</label>
+                    <input type="text" id="idNumberInput" class="form-input" placeholder="Enter ID number">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="titleInput">Title</label>
+                    <select id="titleInput" class="form-select">
+                        <option value="" disabled selected>Select Title</option>
+                        <option value="ADV">ADV</option>
+                        <option value="DR">DR</option>
+                        <option value="MISS">MISS</option>
+                        <option value="MRS">MRS</option>
+                        <option value="MR">MR</option>
+                        <option value="MS">MS</option>
+                        <option value="MX">MX</option>
+                        <option value="PROF">PROF</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="initialsInput">Initials</label>
+                    <input type="text" id="initialsInput" class="form-input" placeholder="e.g. J.P.">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="surnameInput">Surname</label>
+                    <input type="text" id="surnameInput" class="form-input" placeholder="Enter Surname">
+                </div>
+
+                <div id="appFeedback" class="feedback-box hidden"></div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-button cancel" id="cancelAppModal">Cancel</button>
+                    <button type="button" class="modal-button save" id="submitAppRetrieve">Search Application Number</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOASTS -->
+    <div class="toast-container" id="toastContainer"></div>
+
 </div>
 
-    <script type="module" src="login.js"></script>
+<script>
+    /* ============================================================
+       PURE UI INTERACTION LOGIC (NO STORAGE / NO BACKEND)
+    ============================================================ */
+
+    const loginForm = document.getElementById("loginForm");
+    const toastContainer = document.getElementById("toastContainer");
+
+    loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        showToast("Action simulated (frontend-only view mode).", "success");
+    });
+
+    const forgotPinModal = document.getElementById("forgotPinModal");
+    const changePinModal = document.getElementById("changePinModal");
+    const forgotAppModal = document.getElementById("forgotAppModal");
+
+    function openModal(modal) {
+        modal.classList.add("open");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeModal(modal) {
+        modal.classList.remove("open");
+        document.body.style.overflow = "";
+    }
+
+    document.getElementById("forgotPinBtn").addEventListener("click", () => {
+        openModal(forgotPinModal);
+    });
+
+    document.getElementById("changePinBtn").addEventListener("click", () => {
+        openModal(changePinModal);
+    });
+
+    document.getElementById("forgotAppBtn").addEventListener("click", () => {
+        openModal(forgotAppModal);
+    });
+
+    document.getElementById("closePinModal").addEventListener("click", () => closeModal(forgotPinModal));
+    document.getElementById("cancelPinModal").addEventListener("click", () => closeModal(forgotPinModal));
+    document.getElementById("closeChangePinModal").addEventListener("click", () => closeModal(changePinModal));
+    document.getElementById("cancelChangePinModal").addEventListener("click", () => closeModal(changePinModal));
+    document.getElementById("closeAppModal").addEventListener("click", () => closeModal(forgotAppModal));
+    document.getElementById("cancelAppModal").addEventListener("click", () => closeModal(forgotAppModal));
+
+    document.getElementById("submitPinReset").addEventListener("click", () => {
+        const feedback = document.getElementById("pinFeedback");
+        feedback.textContent = "Request processed visually.";
+        feedback.className = "feedback-box success";
+        feedback.classList.remove("hidden");
+    });
+
+    document.getElementById("submitChangePin").addEventListener("click", () => {
+        const feedback = document.getElementById("changePinFeedback");
+        feedback.textContent = "PIN updated visually.";
+        feedback.className = "feedback-box success";
+        feedback.classList.remove("hidden");
+    });
+
+    document.getElementById("submitAppRetrieve").addEventListener("click", () => {
+        const feedback = document.getElementById("appFeedback");
+        feedback.textContent = "Application lookup displayed visually.";
+        feedback.className = "feedback-box success";
+        feedback.classList.remove("hidden");
+    });
+
+    document.getElementById("helpLink").addEventListener("click", (e) => {
+        e.preventDefault();
+        showToast("Admissions Support: info@atlascollege.edu", "");
+    });
+
+    [forgotPinModal, changePinModal, forgotAppModal].forEach(modal => {
+        modal.addEventListener("click", event => {
+            if (event.target === modal) closeModal(modal);
+        });
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            closeModal(forgotPinModal);
+            closeModal(changePinModal);
+            closeModal(forgotAppModal);
+        }
+    });
+
+    function showToast(message, type = "") {
+        const toast = document.createElement("div");
+        toast.className = "toast " + type;
+        toast.textContent = message;
+        toastContainer.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            toast.style.transform = "translateY(10px)";
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+</script>
+
 </body>
 </html>
