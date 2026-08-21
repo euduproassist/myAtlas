@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Application Category — Atlas College</title>
+    <meta name="description" content="Choose your level of study to begin your application with Atlas College.">
+    <style>
+        /* =========================================================
+           RESET
+        ========================================================= */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        html {
+            width: 100%;
+            min-width: 0;
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            width: 100%;
+            min-width: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #071947;
+            background: #f7faff;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        img {
+            display: block;
+            max-width: 100%;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* =========================================================
+           GLOBAL VARIABLES
+        ========================================================= */
+        :root {
+            --blue: #0957e8;
+            --blue-dark: #062b73;
+            --navy: #071947;
+            --light-blue: #f5f9ff;
+            --border: #e1e8f3;
+            --text: #071947;
+            --muted: #596985;
+            --white: #ffffff;
+            --shadow: 0 8px 28px rgba(7, 25, 71, 0.07);
+            --radius: 8px;
+        }
+
+        /* =========================================================
+           PAGE WRAPPER
+        ========================================================= */
+        .page {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .section-inner {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 25px;
+            padding-right: 25px;
+        }
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+        .site-header {
+            width: 100%;
+            height: 66px;
+            background: #ffffff;
+            border-bottom: 1px solid #edf1f7;
+            position: relative;
+            z-index: 50;
+            flex-shrink: 0;
+        }
+        .header-inner {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo-link {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            width: 126px;
+            height: auto;
+            object-fit: contain;
+        }
+        .back-home {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--muted);
+            transition: color 0.2s ease;
+        }
+        .back-home:hover {
+            color: var(--blue);
+        }
+
+        /* =========================================================
+           CATEGORY SELECTION HERO / CONTENT
+        ========================================================= */
+        .selection-section {
+            width: 100%;
+            padding: 60px 0 80px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        .selection-heading {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 45px;
+        }
+        .selection-heading h1 {
+            margin: 0;
+            color: var(--navy);
+            font-size: clamp(28px, 3vw, 40px);
+            line-height: 1.2;
+            font-weight: 750;
+            letter-spacing: -0.8px;
+        }
+        .selection-heading p {
+            margin: 14px auto 0;
+            color: #5c6982;
+            font-size: clamp(15px, 1.2vw, 17px);
+            line-height: 1.6;
+        }
+
+        /* Category Cards Grid */
+        .categories-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 25px;
+        }
+        .category-card {
+            background: #ffffff;
+            border: 1px solid #dfe6f1;
+            border-radius: 10px;
+            padding: 35px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 4px 20px rgba(7, 25, 71, 0.04);
+        }
+        .category-card:hover {
+            transform: translateY(-6px);
+            border-color: #bcd1f7;
+            box-shadow: 0 16px 36px rgba(9, 87, 232, 0.10);
+        }
+        .category-icon-wrap {
+            width: 52px;
+            height: 52px;
+            border-radius: 8px;
+            background: var(--light-blue);
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        .category-icon-wrap svg {
+            width: 28px;
+            height: 28px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .category-content h2 {
+            margin: 0 0 12px;
+            font-size: 20px;
+            line-height: 1.3;
+            font-weight: 750;
+            color: var(--navy);
+        }
+        .category-content p {
+            margin: 0 0 28px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #596985;
+        }
+        .category-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--blue);
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .category-action::after {
+            content: "→";
+            transition: transform 0.25s ease;
+        }
+        .category-card:hover .category-action::after {
+            transform: translateX(5px);
+        }
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+        .footer {
+            width: 100%;
+            background: linear-gradient(110deg, #052b72 0%, #06265f 45%, #031e50 100%);
+            color: #ffffff;
+            padding: 24px 0;
+            flex-shrink: 0;
+            text-align: center;
+            font-size: 13px;
+        }
+        .footer p {
+            margin: 0;
+            opacity: 0.84;
+        }
+
+        /* =========================================================
+           RESPONSIVE DESIGN
+        ========================================================= */
+        @media (max-width: 960px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+        }
+        @media (max-width: 480px) {
+            .selection-section {
+                padding: 40px 0 50px;
+            }
+            .category-card {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="index.html" class="logo-link">
+                <img class="logo" src="assets/logos.png" alt="Atlas College">
+            </a>
+            <a href="index.html" class="back-home">← Back to Home</a>
+        </div>
+    </header>
+
+    <!-- =========================================================
+         CATEGORY SELECTION MAIN CONTENT
+    ========================================================== -->
+    <main class="selection-section">
+        <div class="section-inner">
+            <div class="selection-heading">
+                <h1>Select Your Level of Study</h1>
+                <p>Choose the academic category that matches your qualifications to start the correct application form.</p>
+            </div>
+            
+            <div class="categories-grid">
+                <!-- 1. Undergraduate Card -->
+                <div class="category-card" onclick="window.location.href='apply-undergraduate.html'">
+                    <div>
+                        <div class="category-icon-wrap">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                            </svg>
+                        </div>
+                        <div class="category-content">
+                            <h2>Undergraduate studies</h2>
+                            <p>Join one of South Africa's top colleges with our high certificates, diplomas, and bachelor's degrees.</p>
+                        </div>
+                    </div>
+                    <span class="category-action">Start Application</span>
+                </div>
+
+                <!-- 2. Honours, Diplomas & Certificates Card -->
+                <div class="category-card" onclick="window.location.href='apply-honours.html'">
+                    <div>
+                        <div class="category-icon-wrap">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                                <path d="M6 6h10"/>
+                                <path d="M6 10h10"/>
+                            </svg>
+                        </div>
+                        <div class="category-content">
+                            <h2>Honours, diplomas and certificates</h2>
+                            <p>Achieve academic and professional goals with internationally accredited postgraduate coursework programmes.</p>
+                        </div>
+                    </div>
+                    <span class="category-action">Start Application</span>
+                </div>
+
+                <!-- 3. Masters and Doctoral Studies Card -->
+                <div class="category-card" onclick="window.location.href='apply-research.html'">
+                    <div>
+                        <div class="category-icon-wrap">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            </svg>
+                        </div>
+                        <div class="category-content">
+                            <h2>Masters and Doctoral Studies</h2>
+                            <p>Deepen your expertise, pivot to a new field, or drive impactful academic research through our master's and PhD tracks.</p>
+                        </div>
+                    </div>
+                    <span class="category-action">Start Application</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+    <footer class="footer">
+        <div class="section-inner">
+            <p>© 2026 Atlas College. All rights reserved.</p>
+        </div>
+    </footer>
+</div>
+</body>
+</html>
