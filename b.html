@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atlas College</title>
-    <meta name="description" content="Atlas College — quality education, practical skills and real opportunities for your future.">
+    <title>Atlas College — Select Category</title>
+    <meta name="description" content="Select your application category at Atlas College. Choose between Undergraduate, Postgraduate, and Certificates.">
     <style>
         /* =========================================================
            RESET
@@ -59,55 +59,6 @@
             --white: #ffffff;
             --shadow: 0 8px 28px rgba(7, 25, 71, 0.07);
             --radius: 8px;
-        }
-
-        /* =========================================================
-           PAGE VIEWS (SPA SWITCHING)
-        ========================================================= */
-        .page-view {
-            display: none;
-            width: 100%;
-            flex-direction: column;
-            flex: 1;
-        }
-        .page-view.active {
-            display: flex;
-        }
-
-        /* =========================================================
-           BUILT-IN APP NAVIGATION (BACK / FORWARD)
-        ========================================================= */
-        .app-nav-bar {
-            background: var(--navy);
-            color: #ffffff;
-            padding: 8px 25px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 13px;
-            font-weight: 600;
-            z-index: 110;
-        }
-        .app-nav-controls {
-            display: flex;
-            gap: 10px;
-        }
-        .app-nav-btn {
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            padding: 4px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.2s ease, opacity 0.2s ease;
-        }
-        .app-nav-btn:hover:not(:disabled) {
-            background: var(--blue);
-            border-color: var(--blue);
-        }
-        .app-nav-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
         }
 
         /* =========================================================
@@ -235,7 +186,7 @@
             border-radius: 2px;
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
-        .menu-checkbox {
+        #menu-checkbox {
             display: none;
         }
         .mobile-menu-drawer {
@@ -268,17 +219,17 @@
             color: var(--blue);
             transform: none;
         }
-        .menu-checkbox:checked ~ .mobile-menu-drawer {
+        #menu-checkbox:checked ~ .mobile-menu-drawer {
             max-height: 350px;
             padding: 10px 0;
         }
-        .menu-checkbox:checked + label .menu-toggle span:nth-child(1) {
+        #menu-checkbox:checked + label .menu-toggle span:nth-child(1) {
             transform: translateY(7px) rotate(45deg);
         }
-        .menu-checkbox:checked + label .menu-toggle span:nth-child(2) {
+        #menu-checkbox:checked + label .menu-toggle span:nth-child(2) {
             opacity: 0;
         }
-        .menu-checkbox:checked + label .menu-toggle span:nth-child(3) {
+        #menu-checkbox:checked + label .menu-toggle span:nth-child(3) {
             transform: translateY(-7px) rotate(-45deg);
         }
 
@@ -417,6 +368,7 @@
 
         /* =========================================================
            WHY CHOOSE
+           DO NOT CHANGE THIS SECTION
         ========================================================= */
         .why-section {
             width: 100%;
@@ -523,6 +475,7 @@
 
         /* =========================================================
            PROGRAMMES
+           DO NOT CHANGE THIS SECTION
         ========================================================= */
         .programmes-section {
             width: 100%;
@@ -592,6 +545,7 @@
             color: var(--blue);
             font-size: 13px;
             font-weight: 700;
+            cursor: pointer;
         }
         .programme-more::after {
             content: "→";
@@ -608,6 +562,7 @@
 
         /* =========================================================
            ADMISSION PROCESS
+           DO NOT CHANGE THIS SECTION
         ========================================================= */
         .admissions-section {
             width: 100%;
@@ -701,6 +656,7 @@
 
         /* =========================================================
            CTA
+           DO NOT CHANGE THIS SECTION
         ========================================================= */
         .cta-section {
             width: 100%;
@@ -804,187 +760,8 @@
         }
 
         /* =========================================================
-           CATEGORY PAGE SPECIFIC STYLES (MATCHING CARD SHARPNESS & PALETTE)
-        ========================================================= */
-        .category-hero {
-            width: 100%;
-            background: #ffffff;
-            padding: 48px 0 24px;
-            text-align: center;
-        }
-        .category-hero h1 {
-            margin: 0;
-            font-size: clamp(32px, 4vw, 48px);
-            line-height: 1.1;
-            font-weight: 750;
-            letter-spacing: -1.5px;
-            color: var(--navy);
-        }
-        .category-hero h1 span {
-            color: var(--blue);
-            display: inline-block;
-        }
-        .category-hero p {
-            margin: 14px auto 0;
-            max-width: 600px;
-            font-size: clamp(15px, 1.2vw, 17px);
-            line-height: 1.6;
-            color: #53627d;
-        }
-
-        .categories-section {
-            width: 100%;
-            background: #f7faff;
-            padding: 35px 0 60px;
-        }
-        .categories-grid {
-            width: 100%;
-            max-width: 100%;
-            margin: 0;
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 22px;
-        }
-        .category-card {
-            min-width: 0;
-            background: #ffffff;
-            border: 1px solid #dfe6f1;
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            animation: sectionRise 0.75s ease both;
-        }
-        .category-card:nth-child(2) {
-            animation-delay: 0.08s;
-        }
-        .category-card:nth-child(3) {
-            animation-delay: 0.16s;
-        }
-        .category-card:hover {
-            transform: translateY(-6px);
-            border-color: #c8d8f0;
-            box-shadow: 0 14px 30px rgba(7, 25, 71, 0.09);
-        }
-        .category-image {
-            width: 100%;
-            height: 135px;
-            overflow: hidden;
-            background: #e9eff8;
-        }
-        .category-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.45s ease;
-        }
-        .category-card:hover .category-image img {
-            transform: scale(1.055);
-        }
-        .category-content {
-            padding: 20px 18px 22px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-        .category-badge {
-            align-self: flex-start;
-            padding: 4px 10px;
-            background: var(--light-blue);
-            color: var(--blue);
-            font-size: 12px;
-            font-weight: 700;
-            border-radius: 4px;
-            margin-bottom: 12px;
-        }
-        .category-content h3 {
-            margin: 0;
-            color: var(--navy);
-            font-size: 16px;
-            line-height: 1.35;
-            font-weight: 750;
-        }
-        .category-content p {
-            margin: 9px 0 18px;
-            color: #5a6881;
-            font-size: 13px;
-            line-height: 1.5;
-            flex: 1;
-        }
-        .category-action-btn {
-            width: 100%;
-            height: 42px;
-            border: 1.5px solid var(--blue);
-            border-radius: 5px;
-            background: var(--blue);
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-        }
-        .category-action-btn::after {
-            content: "→";
-            transition: transform 0.25s ease;
-        }
-        .category-card:hover .category-action-btn {
-            background: var(--blue-dark);
-            border-color: var(--blue-dark);
-            box-shadow: 0 6px 16px rgba(9, 87, 232, 0.2);
-        }
-        .category-card:hover .category-action-btn::after {
-            transform: translateX(4px);
-        }
-
-        .help-section {
-            width: 100%;
-            background: #ffffff;
-            padding: 30px 0 50px;
-        }
-        .help-box {
-            width: 100%;
-            max-width: 100%;
-            margin: 0 auto;
-            border: 1px solid #dfe6f1;
-            border-radius: 8px;
-            padding: 24px 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            background: #ffffff;
-        }
-        .help-text h4 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 750;
-            color: var(--navy);
-        }
-        .help-text p {
-            margin: 5px 0 0;
-            font-size: 14px;
-            color: #596985;
-        }
-        .help-link {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--blue);
-            white-space: nowrap;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        .help-link:hover {
-            transform: translateX(3px);
-        }
-
-        /* =========================================================
            FOOTER
+           DO NOT CHANGE THIS SECTION
         ========================================================= */
         .footer {
             width: 100%;
@@ -1092,19 +869,209 @@
             align-items: center;
             gap: 30px;
         }
-        .footer-legal span {
+        .footer-legal a {
             cursor: pointer;
             transition: color 0.2s ease;
         }
-        .footer-legal span:hover {
+        .footer-legal a:hover {
             color: #ffffff;
+        }
+
+        /* =========================================================
+           CATEGORY PAGE SPECIFIC STYLES (MATCHING SHARP CARDS & VARS)
+        ========================================================= */
+        .category-hero {
+            width: 100%;
+            background: #ffffff;
+            padding: 48px 0 24px;
+            text-align: center;
+        }
+        .category-hero h1 {
+            margin: 0;
+            font-size: clamp(32px, 4vw, 48px);
+            line-height: 1.1;
+            font-weight: 750;
+            letter-spacing: -1.5px;
+            color: var(--navy);
+        }
+        .category-hero h1 span {
+            color: var(--blue);
+            display: inline-block;
+        }
+        .category-hero p {
+            margin: 14px auto 0;
+            max-width: 600px;
+            font-size: clamp(15px, 1.2vw, 17px);
+            line-height: 1.6;
+            color: #53627d;
+        }
+        .categories-section {
+            width: 100%;
+            background: #f7faff;
+            padding: 35px 0 60px;
+        }
+        .categories-grid {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+        }
+        .category-card {
+            min-width: 0;
+            background: #ffffff;
+            border: 1px solid #dfe6f1;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            animation: sectionRise 0.75s ease both;
+        }
+        .category-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        .category-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+        .category-card:hover {
+            transform: translateY(-6px);
+            border-color: #c8d8f0;
+            box-shadow: 0 14px 30px rgba(7, 25, 71, 0.09);
+        }
+        .category-image {
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+            background: #e9eff8;
+        }
+        .category-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.45s ease;
+        }
+        .category-card:hover .category-image img {
+            transform: scale(1.055);
+        }
+        .category-content {
+            padding: 24px 22px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .category-badge {
+            align-self: flex-start;
+            padding: 4px 10px;
+            background: var(--light-blue);
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+        .category-content h3 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 19px;
+            line-height: 1.3;
+            font-weight: 750;
+        }
+        .category-content p {
+            margin: 10px 0 20px;
+            color: #5a6881;
+            font-size: 14px;
+            line-height: 1.55;
+            flex: 1;
+        }
+        .category-action-btn {
+            width: 100%;
+            height: 42px;
+            border: 1.5px solid var(--blue);
+            border-radius: 5px;
+            background: var(--blue);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .category-action-btn::after {
+            content: "→";
+            transition: transform 0.25s ease;
+        }
+        .category-card:hover .category-action-btn {
+            background: var(--blue-dark);
+            border-color: var(--blue-dark);
+            box-shadow: 0 6px 16px rgba(9, 87, 232, 0.2);
+        }
+        .category-card:hover .category-action-btn::after {
+            transform: translateX(4px);
+        }
+        .help-section {
+            width: 100%;
+            background: #ffffff;
+            padding: 30px 0 50px;
+        }
+        .help-box {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            border: 1px solid #dfe6f1;
+            border-radius: 8px;
+            padding: 24px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            background: #ffffff;
+        }
+        .help-text h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 750;
+            color: var(--navy);
+        }
+        .help-text p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #596985;
+        }
+        .help-link {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--blue);
+            white-space: nowrap;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .help-link:hover {
+            transform: translateX(3px);
         }
 
         /* =========================================================
            SCROLL REVEAL STYLE
         ========================================================= */
-        .why-card, .programme-card, .step, .cta-box, .category-card {
+        .why-card, .programme-card, .step, .cta-box {
             animation: sectionRise 0.75s ease both;
+        }
+        .why-card:nth-child(2), .programme-card:nth-child(2) {
+            animation-delay: 0.08s;
+        }
+        .why-card:nth-child(3), .programme-card:nth-child(3) {
+            animation-delay: 0.16s;
+        }
+        .why-card:nth-child(4), .programme-card:nth-child(4) {
+            animation-delay: 0.24s;
+        }
+        .programme-card:nth-child(5) {
+            animation-delay: 0.32s;
         }
         @keyframes sectionRise {
             from {
@@ -1118,7 +1085,41 @@
         }
 
         /* =========================================================
-           RESPONSIVE BREAKPOINTS
+           LARGE SCREENS
+        ========================================================= */
+        @media (min-width: 1600px) {
+            .site-header {
+                height: 74px;
+            }
+            .hero, .hero-inner {
+                min-height: 520px;
+            }
+            .hero-content {
+                min-height: 520px;
+            }
+            .hero-image, .hero-image img {
+                min-height: 520px;
+            }
+            .hero-title {
+                font-size: 78px;
+            }
+            .why-section {
+                padding-top: 62px;
+                padding-bottom: 55px;
+            }
+            .why-grid {
+                gap: 28px;
+            }
+            .why-card {
+                min-height: 180px;
+            }
+            .programme-image {
+                height: 135px;
+            }
+        }
+
+        /* =========================================================
+           TABLETS
         ========================================================= */
         @media (max-width: 1050px) {
             .header-inner {
@@ -1137,6 +1138,12 @@
             .hero-content {
                 padding-left: 25px;
                 padding-right: 25px;
+            }
+            .hero-title {
+                font-size: clamp(42px, 5vw, 61px);
+            }
+            .hero-description {
+                font-size: 14px;
             }
             .why-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1159,6 +1166,9 @@
             }
         }
 
+        /* =========================================================
+           MOBILE NAVIGATION
+        ========================================================= */
         @media (max-width: 760px) {
             .site-header {
                 height: auto;
@@ -1175,13 +1185,48 @@
             .main-nav {
                 display: none;
             }
+            .hero, .hero-inner {
+                min-height: auto;
+            }
             .hero-inner {
                 display: flex;
                 flex-direction: column;
             }
             .hero-content {
                 order: 1;
+                min-height: auto;
                 padding: 45px 18px 39px;
+                background: #ffffff;
+            }
+            .hero-title {
+                max-width: 100%;
+                font-size: clamp(42px, 12vw, 62px);
+                line-height: 1;
+                letter-spacing: -2px;
+            }
+            .hero-description {
+                max-width: 100%;
+                margin-top: 19px;
+                font-size: 15px;
+                line-height: 1.6;
+            }
+            .hero-actions {
+                margin-top: 23px;
+                gap: 11px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .hero-button {
+                min-height: 43px;
+                height: auto;
+                padding: 11px 18px;
+                font-size: 13px;
+                width: 100%;
+                justify-content: center;
+            }
+            .hero-status-prompt {
+                justify-content: center;
+                text-align: center;
             }
             .hero-image {
                 order: 2;
@@ -1189,36 +1234,110 @@
                 height: min(62vw, 410px);
                 min-height: 280px;
             }
+            .hero-image img {
+                width: 100%;
+                height: 100%;
+                min-height: 0;
+                object-position: center center;
+            }
+            .hero-image::before {
+                background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0));
+            }
+            .section-inner {
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+            .why-section {
+                padding-top: 43px;
+                padding-bottom: 40px;
+            }
+            .section-heading h2 {
+                font-size: 26px;
+            }
+            .section-heading p {
+                font-size: 14px;
+            }
             .why-grid {
                 grid-template-columns: 1fr;
+                gap: 13px;
+                margin-top: 24px;
+            }
+            .why-card {
+                min-height: 145px;
+                padding: 23px 20px;
+            }
+            .programmes-section {
+                padding-top: 34px;
             }
             .programmes-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
             }
             .categories-grid {
                 grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .programme-image {
+                height: 125px;
+            }
+            .programme-content {
+                padding: 13px 12px 15px;
+            }
+            .programme-content h3 {
+                font-size: 14px;
+            }
+            .programme-content p {
+                font-size: 12px;
             }
             .steps {
                 grid-template-columns: 1fr;
+                gap: 18px;
+                margin-top: 25px;
             }
             .step-arrow {
                 display: none;
             }
+            .step-icon {
+                width: 58px;
+                height: 58px;
+            }
+            .step p {
+                max-width: 100%;
+            }
             .cta-box {
+                min-height: auto;
+                padding: 22px 18px;
                 flex-direction: column;
                 align-items: flex-start;
+            }
+            .cta-left {
+                width: 100%;
             }
             .cta-right-content {
                 width: 100%;
                 align-items: stretch;
+                gap: 12px;
+            }
+            .cta-button {
+                width: 100%;
+            }
+            .cta-status-prompt {
+                text-align: center;
             }
             .help-box {
                 flex-direction: column;
                 align-items: flex-start;
                 padding: 20px 18px;
             }
+            .footer {
+                padding-top: 30px;
+            }
             .footer-grid {
                 grid-template-columns: 1fr;
+                gap: 28px;
+            }
+            .footer-brand p {
+                max-width: 100%;
             }
             .footer-bottom {
                 flex-direction: column;
@@ -1229,581 +1348,701 @@
                 gap: 14px 24px;
             }
         }
+
+        /* =========================================================
+           SMALL PHONES
+        ========================================================= */
+        @media (max-width: 430px) {
+            .header-inner {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+            .logo {
+                width: 101px;
+            }
+            .hero-content {
+                padding: 37px 14px 32px;
+            }
+            .hero-title {
+                font-size: clamp(39px, 12.7vw, 53px);
+                letter-spacing: -1.8px;
+            }
+            .hero-description {
+                font-size: 14px;
+            }
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .hero-button {
+                width: 100%;
+                justify-content: center;
+            }
+            .hero-image {
+                height: 300px;
+                min-height: 300px;
+            }
+            .programmes-grid, .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            .programme-image {
+                height: 190px;
+            }
+            .why-card {
+                min-height: 0;
+            }
+            .cta-left {
+                align-items: flex-start;
+            }
+            .cta-icon {
+                width: 50px;
+                height: 50px;
+                flex-basis: 50px;
+            }
+            .cta-copy h2 {
+                font-size: 20px;
+            }
+            .cta-copy p {
+                font-size: 13px;
+            }
+        }
+
+        /* =========================================================
+           VERY SMALL DEVICES
+        ========================================================= */
+        @media (max-width: 330px) {
+            .logo {
+                width: 92px;
+            }
+            .hero-title {
+                font-size: 37px;
+            }
+            .hero-image {
+                height: 265px;
+                min-height: 265px;
+            }
+        }
+
+        /* =========================================================
+           ACCESSIBILITY / MOTION
+        ========================================================= */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
-
-<!-- =========================================================
-     BUILT-IN APP NAVIGATION (BACK / FORWARD CONTROLS)
-========================================================== -->
-<div class="app-nav-bar">
-    <span>Atlas College Portal</span>
-    <div class="app-nav-controls">
-        <button class="app-nav-btn" id="nav-back-btn" onclick="appGoBack()" disabled>← Back</button>
-        <button class="app-nav-btn" id="nav-forward-btn" onclick="appGoForward()" disabled>Forward →</button>
-    </div>
-</div>
-
 <div class="page">
-
-    <!-- =====================================================
-         VIEW 1: HOME PAGE
-    ====================================================== -->
-    <div id="view-home" class="page-view active">
-        <!-- HEADER -->
-        <header class="site-header">
-            <div class="header-inner">
-                <div class="logo-link" onclick="navigateTo('home')">
-                    <img class="logo" src="assets/logos.png" alt="Atlas College">
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="logo-link" onclick="goToHome()">
+                <img class="logo" src="assets/logos.png" alt="Atlas College">
+            </div>
+            <nav class="main-nav" aria-label="Main navigation">
+                <span class="nav-link" onclick="goToHome()">Home</span>
+                <span class="nav-link" onclick="goToHome()">Programs</span>
+                <span class="nav-link" onclick="goToHome()">Admissions</span>
+                <span class="nav-link" onclick="goToHome()">About Us</span>
+                <span class="nav-link" onclick="goToHome()">Contact</span>
+            </nav>
+            <input type="checkbox" id="menu-checkbox" aria-label="Toggle navigation menu">
+            <label for="menu-checkbox">
+                <div class="menu-toggle" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-                <nav class="main-nav" aria-label="Main navigation">
-                    <a class="nav-link" onclick="navigateTo('home')">Home</a>
-                    <a class="nav-link" onclick="navigateTo('home')">Programs</a>
-                    <a class="nav-link" onclick="navigateTo('home')">Admissions</a>
-                    <a class="nav-link" onclick="navigateTo('home')">About Us</a>
-                    <a class="nav-link" onclick="navigateTo('home')">Contact</a>
-                </nav>
-                <input type="checkbox" id="menu-checkbox-1" class="menu-checkbox" aria-label="Toggle navigation menu">
-                <label for="menu-checkbox-1">
-                    <div class="menu-toggle" aria-hidden="true">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+            </label>
+            <div class="mobile-menu-drawer">
+                <span class="nav-link" onclick="goToHome(); closeMenu();">Home</span>
+                <span class="nav-link" onclick="goToHome(); closeMenu();">Programs</span>
+                <span class="nav-link" onclick="goToHome(); closeMenu();">Admissions</span>
+                <span class="nav-link" onclick="goToHome(); closeMenu();">About Us</span>
+                <span class="nav-link" onclick="goToHome(); closeMenu();">Contact</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- =========================================================
+         HOME PAGE VIEW
+    ========================================================== -->
+    <main id="home-view">
+        <section class="hero">
+            <div class="hero-inner">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Your Future
+                        <span>Starts Here.</span>
+                    </h1>
+                    <p class="hero-description">
+                        Atlas College provides quality education, practical skills,
+                        and real opportunities to help you succeed in your career
+                        and life.
+                    </p>
+                    <div class="hero-actions">
+                        <div class="hero-button primary" onclick="goToCategory()">
+                            Apply Now
+                        </div>
+                        <div class="hero-status-prompt">
+                            Already applied? <a href="#">Check status here</a>
+                        </div>
                     </div>
-                </label>
-                <div class="mobile-menu-drawer">
-                    <a class="nav-link" onclick="navigateTo('home'); document.getElementById('menu-checkbox-1').checked=false;">Home</a>
-                    <a class="nav-link" onclick="navigateTo('home'); document.getElementById('menu-checkbox-1').checked=false;">Programs</a>
-                    <a class="nav-link" onclick="navigateTo('home'); document.getElementById('menu-checkbox-1').checked=false;">Admissions</a>
-                    <a class="nav-link" onclick="navigateTo('home'); document.getElementById('menu-checkbox-1').checked=false;">About Us</a>
-                    <a class="nav-link" onclick="navigateTo('home'); document.getElementById('menu-checkbox-1').checked=false;">Contact</a>
+                </div>
+                <div class="hero-image">
+                    <img src="assets/hero-student.webp" alt="Atlas College students">
                 </div>
             </div>
-        </header>
+        </section>
 
-        <!-- MAIN CONTENT -->
-        <main>
-            <section class="hero">
-                <div class="hero-inner">
-                    <div class="hero-content">
-                        <h1 class="hero-title">
-                            Your Future
-                            <span>Starts Here.</span>
-                        </h1>
-                        <p class="hero-description">
-                            Atlas College provides quality education, practical skills,
-                            and real opportunities to help you succeed in your career
-                            and life.
+        <!-- =====================================================
+             WHY CHOOSE ATLAS COLLEGE
+        ====================================================== -->
+        <section class="why-section">
+            <div class="section-inner">
+                <div class="section-heading">
+                    <h2>
+                        Why Choose Atlas College?
+                    </h2>
+                    <p>
+                        We focus on your growth, your future, and your success.
+                    </p>
+                </div>
+                <div class="why-grid">
+                    <article class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H12v16H5.5A2.5 2.5 0 0 0 3 21.5z"/>
+                                <path d="M21 5.5A2.5 2.5 0 0 0 18.5 3H12v16h6.5a2.5 2.5 0 0 1 2.5 2.5z"/>
+                            </svg>
+                        </div>
+                        <h3>
+                            Quality Education
+                        </h3>
+                        <p>
+                            Practical learning from experienced lecturers.
                         </p>
-                        <div class="hero-actions">
-                            <div class="hero-button primary" onclick="navigateTo('category')">
-                                Apply Now
-                            </div>
-                            <div class="hero-status-prompt">
-                                Already applied? <a onclick="navigateTo('category')">Check status here</a>
-                            </div>
+                    </article>
+                    <article class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="7" width="18" height="13" rx="2"/>
+                                <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                <path d="M3 11h18"/>
+                                <path d="M10 11v2h4v-2"/>
+                            </svg>
                         </div>
-                    </div>
-                    <div class="hero-image">
-                        <img src="assets/hero-student.webp" alt="Atlas College students">
+                        <h3>
+                            Career Focused
+                        </h3>
+                        <p>
+                            Programs designed to prepare you for real jobs.
+                        </p>
+                    </article>
+                    <article class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="9" cy="8" r="3"/>
+                                <circle cx="17" cy="9" r="3"/>
+                                <path d="M3 20c.8-3.2 2.8-5 6-5s5.2 1.8 6 5"/>
+                                <path d="M14 15c3.1-.2 5.5 1.5 6 5"/>
+                            </svg>
+                        </div>
+                        <h3>
+                            Supportive Community
+                        </h3>
+                        <p>
+                            We're here to support you every step of the way.
+                        </p>
+                    </article>
+                    <article class="why-card">
+                        <div class="why-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M3 9l9-5 9 5-9 5z"/>
+                                <path d="M6 11v5c2 2 4 3 6 3s4-1 6-3v-5"/>
+                                <path d="M21 9v6"/>
+                            </svg>
+                        </div>
+                        <h3>
+                            Affordable Fees
+                        </h3>
+                        <p>
+                            Quality education that won't break the bank.
+                        </p>
+                    </article>
+                </div>
+                <div class="learn-button-wrap">
+                    <div class="outline-button">
+                        Learn More About Us
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- WHY CHOOSE ATLAS COLLEGE -->
-            <section class="why-section">
-                <div class="section-inner">
-                    <div class="section-heading">
-                        <h2>Why Choose Atlas College?</h2>
-                        <p>We focus on your growth, your future, and your success.</p>
-                    </div>
-                    <div class="why-grid">
-                        <article class="why-card">
-                            <div class="why-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H12v16H5.5A2.5 2.5 0 0 0 3 21.5z"/>
-                                    <path d="M21 5.5A2.5 2.5 0 0 0 18.5 3H12v16h6.5a2.5 2.5 0 0 1 2.5 2.5z"/>
-                                </svg>
-                            </div>
-                            <h3>Quality Education</h3>
-                            <p>Practical learning from experienced lecturers.</p>
-                        </article>
-                        <article class="why-card">
-                            <div class="why-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <rect x="3" y="7" width="18" height="13" rx="2"/>
-                                    <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                                    <path d="M3 11h18"/>
-                                    <path d="M10 11v2h4v-2"/>
-                                </svg>
-                            </div>
-                            <h3>Career Focused</h3>
-                            <p>Programs designed to prepare you for real jobs.</p>
-                        </article>
-                        <article class="why-card">
-                            <div class="why-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="9" cy="8" r="3"/>
-                                    <circle cx="17" cy="9" r="3"/>
-                                    <path d="M3 20c.8-3.2 2.8-5 6-5s5.2 1.8 6 5"/>
-                                    <path d="M14 15c3.1-.2 5.5 1.5 6 5"/>
-                                </svg>
-                            </div>
-                            <h3>Supportive Community</h3>
-                            <p>We're here to support you every step of the way.</p>
-                        </article>
-                        <article class="why-card">
-                            <div class="why-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M3 9l9-5 9 5-9 5z"/>
-                                    <path d="M6 11v5c2 2 4 3 6 3s4-1 6-3v-5"/>
-                                    <path d="M21 9v6"/>
-                                </svg>
-                            </div>
-                            <h3>Affordable Fees</h3>
-                            <p>Quality education that won't break the bank.</p>
-                        </article>
-                    </div>
-                    <div class="learn-button-wrap">
-                        <div class="outline-button" onclick="navigateTo('home')">
-                            Learn More About Us
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- PROGRAMMES -->
-            <section class="programmes-section">
-                <div class="section-inner">
-                    <div class="section-heading">
-                        <h2>Explore Our Programmes</h2>
-                    </div>
-                    <div class="programmes-grid">
-                        <article class="programme-card">
-                            <div class="programme-image">
-                                <img src="assets/program-it.webp" alt="Information Technology">
-                            </div>
-                            <div class="programme-content">
-                                <h3>Information Technology</h3>
-                                <p>Build the skills to excel in the digital world.</p>
-                                <span class="programme-more">View More</span>
-                            </div>
-                        </article>
-                        <article class="programme-card">
-                            <div class="programme-image">
-                                <img src="assets/program-business.webp" alt="Business Management">
-                            </div>
-                            <div class="programme-content">
-                                <h3>Business Management</h3>
-                                <p>Develop leadership and business acumen.</p>
-                                <span class="programme-more">View More</span>
-                            </div>
-                        </article>
-                        <article class="programme-card">
-                            <div class="programme-image">
-                                <img src="assets/program-accounting.webp" alt="Accounting">
-                            </div>
-                            <div class="programme-content">
-                                <h3>Accounting</h3>
-                                <p>Master financial skills and management.</p>
-                                <span class="programme-more">View More</span>
-                            </div>
-                        </article>
-                        <article class="programme-card">
-                            <div class="programme-image">
-                                <img src="assets/program-health.webp" alt="Health Sciences">
-                            </div>
-                            <div class="programme-content">
-                                <h3>Health Sciences</h3>
-                                <p>Prepare for a rewarding career in healthcare.</p>
-                                <span class="programme-more">View More</span>
-                            </div>
-                        </article>
-                        <article class="programme-card">
-                            <div class="programme-image">
-                                <img src="assets/program-media.webp" alt="Media and Communication">
-                            </div>
-                            <div class="programme-content">
-                                <h3>Media &amp; Communication</h3>
-                                <p>Unleash your creativity and tell impactful stories.</p>
-                                <span class="programme-more">View More</span>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="programmes-button-wrap">
-                        <div class="outline-button" onclick="navigateTo('home')">
-                            View More Programmes
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ADMISSION PROCESS -->
-            <section class="admissions-section">
-                <div class="section-inner">
-                    <div class="section-heading">
-                        <h2>Our Admission Process</h2>
-                        <p>Simple steps to become a part of Atlas College.</p>
-                    </div>
-                    <div class="steps">
-                        <article class="step">
-                            <div class="step-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M4 4h11v16H4z"/>
-                                    <path d="M8 8h4"/>
-                                    <path d="M8 12h4"/>
-                                    <path d="M8 16h3"/>
-                                    <path d="M16 15l4-4"/>
-                                    <path d="M15 20h4v-4"/>
-                                </svg>
-                            </div>
-                            <div class="step-number">1</div>
-                            <h3>Fill Application Form</h3>
-                            <p>Complete and submit your online application.</p>
-                        </article>
-                        <div class="step-arrow">→</div>
-                        <article class="step">
-                            <div class="step-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M12 16V3"/>
-                                    <path d="M8 7l4-4 4 4"/>
-                                    <path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>
-                                </svg>
-                            </div>
-                            <div class="step-number">2</div>
-                            <h3>Upload Documents</h3>
-                            <p>Upload the required documents.</p>
-                        </article>
-                        <div class="step-arrow">→</div>
-                        <article class="step">
-                            <div class="step-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <rect x="3" y="5" width="18" height="14" rx="2"/>
-                                    <path d="M3 10h18"/>
-                                    <path d="M7 15h4"/>
-                                </svg>
-                            </div>
-                            <div class="step-number">3</div>
-                            <h3>Pay Application Fee</h3>
-                            <p>Make payment to complete your application.</p>
-                        </article>
-                        <div class="step-arrow">→</div>
-                        <article class="step">
-                            <div class="step-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="9"/>
-                                    <path d="M12 7v5l3 2"/>
-                                </svg>
-                            </div>
-                            <div class="step-number">4</div>
-                            <h3>Wait for Review</h3>
-                            <p>We review your application and documents.</p>
-                        </article>
-                        <div class="step-arrow">→</div>
-                        <article class="step">
-                            <div class="step-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="9"/>
-                                    <path d="M8 12l2.5 2.5L16 9"/>
-                                </svg>
-                            </div>
-                            <div class="step-number">5</div>
-                            <h3>Get Admission Decision</h3>
-                            <p>Check your status and get accepted.</p>
-                        </article>
-                    </div>
-                </div>
-            </section>
-
-            <!-- CTA -->
-            <section class="cta-section">
-                <div class="section-inner">
-                    <div class="cta-box">
-                        <div class="cta-left">
-                            <div class="cta-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M3 9l9-5 9 5-9 5z"/>
-                                    <path d="M6 11v4c2 2 4 3 6 3s4-1 6-3v-4"/>
-                                    <path d="M21 9v6"/>
-                                </svg>
-                            </div>
-                            <div class="cta-copy">
-                                <h2>Ready to Begin Your Journey?</h2>
-                                <p>Apply today and take the first step toward a brighter future.</p>
-                            </div>
-                        </div>
-                        <div class="cta-right-content">
-                            <div class="cta-button" onclick="navigateTo('category')">
-                                Apply Now
-                            </div>
-                            <div class="cta-status-prompt">
-                                Already applied? <a onclick="navigateTo('category')">Check status here</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- FOOTER -->
-        <footer class="footer">
+        <!-- =====================================================
+             PROGRAMMES
+        ====================================================== -->
+        <section class="programmes-section">
             <div class="section-inner">
-                <div class="footer-grid">
-                    <div class="footer-brand">
-                        <img class="footer-logo" src="assets/logos.png" alt="Atlas College">
-                        <p>Empowering students with education, skills, and opportunities for a better tomorrow.</p>
-                        <div class="socials">
-                            <span class="social">f</span>
-                            <span class="social">◎</span>
-                            <span class="social">♥</span>
-                            <span class="social">in</span>
-                        </div>
-                    </div>
-                    <div class="footer-column">
-                        <h3>Quick Links</h3>
-                        <a onclick="navigateTo('home')">Programs</a>
-                        <a onclick="navigateTo('home')">Admissions</a>
-                        <a onclick="navigateTo('home')">About Us</a>
-                        <a onclick="navigateTo('home')">Contact</a>
-                    </div>
-                    <div class="footer-column">
-                        <h3>Student Info</h3>
-                        <a onclick="navigateTo('category')">How to Apply</a>
-                        <a>Fees &amp; Payments</a>
-                        <a>Student Support</a>
-                        <a>FAQ</a>
-                    </div>
-                    <div class="footer-column">
-                        <h3>Contact Us</h3>
-                        <div class="contact-item">
-                            <span class="contact-icon">⌖</span>
-                            <span>123 Education Road<br>Knowledge City, KC 10001</span>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-icon">⌕</span>
-                            <span>+1 234 567 8900</span>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-icon">✉</span>
-                            <span>info@atlascollege.edu</span>
-                        </div>
-                    </div>
+                <div class="section-heading">
+                    <h2>
+                        Explore Our Programmes
+                    </h2>
                 </div>
-                <div class="footer-bottom">
-                    <span>© 2026 Atlas College. All rights reserved.</span>
-                    <div class="footer-legal">
-                        <span>Privacy Policy</span>
-                        <span>Terms &amp; Conditions</span>
+                <div class="programmes-grid">
+                    <article class="programme-card">
+                        <div class="programme-image">
+                            <img src="assets/program-it.webp" alt="Information Technology">
+                        </div>
+                        <div class="programme-content">
+                            <h3>
+                                Information Technology
+                            </h3>
+                            <p>
+                                Build the skills to excel in the digital world.
+                            </p>
+                            <span class="programme-more">
+                                View More
+                            </span>
+                        </div>
+                    </article>
+                    <article class="programme-card">
+                        <div class="programme-image">
+                            <img src="assets/program-business.webp" alt="Business Management">
+                        </div>
+                        <div class="programme-content">
+                            <h3>
+                                Business Management
+                            </h3>
+                            <p>
+                                Develop leadership and business acumen.
+                            </p>
+                            <span class="programme-more">
+                                View More
+                            </span>
+                        </div>
+                    </article>
+                    <article class="programme-card">
+                        <div class="programme-image">
+                            <img src="assets/program-accounting.webp" alt="Accounting">
+                        </div>
+                        <div class="programme-content">
+                            <h3>
+                                Accounting
+                            </h3>
+                            <p>
+                                Master financial skills and management.
+                            </p>
+                            <span class="programme-more">
+                                View More
+                            </span>
+                        </div>
+                    </article>
+                    <article class="programme-card">
+                        <div class="programme-image">
+                            <img src="assets/program-health.webp" alt="Health Sciences">
+                        </div>
+                        <div class="programme-content">
+                            <h3>
+                                Health Sciences
+                            </h3>
+                            <p>
+                                Prepare for a rewarding career in healthcare.
+                            </p>
+                            <span class="programme-more">
+                                View More
+                            </span>
+                        </div>
+                    </article>
+                    <article class="programme-card">
+                        <div class="programme-image">
+                            <img src="assets/program-media.webp" alt="Media and Communication">
+                        </div>
+                        <div class="programme-content">
+                            <h3>
+                                Media &amp; Communication
+                            </h3>
+                            <p>
+                                Unleash your creativity and tell impactful stories.
+                            </p>
+                            <span class="programme-more">
+                                View More
+                            </span>
+                        </div>
+                    </article>
+                </div>
+                <div class="programmes-button-wrap">
+                    <div class="outline-button">
+                        View More Programmes
                     </div>
                 </div>
             </div>
-        </footer>
-    </div>
+        </section>
 
-    <!-- =====================================================
-         VIEW 2: CATEGORY SELECTION PAGE
-    ====================================================== -->
-    <div id="view-category" class="page-view">
-        <!-- HEADER -->
-        <header class="site-header">
-            <div class="header-inner">
-                <div class="logo-link" onclick="navigateTo('home')">
-                    <img class="logo" src="assets/logos.png" alt="Atlas College">
-                </div>
-                <nav class="main-nav" aria-label="Main navigation">
-                    <a class="nav-link" onclick="navigateTo('home')">Home</a>
-                    <a class="nav-link" onclick="navigateTo('home')">Programs</a>
-                    <a class="nav-link" onclick="navigateTo('home')">Admissions</a>
-                </nav>
-                <input type="checkbox" id="menu-checkbox-2" class="menu-checkbox" aria-label="Toggle navigation menu">
-                <label for="menu-checkbox-2">
-                    <div class="menu-toggle" aria-hidden="true">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </label>
-                <div class="mobile-menu-drawer">
-                    <a class="nav-link" onclick="navigateTo('home'); document.getElementById('menu-checkbox-2').checked=false;">Home</a>
-                    <a class="nav-link" onclick="navigateTo('home'); document.getElementById('menu-checkbox-2').checked=false;">Programs</a>
-                    <a class="nav-link" onclick="navigateTo('home'); document.getElementById('menu-checkbox-2').checked=false;">Admissions</a>
-                    <a class="nav-link" onclick="navigateTo('home'); document.getElementById('menu-checkbox-2').checked=false;">Contact</a>
-                </div>
-            </div>
-        </header>
-
-        <!-- MAIN CONTENT -->
-        <main>
-            <section class="category-hero">
-                <div class="section-inner">
-                    <h1>Choose Your <span>Application Level</span></h1>
-                    <p>Select the academic category that matches your qualifications to proceed with your online application form.</p>
-                </div>
-            </section>
-
-            <section class="categories-section">
-                <div class="section-inner">
-                    <div class="categories-grid">
-                        <!-- Card 1 -->
-                        <article class="category-card">
-                            <div class="category-image">
-                                <img src="assets/program-it.webp" alt="Undergraduate Programmes">
-                            </div>
-                            <div class="category-content">
-                                <span class="category-badge">Level 01</span>
-                                <h3>Undergraduate Studies</h3>
-                                <p>Explore Higher Certificates, Diplomas, and Bachelor Degrees designed for school leavers and career starters.</p>
-                                <button class="category-action-btn" type="button">
-                                    Apply for Undergraduate
-                                </button>
-                            </div>
-                        </article>
-
-                        <!-- Card 2 -->
-                        <article class="category-card">
-                            <div class="category-image">
-                                <img src="assets/program-business.webp" alt="Honours and Postgraduate Diplomas">
-                            </div>
-                            <div class="category-content">
-                                <span class="category-badge">Level 02</span>
-                                <h3>Honours &amp; Postgraduate Diplomas</h3>
-                                <p>Advance your expertise with specialized postgraduate diplomas, advanced certificates, and honours degrees.</p>
-                                <button class="category-action-btn" type="button">
-                                    Apply for Postgraduate
-                                </button>
-                            </div>
-                        </article>
-
-                        <!-- Card 3 -->
-                        <article class="category-card">
-                            <div class="category-image">
-                                <img src="assets/program-health.webp" alt="Masters and Doctoral Research">
-                            </div>
-                            <div class="category-content">
-                                <span class="category-badge">Level 03</span>
-                                <h3>Master's &amp; Doctoral</h3>
-                                <p>Engage in high-level academic research and leadership specializations with our master's and doctoral programs.</p>
-                                <button class="category-action-btn" type="button">
-                                    Apply for Research Degree
-                                </button>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Help Info Strip -->
-            <section class="help-section">
-                <div class="section-inner">
-                    <div class="help-box">
-                        <div class="help-text">
-                            <h4>Need help figuring out which category fits you?</h4>
-                            <p>Review our entry requirements and admission rules or talk to student support.</p>
-                        </div>
-                        <a class="help-link">View Admission Guidelines →</a>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- FOOTER -->
-        <footer class="footer">
+        <!-- =====================================================
+             ADMISSION PROCESS
+        ====================================================== -->
+        <section class="admissions-section">
             <div class="section-inner">
-                <div class="footer-grid">
-                    <div class="footer-brand">
-                        <img class="footer-logo" src="assets/logos.png" alt="Atlas College">
-                        <p>Empowering students with education, skills, and opportunities for a better tomorrow.</p>
-                        <div class="socials">
-                            <span class="social">f</span>
-                            <span class="social">◎</span>
-                            <span class="social">♥</span>
-                            <span class="social">in</span>
-                        </div>
-                    </div>
-                    <div class="footer-column">
-                        <h3>Quick Links</h3>
-                        <a onclick="navigateTo('home')">Programs</a>
-                        <a onclick="navigateTo('home')">Admissions</a>
-                        <a onclick="navigateTo('home')">About Us</a>
-                        <a onclick="navigateTo('home')">Contact</a>
-                    </div>
-                    <div class="footer-column">
-                        <h3>Student Info</h3>
-                        <a>How to Apply</a>
-                        <a>Fees &amp; Payments</a>
-                        <a>Student Support</a>
-                        <a>FAQ</a>
-                    </div>
-                    <div class="footer-column">
-                        <h3>Contact Us</h3>
-                        <div class="contact-item">
-                            <span class="contact-icon">⌖</span>
-                            <span>123 Education Road<br>Knowledge City, KC 10001</span>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-icon">⌕</span>
-                            <span>+1 234 567 8900</span>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-icon">✉</span>
-                            <span>info@atlascollege.edu</span>
-                        </div>
-                    </div>
+                <div class="section-heading">
+                    <h2>
+                        Our Admission Process
+                    </h2>
+                    <p>
+                        Simple steps to become a part of Atlas College.
+                    </p>
                 </div>
-                <div class="footer-bottom">
-                    <span>© 2026 Atlas College. All rights reserved.</span>
-                    <div class="footer-legal">
-                        <span>Privacy Policy</span>
-                        <span>Terms &amp; Conditions</span>
+                <div class="steps">
+                    <article class="step">
+                        <div class="step-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 4h11v16H4z"/>
+                                <path d="M8 8h4"/>
+                                <path d="M8 12h4"/>
+                                <path d="M8 16h3"/>
+                                <path d="M16 15l4-4"/>
+                                <path d="M15 20h4v-4"/>
+                            </svg>
+                        </div>
+                        <div class="step-number">1</div>
+                        <h3>
+                            Fill Application Form
+                        </h3>
+                        <p>
+                            Complete and submit your online application.
+                        </p>
+                    </article>
+                    <div class="step-arrow">
+                        →
+                    </div>
+                    <article class="step">
+                        <div class="step-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 16V3"/>
+                                <path d="M8 7l4-4 4 4"/>
+                                <path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>
+                            </svg>
+                        </div>
+                        <div class="step-number">2</div>
+                        <h3>
+                            Upload Documents
+                        </h3>
+                        <p>
+                            Upload the required documents.
+                        </p>
+                    </article>
+                    <div class="step-arrow">
+                        →
+                    </div>
+                    <article class="step">
+                        <div class="step-icon">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="5" width="18" height="14" rx="2"/>
+                                <path d="M3 10h18"/>
+                                <path d="M7 15h4"/>
+                            </svg>
+                        </div>
+                        <div class="step-number">3</div>
+                        <h3>
+                            Pay Application Fee
+                        </h3>
+                        <p>
+                            Make payment to complete your application.
+                        </p>
+                    </article>
+                    <div class="step-arrow">
+                        →
+                    </div>
+                    <article class="step">
+                        <div class="step-icon">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9"/>
+                                <path d="M12 7v5l3 2"/>
+                            </svg>
+                        </div>
+                        <div class="step-number">4</div>
+                        <h3>
+                            Wait for Review
+                        </h3>
+                        <p>
+                            We review your application and documents.
+                        </p>
+                    </article>
+                    <div class="step-arrow">
+                        →
+                    </div>
+                    <article class="step">
+                        <div class="step-icon">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9"/>
+                                <path d="M8 12l2.5 2.5L16 9"/>
+                            </svg>
+                        </div>
+                        <div class="step-number">5</div>
+                        <h3>
+                            Get Admission Decision
+                        </h3>
+                        <p>
+                            Check your status and get accepted.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             CTA
+        ====================================================== -->
+        <section class="cta-section">
+            <div class="section-inner">
+                <div class="cta-box">
+                    <div class="cta-left">
+                        <div class="cta-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M3 9l9-5 9 5-9 5z"/>
+                                <path d="M6 11v4c2 2 4 3 6 3s4-1 6-3v-4"/>
+                                <path d="M21 9v6"/>
+                            </svg>
+                        </div>
+                        <div class="cta-copy">
+                            <h2>
+                                Ready to Begin Your Journey?
+                            </h2>
+                            <p>
+                                Apply today and take the first step toward a brighter future.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="cta-right-content">
+                        <div class="cta-button" onclick="goToCategory()">
+                            Apply Now
+                        </div>
+                        <div class="cta-status-prompt">
+                            Already applied? <a href="#">Check status here</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </footer>
-    </div>
+        </section>
+    </main>
 
+    <!-- =========================================================
+         CATEGORY PAGE VIEW (HIDDEN BY DEFAULT)
+    ========================================================== -->
+    <main id="category-view" style="display: none;">
+        <section class="category-hero">
+            <div class="section-inner">
+                <h1>
+                    Choose Your <span>Application Level</span>
+                </h1>
+                <p>
+                    Select the academic category that matches your qualifications to proceed with your online application form.
+                </p>
+            </div>
+        </section>
+
+        <section class="categories-section">
+            <div class="section-inner">
+                <div class="categories-grid">
+                    <!-- Card 1: Undergraduate -->
+                    <article class="category-card">
+                        <div class="category-image">
+                            <img src="assets/program-it.webp" alt="Undergraduate Programmes">
+                        </div>
+                        <div class="category-content">
+                            <span class="category-badge">Level 01</span>
+                            <h3>Undergraduate Studies</h3>
+                            <p>
+                                Explore Higher Certificates, Diplomas, and Bachelor Degrees designed for school leavers and career starters.
+                            </p>
+                            <button class="category-action-btn" type="button">
+                                Apply for Undergraduate
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Card 2: Honours, Diplomas & Certificates -->
+                    <article class="category-card">
+                        <div class="category-image">
+                            <img src="assets/program-business.webp" alt="Honours and Postgraduate Diplomas">
+                        </div>
+                        <div class="category-content">
+                            <span class="category-badge">Level 02</span>
+                            <h3>Honours &amp; Postgraduate Diplomas</h3>
+                            <p>
+                                Advance your expertise with specialized postgraduate diplomas, advanced certificates, and honours degrees.
+                            </p>
+                            <button class="category-action-btn" type="button">
+                                Apply for Postgraduate
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Card 3: Master's & Doctoral -->
+                    <article class="category-card">
+                        <div class="category-image">
+                            <img src="assets/program-health.webp" alt="Masters and Doctoral Research">
+                        </div>
+                        <div class="category-content">
+                            <span class="category-badge">Level 03</span>
+                            <h3>Master's &amp; Doctoral</h3>
+                            <p>
+                                Engage in high-level academic research and leadership specializations with our master's and doctoral programs.
+                            </p>
+                            <button class="category-action-btn" type="button">
+                                Apply for Research Degree
+                            </button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Help Info Strip -->
+        <section class="help-section">
+            <div class="section-inner">
+                <div class="help-box">
+                    <div class="help-text">
+                        <h4>Need help figuring out which category fits you?</h4>
+                        <p>Review our entry requirements and admission rules or talk to student support.</p>
+                    </div>
+                    <a href="#" class="help-link">View Admission Guidelines →</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+    <footer class="footer">
+        <div class="section-inner">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img class="footer-logo" src="assets/logos.png" alt="Atlas College">
+                    <p>
+                        Empowering students with education, skills, and opportunities
+                        for a better tomorrow.
+                    </p>
+                    <div class="socials">
+                        <span class="social">f</span>
+                        <span class="social">◎</span>
+                        <span class="social">♥</span>
+                        <span class="social">in</span>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>
+                        Quick Links
+                    </h3>
+                    <a onclick="goToHome()">Programs</a>
+                    <a onclick="goToCategory()">Admissions</a>
+                    <a onclick="goToHome()">About Us</a>
+                    <a onclick="goToHome()">Contact</a>
+                </div>
+                <div class="footer-column">
+                    <h3>
+                        Student Info
+                    </h3>
+                    <a>How to Apply</a>
+                    <a>Fees &amp; Payments</a>
+                    <a>Student Support</a>
+                    <a>FAQ</a>
+                </div>
+                <div class="footer-column">
+                    <h3>
+                        Contact Us
+                    </h3>
+                    <div class="contact-item">
+                        <span class="contact-icon">⌖</span>
+                        <span>
+                            123 Education Road<br>
+                            Knowledge City, KC 10001
+                        </span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">⌕</span>
+                        <span>
+                            +1 234 567 8900
+                        </span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">✉</span>
+                        <span>
+                            info@atlascollege.edu
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>
+                    © 2026 Atlas College. All rights reserved.
+                </span>
+                <div class="footer-legal">
+                    <a>Privacy Policy</a>
+                    <a>Terms &amp; Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>
 
-<!-- =========================================================
-     JAVASCRIPT NAVIGATION CONTROLLER
-========================================================== -->
 <script>
-    let historyStack = ['home'];
-    let currentIndex = 0;
+    function updateViewState(viewName, pushHistory = true) {
+        const homeView = document.getElementById('home-view');
+        const categoryView = document.getElementById('category-view');
 
-    function navigateTo(viewName, isHistoryAction = false) {
-        if (!isHistoryAction) {
-            // Trim forward history if we branch out to a new page
-            historyStack = historyStack.slice(0, currentIndex + 1);
-            historyStack.push(viewName);
-            currentIndex = historyStack.length - 1;
+        if (viewName === 'category') {
+            homeView.style.display = 'none';
+            categoryView.style.display = 'block';
+            if (pushHistory) {
+                history.pushState({ view: 'category' }, '', '#category');
+            }
+        } else {
+            homeView.style.display = 'block';
+            categoryView.style.display = 'none';
+            if (pushHistory) {
+                history.pushState({ view: 'home' }, '', '#home');
+            }
         }
-
-        // Switch active views
-        document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active'));
-        document.getElementById('view-' + viewName).classList.add('active');
-
-        // Scroll to top smoothly
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        // Update button states
-        document.getElementById('nav-back-btn').disabled = (currentIndex <= 0);
-        document.getElementById('nav-forward-btn').disabled = (currentIndex >= historyStack.length - 1);
+        window.scrollTo(0, 0);
     }
 
-    function appGoBack() {
-        if (currentIndex > 0) {
-            currentIndex--;
-            navigateTo(historyStack[currentIndex], true);
-        }
+    function goToCategory() {
+        updateViewState('category', true);
     }
 
-    function appGoForward() {
-        if (currentIndex < historyStack.length - 1) {
-            currentIndex++;
-            navigateTo(historyStack[currentIndex], true);
+    function goToHome() {
+        updateViewState('home', true);
+    }
+
+    function closeMenu() {
+        const checkbox = document.getElementById('menu-checkbox');
+        if (checkbox) checkbox.checked = false;
+    }
+
+    // Handle device built-in back/forward buttons using the History API
+    window.addEventListener('popstate', (event) => {
+        if (event.state && event.state.view === 'category') {
+            updateViewState('category', false);
+        } else {
+            updateViewState('home', false);
         }
+    });
+
+    // Initialize initial history state on page load
+    if (!history.state) {
+        history.replaceState({ view: 'home' }, '', '#home');
     }
 </script>
-
 </body>
 </html>
