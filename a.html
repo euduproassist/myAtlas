@@ -468,11 +468,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
@@ -767,41 +762,29 @@
                         </select>
                     </div>
 
-                    <div class="grid-3">
-                        <div class="form-group">
-                            <label class="form-label" for="schoolName">Name of High School / Institution *</label>
-                            <input type="text" id="schoolName" class="form-input" placeholder="e.g. Soshanguve High School" required>
+                    <div id="schoolDetailsContainer" class="hidden">
+                        <div class="grid-3">
+                            <div class="form-group">
+                                <label class="form-label" for="schoolName">Name of High School / Institution *</label>
+                                <input type="text" id="schoolName" class="form-input" placeholder="e.g. Soshanguve High School">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="schoolCountry">Country of High School *</label>
+                                <input type="text" id="schoolCountry" class="form-input" placeholder="e.g. South Africa">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="schoolProvince">Province / State *</label>
+                                <input type="text" id="schoolProvince" class="form-input" placeholder="e.g. Gauteng">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="schoolCountry">Country of High School *</label>
-                            <input type="text" id="schoolCountry" class="form-input" placeholder="e.g. South Africa" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="schoolProvince">Province / State *</label>
-                            <input type="text" id="schoolProvince" class="form-input" placeholder="e.g. Gauteng" required>
-                        </div>
-                    </div>
 
-                    <!-- Dynamic field container for Completed vs Current Grade 12 -->
-                    <div id="completedMatricContainer" class="grid-2 hidden" style="margin-bottom: 0;">
-                        <div class="form-group">
+                        <!-- Dynamic field container for Completed vs Current Grade 12 -->
+                        <div id="completedMatricContainer" class="form-group hidden">
                             <label class="form-label" for="matricYear">Year Completed / Matriculated *</label>
                             <input type="number" id="matricYear" class="form-input" placeholder="e.g. 2025" min="1990" max="2026">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="highestGrade">Highest Grade / Qualification Passed *</label>
-                            <select id="highestGrade" class="form-select">
-                                <option value="">Select qualification</option>
-                                <option value="National Senior Certificate (Matric)">National Senior Certificate (Matric)</option>
-                                <option value="Senior Certificate (Old Curriculum)">Senior Certificate (Old Curriculum)</option>
-                                <option value="Certificate / Higher Certificate">Certificate / Higher Certificate</option>
-                                <option value="Diploma / Degree">Diploma / Degree</option>
-                            </select>
-                        </div>
-                    </div>
 
-                    <div id="currentGrade12Container" class="grid-2 hidden" style="margin-bottom: 0;">
-                        <div class="form-group">
+                        <div id="currentGrade12Container" class="form-group hidden">
                             <label class="form-label" for="currentGrade12Basis">Currently have *</label>
                             <select id="currentGrade12Basis" class="form-select" onchange="updateSubjectHeading()">
                                 <option value="">Select option</option>
@@ -809,32 +792,28 @@
                                 <option value="Grade 12 june results">Grade 12 june results</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="expectedMatricYear">Expected Matric Year *</label>
-                            <input type="number" id="expectedMatricYear" class="form-input" value="2026" min="2026" max="2030">
-                        </div>
+
+                        <h2 class="section-heading" id="subjectHeading" style="margin-top: 35px;">Subject Results</h2>
+                        <p style="font-size: 12px; color: var(--muted); margin-bottom: 15px;" id="subjectSubtext">Please add your school subjects and percentages achieved.</p>
+
+                        <table class="subject-table" id="subjectTable">
+                            <thead>
+                                <tr>
+                                    <th>Subject Name</th>
+                                    <th style="width: 150px;">Result / %</th>
+                                    <th style="width: 80px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" class="form-input sub-name" placeholder="e.g. Mathematics" style="height: 38px;"></td>
+                                    <td><input type="text" class="form-input sub-res" placeholder="e.g. 72%" style="height: 38px;"></td>
+                                    <td><button type="button" class="btn btn-secondary btn-sm" onclick="removeSubjectRow(this)">Remove</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-secondary btn-sm" style="margin-bottom: 25px;" onclick="addSubjectRow()">+ Add Subject</button>
                     </div>
-
-                    <h2 class="section-heading" id="subjectHeading" style="margin-top: 35px;">Subject Results</h2>
-                    <p style="font-size: 12px; color: var(--muted); margin-bottom: 15px;" id="subjectSubtext">Please add your school subjects and percentages achieved.</p>
-
-                    <table class="subject-table" id="subjectTable">
-                        <thead>
-                            <tr>
-                                <th>Subject Name</th>
-                                <th style="width: 150px;">Result / %</th>
-                                <th style="width: 80px;">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="text" class="form-input sub-name" placeholder="e.g. Mathematics" style="height: 38px;"></td>
-                                <td><input type="text" class="form-input sub-res" placeholder="e.g. 72%" style="height: 38px;"></td>
-                                <td><button type="button" class="btn btn-secondary btn-sm" onclick="removeSubjectRow(this)">Remove</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <button type="button" class="btn btn-secondary btn-sm" style="margin-bottom: 25px;" onclick="addSubjectRow()">+ Add Subject</button>
 
                     <h2 class="section-heading" style="margin-top: 20px;">Previous Tertiary Education</h2>
 
@@ -902,7 +881,19 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="campus">Preferred Campus *</label>
+                            <label class="form-label" for="studyMode">Study Mode *</label>
+                            <select id="studyMode" class="form-select" required>
+                                <option value="">Select mode</option>
+                                <option value="Full-Time (Day Classes)">Full-Time (Day Classes)</option>
+                                <option value="Part-Time (Evening Classes)">Part-Time (Evening Classes)</option>
+                                <option value="Distance Learning">Distance Learning</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="campus">Campus *</label>
                             <select id="campus" class="form-select" required>
                                 <option value="">Select campus</option>
                                 <option value="Pretoria Main Campus">Pretoria Main Campus</option>
@@ -911,11 +902,8 @@
                                 <option value="Distance Learning / Online">Distance Learning / Online</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="grid-3">
                         <div class="form-group">
-                            <label class="form-label" for="qualification">First Choice Qualification *</label>
+                            <label class="form-label" for="qualification">Course *</label>
                             <select id="qualification" class="form-select" required>
                                 <option value="">Select study program</option>
                                 <option value="Higher Certificate in Information Technology">Higher Certificate in Information Technology</option>
@@ -925,49 +913,11 @@
                                 <option value="Diploma in Public Relations">Diploma in Public Relations</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="secondChoice">Second Choice Qualification</label>
-                            <select id="secondChoice" class="form-select">
-                                <option value="">None / Optional</option>
-                                <option value="Higher Certificate in Information Technology">Higher Certificate in Information Technology</option>
-                                <option value="Diploma in Software Development">Diploma in Software Development</option>
-                                <option value="Bachelor of Business Administration">Bachelor of Business Administration</option>
-                                <option value="Higher Certificate in Accounting">Higher Certificate in Accounting</option>
-                                <option value="Diploma in Public Relations">Diploma in Public Relations</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="thirdChoice">Third Choice Qualification</label>
-                            <select id="thirdChoice" class="form-select">
-                                <option value="">None / Optional</option>
-                                <option value="Higher Certificate in Information Technology">Higher Certificate in Information Technology</option>
-                                <option value="Diploma in Software Development">Diploma in Software Development</option>
-                                <option value="Bachelor of Business Administration">Bachelor of Business Administration</option>
-                                <option value="Higher Certificate in Accounting">Higher Certificate in Accounting</option>
-                                <option value="Diploma in Public Relations">Diploma in Public Relations</option>
-                            </select>
-                        </div>
                     </div>
 
-                    <div class="grid-3">
+                    <div class="grid-2" style="margin-top: 35px;">
                         <div class="form-group">
-                            <label class="form-label" for="studyMode">Study Mode *</label>
-                            <select id="studyMode" class="form-select" required>
-                                <option value="">Select mode</option>
-                                <option value="Full-Time (Day Classes)">Full-Time (Day Classes)</option>
-                                <option value="Part-Time (Evening Classes)">Part-Time (Evening Classes)</option>
-                                <option value="Distance Learning">Distance Learning</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="preferredIntake">Preferred Intake *</label>
-                            <select id="preferredIntake" class="form-select" required>
-                                <option value="First Semester">First Semester</option>
-                                <option value="Second Semester">Second Semester</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="fundingSource">How Do You Intend to Fund Studies? *</label>
+                            <label class="form-label" for="fundingSource">How do u intend to fund your studies *</label>
                             <select id="fundingSource" class="form-select" required>
                                 <option value="">Select option</option>
                                 <option value="Self / Family">Self / Family Funded</option>
@@ -975,19 +925,9 @@
                                 <option value="Student Loan">Student Loan</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="grid-2">
                         <div class="form-group">
-                            <label class="form-label" for="financialAid">Do You Require Financial Aid Assistance? *</label>
+                            <label class="form-label" for="financialAid">Do u require financial aid assistance *</label>
                             <select id="financialAid" class="form-select" required>
-                                <option value="No">No</option>
-                                <option value="Yes">Yes</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="academicSupport">Do You Require Additional Academic / Student Support? *</label>
-                            <select id="academicSupport" class="form-select" required>
                                 <option value="No">No</option>
                                 <option value="Yes">Yes</option>
                             </select>
@@ -1136,33 +1076,56 @@
 
     function toggleMatricStatus() {
         const status = document.getElementById("enrollmentStatus").value;
+        const schoolDetailsContainer = document.getElementById("schoolDetailsContainer");
         const completedContainer = document.getElementById("completedMatricContainer");
         const currentContainer = document.getElementById("currentGrade12Container");
+        
+        const schoolNameInput = document.getElementById("schoolName");
+        const schoolCountryInput = document.getElementById("schoolCountry");
+        const schoolProvinceInput = document.getElementById("schoolProvince");
         const matricYearInput = document.getElementById("matricYear");
-        const highestGradeSelect = document.getElementById("highestGrade");
         const currentBasisSelect = document.getElementById("currentGrade12Basis");
 
         if (status === "Completed Matric") {
+            schoolDetailsContainer.classList.remove("hidden");
             completedContainer.classList.remove("hidden");
             currentContainer.classList.add("hidden");
+            
+            schoolNameInput.setAttribute("required", "true");
+            schoolCountryInput.setAttribute("required", "true");
+            schoolProvinceInput.setAttribute("required", "true");
             matricYearInput.setAttribute("required", "true");
-            highestGradeSelect.setAttribute("required", "true");
+            
             currentBasisSelect.removeAttribute("required");
             currentBasisSelect.value = "";
         } else if (status === "Currently in Grade 12") {
+            schoolDetailsContainer.classList.remove("hidden");
             currentContainer.classList.remove("hidden");
             completedContainer.classList.add("hidden");
+            
+            schoolNameInput.setAttribute("required", "true");
+            schoolCountryInput.setAttribute("required", "true");
+            schoolProvinceInput.setAttribute("required", "true");
             currentBasisSelect.setAttribute("required", "true");
+            
             matricYearInput.removeAttribute("required");
-            highestGradeSelect.removeAttribute("required");
             matricYearInput.value = "";
-            highestGradeSelect.value = "";
         } else {
+            schoolDetailsContainer.classList.add("hidden");
             completedContainer.classList.add("hidden");
             currentContainer.classList.add("hidden");
+            
+            schoolNameInput.removeAttribute("required");
+            schoolCountryInput.removeAttribute("required");
+            schoolProvinceInput.removeAttribute("required");
             matricYearInput.removeAttribute("required");
-            highestGradeSelect.removeAttribute("required");
             currentBasisSelect.removeAttribute("required");
+            
+            schoolNameInput.value = "";
+            schoolCountryInput.value = "";
+            schoolProvinceInput.value = "";
+            matricYearInput.value = "";
+            currentBasisSelect.value = "";
         }
         updateSubjectHeading();
     }
@@ -1285,14 +1248,16 @@
 
         // Collect dynamic subjects
         const subjects = [];
-        document.querySelectorAll("#subjectTable tbody tr").forEach(tr => {
-            const name = tr.querySelector(".sub-name").value.trim();
-            const res = tr.querySelector(".sub-res").value.trim();
-            if(name) subjects.push({ name, result: res });
-        });
+        const enrollmentStatus = document.getElementById("enrollmentStatus").value;
+        if (enrollmentStatus) {
+            document.querySelectorAll("#subjectTable tbody tr").forEach(tr => {
+                const name = tr.querySelector(".sub-name").value.trim();
+                const res = tr.querySelector(".sub-res").value.trim();
+                if(name) subjects.push({ name, result: res });
+            });
+        }
 
         const sameAsRes = document.getElementById("sameAsResidential").value;
-        const enrollmentStatus = document.getElementById("enrollmentStatus").value;
 
         // Gather all data
         const formData = {
@@ -1326,7 +1291,7 @@
                 postalAddress: document.getElementById("address").value.trim(),
                 city: document.getElementById("city").value.trim(),
                 province: document.getElementById("province").value.trim(),
-                postalCode: document.getElementById("postalCode").value.trim(),
+                postalCode: document.getElementById("postalCodeField").value.trim(),
                 country: document.getElementById("countryResidence").value.trim()
             },
             guardianFirstName: document.getElementById("guardianFirstName").value.trim(),
@@ -1342,14 +1307,12 @@
                 phone: document.getElementById("secGuardianPhone").value.trim(),
                 altPhone: document.getElementById("secGuardianAltPhone").value.trim()
             } : null,
-            schoolName: document.getElementById("schoolName").value.trim(),
-            schoolCountry: document.getElementById("schoolCountry").value.trim(),
-            schoolProvince: document.getElementById("schoolProvince").value.trim(),
+            schoolName: enrollmentStatus ? document.getElementById("schoolName").value.trim() : null,
+            schoolCountry: enrollmentStatus ? document.getElementById("schoolCountry").value.trim() : null,
+            schoolProvince: enrollmentStatus ? document.getElementById("schoolProvince").value.trim() : null,
             enrollmentStatus: enrollmentStatus,
             matricYear: enrollmentStatus === "Completed Matric" ? document.getElementById("matricYear").value : null,
-            highestGrade: enrollmentStatus === "Completed Matric" ? document.getElementById("highestGrade").value : null,
             currentGrade12Basis: enrollmentStatus === "Currently in Grade 12" ? document.getElementById("currentGrade12Basis").value : null,
-            expectedMatricYear: enrollmentStatus === "Currently in Grade 12" ? document.getElementById("expectedMatricYear").value : null,
             subjects: subjects,
             hasTertiary: document.getElementById("hasTertiary").value,
             tertiaryDetails: document.getElementById("hasTertiary").value === "Yes" ? {
@@ -1361,15 +1324,11 @@
                 status: document.getElementById("tertiaryStatus").value.trim()
             } : null,
             academicYear: document.getElementById("academicYear").value,
+            studyMode: document.getElementById("studyMode").value,
             campus: document.getElementById("campus").value,
             qualification: document.getElementById("qualification").value,
-            secondChoice: document.getElementById("secondChoice").value,
-            thirdChoice: document.getElementById("thirdChoice").value,
-            studyMode: document.getElementById("studyMode").value,
-            preferredIntake: document.getElementById("preferredIntake").value,
             fundingSource: document.getElementById("fundingSource").value,
             financialAid: document.getElementById("financialAid").value,
-            academicSupport: document.getElementById("academicSupport").value,
             applicantConfirmation: document.getElementById("applicantConfirmation").value.trim(),
             declarationDate: document.getElementById("declarationDate").value,
             referenceNumber: "ATL-2026-" + Math.floor(10000 + Math.random() * 90000),
