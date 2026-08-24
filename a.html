@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postgraduate Application | Atlas College</title>
+    <style>
+        /* =========================================================
+           RESET & BASE STYLES
+        ========================================================= */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            width: 100%;
+            min-width: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            width: 100%;
+            min-width: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+
+            font-family:
+                Inter,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+
+            color: #071947;
+            background: #ffffff;
+
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================================================
+           VARIABLES
+        ========================================================= */
+        :root {
+            --blue: #0957e8;
+            --blue-dark: #062b73;
+            --navy: #071947;
+            --text: #1d2c49;
+            --muted: #64728a;
+            --border: #e2e8f0;
+            --white: #ffffff;
+            --red: #c93636;
+            --green: #159447;
+
+            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* =========================================================
+           UTILITIES (FULL WIDTH EDGE-TO-EDGE)
+        ========================================================= */
+        .hidden {
+            display: none !important;
+        }
+
+        /* =========================================================
+           HEADER (PINNED TO EXTREME EDGES)
+        ========================================================= */
+        .header {
+            width: 100%;
+            height: 75px;
+            background: #ffffff;
+            border-bottom: 1px solid #eaeef4;
+            flex-shrink: 0;
+        }
+
+        .header-inner {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand img {
+            width: 125px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .help-link {
+            color: #53627b;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .help-link:hover {
+            color: var(--blue);
+        }
+
+        /* =========================================================
+           MAIN APPLICATION CONTAINER & STEPS (PURE WHITE & CLEAN)
+        ========================================================= */
+        .main {
+            width: 100%;
+            padding: 40px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            background: #ffffff;
+        }
+
+        .application-wrapper {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            background: #ffffff;
+        }
+
+        /* FORM STEP SECTIONS (PURE WHITE, NO OUTER CARD) */
+        .form-step {
+            background: #ffffff;
+            width: 100%;
+            max-width: 100%;
+            transition: var(--transition);
+            animation: fadeUp 0.4s ease both;
+        }
+
+        .section-heading {
+            margin: 0 0 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            color: var(--navy);
+            font-size: 17px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+            width: 100%;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            width: 100%;
+            background: #ffffff;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--navy);
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            height: 46px;
+            padding: 0 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: #ffffff;
+            color: var(--navy);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364728a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+        }
+
+        .form-textarea {
+            height: auto;
+            padding: 12px 16px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(9, 87, 232, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--blue);
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            font-size: 13px;
+            color: var(--navy);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* BUTTONS */
+        .form-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            gap: 12px;
+            flex-wrap: wrap;
+            width: 100%;
+            background: #ffffff;
+        }
+
+        .btn {
+            height: 46px;
+            padding: 0 28px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--blue);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(9, 87, 232, 0.15);
+        }
+
+        .btn-primary:hover {
+            background: #064dd2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(9, 87, 232, 0.25);
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            color: var(--navy);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--green);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(21, 148, 71, 0.15);
+        }
+
+        .btn-success:hover {
+            background: #117a3a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(21, 148, 71, 0.25);
+        }
+
+        .btn-sm {
+            height: 36px;
+            padding: 0 16px;
+            font-size: 12px;
+        }
+
+        /* SUCCESS / SUBMISSION VIEW */
+        .success-card {
+            text-align: center;
+            padding: 30px 10px;
+            animation: scaleUp 0.4s ease both;
+            width: 100%;
+            background: #ffffff;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #ffffff;
+            color: var(--green);
+            border: 2px solid var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 20px;
+            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        .reference-badge {
+            display: inline-block;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--blue);
+            margin: 15px 0 25px;
+        }
+
+        .action-button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        /* TOAST NOTIFICATIONS */
+        .toast-container {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 500;
+            width: min(350px, calc(100vw - 40px));
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            padding: 12px 14px;
+            border-radius: 6px;
+            background: #071947;
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            font-size: 12px;
+            line-height: 1.4;
+            font-weight: 650;
+            transform: translateY(15px);
+            opacity: 0;
+            animation: toastIn 0.3s ease forwards;
+        }
+
+        .toast.success { background: var(--green); }
+        .toast.error { background: var(--red); }
+
+        /* FOOTER (PINNED TO EXTREME CORNERS) */
+        .footer {
+            width: 100%;
+            padding: 24px 0;
+            background: #ffffff;
+            border-top: 1px solid #eaeef4;
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+
+        .footer-inner {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .footer-copy, .footer-links {
+            font-size: 11px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .footer-links span {
+            cursor: pointer;
+        }
+
+        .footer-links span:hover {
+            color: var(--blue);
+        }
+
+        @keyframes toastIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleUp {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .action-button-group {
+                flex-direction: column;
+            }
+            .main {
+                padding: 20px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div style="display: flex; flex-direction: column; min-height: 100vh; width: 100%; background: #ffffff;">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="brand">
+                <img src="assets/logos.png" alt="Atlas College">
+            </div>
+            <div class="header-right">
+                <a href="login.html" class="help-link">Already applied? Track Status</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN POSTGRADUATE APPLICATION WIZARD -->
+    <main class="main">
+        <div class="application-wrapper">
+            
+            <form id="applicationForm">
+                
+                <!-- STEP 1: PERSONAL & CONTACT INFORMATION -->
+                <div class="form-step" id="step1">
+                    <h2 class="section-heading">Personal Information</h2>
+                    
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label class="form-label" for="firstName">First Name(s) *</label>
+                            <input type="text" id="firstName" class="form-input" placeholder="e.g. Thabo" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="surname">Surname *</label>
+                            <input type="text" id="surname" class="form-input" placeholder="e.g. Molefe" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="initials">Initials *</label>
+                            <input type="text" id="initials" class="form-input" placeholder="e.g. T." required>
+                        </div>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label class="form-label" for="idNumber">ID / Passport Number *</label>
+                            <input type="text" id="idNumber" class="form-input" placeholder="Identity document number" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="dob">Date of Birth *</label>
+                            <input type="date" id="dob" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="title">Title *</label>
+                            <select id="title" class="form-select" required>
+                                <option value="">Select Title</option>
+                                <option value="Mr">Mr</option>
+                                <option value="Mrs">Mrs</option>
+                                <option value="Ms">Ms</option>
+                                <option value="Dr">Dr</option>
+                                <option value="Adv">Adv</option>
+                                <option value="Prof">Prof</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label class="form-label" for="gender">Gender *</label>
+                            <select id="gender" class="form-select" required>
+                                <option value="">Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other / Prefer not to say</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="citizenship">Citizenship Status *</label>
+                            <select id="citizenship" class="form-select" required>
+                                <option value="">Select citizenship</option>
+                                <option value="South African Citizen">South African Citizen</option>
+                                <option value="Permanent Resident">Permanent Resident</option>
+                                <option value="Temporary Resident">Temporary Resident</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="countryCitizenship">Country of Citizenship *</label>
+                            <input type="text" id="countryCitizenship" class="form-input" placeholder="e.g. South Africa" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="countryBirth">Country of Birth *</label>
+                        <input type="text" id="countryBirth" class="form-input" placeholder="e.g. South Africa" required>
+                    </div>
+
+                    <h2 class="section-heading" style="margin-top: 35px;">Contact Information</h2>
+                    
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email Address *</label>
+                            <input type="email" id="email" class="form-input" placeholder="e.g. thabom@gmail.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="phone">Mobile Phone Number *</label>
+                            <input type="tel" id="phone" class="form-input" placeholder="e.g. 072 123 4567" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="altPhone">Alternative Phone Number</label>
+                            <input type="tel" id="altPhone" class="form-input" placeholder="e.g. 011 123 4567">
+                        </div>
+                    </div>
+
+                    <h2 class="section-heading" style="margin-top: 35px;">Residential &amp; Postal Address</h2>
+
+                    <div class="form-group">
+                        <label class="form-label" for="address">Physical Residential Address *</label>
+                        <textarea id="address" class="form-textarea" placeholder="Street address, suburb" required></textarea>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label class="form-label" for="city">City / Town *</label>
+                            <input type="text" id="city" class="form-input" placeholder="e.g. Pretoria" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="province">Province / State *</label>
+                            <input type="text" id="province" class="form-input" placeholder="e.g. Gauteng" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="postalCode">Postal Code *</label>
+                            <input type="text" id="postalCode" class="form-input" placeholder="e.g. 0001" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="countryResidence">Country of Residence *</label>
+                        <input type="text" id="countryResidence" class="form-input" placeholder="e.g. South Africa" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="sameAsResidential">Is postal address the same as residential address? *</label>
+                        <select id="sameAsResidential" class="form-select" onchange="togglePostalAddress()" required>
+                            <option value="">Select option</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+
+                    <div id="postalAddressSection" class="hidden" style="border-left: 3px solid var(--blue); padding-left: 15px; margin-top: 15px;">
+                        <div class="form-group">
+                            <label class="form-label" for="postalAddressField">Postal Address *</label>
+                            <textarea id="postalAddressField" class="form-textarea" placeholder="P.O. Box or Private Bag"></textarea>
+                        </div>
+
+                        <div class="grid-3">
+                            <div class="form-group">
+                                <label class="form-label" for="postalCity">City / Town *</label>
+                                <input type="text" id="postalCity" class="form-input" placeholder="City / Town">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="postalProvince">Province / State *</label>
+                                <input type="text" id="postalProvince" class="form-input" placeholder="Province / State">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="postalCodeField">Postal Code *</label>
+                                <input type="text" id="postalCodeField" class="form-input" placeholder="Postal Code">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="postalCountry">Country *</label>
+                            <input type="text" id="postalCountry" class="form-input" placeholder="Country">
+                        </div>
+                    </div>
+
+                    <div class="form-buttons" style="justify-content: flex-end;">
+                        <button type="button" class="btn btn-primary" onclick="nextStep(2)">
+                            Next: University Education →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: PREVIOUS UNIVERSITY EDUCATION -->
+                <div class="form-step hidden" id="step2">
+                    <h2 class="section-heading">Highest / Qualifying Qualification</h2>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="tertiaryInstitution">Institution Name *</label>
+                            <input type="text" id="tertiaryInstitution" class="form-input" placeholder="e.g. University of Pretoria" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="institutionCountry">Country of Institution *</label>
+                            <input type="text" id="institutionCountry" class="form-input" placeholder="e.g. South Africa" required>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="tertiaryProgramme">Qualification / Degree *</label>
+                            <input type="text" id="tertiaryProgramme" class="form-input" placeholder="e.g. Bachelor of Science Honours in Computer Science" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="fieldOfStudy">Field of Study *</label>
+                            <input type="text" id="fieldOfStudy" class="form-input" placeholder="e.g. Computer Science" required>
+                        </div>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label class="form-label" for="completionYear">Year Completed / Expected Completion *</label>
+                            <input type="number" id="completionYear" class="form-input" placeholder="e.g. 2025" min="1980" max="2030" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="qualificationStatus">Qualification Status *</label>
+                            <select id="qualificationStatus" class="form-select" required>
+                                <option value="">Select status</option>
+                                <option value="Completed">Completed</option>
+                                <option value="In Progress">In Progress</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="finalAverage">Final Average / Classification *</label>
+                            <input type="text" id="finalAverage" class="form-input" placeholder="e.g. Distinction / 75%" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 15px;">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="hasAdditionalQualification" onchange="toggleAdditionalQualification()">
+                            <label for="hasAdditionalQualification">Add an additional previous tertiary qualification</label>
+                        </div>
+                    </div>
+
+                    <div id="additionalQualSection" class="hidden" style="border-left: 3px solid var(--blue); padding-left: 15px; margin-top: 15px;">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label" for="addInstitution">Additional Institution Name</label>
+                                <input type="text" id="addInstitution" class="form-input" placeholder="e.g. Tshwane University of Technology">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="addProgramme">Qualification / Degree</label>
+                                <input type="text" id="addProgramme" class="form-input" placeholder="e.g. Bachelor of Information Technology">
+                            </div>
+                        </div>
+
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label" for="addField">Field of Study</label>
+                                <input type="text" id="addField" class="form-input" placeholder="e.g. Informatics">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="addYear">Year Completed</label>
+                                <input type="number" id="addYear" class="form-input" placeholder="e.g. 2023">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep(1)">
+                            ← Back
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep(3)">
+                            Next: Postgraduate Programme →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: POSTGRADUATE PROGRAMME & CONDITIONAL SECTIONS -->
+                <div class="form-step hidden" id="step3">
+                    <h2 class="section-heading">Programme Selection</h2>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="academicYear">Academic Year *</label>
+                            <select id="academicYear" class="form-select" required>
+                                <option value="2026">2026 Academic Year</option>
+                                <option value="2027">2027 Academic Year</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="postgraduateLevel">Postgraduate Level *</label>
+                            <select id="postgraduateLevel" class="form-select" onchange="toggleConditionalSections()" required>
+                                <option value="">Select level</option>
+                                <option value="Master's (Coursework)">Master's (Coursework)</option>
+                                <option value="Master's (Research)">Master's (Research)</option>
+                                <option value="Doctorate (PhD)">Doctorate (PhD)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="form-group">
+                            <label class="form-label" for="faculty">Faculty / School *</label>
+                            <input type="text" id="faculty" class="form-input" placeholder="e.g. Faculty of Engineering & IT" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="department">Department *</label>
+                            <input type="text" id="department" class="form-input" placeholder="e.g. Department of Computer Science" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="studyMode">Study Mode *</label>
+                            <select id="studyMode" class="form-select" required>
+                                <option value="">Select mode</option>
+                                <option value="Full-Time">Full-Time</option>
+                                <option value="Part-Time">Part-Time</option>
+                                <option value="Distance / Online">Distance / Online</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="qualification">Programme / Degree *</label>
+                            <input type="text" id="qualification" class="form-input" placeholder="e.g. Master of Science in Computer Science" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="specialisation">Specialisation / Field (If applicable)</label>
+                            <input type="text" id="specialisation" class="form-input" placeholder="e.g. Artificial Intelligence">
+                        </div>
+                    </div>
+
+                    <!-- CONDITIONAL SECTION: RESEARCH INFORMATION -->
+                    <div id="researchSection" class="hidden" style="margin-top: 35px; border-top: 1px solid var(--border); padding-top: 20px;">
+                        <h2 class="section-heading">Research Information</h2>
+                        
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label" for="researchArea">Research Area *</label>
+                                <input type="text" id="researchArea" class="form-input" placeholder="e.g. Machine Learning & Natural Language Processing">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="researchTopic">Proposed Research Topic / Title *</label>
+                                <input type="text" id="researchTopic" class="form-input" placeholder="Working title of your dissertation or thesis">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="researchDescription">Research Description / Concept Note *</label>
+                            <textarea id="researchDescription" class="form-textarea" placeholder="Provide a short summary of your proposed research objectives, methodology, and scope."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- CONDITIONAL SECTION: SUPERVISOR INFORMATION -->
+                    <div id="supervisorSection" class="hidden" style="margin-top: 35px; border-top: 1px solid var(--border); padding-top: 20px;">
+                        <h2 class="section-heading">Supervisor Information</h2>
+                        
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label" for="potentialSupervisor">Potential / Preferred Supervisor *</label>
+                                <input type="text" id="potentialSupervisor" class="form-input" placeholder="e.g. Prof. John Doe (if pre-arranged)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="supervisorDepartment">Supervisor Department / Research Group</label>
+                                <input type="text" id="supervisorDepartment" class="form-input" placeholder="e.g. Department of Computer Science">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CONDITIONAL SECTION: REFEREES -->
+                    <div id="refereesSection" class="hidden" style="margin-top: 35px; border-top: 1px solid var(--border); padding-top: 20px;">
+                        <h2 class="section-heading">Academic &amp; Professional Referees</h2>
+
+                        <h3 style="font-size: 14px; color: var(--navy); margin-bottom: 15px;">Referee 1 *</h3>
+                        <div class="grid-3">
+                            <div class="form-group">
+                                <label class="form-label" for="ref1Name">Full Name *</label>
+                                <input type="text" id="ref1Name" class="form-input" placeholder="e.g. Dr. Jane Smith">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="ref1Institution">Institution / Company *</label>
+                                <input type="text" id="ref1Institution" class="form-input" placeholder="e.g. University of Pretoria">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="ref1Position">Position / Title *</label>
+                                <input type="text" id="ref1Position" class="form-input" placeholder="e.g. Senior Lecturer">
+                            </div>
+                        </div>
+                        <div class="grid-3">
+                            <div class="form-group">
+                                <label class="form-label" for="ref1Relation">Relationship *</label>
+                                <input type="text" id="ref1Relation" class="form-input" placeholder="e.g. Masters Supervisor">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="ref1Email">Email Address *</label>
+                                <input type="email" id="ref1Email" class="form-input" placeholder="referee@university.ac.za">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="ref1Phone">Phone Number *</label>
+                                <input type="tel" id="ref1Phone" class="form-input" placeholder="Contact number">
+                            </div>
+                        </div>
+
+                        <h3 style="font-size: 14px; color: var(--navy); margin: 25px 0 15px;">Referee 2 (If required)</h3>
+                        <div class="grid-3">
+                            <div class="form-group">
+                                <label class="form-label" for="ref2Name">Full Name</label>
+                                <input type="text" id="ref2Name" class="form-input" placeholder="Full name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="ref2Institution">Institution / Company</label>
+                                <input type="text" id="ref2Institution" class="form-input" placeholder="Institution">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="ref2Position">Position / Title</label>
+                                <input type="text" id="ref2Position" class="form-input" placeholder="Position">
+                            </div>
+                        </div>
+                        <div class="grid-3">
+                            <div class="form-group">
+                                <label class="form-label" for="ref2Relation">Relationship</label>
+                                <input type="text" id="ref2Relation" class="form-input" placeholder="Relationship">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="ref2Email">Email Address</label>
+                                <input type="email" id="ref2Email" class="form-input" placeholder="Email address">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="ref2Phone">Phone Number</label>
+                                <input type="tel" id="ref2Phone" class="form-input" placeholder="Contact number">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OPTIONAL SECTION: RELEVANT EXPERIENCE & MOTIVATION -->
+                    <div style="margin-top: 35px; border-top: 1px solid var(--border); padding-top: 20px;">
+                        <h2 class="section-heading">Background &amp; Motivation</h2>
+
+                        <div class="form-group">
+                            <label class="form-label" for="workExperience">Relevant Work / Research Experience (Optional)</label>
+                            <textarea id="workExperience" class="form-textarea" placeholder="Summarize any professional work experience, publications, or practical research background relevant to this postgraduate qualification."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="motivationStatement">Motivation for Postgraduate Study &amp; Career Goals *</label>
+                            <textarea id="motivationStatement" class="form-textarea" placeholder="Explain your motivations for pursuing this qualification and how it aligns with your long-term academic or career goals." required></textarea>
+                        </div>
+                    </div>
+
+                    <h2 class="section-heading" style="margin-top: 35px;">Declaration &amp; Consent</h2>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="declarationConsent" required>
+                            <label for="declarationConsent">I declare that all information provided in this postgraduate application form is true, correct, and complete to the best of my knowledge. *</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="privacyConsent" required>
+                            <label for="privacyConsent">I consent to Atlas College processing my personal information and verifying my academic transcripts under applicable data privacy regulations. *</label>
+                        </div>
+                    </div>
+
+                    <div class="grid-2" style="margin-top: 20px;">
+                        <div class="form-group">
+                            <label class="form-label" for="applicantConfirmation">Applicant Full Name (Electronic Signature) *</label>
+                            <input type="text" id="applicantConfirmation" class="form-input" placeholder="Type your full legal name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="declarationDate">Declaration Date *</label>
+                            <input type="date" id="declarationDate" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep(2)">
+                            ← Back
+                        </button>
+                        <button type="submit" class="btn btn-success" id="submitAppBtn">
+                            Submit Postgraduate Application ✓
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
+            <!-- SUCCESS & STATUS INSTRUCTION VIEW (HIDDEN INITIALLY) -->
+            <div id="successView" class="hidden success-card">
+                <div class="success-icon">✓</div>
+                <h2 style="color: var(--navy); margin: 0 0 8px; font-size: 22px;">Postgraduate Application Successfully Submitted!</h2>
+                <p style="color: var(--muted); font-size: 13px; max-width: 600px; margin: 0 auto 15px;">
+                    Your application has been successfully registered in our local system. Please note that postgraduate selection committees 
+                    <strong>will review your academic transcripts, concept note, and references</strong> before admission is granted.
+                </p>
+                
+                <div class="reference-badge" id="generatedReferenceDisplay">ATL-PG-2026-XXXX</div>
+
+                <p style="color: var(--navy); font-weight: 700; font-size: 13px; margin-bottom: 10px;">Choose how you want to proceed:</p>
+
+                <div class="action-button-group">
+                    <button type="button" class="btn btn-secondary" id="payLaterBtn">
+                        Upload Transcripts Later
+                    </button>
+                    <button type="button" class="btn btn-primary" id="payNowBtn">
+                        Upload Transcripts &amp; Pay Now
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-copy">
+                © 2026 Atlas College. All rights reserved.
+            </div>
+            <div class="footer-links">
+                <span>Privacy Policy</span>
+                <span>Terms &amp; Conditions</span>
+                <span>Help</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+</div>
+
+<script>
+    /* ============================================================
+       POSTGRADUATE APPLICATION WIZARD & CONDITIONAL FIELD LOGIC
+    ============================================================ */
+
+    let currentStep = 1;
+    const STORAGE_KEY = "atlas_postgraduate_application_v1";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const today = new Date().toISOString().split('T')[0];
+        const decDateEl = document.getElementById("declarationDate");
+        if (decDateEl) decDateEl.value = today;
+    });
+
+    function togglePostalAddress() {
+        const val = document.getElementById("sameAsResidential").value;
+        const postalSection = document.getElementById("postalAddressSection");
+        const postalInputs = postalSection.querySelectorAll("input, textarea");
+        
+        if (val === "No") {
+            postalSection.classList.remove("hidden");
+            postalInputs.forEach(input => input.setAttribute("required", "true"));
+        } else {
+            postalSection.classList.add("hidden");
+            postalInputs.forEach(input => {
+                input.removeAttribute("required");
+                input.value = "";
+            });
+        }
+    }
+
+    function toggleAdditionalQualification() {
+        const isChecked = document.getElementById("hasAdditionalQualification").checked;
+        const addSection = document.getElementById("additionalQualSection");
+        const addInputs = addSection.querySelectorAll("input");
+
+        if (isChecked) {
+            addSection.classList.remove("hidden");
+        } else {
+            addSection.classList.add("hidden");
+            addInputs.forEach(input => input.value = "");
+        }
+    }
+
+    function toggleConditionalSections() {
+        const level = document.getElementById("postgraduateLevel").value;
+        const researchSection = document.getElementById("researchSection");
+        const supervisorSection = document.getElementById("supervisorSection");
+        const refereesSection = document.getElementById("refereesSection");
+
+        const researchInputs = researchSection.querySelectorAll("input, textarea");
+        const supervisorInputs = supervisorSection.querySelectorAll("input");
+        const refereeInputs = refereesSection.querySelectorAll("input");
+
+        if (level === "Master's (Research)" || level === "Doctorate (PhD)") {
+            researchSection.classList.remove("hidden");
+            supervisorSection.classList.remove("hidden");
+            refereesSection.classList.remove("hidden");
+
+            researchInputs.forEach(input => input.setAttribute("required", "true"));
+            supervisorInputs.forEach(input => {
+                if(input.id === "potentialSupervisor") input.setAttribute("required", "true");
+            });
+            refereesSection.querySelectorAll("#ref1Name, #ref1Institution, #ref1Position, #ref1Relation, #ref1Email, #ref1Phone").forEach(input => {
+                input.setAttribute("required", "true");
+            });
+        } else if (level === "Master's (Coursework)") {
+            researchSection.classList.add("hidden");
+            supervisorSection.classList.add("hidden");
+            refereesSection.classList.remove("hidden");
+
+            researchInputs.forEach(input => {
+                input.removeAttribute("required");
+                input.value = "";
+            });
+            supervisorInputs.forEach(input => {
+                input.removeAttribute("required");
+                input.value = "";
+            });
+            refereesSection.querySelectorAll("#ref1Name, #ref1Institution, #ref1Position, #ref1Relation, #ref1Email, #ref1Phone").forEach(input => {
+                input.setAttribute("required", "true");
+            });
+        } else {
+            researchSection.classList.add("hidden");
+            supervisorSection.classList.add("hidden");
+            refereesSection.classList.add("hidden");
+
+            researchInputs.forEach(input => { input.removeAttribute("required"); input.value = ""; });
+            supervisorInputs.forEach(input => { input.removeAttribute("required"); input.value = ""; });
+            refereesSection.querySelectorAll("input").forEach(input => { input.removeAttribute("required"); input.value = ""; });
+        }
+    }
+
+    function updateStepper(step) {
+        currentStep = step;
+        document.querySelectorAll(".form-step").forEach((el, idx) => {
+            if (idx + 1 === step) {
+                el.classList.remove("hidden");
+                el.style.animation = "fadeUp 0.4s ease both";
+            } else {
+                el.classList.add("hidden");
+            }
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function validateStep(step) {
+        const stepEl = document.getElementById("step" + step);
+        const inputs = stepEl.querySelectorAll("[required]");
+        let valid = true;
+        inputs.forEach(input => {
+            if (input.offsetParent === null) return;
+
+            if (input.type === "checkbox") {
+                if (!input.checked) {
+                    valid = false;
+                    input.parentElement.style.color = "var(--red)";
+                } else {
+                    input.parentElement.style.color = "var(--navy)";
+                }
+            } else {
+                if (!input.value.trim()) {
+                    valid = false;
+                    input.style.borderColor = "var(--red)";
+                } else {
+                    input.style.borderColor = "var(--border)";
+                }
+            }
+        });
+        return valid;
+    }
+
+    function nextStep(targetStep) {
+        if (targetStep > currentStep) {
+            if (!validateStep(currentStep)) {
+                showToast("Please fill in all required fields before proceeding.", "error");
+                return;
+            }
+        }
+        updateStepper(targetStep);
+    }
+
+    function prevStep(targetStep) {
+        updateStepper(targetStep);
+    }
+
+    const applicationForm = document.getElementById("applicationForm");
+    applicationForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (!validateStep(3)) {
+            showToast("Please complete all required fields and accept all declarations.", "error");
+            return;
+        }
+
+        const sameAsRes = document.getElementById("sameAsResidential").value;
+        const postgradLevel = document.getElementById("postgraduateLevel").value;
+
+        const formData = {
+            firstName: document.getElementById("firstName").value.trim(),
+            surname: document.getElementById("surname").value.trim(),
+            initials: document.getElementById("initials").value.trim(),
+            idNumber: document.getElementById("idNumber").value.trim(),
+            dob: document.getElementById("dob").value,
+            title: document.getElementById("title").value,
+            gender: document.getElementById("gender").value,
+            citizenship: document.getElementById("citizenship").value,
+            countryCitizenship: document.getElementById("countryCitizenship").value.trim(),
+            countryBirth: document.getElementById("countryBirth").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            phone: document.getElementById("phone").value.trim(),
+            altPhone: document.getElementById("altPhone").value.trim(),
+            address: document.getElementById("address").value.trim(),
+            city: document.getElementById("city").value.trim(),
+            province: document.getElementById("province").value.trim(),
+            postalCode: document.getElementById("postalCode").value.trim(),
+            countryResidence: document.getElementById("countryResidence").value.trim(),
+            sameAsResidential: sameAsRes,
+            postalAddressDetails: sameAsRes === "No" ? {
+                postalAddress: document.getElementById("postalAddressField").value.trim(),
+                city: document.getElementById("postalCity").value.trim(),
+                province: document.getElementById("postalProvince").value.trim(),
+                postalCode: document.getElementById("postalCodeField").value.trim(),
+                country: document.getElementById("postalCountry").value.trim()
+            } : null,
+            tertiaryInstitution: document.getElementById("tertiaryInstitution").value.trim(),
+            institutionCountry: document.getElementById("institutionCountry").value.trim(),
+            tertiaryProgramme: document.getElementById("tertiaryProgramme").value.trim(),
+            fieldOfStudy: document.getElementById("fieldOfStudy").value.trim(),
+            completionYear: document.getElementById("completionYear").value,
+            qualificationStatus: document.getElementById("qualificationStatus").value,
+            finalAverage: document.getElementById("finalAverage").value.trim(),
+            hasAdditionalQualification: document.getElementById("hasAdditionalQualification").checked,
+            additionalQualification: document.getElementById("hasAdditionalQualification").checked ? {
+                institution: document.getElementById("addInstitution").value.trim(),
+                programme: document.getElementById("addProgramme").value.trim(),
+                field: document.getElementById("addField").value.trim(),
+                year: document.getElementById("addYear").value
+            } : null,
+            academicYear: document.getElementById("academicYear").value,
+            postgraduateLevel: postgradLevel,
+            faculty: document.getElementById("faculty").value.trim(),
+            department: document.getElementById("department").value.trim(),
+            studyMode: document.getElementById("studyMode").value,
+            qualification: document.getElementById("qualification").value.trim(),
+            specialisation: document.getElementById("specialisation").value.trim(),
+            researchDetails: (postgradLevel === "Master's (Research)" || postgradLevel === "Doctorate (PhD)") ? {
+                researchArea: document.getElementById("researchArea").value.trim(),
+                researchTopic: document.getElementById("researchTopic").value.trim(),
+                researchDescription: document.getElementById("researchDescription").value.trim()
+            } : null,
+            supervisorDetails: (postgradLevel === "Master's (Research)" || postgradLevel === "Doctorate (PhD)") ? {
+                potentialSupervisor: document.getElementById("potentialSupervisor").value.trim(),
+                supervisorDepartment: document.getElementById("supervisorDepartment").value.trim()
+            } : null,
+            referees: {
+                ref1: {
+                    name: document.getElementById("ref1Name").value.trim(),
+                    institution: document.getElementById("ref1Institution").value.trim(),
+                    position: document.getElementById("ref1Position").value.trim(),
+                    relation: document.getElementById("ref1Relation").value.trim(),
+                    email: document.getElementById("ref1Email").value.trim(),
+                    phone: document.getElementById("ref1Phone").value.trim()
+                },
+                ref2: document.getElementById("ref2Name").value.trim() ? {
+                    name: document.getElementById("ref2Name").value.trim(),
+                    institution: document.getElementById("ref2Institution").value.trim(),
+                    position: document.getElementById("ref2Position").value.trim(),
+                    relation: document.getElementById("ref2Relation").value.trim(),
+                    email: document.getElementById("ref2Email").value.trim(),
+                    phone: document.getElementById("ref2Phone").value.trim()
+                } : null
+            },
+            workExperience: document.getElementById("workExperience").value.trim(),
+            motivationStatement: document.getElementById("motivationStatement").value.trim(),
+            applicantConfirmation: document.getElementById("applicantConfirmation").value.trim(),
+            declarationDate: document.getElementById("declarationDate").value,
+            referenceNumber: "ATL-PG-2026-" + Math.floor(10000 + Math.random() * 90000),
+            status: "Pending Transcripts & Review",
+            createdAt: new Date().toISOString()
+        };
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+
+        applicationForm.classList.add("hidden");
+        const successView = document.getElementById("successView");
+        successView.classList.remove("hidden");
+        document.getElementById("generatedReferenceDisplay").textContent = formData.referenceNumber;
+
+        showToast("Postgraduate application submitted successfully!", "success");
+    });
+
+    document.getElementById("payLaterBtn").addEventListener("click", () => {
+        showToast("Saved! You can log in anytime with your reference number to upload academic transcripts.", "success");
+        setTimeout(() => { window.location.href = "login.html"; }, 1500);
+    });
+
+    document.getElementById("payNowBtn").addEventListener("click", () => {
+        showToast("Redirecting to secure transcript upload & review portal...", "success");
+        setTimeout(() => { window.location.href = "login.html"; }, 1500);
+    });
+
+    function showToast(message, type = "") {
+        const toastContainer = document.getElementById("toastContainer");
+        const toast = document.createElement("div");
+        toast.className = "toast " + type;
+        toast.textContent = message;
+        toastContainer.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            toast.style.transform = "translateY(10px)";
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+</script>
+
+</body>
+</html>
