@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Atlas — Application Credits</title>
+
+    <style>
+        :root {
+            --white: #ffffff;
+            --blue-50: #f4faff;
+            --blue-100: #eaf6ff;
+            --blue-200: #d7edff;
+            --blue-300: #b9ddf7;
+            --blue-500: #4aa9df;
+            --blue-600: #278dca;
+            --blue-700: #176f9f;
+
+            --black: #111820;
+            --gray-900: #1c2732;
+            --gray-700: #4b5966;
+            --gray-600: #687683;
+            --gray-500: #85929d;
+            --gray-300: #dce3e8;
+            --gray-200: #e9eef2;
+            --gray-100: #f5f7f9;
+
+            --success: #188a57;
+            --success-bg: #edf9f3;
+
+            --shadow-sm: 0 2px 10px rgba(22, 54, 76, 0.05);
+            --shadow-md: 0 12px 35px rgba(22, 54, 76, 0.09);
+            --shadow-lg: 0 20px 60px rgba(22, 54, 76, 0.12);
+
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            width: 100%;
+            max-width: 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: var(--blue-50);
+            color: var(--black);
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+            line-height: 1.5;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================================
+           TOP BAR
+        ========================================= */
+
+        .topbar {
+            width: 100%;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-inner {
+            width: min(100% - 40px, 1500px);
+            margin: 0 auto;
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-width: 0;
+        }
+
+        .brand-logo {
+            width: 43px;
+            height: 43px;
+            object-fit: contain;
+            flex: 0 0 auto;
+        }
+
+        .brand-text {
+            min-width: 0;
+        }
+
+        .brand-name {
+            font-size: clamp(19px, 1.4vw, 25px);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--black);
+        }
+
+        .brand-subtitle {
+            font-size: clamp(11px, 0.8vw, 13px);
+            color: var(--gray-600);
+            white-space: nowrap;
+        }
+
+        .admin-badge {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 13px;
+            border-radius: 999px;
+            background: var(--blue-100);
+            color: var(--blue-700);
+            font-size: 12px;
+            font-weight: 700;
+            border: 1px solid var(--blue-200);
+        }
+
+        .admin-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--blue-600);
+        }
+
+        /* =========================================
+           MAIN
+        ========================================= */
+
+        .page {
+            width: min(100% - 40px, 1500px);
+            margin: 0 auto;
+            padding: clamp(28px, 4vw, 60px) 0 80px;
+        }
+
+        .page-heading {
+            margin-bottom: clamp(25px, 3vw, 42px);
+        }
+
+        .eyebrow {
+            display: inline-block;
+            color: var(--blue-700);
+            background: var(--blue-100);
+            border: 1px solid var(--blue-200);
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 13px;
+        }
+
+        .page-heading h1 {
+            font-size: clamp(30px, 4vw, 58px);
+            line-height: 1.05;
+            letter-spacing: -2px;
+            font-weight: 850;
+            max-width: 900px;
+        }
+
+        .page-heading h1 span {
+            color: var(--blue-600);
+        }
+
+        .page-heading p {
+            margin-top: 13px;
+            color: var(--gray-600);
+            max-width: 720px;
+            font-size: clamp(14px, 1.1vw, 17px);
+        }
+
+        /* =========================================
+           BALANCE
+        ========================================= */
+
+        .balance-card {
+            width: 100%;
+            background: var(--black);
+            color: var(--white);
+            border-radius: var(--radius-lg);
+            padding: clamp(24px, 3vw, 38px);
+            margin-bottom: clamp(25px, 3vw, 40px);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .balance-card::after {
+            content: "";
+            position: absolute;
+            width: clamp(180px, 20vw, 400px);
+            height: clamp(180px, 20vw, 400px);
+            border-radius: 50%;
+            right: -100px;
+            top: -150px;
+            background: var(--blue-600);
+            opacity: 0.25;
+        }
+
+        .balance-top {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .balance-label {
+            color: #b9c5ce;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .balance-number {
+            margin-top: 7px;
+            font-size: clamp(42px, 5vw, 76px);
+            line-height: 1;
+            font-weight: 850;
+            letter-spacing: -3px;
+        }
+
+        .balance-unit {
+            color: #b9c5ce;
+            margin-top: 9px;
+            font-size: clamp(13px, 1vw, 15px);
+        }
+
+        .balance-action {
+            position: relative;
+            z-index: 2;
+        }
+
+        .primary-button {
+            border: none;
+            background: var(--blue-500);
+            color: var(--white);
+            border-radius: 12px;
+            padding: 13px 20px;
+            font-weight: 800;
+            font-size: 14px;
+            transition: 0.2s ease;
+            box-shadow: 0 7px 18px rgba(74, 169, 223, 0.22);
+        }
+
+        .primary-button:hover {
+            background: var(--blue-600);
+            transform: translateY(-1px);
+        }
+
+        /* =========================================
+           CONTENT GRID
+        ========================================= */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.8fr);
+            gap: clamp(20px, 3vw, 38px);
+            align-items: start;
+        }
+
+        .section-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            min-width: 0;
+        }
+
+        .section-header {
+            padding: clamp(20px, 2.3vw, 30px);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .section-header h2 {
+            font-size: clamp(20px, 1.8vw, 27px);
+            letter-spacing: -0.7px;
+        }
+
+        .section-header p {
+            color: var(--gray-600);
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        /* =========================================
+           CREDIT PACKAGES
+        ========================================= */
+
+        .packages {
+            padding: clamp(18px, 2.3vw, 30px);
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .package {
+            width: 100%;
+            min-width: 0;
+            position: relative;
+            border: 1.5px solid var(--gray-200);
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: clamp(17px, 2vw, 24px);
+            text-align: left;
+            transition: 0.2s ease;
+        }
+
+        .package:hover {
+            border-color: var(--blue-300);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .package.selected {
+            border-color: var(--blue-600);
+            background: var(--blue-50);
+            box-shadow: 0 0 0 2px rgba(39, 141, 202, 0.08);
+        }
+
+        .package.recommended::before {
+            content: "POPULAR";
+            position: absolute;
+            top: -1px;
+            right: 15px;
+            background: var(--blue-600);
+            color: var(--white);
+            padding: 5px 9px;
+            border-radius: 0 0 8px 8px;
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 0.7px;
+        }
+
+        .package-name {
+            font-size: 13px;
+            color: var(--gray-600);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .package-credits {
+            font-size: clamp(27px, 2.5vw, 38px);
+            line-height: 1.05;
+            font-weight: 850;
+            letter-spacing: -1.3px;
+            margin-top: 9px;
+        }
+
+        .package-credits small {
+            font-size: 13px;
+            color: var(--gray-600);
+            letter-spacing: 0;
+            font-weight: 600;
+        }
+
+        .package-price {
+            margin-top: 13px;
+            font-size: clamp(19px, 1.7vw, 25px);
+            font-weight: 850;
+        }
+
+        .package-rate {
+            margin-top: 3px;
+            color: var(--gray-600);
+            font-size: 12px;
+        }
+
+        .package-check {
+            position: absolute;
+            top: 17px;
+            right: 17px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1.5px solid var(--gray-300);
+            display: grid;
+            place-items: center;
+            color: transparent;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .package.selected .package-check {
+            background: var(--blue-600);
+            border-color: var(--blue-600);
+            color: var(--white);
+        }
+
+        /* =========================================
+           PURCHASE SUMMARY
+        ========================================= */
+
+        .purchase-panel {
+            padding: clamp(20px, 2.3vw, 30px);
+        }
+
+        .summary-box {
+            background: var(--blue-50);
+            border: 1px solid var(--blue-200);
+            border-radius: var(--radius-md);
+            padding: 20px;
+        }
+
+        .summary-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .summary-credits {
+            margin-top: 6px;
+            font-size: clamp(30px, 3vw, 45px);
+            font-weight: 850;
+            letter-spacing: -1.5px;
+        }
+
+        .summary-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 13px;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-row span:first-child {
+            color: var(--gray-600);
+        }
+
+        .summary-row strong {
+            text-align: right;
+        }
+
+        .total-row {
+            margin-top: 8px;
+            padding-top: 17px;
+            border-top: 1px solid var(--gray-300);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .total-label {
+            font-weight: 800;
+        }
+
+        .total-price {
+            font-size: clamp(23px, 2vw, 31px);
+            font-weight: 850;
+        }
+
+        .purchase-button {
+            width: 100%;
+            margin-top: 17px;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            background: var(--black);
+            color: var(--white);
+            font-weight: 800;
+            transition: 0.2s ease;
+        }
+
+        .purchase-button:hover {
+            background: var(--blue-700);
+        }
+
+        .fine-print {
+            color: var(--gray-500);
+            font-size: 11px;
+            line-height: 1.55;
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        /* =========================================
+           TRANSACTION HISTORY
+        ========================================= */
+
+        .history-card {
+            margin-top: clamp(22px, 3vw, 40px);
+        }
+
+        .history-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th,
+        td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        th {
+            color: var(--gray-500);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 850;
+            background: var(--gray-100);
+        }
+
+        td {
+            color: var(--gray-700);
+        }
+
+        td strong {
+            color: var(--black);
+        }
+
+        .credit-positive {
+            color: var(--success);
+            font-weight: 800;
+        }
+
+        .credit-negative {
+            color: #b84d4d;
+            font-weight: 800;
+        }
+
+        .status {
+            display: inline-flex;
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: var(--success-bg);
+            color: var(--success);
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        /* =========================================
+           INFO STRIP
+        ========================================= */
+
+        .info-strip {
+            margin-top: 20px;
+            background: var(--blue-100);
+            border: 1px solid var(--blue-200);
+            border-radius: var(--radius-md);
+            padding: 17px 20px;
+            color: var(--blue-700);
+            font-size: 12px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .info-icon {
+            width: 21px;
+            height: 21px;
+            border-radius: 50%;
+            background: var(--blue-600);
+            color: white;
+            display: grid;
+            place-items: center;
+            flex: 0 0 auto;
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        /* =========================================
+           MODAL
+        ========================================= */
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 500;
+            background: rgba(8, 18, 27, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            width: min(100%, 520px);
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            padding: 23px 25px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 21px;
+            letter-spacing: -0.5px;
+        }
+
+        .close-button {
+            width: 34px;
+            height: 34px;
+            border: none;
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border-radius: 50%;
+            font-size: 19px;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .payment-option {
+            border: 1px solid var(--gray-200);
+            border-radius: 13px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .payment-option strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .payment-option span {
+            display: block;
+            color: var(--gray-500);
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .fake-input {
+            margin-top: 20px;
+            width: 100%;
+            border: 1px solid var(--gray-300);
+            border-radius: 10px;
+            padding: 13px;
+            color: var(--gray-500);
+            background: var(--gray-100);
+            font-size: 13px;
+        }
+
+        .modal-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .secondary-button {
+            flex: 1;
+            border: 1px solid var(--gray-300);
+            background: var(--white);
+            color: var(--gray-700);
+            border-radius: 11px;
+            padding: 13px;
+            font-weight: 700;
+        }
+
+        .modal-primary {
+            flex: 1;
+            border: none;
+            background: var(--black);
+            color: var(--white);
+            border-radius: 11px;
+            padding: 13px;
+            font-weight: 800;
+        }
+
+        /* =========================================
+           SUCCESS
+        ========================================= */
+
+        .success-screen {
+            text-align: center;
+            padding: 35px 25px 30px;
+        }
+
+        .success-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            margin: 0 auto 17px;
+            display: grid;
+            place-items: center;
+            background: var(--success-bg);
+            color: var(--success);
+            font-size: 30px;
+            font-weight: 900;
+        }
+
+        .success-screen h3 {
+            font-size: 25px;
+            letter-spacing: -0.6px;
+        }
+
+        .success-screen p {
+            color: var(--gray-600);
+            font-size: 13px;
+            margin-top: 7px;
+        }
+
+        .new-balance {
+            margin: 22px 0;
+            padding: 18px;
+            background: var(--blue-50);
+            border: 1px solid var(--blue-200);
+            border-radius: 13px;
+        }
+
+        .new-balance span {
+            display: block;
+            color: var(--gray-600);
+            font-size: 11px;
+        }
+
+        .new-balance strong {
+            display: block;
+            margin-top: 3px;
+            font-size: 34px;
+            letter-spacing: -1px;
+        }
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: var(--gray-500);
+            font-size: 11px;
+        }
+
+        /* =========================================
+           TABLET
+        ========================================= */
+
+        @media (max-width: 1000px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .purchase-panel {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                gap: 20px;
+                align-items: start;
+            }
+
+            .purchase-panel .info-strip {
+                grid-column: 1 / -1;
+                margin-top: 0;
+            }
+        }
+
+        /* =========================================
+           SMALL TABLET / LARGE PHONE
+        ========================================= */
+
+        @media (max-width: 700px) {
+            .topbar-inner,
+            .page {
+                width: min(100% - 28px, 1500px);
+            }
+
+            .topbar-inner {
+                min-height: 67px;
+            }
+
+            .brand-subtitle {
+                display: none;
+            }
+
+            .balance-top {
+                flex-direction: column;
+            }
+
+            .balance-action {
+                width: 100%;
+            }
+
+            .balance-action .primary-button {
+                width: 100%;
+            }
+
+            .packages {
+                grid-template-columns: 1fr;
+            }
+
+            .purchase-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .purchase-panel .info-strip {
+                grid-column: auto;
+            }
+
+            .history-table-wrap {
+                margin: 0;
+            }
+        }
+
+        /* =========================================
+           SMALL PHONE
+        ========================================= */
+
+        @media (max-width: 430px) {
+            .topbar-inner,
+            .page {
+                width: calc(100% - 20px);
+            }
+
+            .page {
+                padding-top: 23px;
+                padding-bottom: 50px;
+            }
+
+            .brand-logo {
+                width: 37px;
+                height: 37px;
+            }
+
+            .brand-name {
+                font-size: 18px;
+            }
+
+            .admin-badge {
+                padding: 7px 9px;
+                font-size: 9px;
+            }
+
+            .admin-dot {
+                display: none;
+            }
+
+            .page-heading h1 {
+                letter-spacing: -1.2px;
+            }
+
+            .balance-card {
+                border-radius: 18px;
+            }
+
+            .balance-number {
+                letter-spacing: -2px;
+            }
+
+            .section-card {
+                border-radius: 18px;
+            }
+
+            .packages,
+            .purchase-panel {
+                padding: 15px;
+            }
+
+            .modal-overlay {
+                padding: 10px;
+            }
+
+            .modal {
+                border-radius: 18px;
+            }
+
+            .modal-body,
+            .modal-header {
+                padding: 19px;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .secondary-button,
+            .modal-primary {
+                width: 100%;
+            }
+        }
+
+        /* =========================================
+           LARGE SCREENS
+        ========================================= */
+
+        @media (min-width: 1600px) {
+            .topbar-inner,
+            .page {
+                width: min(92%, 1750px);
+            }
+
+            .content-grid {
+                grid-template-columns: minmax(0, 1.7fr) minmax(400px, 0.75fr);
+            }
+
+            .packages {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        /* =========================================
+           ENORMOUS SCREENS
+        ========================================= */
+
+        @media (min-width: 2200px) {
+            .topbar-inner,
+            .page {
+                width: min(90%, 2100px);
+            }
+
+            .page {
+                padding-top: 75px;
+            }
+
+            .content-grid {
+                gap: 50px;
+            }
+
+            .packages {
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================
+         TOP BAR
+    ========================================= -->
+
+    <header class="topbar">
+        <div class="topbar-inner">
+
+            <div class="brand">
+                <img
+                    src="assets/logos.png"
+                    alt="Atlas"
+                    class="brand-logo"
+                    onerror="this.style.display='none'"
+                >
+
+                <div class="brand-text">
+                    <div class="brand-name">Atlas</div>
+                    <div class="brand-subtitle">
+                        College Administration
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-badge">
+                <span class="admin-dot"></span>
+                College Admin
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- =========================================
+         MAIN
+    ========================================= -->
+
+    <main class="page">
+
+        <section class="page-heading">
+
+            <span class="eyebrow">
+                Application Credits
+            </span>
+
+            <h1>
+                Manage your
+                <span>application credits.</span>
+            </h1>
+
+            <p>
+                Purchase application credits in bulk and use them whenever
+                your college receives applications. Credits never expire.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================
+             BALANCE
+        ====================================== -->
+
+        <section class="balance-card">
+
+            <div class="balance-top">
+
+                <div>
+                    <div class="balance-label">
+                        Current Balance
+                    </div>
+
+                    <div
+                        class="balance-number"
+                        id="balanceNumber"
+                    >
+                        827
+                    </div>
+
+                    <div class="balance-unit">
+                        Application Credits Available
+                    </div>
+                </div>
+
+                <div class="balance-action">
+
+                    <button
+                        class="primary-button"
+                        onclick="scrollToPackages()"
+                    >
+                        + Buy Application Credits
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================
+             MAIN CONTENT
+        ====================================== -->
+
+        <div class="content-grid">
+
+            <!-- PACKAGES -->
+
+            <section class="section-card" id="packagesSection">
+
+                <div class="section-header">
+
+                    <h2>
+                        Buy Application Credits
+                    </h2>
+
+                    <p>
+                        Choose the number of application submissions you want available.
+                    </p>
+
+                </div>
+
+
+                <div class="packages">
+
+                    <!-- 100 -->
+
+                    <button
+                        class="package"
+                        data-credits="100"
+                        data-price="3500"
+                        data-rate="35"
+                        onclick="selectPackage(this)"
+                    >
+
+                        <div class="package-check">✓</div>
+
+                        <div class="package-name">
+                            Starter
+                        </div>
+
+                        <div class="package-credits">
+                            100
+                            <small>credits</small>
+                        </div>
+
+                        <div class="package-price">
+                            R3,500
+                        </div>
+
+                        <div class="package-rate">
+                            R35 per application
+                        </div>
+
+                    </button>
+
+
+                    <!-- 250 -->
+
+                    <button
+                        class="package"
+                        data-credits="250"
+                        data-price="8000"
+                        data-rate="32"
+                        onclick="selectPackage(this)"
+                    >
+
+                        <div class="package-check">✓</div>
+
+                        <div class="package-name">
+                            Standard
+                        </div>
+
+                        <div class="package-credits">
+                            250
+                            <small>credits</small>
+                        </div>
+
+                        <div class="package-price">
+                            R8,000
+                        </div>
+
+                        <div class="package-rate">
+                            R32 per application
+                        </div>
+
+                    </button>
+
+
+                    <!-- 500 -->
+
+                    <button
+                        class="package recommended selected"
+                        data-credits="500"
+                        data-price="15000"
+                        data-rate="30"
+                        onclick="selectPackage(this)"
+                    >
+
+                        <div class="package-check">✓</div>
+
+                        <div class="package-name">
+                            Growth
+                        </div>
+
+                        <div class="package-credits">
+                            500
+                            <small>credits</small>
+                        </div>
+
+                        <div class="package-price">
+                            R15,000
+                        </div>
+
+                        <div class="package-rate">
+                            R30 per application
+                        </div>
+
+                    </button>
+
+
+                    <!-- 1000 -->
+
+                    <button
+                        class="package"
+                        data-credits="1000"
+                        data-price="28000"
+                        data-rate="28"
+                        onclick="selectPackage(this)"
+                    >
+
+                        <div class="package-check">✓</div>
+
+                        <div class="package-name">
+                            Bulk
+                        </div>
+
+                        <div class="package-credits">
+                            1,000
+                            <small>credits</small>
+                        </div>
+
+                        <div class="package-price">
+                            R28,000
+                        </div>
+
+                        <div class="package-rate">
+                            R28 per application
+                        </div>
+
+                    </button>
+
+
+                    <!-- 2500 -->
+
+                    <button
+                        class="package"
+                        data-credits="2500"
+                        data-price="65000"
+                        data-rate="26"
+                        onclick="selectPackage(this)"
+                    >
+
+                        <div class="package-check">✓</div>
+
+                        <div class="package-name">
+                            Institutional Bulk
+                        </div>
+
+                        <div class="package-credits">
+                            2,500
+                            <small>credits</small>
+                        </div>
+
+                        <div class="package-price">
+                            R65,000
+                        </div>
+
+                        <div class="package-rate">
+                            R26 per application
+                        </div>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- PURCHASE SUMMARY -->
+
+            <aside class="section-card">
+
+                <div class="section-header">
+
+                    <h2>
+                        Purchase Summary
+                    </h2>
+
+                    <p>
+                        Review your selected application credits.
+                    </p>
+
+                </div>
+
+                <div class="purchase-panel">
+
+                    <div class="summary-box">
+
+                        <div class="summary-title">
+                            Selected Package
+                        </div>
+
+                        <div
+                            class="summary-credits"
+                            id="summaryCredits"
+                        >
+                            500 Credits
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Application credits</span>
+                            <strong id="summaryCreditsRow">
+                                500
+                            </strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Cost per application</span>
+                            <strong id="summaryRate">
+                                R30
+                            </strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Current balance</span>
+                            <strong id="summaryBalance">
+                                827
+                            </strong>
+                        </div>
+
+                        <div class="total-row">
+                            <div class="total-label">
+                                Total
+                            </div>
+
+                            <div
+                                class="total-price"
+                                id="summaryPrice"
+                            >
+                                R15,000
+                            </div>
+                        </div>
+
+                        <button
+                            class="purchase-button"
+                            onclick="openPayment()"
+                        >
+                            Continue to Payment
+                        </button>
+
+                        <div class="fine-print">
+                            Application credits do not expire.
+                            1 application credit is used for each
+                            successfully submitted application.
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-strip">
+
+                        <div class="info-icon">
+                            i
+                        </div>
+
+                        <div>
+                            <strong>
+                                Credits never expire.
+                            </strong>
+
+                            Your unused application credits remain
+                            available until they are used.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+
+        <!-- =====================================
+             TRANSACTION HISTORY
+        ====================================== -->
+
+        <section class="section-card history-card">
+
+            <div class="section-header">
+
+                <h2>
+                    Application Credit History
+                </h2>
+
+                <p>
+                    View purchases and application-credit usage.
+                </p>
+
+            </div>
+
+
+            <div class="history-table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Date</th>
+                            <th>Activity</th>
+                            <th>Credits</th>
+                            <th>Balance</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="transactionBody">
+
+                        <tr>
+                            <td>07 Sep 2026</td>
+
+                            <td>
+                                <strong>
+                                    Credits purchased
+                                </strong>
+                            </td>
+
+                            <td class="credit-positive">
+                                +500
+                            </td>
+
+                            <td>
+                                827
+                            </td>
+
+                            <td>
+                                <span class="status">
+                                    Completed
+                                </span>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>06 Sep 2026</td>
+
+                            <td>
+                                <strong>
+                                    Applications submitted
+                                </strong>
+                            </td>
+
+                            <td class="credit-negative">
+                                −1
+                            </td>
+
+                            <td>
+                                327
+                            </td>
+
+                            <td>
+                                <span class="status">
+                                    Completed
+                                </span>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>06 Sep 2026</td>
+
+                            <td>
+                                <strong>
+                                    Applications submitted
+                                </strong>
+                            </td>
+
+                            <td class="credit-negative">
+                                −1
+                            </td>
+
+                            <td>
+                                328
+                            </td>
+
+                            <td>
+                                <span class="status">
+                                    Completed
+                                </span>
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>05 Sep 2026</td>
+
+                            <td>
+                                <strong>
+                                    Credits purchased
+                                </strong>
+                            </td>
+
+                            <td class="credit-positive">
+                                +250
+                            </td>
+
+                            <td>
+                                329
+                            </td>
+
+                            <td>
+                                <span class="status">
+                                    Completed
+                                </span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+            Atlas Application Credits • College Administration
+        </footer>
+
+    </main>
+
+
+    <!-- =========================================
+         PAYMENT MODAL
+    ========================================= -->
+
+    <div
+        class="modal-overlay"
+        id="paymentModal"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <h3>
+                    Complete Purchase
+                </h3>
+
+                <button
+                    class="close-button"
+                    onclick="closePayment()"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="summary-box">
+
+                    <div class="summary-title">
+                        You're purchasing
+                    </div>
+
+                    <div
+                        class="summary-credits"
+                        id="modalCredits"
+                    >
+                        500 Credits
+                    </div>
+
+                    <div class="summary-row">
+
+                        <span>
+                            Application credits
+                        </span>
+
+                        <strong id="modalCreditCount">
+                            500
+                        </strong>
+
+                    </div>
+
+                    <div class="total-row">
+
+                        <div class="total-label">
+                            Amount
+                        </div>
+
+                        <div
+                            class="total-price"
+                            id="modalPrice"
+                        >
+                            R15,000
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div style="margin-top:20px;">
+
+                    <div
+                        style="
+                            font-size:12px;
+                            font-weight:800;
+                            margin-bottom:9px;
+                        "
+                    >
+                        Payment Method
+                    </div>
+
+
+                    <div class="payment-option">
+
+                        <div>
+                            <strong>
+                                Online Payment
+                            </strong>
+
+                            <span>
+                                Secure payment gateway
+                            </span>
+                        </div>
+
+                        <strong>
+                            →
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-option">
+
+                        <div>
+                            <strong>
+                                EFT / Bank Payment
+                            </strong>
+
+                            <span>
+                                Pay using your institution's bank account
+                            </span>
+                        </div>
+
+                        <strong>
+                            →
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="fake-input">
+                    Payment gateway connection will appear here.
+                </div>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        class="secondary-button"
+                        onclick="closePayment()"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        class="modal-primary"
+                        onclick="simulatePayment()"
+                    >
+                        Pay & Add Credits
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         SUCCESS MODAL
+    ========================================= -->
+
+    <div
+        class="modal-overlay"
+        id="successModal"
+    >
+
+        <div class="modal">
+
+            <div class="success-screen">
+
+                <div class="success-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Purchase Successful
+                </h3>
+
+                <p>
+                    Your application credits have been added
+                    to your college account.
+                </p>
+
+
+                <div class="new-balance">
+
+                    <span>
+                        New Application Credit Balance
+                    </span>
+
+                    <strong id="newBalance">
+                        1,327
+                    </strong>
+
+                </div>
+
+
+                <button
+                    class="primary-button"
+                    style="width:100%;"
+                    onclick="closeSuccess()"
+                >
+                    Done
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================= -->
+
+    <script>
+
+        /* =========================================
+           STATE
+        ========================================= */
+
+        let currentBalance = 827;
+
+        let selectedCredits = 500;
+        let selectedPrice = 15000;
+        let selectedRate = 30;
+
+
+        /* =========================================
+           FORMAT CURRENCY
+        ========================================= */
+
+        function formatCurrency(amount) {
+
+            return "R" + amount.toLocaleString("en-ZA");
+
+        }
+
+
+        /* =========================================
+           FORMAT NUMBER
+        ========================================= */
+
+        function formatNumber(number) {
+
+            return number.toLocaleString("en-ZA");
+
+        }
+
+
+        /* =========================================
+           SELECT PACKAGE
+        ========================================= */
+
+        function selectPackage(element) {
+
+            document
+                .querySelectorAll(".package")
+                .forEach(packageElement => {
+
+                    packageElement.classList.remove("selected");
+
+                });
+
+
+            element.classList.add("selected");
+
+
+            selectedCredits =
+                Number(element.dataset.credits);
+
+            selectedPrice =
+                Number(element.dataset.price);
+
+            selectedRate =
+                Number(element.dataset.rate);
+
+
+            updateSummary();
+
+        }
+
+
+        /* =========================================
+           UPDATE SUMMARY
+        ========================================= */
+
+        function updateSummary() {
+
+            document.getElementById("summaryCredits").textContent =
+                formatNumber(selectedCredits) + " Credits";
+
+            document.getElementById("summaryCreditsRow").textContent =
+                formatNumber(selectedCredits);
+
+            document.getElementById("summaryRate").textContent =
+                formatCurrency(selectedRate);
+
+            document.getElementById("summaryBalance").textContent =
+                formatNumber(currentBalance);
+
+            document.getElementById("summaryPrice").textContent =
+                formatCurrency(selectedPrice);
+
+            document.getElementById("modalCredits").textContent =
+                formatNumber(selectedCredits) + " Credits";
+
+            document.getElementById("modalCreditCount").textContent =
+                formatNumber(selectedCredits);
+
+            document.getElementById("modalPrice").textContent =
+                formatCurrency(selectedPrice);
+
+        }
+
+
+        /* =========================================
+           SCROLL TO PACKAGES
+        ========================================= */
+
+        function scrollToPackages() {
+
+            document
+                .getElementById("packagesSection")
+                .scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+        }
+
+
+        /* =========================================
+           OPEN PAYMENT
+        ========================================= */
+
+        function openPayment() {
+
+            updateSummary();
+
+            document
+                .getElementById("paymentModal")
+                .classList.add("active");
+
+            document.body.style.overflow = "hidden";
+
+        }
+
+
+        /* =========================================
+           CLOSE PAYMENT
+        ========================================= */
+
+        function closePayment() {
+
+            document
+                .getElementById("paymentModal")
+                .classList.remove("active");
+
+            document.body.style.overflow = "";
+
+        }
+
+
+        /* =========================================
+           SIMULATED PAYMENT
+        ========================================= */
+
+        function simulatePayment() {
+
+            /*
+                This is intentionally a local prototype.
+
+                In the real Atlas system, this button would
+                connect to the actual payment gateway.
+            */
+
+
+            currentBalance += selectedCredits;
+
+
+            document.getElementById("balanceNumber").textContent =
+                formatNumber(currentBalance);
+
+            document.getElementById("summaryBalance").textContent =
+                formatNumber(currentBalance);
+
+            document.getElementById("newBalance").textContent =
+                formatNumber(currentBalance);
+
+
+            addTransaction(
+                selectedCredits,
+                currentBalance
+            );
+
+
+            closePayment();
+
+
+            setTimeout(() => {
+
+                document
+                    .getElementById("successModal")
+                    .classList.add("active");
+
+                document.body.style.overflow = "hidden";
+
+            }, 200);
+
+        }
+
+
+        /* =========================================
+           ADD TRANSACTION
+        ========================================= */
+
+        function addTransaction(
+            credits,
+            balance
+        ) {
+
+            const table =
+                document.getElementById("transactionBody");
+
+
+            const row =
+                document.createElement("tr");
+
+
+            const date =
+                new Date().toLocaleDateString(
+                    "en-ZA",
+                    {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric"
+                    }
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${date}
+                </td>
+
+                <td>
+                    <strong>
+                        Credits purchased
+                    </strong>
+                </td>
+
+                <td class="credit-positive">
+                    +${formatNumber(credits)}
+                </td>
+
+                <td>
+                    ${formatNumber(balance)}
+                </td>
+
+                <td>
+                    <span class="status">
+                        Completed
+                    </span>
+                </td>
+
+            `;
+
+
+            table.insertBefore(
+                row,
+                table.firstChild
+            );
+
+        }
+
+
+        /* =========================================
+           CLOSE SUCCESS
+        ========================================= */
+
+        function closeSuccess() {
+
+            document
+                .getElementById("successModal")
+                .classList.remove("active");
+
+            document.body.style.overflow = "";
+
+            updateSummary();
+
+        }
+
+
+        /* =========================================
+           CLOSE MODALS WITH ESC
+        ========================================= */
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (event.key === "Escape") {
+
+                    closePayment();
+                    closeSuccess();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================
+           CLICK OUTSIDE MODAL
+        ========================================= */
+
+        document
+            .getElementById("paymentModal")
+            .addEventListener(
+                "click",
+                function(event) {
+
+                    if (event.target === this) {
+
+                        closePayment();
+
+                    }
+
+                }
+            );
+
+
+        document
+            .getElementById("successModal")
+            .addEventListener(
+                "click",
+                function(event) {
+
+                    if (event.target === this) {
+
+                        closeSuccess();
+
+                    }
+
+                }
+            );
+
+
+        /* =========================================
+           INITIALIZE
+        ========================================= */
+
+        updateSummary();
+
+    </script>
+
+</body>
+  </html>
