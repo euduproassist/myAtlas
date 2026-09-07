@@ -1,0 +1,3724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Atlas | Undergraduate Application</title>
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    overflow-x:hidden;
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background:#edf4f9;
+    color:#111827;
+    overflow-x:hidden;
+}
+
+
+/* =========================================================
+   COLOUR SYSTEM
+========================================================= */
+
+:root{
+
+    --white:#ffffff;
+
+    --blue:#eaf5ff;
+    --blue-soft:#f4faff;
+    --blue-border:#cfe7f8;
+    --blue-dark:#2c638c;
+
+    --black:#111827;
+
+    --text:#17212b;
+    --muted:#667788;
+
+    --border:#dce5ec;
+
+    --green:#16835b;
+    --green-bg:#eaf8f2;
+
+    --orange:#b56b00;
+    --orange-bg:#fff5df;
+
+    --red:#b42318;
+    --red-bg:#fff0ef;
+}
+
+
+/* =========================================================
+   TOP APPLICATION VIEWER BAR
+========================================================= */
+
+.topbar{
+
+    min-height:76px;
+
+    background:#ffffff;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    padding:
+        12px
+        clamp(18px,4vw,64px);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+}
+
+
+.brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:13px;
+
+    min-width:0;
+}
+
+
+.brand img{
+
+    width:48px;
+
+    height:48px;
+
+    object-fit:contain;
+
+    flex-shrink:0;
+}
+
+
+.brand-copy strong{
+
+    display:block;
+
+    font-size:18px;
+
+    line-height:1.1;
+
+    letter-spacing:-0.3px;
+}
+
+
+.brand-copy span{
+
+    display:block;
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    margin-top:4px;
+}
+
+
+.top-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+
+.button{
+
+    min-height:42px;
+
+    border-radius:10px;
+
+    padding:0 17px;
+
+    border:1px solid transparent;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    transition:
+        transform .15s ease,
+        box-shadow .15s ease;
+}
+
+
+.button:hover{
+
+    transform:translateY(-1px);
+
+    box-shadow:
+        0 7px 18px rgba(15,23,42,.10);
+}
+
+
+.button-light{
+
+    background:var(--blue);
+
+    color:#1e567d;
+
+    border-color:var(--blue-border);
+}
+
+
+.button-dark{
+
+    background:#111827;
+
+    color:#ffffff;
+}
+
+
+/* =========================================================
+   VIEWER AREA
+========================================================= */
+
+.viewer{
+
+    width:min(1500px,100%);
+
+    margin:auto;
+
+    padding:
+        30px
+        clamp(12px,3vw,45px)
+        70px;
+}
+
+
+.viewer-heading{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-end;
+
+    gap:20px;
+
+    margin-bottom:24px;
+}
+
+
+.viewer-heading h1{
+
+    font-size:
+        clamp(25px,3vw,37px);
+
+    letter-spacing:-1.2px;
+
+    margin-bottom:6px;
+}
+
+
+.viewer-heading p{
+
+    color:var(--muted);
+
+    font-size:14px;
+}
+
+
+.application-status{
+
+    background:#ffffff;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    padding:10px 15px;
+
+    font-size:12px;
+
+    white-space:nowrap;
+}
+
+
+.application-status span{
+
+    color:var(--muted);
+
+    margin-right:5px;
+}
+
+
+.application-status strong{
+
+    color:var(--orange);
+}
+
+
+/* =========================================================
+   DOCUMENT
+========================================================= */
+
+.document{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:28px;
+}
+
+
+/* =========================================================
+   A4 PAGE
+========================================================= */
+
+.page{
+
+    width:210mm;
+
+    height:297mm;
+
+    background:#ffffff;
+
+    position:relative;
+
+    padding:
+        16mm
+        17mm
+        18mm;
+
+    box-shadow:
+        0 18px 55px rgba(15,23,42,.13);
+
+    overflow:hidden;
+
+    page-break-after:always;
+
+    break-after:page;
+}
+
+
+.page:last-child{
+
+    page-break-after:auto;
+
+    break-after:auto;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    padding-bottom:11px;
+
+    border-bottom:2px solid var(--black);
+
+    margin-bottom:15px;
+}
+
+
+.page-brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    min-width:0;
+}
+
+
+.page-brand img{
+
+    width:44px;
+
+    height:44px;
+
+    object-fit:contain;
+
+    flex-shrink:0;
+}
+
+
+.institution-name strong{
+
+    display:block;
+
+    font-size:13px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.65px;
+}
+
+
+.institution-name span{
+
+    display:block;
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    margin-top:3px;
+}
+
+
+.page-number{
+
+    text-align:right;
+
+    color:var(--muted);
+
+    font-size:8px;
+
+    line-height:1.5;
+
+    white-space:nowrap;
+}
+
+
+/* =========================================================
+   DOCUMENT TITLE
+========================================================= */
+
+.document-title{
+
+    text-align:center;
+
+    margin:
+        8px 0
+        16px;
+}
+
+
+.document-title h2{
+
+    font-size:22px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+}
+
+
+.document-title p{
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    margin-top:5px;
+}
+
+
+/* =========================================================
+   APPLICATION SUMMARY
+========================================================= */
+
+.summary{
+
+    display:grid;
+
+    grid-template-columns:
+        1.5fr
+        1fr
+        1fr;
+
+    border:1px solid var(--border);
+
+    margin-bottom:15px;
+}
+
+
+.summary-item{
+
+    padding:9px 11px;
+
+    border-right:1px solid var(--border);
+}
+
+
+.summary-item:last-child{
+
+    border-right:none;
+}
+
+
+.label{
+
+    display:block;
+
+    color:var(--muted);
+
+    font-size:7.5px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.55px;
+
+    font-weight:800;
+
+    margin-bottom:4px;
+}
+
+
+.value{
+
+    font-size:10.5px;
+
+    font-weight:650;
+
+    line-height:1.35;
+}
+
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.section{
+
+    margin-top:14px;
+}
+
+
+.section-title{
+
+    background:var(--blue);
+
+    border-left:4px solid var(--black);
+
+    padding:8px 10px;
+
+    font-size:10.5px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.65px;
+
+    font-weight:850;
+
+    margin-bottom:8px;
+}
+
+
+.section-note{
+
+    color:var(--muted);
+
+    font-size:8.5px;
+
+    margin:
+        -2px 0
+        8px;
+}
+
+
+/* =========================================================
+   FIELD TABLE
+========================================================= */
+
+.fields{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    border-top:1px solid var(--border);
+
+    border-left:1px solid var(--border);
+}
+
+
+.field{
+
+    min-height:45px;
+
+    padding:8px 10px;
+
+    border-right:1px solid var(--border);
+
+    border-bottom:1px solid var(--border);
+}
+
+
+.field.full{
+
+    grid-column:1 / -1;
+}
+
+
+.field .value{
+
+    font-size:10px;
+
+    font-weight:600;
+}
+
+
+/* =========================================================
+   TABLES
+========================================================= */
+
+.data-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    font-size:9px;
+}
+
+
+.data-table th{
+
+    background:#f5f9fc;
+
+    border:1px solid var(--border);
+
+    padding:7px 8px;
+
+    text-align:left;
+
+    text-transform:uppercase;
+
+    letter-spacing:.4px;
+
+    font-size:7.5px;
+}
+
+
+.data-table td{
+
+    border:1px solid var(--border);
+
+    padding:8px;
+
+    line-height:1.35;
+
+    vertical-align:top;
+}
+
+
+.data-table strong{
+
+    font-size:9px;
+}
+
+
+/* =========================================================
+   DOCUMENT LIST
+========================================================= */
+
+.document-list{
+
+    border:1px solid var(--border);
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+}
+
+
+.document-item{
+
+    min-height:44px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    padding:8px 10px;
+
+    border-bottom:1px solid var(--border);
+}
+
+
+.document-item:nth-child(odd){
+
+    border-right:1px solid var(--border);
+}
+
+
+.document-item:nth-last-child(-n+2){
+
+    border-bottom:none;
+}
+
+
+.document-name{
+
+    font-size:9px;
+
+    font-weight:700;
+}
+
+
+.document-state{
+
+    font-size:7px;
+
+    font-weight:850;
+
+    padding:4px 7px;
+
+    background:var(--green-bg);
+
+    color:var(--green);
+
+    border:1px solid #bce6d4;
+
+    white-space:nowrap;
+}
+
+
+.document-state.not-required{
+
+    background:#f3f4f6;
+
+    color:#667085;
+
+    border-color:#e1e5ea;
+}
+
+
+/* =========================================================
+   DECLARATION
+========================================================= */
+
+.declaration{
+
+    border:1px solid var(--border);
+
+    background:#fbfdff;
+
+    padding:11px;
+
+    font-size:8.7px;
+
+    line-height:1.6;
+}
+
+
+.declaration strong{
+
+    display:block;
+
+    font-size:8px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.55px;
+
+    margin-bottom:5px;
+}
+
+
+/* =========================================================
+   SIGNATURES
+========================================================= */
+
+.signatures{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:28px;
+
+    margin-top:18px;
+}
+
+
+.signature{
+
+    border-bottom:1px solid var(--black);
+
+    padding-top:25px;
+
+    font-size:9px;
+}
+
+
+.signature small{
+
+    display:block;
+
+    color:var(--muted);
+
+    font-size:7.5px;
+
+    padding:
+        5px 0
+        7px;
+}
+
+
+/* =========================================================
+   REVIEW BOX
+========================================================= */
+
+.review-box{
+
+    border:1px solid var(--border);
+
+    background:#fbfdff;
+
+    padding:10px;
+}
+
+
+.review-row{
+
+    display:grid;
+
+    grid-template-columns:145px 1fr;
+
+    min-height:34px;
+
+    align-items:center;
+
+    border-bottom:1px solid var(--border);
+
+    font-size:9px;
+}
+
+
+.review-row:last-child{
+
+    border-bottom:none;
+}
+
+
+.review-row b{
+
+    color:var(--muted);
+
+    text-transform:uppercase;
+
+    letter-spacing:.35px;
+
+    font-size:7.5px;
+}
+
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+.note-lines{
+
+    border:1px solid var(--border);
+
+    padding:10px;
+}
+
+
+.note-line{
+
+    height:30px;
+
+    border-bottom:1px solid #b9c5cf;
+
+    margin-bottom:2px;
+}
+
+
+.note-line:last-child{
+
+    margin-bottom:0;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.page-footer{
+
+    position:absolute;
+
+    left:17mm;
+
+    right:17mm;
+
+    bottom:8mm;
+
+    padding-top:6px;
+
+    border-top:1px solid var(--border);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    color:#7a8793;
+
+    font-size:7.5px;
+}
+
+
+/* =========================================================
+   RESPONSIVE VIEW
+========================================================= */
+
+@media(max-width:900px){
+
+    .topbar{
+
+        position:relative;
+    }
+
+
+    .viewer-heading{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+    }
+
+
+    .page{
+
+        width:min(100%,210mm);
+
+        height:auto;
+
+        min-height:297mm;
+
+        padding:6vw;
+    }
+
+
+    .page-footer{
+
+        left:6vw;
+
+        right:6vw;
+
+        bottom:3vw;
+    }
+}
+
+
+@media(max-width:650px){
+
+    .topbar{
+
+        align-items:flex-start;
+    }
+
+
+    .top-actions .button-light{
+
+        display:none;
+    }
+
+
+    .viewer{
+
+        padding-top:20px;
+    }
+
+
+    .page{
+
+        width:100%;
+
+        min-height:0;
+
+        padding:
+            24px
+            18px
+            55px;
+
+        overflow:visible;
+    }
+
+
+    .summary{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .summary-item{
+
+        border-right:none;
+
+        border-bottom:1px solid var(--border);
+    }
+
+
+    .summary-item:last-child{
+
+        border-bottom:none;
+    }
+
+
+    .fields{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .field.full{
+
+        grid-column:auto;
+    }
+
+
+    .document-list{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .document-item:nth-child(odd){
+
+        border-right:none;
+    }
+
+
+    .document-item:nth-last-child(-n+2){
+
+        border-bottom:1px solid var(--border);
+    }
+
+
+    .document-item:last-child{
+
+        border-bottom:none;
+    }
+
+
+    .signatures{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .review-row{
+
+        grid-template-columns:1fr;
+
+        padding:7px 0;
+
+        gap:4px;
+    }
+
+
+    .page-header{
+
+        align-items:flex-start;
+    }
+}
+
+
+/* =========================================================
+   PRINT / PDF
+========================================================= */
+
+@media print{
+
+    @page{
+
+        size:A4;
+
+        margin:0;
+    }
+
+
+    html,
+    body{
+
+        width:210mm;
+
+        margin:0!important;
+
+        padding:0!important;
+
+        background:#fff!important;
+    }
+
+
+    body{
+
+        overflow:visible!important;
+    }
+
+
+    .topbar,
+    .viewer-heading{
+
+        display:none!important;
+    }
+
+
+    .viewer{
+
+        width:auto!important;
+
+        margin:0!important;
+
+        padding:0!important;
+    }
+
+
+    .document{
+
+        display:block!important;
+
+        width:auto!important;
+    }
+
+
+    .page{
+
+        width:210mm!important;
+
+        height:297mm!important;
+
+        min-height:297mm!important;
+
+        max-height:297mm!important;
+
+        margin:0!important;
+
+        padding:
+            16mm
+            17mm
+            18mm!important;
+
+        box-shadow:none!important;
+
+        overflow:hidden!important;
+
+        page-break-after:always!important;
+
+        break-after:page!important;
+    }
+
+
+    .page:last-child{
+
+        page-break-after:auto!important;
+
+        break-after:auto!important;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ======================================================
+     STAFF VIEWER BAR
+======================================================= -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <img
+            src="assets/logos.png"
+            alt="Atlas logo"
+        >
+
+        <div class="brand-copy">
+
+            <strong>Atlas</strong>
+
+            <span>
+                College Administration Portal
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="top-actions">
+
+        <button
+            class="button button-light"
+            onclick="history.back()"
+        >
+            ← Back
+        </button>
+
+
+        <button
+            class="button button-dark"
+            onclick="window.print()"
+        >
+            Export Application
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- ======================================================
+     VIEWER
+======================================================= -->
+
+<main class="viewer">
+
+
+    <div class="viewer-heading">
+
+        <div>
+
+            <h1>
+                Undergraduate Application
+            </h1>
+
+            <p>
+                Completed student application · Staff review document
+            </p>
+
+        </div>
+
+
+        <div class="application-status">
+
+            <span>
+                Current status:
+            </span>
+
+            <strong>
+                Under Review
+            </strong>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         DOCUMENT
+    =================================================== -->
+
+    <section class="document">
+
+
+        <!-- =================================================
+             PAGE 1
+        ================================================== -->
+
+        <article class="page">
+
+
+            <div class="page-header">
+
+                <div class="page-brand">
+
+                    <img
+                        src="assets/logos.png"
+                        alt="Atlas logo"
+                    >
+
+                    <div class="institution-name">
+
+                        <strong>
+                            Atlas College Administration
+                        </strong>
+
+                        <span>
+                            Official Undergraduate Admission Application
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="page-number">
+
+                    APPLICATION<br>
+
+                    PAGE 01 OF 06
+
+                </div>
+
+            </div>
+
+
+
+            <div class="document-title">
+
+                <h2>
+                    Undergraduate Application Form
+                </h2>
+
+                <p>
+                    Completed application submitted through the Atlas Student Portal
+                </p>
+
+            </div>
+
+
+
+            <!-- APPLICATION META -->
+
+            <div class="summary">
+
+                <div class="summary-item">
+
+                    <span class="label">
+                        Application Reference
+                    </span>
+
+                    <span class="value">
+                        ATL-2026-004821
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span class="label">
+                        Submitted
+                    </span>
+
+                    <span class="value">
+                        07 September 2026
+                    </span>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span class="label">
+                        Intake
+                    </span>
+
+                    <span class="value">
+                        2027
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PERSONAL INFORMATION -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    1. Personal Information
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field">
+
+                        <span class="label">
+                            First Name(s)
+                        </span>
+
+                        <span class="value">
+                            Thabo
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Surname
+                        </span>
+
+                        <span class="value">
+                            Mokoena
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Preferred Name
+                        </span>
+
+                        <span class="value">
+                            Thabo
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Date of Birth
+                        </span>
+
+                        <span class="value">
+                            14 March 2007
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            ID / Passport Number
+                        </span>
+
+                        <span class="value">
+                            070314 0000 000
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Nationality
+                        </span>
+
+                        <span class="value">
+                            South African
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Gender
+                        </span>
+
+                        <span class="value">
+                            Male
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Home Language
+                        </span>
+
+                        <span class="value">
+                            Sesotho
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Citizenship Status
+                        </span>
+
+                        <span class="value">
+                            South African Citizen
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Disability / Support Requirement
+                        </span>
+
+                        <span class="value">
+                            No support requirement declared
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- CONTACT -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    2. Contact Information
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field">
+
+                        <span class="label">
+                            Mobile Number
+                        </span>
+
+                        <span class="value">
+                            +27 72 000 0000
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Alternative Number
+                        </span>
+
+                        <span class="value">
+                            +27 71 000 0000
+                        </span>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <span class="label">
+                            Email Address
+                        </span>
+
+                        <span class="value">
+                            thabo.mokoena@example.com
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ADDRESS -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    3. Residential Address
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field full">
+
+                        <span class="label">
+                            Residential Address
+                        </span>
+
+                        <span class="value">
+                            24 Example Street, Central Township
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            City / Town
+                        </span>
+
+                        <span class="value">
+                            Polokwane
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Province
+                        </span>
+
+                        <span class="value">
+                            Limpopo
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Postal Code
+                        </span>
+
+                        <span class="value">
+                            0700
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Country
+                        </span>
+
+                        <span class="value">
+                            South Africa
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- POSTAL -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    4. Postal Address
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field full">
+
+                        <span class="label">
+                            Postal Address
+                        </span>
+
+                        <span class="value">
+                            PO Box 1456, Polokwane
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Postal Code
+                        </span>
+
+                        <span class="value">
+                            0700
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Country
+                        </span>
+
+                        <span class="value">
+                            South Africa
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <div class="page-footer">
+
+                <span>
+                    Atlas · Confidential Student Application
+                </span>
+
+                <span>
+                    ATL-2026-004821 · Page 1
+                </span>
+
+            </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             PAGE 2
+        ================================================== -->
+
+        <article class="page">
+
+
+            <div class="page-header">
+
+                <div class="page-brand">
+
+                    <img
+                        src="assets/logos.png"
+                        alt="Atlas logo"
+                    >
+
+                    <div class="institution-name">
+
+                        <strong>
+                            Atlas College Administration
+                        </strong>
+
+                        <span>
+                            Official Undergraduate Admission Application
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="page-number">
+
+                    APPLICATION<br>
+
+                    PAGE 02 OF 06
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SCHOOL -->
+
+            <section class="section" style="margin-top:0">
+
+                <div class="section-title">
+                    5. School & Academic Information
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field full">
+
+                        <span class="label">
+                            High School / Institution
+                        </span>
+
+                        <span class="value">
+                            Mohloli Secondary School
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Country
+                        </span>
+
+                        <span class="value">
+                            South Africa
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Province
+                        </span>
+
+                        <span class="value">
+                            Limpopo
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Year Completed / Matriculated
+                        </span>
+
+                        <span class="value">
+                            2025
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Highest School Qualification
+                        </span>
+
+                        <span class="value">
+                            National Senior Certificate
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Academic Status
+                        </span>
+
+                        <span class="value">
+                            Completed Grade 12
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Examination Body
+                        </span>
+
+                        <span class="value">
+                            Department of Basic Education
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- RESULTS -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    6. Grade 12 / Matric Results
+                </div>
+
+
+                <table class="data-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Subject
+                            </th>
+
+                            <th>
+                                Level
+                            </th>
+
+                            <th>
+                                Mark
+                            </th>
+
+                            <th>
+                                Result
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+                            <td>English Home Language</td>
+                            <td>5</td>
+                            <td>68%</td>
+                            <td>Passed</td>
+                        </tr>
+
+                        <tr>
+                            <td>Sesotho Home Language</td>
+                            <td>6</td>
+                            <td>74%</td>
+                            <td>Passed</td>
+                        </tr>
+
+                        <tr>
+                            <td>Mathematics</td>
+                            <td>5</td>
+                            <td>63%</td>
+                            <td>Passed</td>
+                        </tr>
+
+                        <tr>
+                            <td>Physical Sciences</td>
+                            <td>4</td>
+                            <td>57%</td>
+                            <td>Passed</td>
+                        </tr>
+
+                        <tr>
+                            <td>Life Sciences</td>
+                            <td>5</td>
+                            <td>65%</td>
+                            <td>Passed</td>
+                        </tr>
+
+                        <tr>
+                            <td>Life Orientation</td>
+                            <td>6</td>
+                            <td>72%</td>
+                            <td>Passed</td>
+                        </tr>
+
+                        <tr>
+                            <td>Computer Applications Technology</td>
+                            <td>6</td>
+                            <td>71%</td>
+                            <td>Passed</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+
+
+            <!-- PREVIOUS STUDIES -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    7. Previous Tertiary Education
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field full">
+
+                        <span class="label">
+                            Previously studied at a tertiary institution?
+                        </span>
+
+                        <span class="value">
+                            No
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Previous Institution
+                        </span>
+
+                        <span class="value">
+                            Not applicable
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Qualification
+                        </span>
+
+                        <span class="value">
+                            Not applicable
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ACADEMIC HISTORY -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    8. Academic History
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field">
+
+                        <span class="label">
+                            Highest Qualification
+                        </span>
+
+                        <span class="value">
+                            National Senior Certificate
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Year Obtained
+                        </span>
+
+                        <span class="value">
+                            2025
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Overall Academic Outcome
+                        </span>
+
+                        <span class="value">
+                            Matric Pass
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Intended Level
+                        </span>
+
+                        <span class="value">
+                            Undergraduate
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <div class="page-footer">
+
+                <span>
+                    Atlas · Confidential Student Application
+                </span>
+
+                <span>
+                    ATL-2026-004821 · Page 2
+                </span>
+
+            </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             PAGE 3
+        ================================================== -->
+
+        <article class="page">
+
+
+            <div class="page-header">
+
+                <div class="page-brand">
+
+                    <img
+                        src="assets/logos.png"
+                        alt="Atlas logo"
+                    >
+
+                    <div class="institution-name">
+
+                        <strong>
+                            Atlas College Administration
+                        </strong>
+
+                        <span>
+                            Official Undergraduate Admission Application
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="page-number">
+
+                    APPLICATION<br>
+
+                    PAGE 03 OF 06
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PROGRAMMES -->
+
+            <section class="section" style="margin-top:0">
+
+                <div class="section-title">
+                    9. Programme Choices
+                </div>
+
+                <div class="section-note">
+                    Programmes selected by the applicant in order of preference.
+                </div>
+
+
+                <table class="data-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th style="width:35px">
+                                #
+                            </th>
+
+                            <th>
+                                Qualification / Programme
+                            </th>
+
+                            <th>
+                                Faculty
+                            </th>
+
+                            <th>
+                                Study Mode
+                            </th>
+
+                            <th>
+                                Campus
+                            </th>
+
+                            <th>
+                                Intake
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>1</strong>
+                            </td>
+
+                            <td>
+                                <strong>
+                                    Diploma in Information Technology
+                                </strong>
+
+                                <br>
+
+                                Information Technology
+                            </td>
+
+                            <td>
+                                Computing & Technology
+                            </td>
+
+                            <td>
+                                Full-time
+                            </td>
+
+                            <td>
+                                Main Campus
+                            </td>
+
+                            <td>
+                                2027
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>2</strong>
+                            </td>
+
+                            <td>
+                                <strong>
+                                    Diploma in Business Management
+                                </strong>
+
+                                <br>
+
+                                Business & Management
+                            </td>
+
+                            <td>
+                                Business School
+                            </td>
+
+                            <td>
+                                Full-time
+                            </td>
+
+                            <td>
+                                Main Campus
+                            </td>
+
+                            <td>
+                                2027
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>3</strong>
+                            </td>
+
+                            <td>
+                                <strong>
+                                    Higher Certificate in Information Technology
+                                </strong>
+
+                                <br>
+
+                                Information Technology
+                            </td>
+
+                            <td>
+                                Computing & Technology
+                            </td>
+
+                            <td>
+                                Full-time
+                            </td>
+
+                            <td>
+                                Main Campus
+                            </td>
+
+                            <td>
+                                2027
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+
+
+            <!-- STUDY DETAILS -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    10. Study Preferences
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field">
+
+                        <span class="label">
+                            Application Type
+                        </span>
+
+                        <span class="value">
+                            New Undergraduate Applicant
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Preferred Intake
+                        </span>
+
+                        <span class="value">
+                            January 2027
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Preferred Study Mode
+                        </span>
+
+                        <span class="value">
+                            Full-time
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Preferred Campus
+                        </span>
+
+                        <span class="value">
+                            Main Campus
+                        </span>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <span class="label">
+                            Reason for Choosing the Institution
+                        </span>
+
+                        <span class="value">
+                            I would like to develop practical information technology
+                            skills and pursue a career in the technology industry.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- GUARDIAN -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    11. Parent / Guardian Information
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field">
+
+                        <span class="label">
+                            Full Name
+                        </span>
+
+                        <span class="value">
+                            Mpho Mokoena
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Relationship
+                        </span>
+
+                        <span class="value">
+                            Mother
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Mobile Number
+                        </span>
+
+                        <span class="value">
+                            +27 73 000 0000
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Email Address
+                        </span>
+
+                        <span class="value">
+                            mpho.mokoena@example.com
+                        </span>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <span class="label">
+                            Residential Address
+                        </span>
+
+                        <span class="value">
+                            24 Example Street, Central Township,
+                            Polokwane, Limpopo, 0700
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- EMERGENCY -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    12. Emergency Contact
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field">
+
+                        <span class="label">
+                            Contact Name
+                        </span>
+
+                        <span class="value">
+                            Mpho Mokoena
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Relationship
+                        </span>
+
+                        <span class="value">
+                            Mother
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Mobile Number
+                        </span>
+
+                        <span class="value">
+                            +27 73 000 0000
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Alternative Number
+                        </span>
+
+                        <span class="value">
+                            +27 76 000 0000
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <div class="page-footer">
+
+                <span>
+                    Atlas · Confidential Student Application
+                </span>
+
+                <span>
+                    ATL-2026-004821 · Page 3
+                </span>
+
+            </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             PAGE 4
+        ================================================== -->
+
+        <article class="page">
+
+
+            <div class="page-header">
+
+                <div class="page-brand">
+
+                    <img
+                        src="assets/logos.png"
+                        alt="Atlas logo"
+                    >
+
+                    <div class="institution-name">
+
+                        <strong>
+                            Atlas College Administration
+                        </strong>
+
+                        <span>
+                            Official Undergraduate Admission Application
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="page-number">
+
+                    APPLICATION<br>
+
+                    PAGE 04 OF 06
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FUNDING -->
+
+            <section class="section" style="margin-top:0">
+
+                <div class="section-title">
+                    13. Funding Information
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field">
+
+                        <span class="label">
+                            How will your studies be funded?
+                        </span>
+
+                        <span class="value">
+                            Bursary / Financial Aid
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Funding Status
+                        </span>
+
+                        <span class="value">
+                            Application Pending
+                        </span>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <span class="label">
+                            Funding Provider / Bursary
+                        </span>
+
+                        <span class="value">
+                            To be confirmed
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- RESIDENCE -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    14. Residence & Student Support
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field">
+
+                        <span class="label">
+                            Require Student Accommodation?
+                        </span>
+
+                        <span class="value">
+                            Yes
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Require Academic Support?
+                        </span>
+
+                        <span class="value">
+                            No
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Require Disability Support?
+                        </span>
+
+                        <span class="value">
+                            No
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Require Counselling / Wellness Support?
+                        </span>
+
+                        <span class="value">
+                            No
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- SUPPORTING DOCUMENTS -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    15. Supporting Documents
+                </div>
+
+
+                <div class="section-note">
+                    Documents submitted by the applicant and recorded in the Atlas document record.
+                </div>
+
+
+                <div class="document-list">
+
+                    <div class="document-item">
+
+                        <span class="document-name">
+                            South African ID / Passport
+                        </span>
+
+                        <span class="document-state">
+                            SUBMITTED
+                        </span>
+
+                    </div>
+
+
+                    <div class="document-item">
+
+                        <span class="document-name">
+                            Matric Certificate / Statement
+                        </span>
+
+                        <span class="document-state">
+                            SUBMITTED
+                        </span>
+
+                    </div>
+
+
+                    <div class="document-item">
+
+                        <span class="document-name">
+                            Latest Academic Record
+                        </span>
+
+                        <span class="document-state">
+                            SUBMITTED
+                        </span>
+
+                    </div>
+
+
+                    <div class="document-item">
+
+                        <span class="document-name">
+                            Proof of Residence
+                        </span>
+
+                        <span class="document-state">
+                            SUBMITTED
+                        </span>
+
+                    </div>
+
+
+                    <div class="document-item">
+
+                        <span class="document-name">
+                            Passport Photograph
+                        </span>
+
+                        <span class="document-state">
+                            SUBMITTED
+                        </span>
+
+                    </div>
+
+
+                    <div class="document-item">
+
+                        <span class="document-name">
+                            Additional Supporting Document
+                        </span>
+
+                        <span class="document-state not-required">
+                            NOT REQUIRED
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- DOCUMENT RECORD -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    16. Application Document Record
+                </div>
+
+
+                <div class="review-box">
+
+                    <div class="review-row">
+
+                        <b>
+                            Required documents
+                        </b>
+
+                        <span>
+                            5
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Documents submitted
+                        </b>
+
+                        <span>
+                            5
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Documents missing
+                        </b>
+
+                        <span>
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Document status
+                        </b>
+
+                        <span>
+                            Complete
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- COMMUNICATION -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    17. Communication Preferences
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field full">
+
+                        <span class="label">
+                            Application updates by email
+                        </span>
+
+                        <span class="value">
+                            Yes
+                        </span>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <span class="label">
+                            Application updates by SMS / mobile
+                        </span>
+
+                        <span class="value">
+                            Yes
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <div class="page-footer">
+
+                <span>
+                    Atlas · Confidential Student Application
+                </span>
+
+                <span>
+                    ATL-2026-004821 · Page 4
+                </span>
+
+            </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             PAGE 5
+        ================================================== -->
+
+        <article class="page">
+
+
+            <div class="page-header">
+
+                <div class="page-brand">
+
+                    <img
+                        src="assets/logos.png"
+                        alt="Atlas logo"
+                    >
+
+                    <div class="institution-name">
+
+                        <strong>
+                            Atlas College Administration
+                        </strong>
+
+                        <span>
+                            Official Undergraduate Admission Application
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="page-number">
+
+                    APPLICATION<br>
+
+                    PAGE 05 OF 06
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DECLARATION -->
+
+            <section class="section" style="margin-top:0">
+
+                <div class="section-title">
+                    18. Applicant Declaration
+                </div>
+
+
+                <div class="declaration">
+
+                    <strong>
+                        Declaration by Applicant
+                    </strong>
+
+                    I declare that the information provided in this application
+                    is true, complete and correct to the best of my knowledge.
+
+                    I understand that the institution may verify the information
+                    and supporting documents supplied with this application.
+
+                    I acknowledge that submitting false, incomplete or misleading
+                    information may result in the application being rejected or,
+                    where admission has already been granted, the admission
+                    decision being withdrawn.
+
+                    I further confirm that I have read and understood the
+                    institution's application and admission requirements.
+
+                </div>
+
+
+                <div class="signatures">
+
+                    <div class="signature">
+
+                        Thabo Mokoena
+
+                        <small>
+                            Applicant name / electronic acknowledgement
+                        </small>
+
+                    </div>
+
+
+                    <div class="signature">
+
+                        07 September 2026
+
+                        <small>
+                            Date submitted
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- CONSENT -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    19. Applicant Consent
+                </div>
+
+
+                <div class="declaration">
+
+                    <strong>
+                        Consent
+                    </strong>
+
+                    I consent to the institution processing the information
+                    supplied in this application for the purpose of assessing
+                    my application, communicating with me regarding admission,
+                    maintaining student records and performing related
+                    administrative activities.
+
+                </div>
+
+            </section>
+
+
+
+            <!-- SUBMISSION RECORD -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    20. Submission Record
+                </div>
+
+
+                <div class="review-box">
+
+                    <div class="review-row">
+
+                        <b>
+                            Submitted through
+                        </b>
+
+                        <span>
+                            Atlas Student Application Portal
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Submission date
+                        </b>
+
+                        <span>
+                            07 September 2026
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Submission status
+                        </b>
+
+                        <span>
+                            Successfully Submitted
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Current application status
+                        </b>
+
+                        <span>
+                            Under Review
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Application reference
+                        </b>
+
+                        <span>
+                            ATL-2026-004821
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- SYSTEM TIMELINE -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    21. Application Timeline
+                </div>
+
+
+                <table class="data-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Event
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                07 Sep 2026
+                            </td>
+
+                            <td>
+                                Application created
+                            </td>
+
+                            <td>
+                                Completed
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                07 Sep 2026
+                            </td>
+
+                            <td>
+                                Documents uploaded
+                            </td>
+
+                            <td>
+                                Complete
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                07 Sep 2026
+                            </td>
+
+                            <td>
+                                Application submitted
+                            </td>
+
+                            <td>
+                                Successful
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                07 Sep 2026
+                            </td>
+
+                            <td>
+                                Application entered staff review
+                            </td>
+
+                            <td>
+                                Under Review
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+
+
+            <div class="page-footer">
+
+                <span>
+                    Atlas · Confidential Student Application
+                </span>
+
+                <span>
+                    ATL-2026-004821 · Page 5
+                </span>
+
+            </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             PAGE 6
+        ================================================== -->
+
+        <article class="page">
+
+
+            <div class="page-header">
+
+                <div class="page-brand">
+
+                    <img
+                        src="assets/logos.png"
+                        alt="Atlas logo"
+                    >
+
+                    <div class="institution-name">
+
+                        <strong>
+                            Atlas College Administration
+                        </strong>
+
+                        <span>
+                            Official Undergraduate Admission Application
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="page-number">
+
+                    APPLICATION<br>
+
+                    PAGE 06 OF 06
+
+                </div>
+
+            </div>
+
+
+
+            <!-- STAFF REVIEW -->
+
+            <section class="section" style="margin-top:0">
+
+                <div class="section-title">
+                    22. Staff Review Record
+                </div>
+
+
+                <div class="review-box">
+
+                    <div class="review-row">
+
+                        <b>
+                            Application reference
+                        </b>
+
+                        <span>
+                            ATL-2026-004821
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Applicant
+                        </b>
+
+                        <span>
+                            Thabo Mokoena
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Current status
+                        </b>
+
+                        <span>
+                            Under Review
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Documents checked
+                        </b>
+
+                        <span>
+                            Pending final verification
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Academic requirements
+                        </b>
+
+                        <span>
+                            Pending assessment
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Programme availability
+                        </b>
+
+                        <span>
+                            Pending confirmation
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- STAFF NOTES -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    23. Staff Review Notes
+                </div>
+
+
+                <div class="note-lines">
+
+                    <div class="note-line"></div>
+
+                    <div class="note-line"></div>
+
+                    <div class="note-line"></div>
+
+                    <div class="note-line"></div>
+
+                    <div class="note-line"></div>
+
+                    <div class="note-line"></div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- DECISION -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    24. Admission Decision
+                </div>
+
+
+                <div class="fields">
+
+                    <div class="field full">
+
+                        <span class="label">
+                            Decision
+                        </span>
+
+                        <span class="value">
+                            ☐ Accepted
+                            &nbsp;&nbsp;&nbsp;
+                            ☐ Rejected
+                            &nbsp;&nbsp;&nbsp;
+                            ☐ Waitlisted
+                            &nbsp;&nbsp;&nbsp;
+                            ☐ More Information Required
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Decision Date
+                        </span>
+
+                        <span class="value">
+                            ______________________
+                        </span>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <span class="label">
+                            Reviewed By
+                        </span>
+
+                        <span class="value">
+                            ______________________
+                        </span>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <span class="label">
+                            Decision / Conditions / Reason
+                        </span>
+
+                        <span class="value">
+                            &nbsp;
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- STAFF CONFIRMATION -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    25. Authorised Staff Confirmation
+                </div>
+
+
+                <div class="declaration">
+
+                    <strong>
+                        Staff Confirmation
+                    </strong>
+
+                    I confirm that I have reviewed the information and
+                    supporting records available in this application and
+                    have recorded the admission decision in accordance with
+                    the institution's admissions process.
+
+                </div>
+
+
+                <div class="signatures">
+
+                    <div class="signature">
+
+                        ______________________________
+
+                        <small>
+                            Authorised staff member
+                        </small>
+
+                    </div>
+
+
+                    <div class="signature">
+
+                        ______________________________
+
+                        <small>
+                            Date
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- SYSTEM RECORD -->
+
+            <section class="section">
+
+                <div class="section-title">
+                    26. Atlas System Record
+                </div>
+
+
+                <div class="review-box">
+
+                    <div class="review-row">
+
+                        <b>
+                            Generated by
+                        </b>
+
+                        <span>
+                            Atlas College Administration Portal
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Application ID
+                        </b>
+
+                        <span>
+                            ATL-2026-004821
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Document type
+                        </b>
+
+                        <span>
+                            Completed Undergraduate Application
+                        </span>
+
+                    </div>
+
+
+                    <div class="review-row">
+
+                        <b>
+                            Export
+                        </b>
+
+                        <span>
+                            Print-ready A4 / PDF
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <div class="page-footer">
+
+                <span>
+                    Atlas · Confidential Student Application
+                </span>
+
+                <span>
+                    ATL-2026-004821 · Page 6
+                </span>
+
+            </div>
+
+        </article>
+
+
+    </section>
+
+</main>
+
+
+
+<script>
+
+/*
+    Atlas Application Viewer
+
+    The application is intentionally presented as separate
+    A4 pages.
+
+    Export uses the browser's native print system so staff
+    can choose "Save as PDF".
+*/
+
+document.documentElement.style.overflowX = "hidden";
+
+document.body.style.overflowX = "hidden";
+
+
+/*
+    Keyboard shortcut:
+
+    Ctrl + P
+    Command + P
+*/
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            (event.ctrlKey || event.metaKey)
+            &&
+            event.key.toLowerCase() === "p"
+        ){
+
+            event.preventDefault();
+
+            window.print();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+  </html>
