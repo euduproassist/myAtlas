@@ -205,8 +205,8 @@
         }
 
         /* =========================================================
-           FOOTER
-           DO NOT CHANGE THIS SECTION
+           FOOTER (DEFAULT FULL FOOTER)
+           DO NOT CHANGE THIS SECTION FOR CATEGORY PAGE
         ========================================================= */
         .footer {
             width: 100%;
@@ -320,6 +320,29 @@
         }
         .footer-legal span:hover {
             color: #ffffff;
+        }
+
+        /* =========================================================
+           MINIMAL FOOTER (SPECIFICALLY FOR UNDERGRADUATE APPLY PAGE)
+        ========================================================= */
+        .footer.minimal-footer {
+            background: #ffffff;
+            color: #596985;
+            border-top: 1px solid #edf1f7;
+            padding: 20px 0;
+        }
+        .minimal-footer .footer-bottom {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+            color: #596985;
+            font-size: 13px;
+        }
+        .minimal-footer .footer-legal span {
+            color: #596985;
+        }
+        .minimal-footer .footer-legal span:hover {
+            color: var(--blue);
         }
 
         /* =========================================================
@@ -1525,7 +1548,6 @@
                 <div class="footer-legal">
                     <span>Privacy Policy</span>
                     <span>Terms &amp; Conditions</span>
-                    <span>Help</span>
                 </div>
             </div>
         </div>
@@ -1561,18 +1583,21 @@
             pageTitle.textContent = "Online Application | Atlas College";
             headerRightContainer.innerHTML = `<a href="#category" class="help-link-app">Already applied? Track Status</a>`;
             if (hamburgerContainer) hamburgerContainer.classList.add("hidden");
-            if (mainFooter) mainFooter.style.background = "#ffffff";
-            if (mainFooter) mainFooter.style.color = "#071947";
-            // Make footer text dark for Photo 2 styling style adjustment
-            mainFooter.querySelectorAll(".footer-brand p, .footer-column h3, .footer-column a, .contact-item, .footer-bottom, .footer-legal span").forEach(el => {
-                el.style.color = "#071947";
-            });
-            mainFooter.querySelectorAll(".footer-bottom").forEach(el => {
-                el.style.borderColor = "#e1e8f3";
-            });
-            mainFooter.querySelectorAll(".social").forEach(el => {
-                el.style.borderColor = "#071947";
-            });
+            
+            // Swap footer to minimal footer style matching photo 2
+            mainFooter.classList.add("minimal-footer");
+            mainFooter.innerHTML = `
+                <div class="section-inner">
+                    <div class="footer-bottom">
+                        <span>© 2026 Atlas College. All rights reserved.</span>
+                        <div class="footer-legal">
+                            <span>Privacy Policy</span>
+                            <span>Terms &amp; Conditions</span>
+                            <span>Help</span>
+                        </div>
+                    </div>
+                </div>
+            `;
         } else {
             // Default to Category View
             categoryView.classList.remove("hidden");
@@ -1580,19 +1605,80 @@
             pageTitle.textContent = "Atlas College — Select Category";
             headerRightContainer.innerHTML = "";
             if (hamburgerContainer) hamburgerContainer.classList.remove("hidden");
-            if (mainFooter) {
-                mainFooter.style.background = "linear-gradient(110deg, #052b72 0%, #06265f 45%, #031e50 100%)";
-                mainFooter.style.color = "#ffffff";
-                mainFooter.querySelectorAll(".footer-brand p, .footer-column h3, .footer-column a, .contact-item, .footer-bottom, .footer-legal span").forEach(el => {
-                    el.style.color = "";
-                });
-                mainFooter.querySelectorAll(".footer-bottom").forEach(el => {
-                    el.style.borderColor = "";
-                });
-                mainFooter.querySelectorAll(".social").forEach(el => {
-                    el.style.borderColor = "";
-                });
-            }
+            
+            // Restore default full footer
+            mainFooter.classList.remove("minimal-footer");
+            mainFooter.innerHTML = `
+                <div class="section-inner">
+                    <div class="footer-grid">
+                        <div class="footer-brand">
+                            <img class="footer-logo" src="assets/logos.png" alt="Atlas College">
+                            <p>
+                                Empowering students with education, skills, and opportunities
+                                for a better tomorrow.
+                            </p>
+                            <div class="socials">
+                                <span class="social">f</span>
+                                <span class="social">◎</span>
+                                <span class="social">♥</span>
+                                <span class="social">in</span>
+                            </div>
+                        </div>
+                        <div class="footer-column">
+                            <h3>
+                                Quick Links
+                            </h3>
+                            <a>Programs</a>
+                            <a>Admissions</a>
+                            <a>About Us</a>
+                            <a>Contact</a>
+                        </div>
+                        <div class="footer-column">
+                            <h3>
+                                Student Info
+                            </h3>
+                            <a>How to Apply</a>
+                            <a>Fees &amp; Payments</a>
+                            <a>Student Support</a>
+                            <a>FAQ</a>
+                        </div>
+                        <div class="footer-column">
+                            <h3>
+                                Contact Us
+                            </h3>
+                            <div class="contact-item">
+                                <span class="contact-icon">⌖</span>
+                                <span>
+                                    123 Education Road<br>
+                                    Knowledge City, KC 10001
+                                </span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">⌕</span>
+                                <span>
+                                    +1 234 567 8900
+                                </span>
+                            </div>
+                            <div class="contact-item">
+                                <span class="contact-icon">✉</span>
+                                <span>
+                                    info@atlascollege.edu
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        <span>
+                            © 2026 Atlas College. All rights reserved.
+                        </span>
+                        <div class="footer-legal">
+                            <span>Privacy Policy</span>
+                            <span>Terms &amp; Conditions</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
             if (hash !== "#category" && hash !== "") {
                 window.location.hash = "#category";
             }
