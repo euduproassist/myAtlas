@@ -1,0 +1,2546 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Visual Software Studio</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar {
+    height: 58px;
+    min-height: 58px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    background: #111820;
+    border-bottom: 1px solid #26313c;
+    gap: 12px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.brand-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #7c3aed, #2563eb);
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+}
+
+.brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.project-name {
+    color: #8b98a7;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.top-btn {
+    border: 1px solid #303b47;
+    background: #18212b;
+    color: #d9e1e8;
+    padding: 8px 12px;
+    border-radius: 7px;
+    font-size: 12px;
+}
+
+.top-btn:hover {
+    background: #222d38;
+}
+
+.top-btn.primary {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: white;
+}
+
+.top-btn.primary:hover {
+    background: #1d4ed8;
+}
+
+/* =========================================================
+   MAIN WORKSPACE
+========================================================= */
+
+.workspace {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 210px minmax(0, 1fr) 250px;
+    overflow: hidden;
+}
+
+/* =========================================================
+   LEFT SIDEBAR
+========================================================= */
+
+.sidebar-left {
+    min-width: 0;
+    min-height: 0;
+    background: #10161d;
+    border-right: 1px solid #26313c;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.sidebar-section {
+    padding: 14px;
+}
+
+.section-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #738090;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.scene-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.scene-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 10px;
+    border-radius: 7px;
+    color: #aeb8c3;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.scene-item:hover {
+    background: #18212b;
+}
+
+.scene-item.active {
+    background: #1d2b3a;
+    color: white;
+}
+
+.scene-icon {
+    margin-right: 8px;
+    color: #7f8c99;
+}
+
+.add-scene {
+    width: 100%;
+    margin-top: 8px;
+    border: 1px dashed #374452;
+    background: transparent;
+    color: #8996a4;
+    border-radius: 7px;
+    padding: 8px;
+    font-size: 12px;
+}
+
+.add-scene:hover {
+    border-color: #536273;
+    color: white;
+}
+
+.components {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+}
+
+.component-btn {
+    min-width: 0;
+    border: 1px solid #293540;
+    background: #151e27;
+    color: #aeb9c5;
+    border-radius: 7px;
+    padding: 10px 5px;
+    font-size: 11px;
+}
+
+.component-btn:hover {
+    background: #1e2935;
+    color: white;
+    border-color: #3b4a59;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 12px;
+    border-top: 1px solid #26313c;
+    color: #657280;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   CANVAS AREA
+========================================================= */
+
+.canvas-area {
+    min-width: 0;
+    min-height: 0;
+    background:
+        linear-gradient(#151d26 1px, transparent 1px),
+        linear-gradient(90deg, #151d26 1px, transparent 1px),
+        #0d1319;
+    background-size: 20px 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.canvas-toolbar {
+    height: 46px;
+    min-height: 46px;
+    border-bottom: 1px solid #26313c;
+    background: rgba(14, 20, 27, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+}
+
+.canvas-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #8b98a7;
+    font-size: 11px;
+}
+
+.device-selector {
+    border: 1px solid #303b47;
+    background: #151e27;
+    color: #bfc9d3;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 11px;
+}
+
+.canvas-scroll {
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 35px;
+}
+
+.canvas-scroll::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+.canvas-scroll::-webkit-scrollbar-thumb {
+    background: #2a3541;
+    border-radius: 10px;
+}
+
+/* =========================================================
+   DESIGN CANVAS
+========================================================= */
+
+.design-canvas {
+    position: relative;
+    width: min(100%, 1000px);
+    min-width: 320px;
+    aspect-ratio: 16 / 10;
+    background: white;
+    color: #111827;
+    box-shadow: 0 15px 50px rgba(0,0,0,.4);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.canvas-empty {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #9ca3af;
+    font-size: 13px;
+    pointer-events: none;
+}
+
+/* =========================================================
+   CANVAS ELEMENTS
+========================================================= */
+
+.canvas-element {
+    position: absolute;
+    cursor: move;
+    user-select: none;
+    outline: 1px solid transparent;
+}
+
+.canvas-element.selected {
+    outline: 2px solid #2563eb;
+}
+
+.element-label {
+    position: absolute;
+    top: -18px;
+    left: 0;
+    background: #2563eb;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 8px;
+    white-space: nowrap;
+    display: none;
+    z-index: 1000;
+}
+
+.canvas-element.selected .element-label {
+    display: block;
+}
+
+.resize-handle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #2563eb;
+    border: 1px solid white;
+    border-radius: 2px;
+    right: -5px;
+    bottom: -5px;
+    cursor: nwse-resize;
+    display: none;
+}
+
+.canvas-element.selected .resize-handle {
+    display: block;
+}
+
+/* Text */
+
+.element-text {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* Button */
+
+.element-button {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 7px;
+    background: #2563eb;
+    color: white;
+    font-weight: 600;
+    pointer-events: none;
+}
+
+/* Input */
+
+.element-input {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 0 10px;
+    color: #64748b;
+    pointer-events: none;
+}
+
+/* Container */
+
+.element-container {
+    width: 100%;
+    height: 100%;
+    border: 2px dashed #94a3b8;
+    background: rgba(148,163,184,.08);
+}
+
+/* Image placeholder */
+
+.element-image {
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(135deg, #dbeafe, #e0e7ff);
+    display: grid;
+    place-items: center;
+    color: #64748b;
+    font-size: 12px;
+}
+
+/* =========================================================
+   RIGHT INSPECTOR
+========================================================= */
+
+.sidebar-right {
+    min-width: 0;
+    min-height: 0;
+    background: #10161d;
+    border-left: 1px solid #26313c;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.inspector-header {
+    height: 46px;
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    border-bottom: 1px solid #26313c;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.inspector-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 14px;
+}
+
+.inspector-group {
+    margin-bottom: 18px;
+}
+
+.inspector-label {
+    color: #718091;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    margin-bottom: 8px;
+}
+
+.field {
+    margin-bottom: 9px;
+}
+
+.field label {
+    display: block;
+    color: #8996a4;
+    font-size: 10px;
+    margin-bottom: 4px;
+}
+
+.field input,
+.field select {
+    width: 100%;
+    border: 1px solid #2d3945;
+    background: #151e27;
+    color: #d8e0e7;
+    border-radius: 5px;
+    padding: 7px 8px;
+    outline: none;
+    font-size: 11px;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color: #2563eb;
+}
+
+.position-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+}
+
+.no-selection {
+    color: #657280;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    background: rgba(0,0,0,.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.open {
+    display: flex;
+}
+
+.modal-box {
+    width: min(850px, 100%);
+    max-height: 90dvh;
+    background: #111820;
+    border: 1px solid #2b3743;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 30px 100px rgba(0,0,0,.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    padding: 13px 16px;
+    border-bottom: 1px solid #293541;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-title {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: #8b98a7;
+    font-size: 18px;
+}
+
+.modal-content {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 16px;
+}
+
+.code-output {
+    width: 100%;
+    min-height: 400px;
+    resize: vertical;
+    background: #080c10;
+    color: #d8e0e7;
+    border: 1px solid #293541;
+    border-radius: 7px;
+    padding: 14px;
+    font-family: Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: pre;
+}
+
+.modal-footer {
+    padding: 12px 16px;
+    border-top: 1px solid #293541;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+.preview-frame {
+    width: 100%;
+    min-height: 500px;
+    border: 1px solid #293541;
+    border-radius: 7px;
+    background: white;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+    .workspace {
+        grid-template-columns: 170px minmax(0, 1fr) 210px;
+    }
+
+    .brand-name {
+        display: none;
+    }
+
+    .canvas-scroll {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 720px) {
+    .workspace {
+        grid-template-columns: 150px minmax(0, 1fr);
+    }
+
+    .sidebar-right {
+        display: none;
+    }
+
+    .top-btn span {
+        display: none;
+    }
+
+    .canvas-scroll {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 500px) {
+    .workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar-left {
+        display: none;
+    }
+
+    .canvas-toolbar {
+        padding: 0 8px;
+    }
+
+    .design-canvas {
+        width: 100%;
+        min-width: 320px;
+    }
+
+    .canvas-scroll {
+        padding: 10px;
+    }
+
+    .topbar {
+        padding: 0 8px;
+    }
+
+    .project-name {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =====================================================
+         TOP BAR
+    ====================================================== -->
+
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-logo">V</div>
+
+            <div class="brand-name">
+                Visual Software Studio
+            </div>
+
+            <div class="project-name">
+                / My First Project
+            </div>
+        </div>
+
+        <div class="top-actions">
+
+            <button class="top-btn" onclick="saveProject()">
+                Save
+            </button>
+
+            <button class="top-btn" onclick="openPreview()">
+                Preview
+            </button>
+
+            <button class="top-btn primary" onclick="openCodeExport()">
+                Export Code
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         WORKSPACE
+    ====================================================== -->
+
+    <main class="workspace">
+
+        <!-- =================================================
+             LEFT
+        ================================================== -->
+
+        <aside class="sidebar-left">
+
+            <div class="sidebar-section">
+
+                <div class="section-title">
+                    Scenes
+                </div>
+
+                <div id="sceneList" class="scene-list"></div>
+
+                <button class="add-scene" onclick="addScene()">
+                    + New Scene
+                </button>
+
+            </div>
+
+
+            <div class="sidebar-section">
+
+                <div class="section-title">
+                    Components
+                </div>
+
+                <div class="components">
+
+                    <button class="component-btn"
+                            onclick="addElement('text')">
+                        Text
+                    </button>
+
+                    <button class="component-btn"
+                            onclick="addElement('button')">
+                        Button
+                    </button>
+
+                    <button class="component-btn"
+                            onclick="addElement('input')">
+                        Input
+                    </button>
+
+                    <button class="component-btn"
+                            onclick="addElement('container')">
+                        Container
+                    </button>
+
+                    <button class="component-btn"
+                            onclick="addElement('image')">
+                        Image
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="sidebar-footer">
+                Local visual software editor<br>
+                No API • No AI • Local only
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             CANVAS
+        ================================================== -->
+
+        <section class="canvas-area">
+
+            <div class="canvas-toolbar">
+
+                <div class="canvas-info">
+                    <strong id="currentSceneName">
+                        Home
+                    </strong>
+
+                    <span>•</span>
+
+                    <span id="canvasSize">
+                        1000 × 625
+                    </span>
+                </div>
+
+                <select class="device-selector"
+                        id="deviceSelector"
+                        onchange="changeDevice()">
+
+                    <option value="desktop">
+                        Desktop
+                    </option>
+
+                    <option value="tablet">
+                        Tablet
+                    </option>
+
+                    <option value="mobile">
+                        Mobile
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="canvas-scroll">
+
+                <div id="designCanvas"
+                     class="design-canvas">
+
+                    <div id="emptyMessage"
+                         class="canvas-empty">
+                        Add a component from the left panel
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             RIGHT INSPECTOR
+        ================================================== -->
+
+        <aside class="sidebar-right">
+
+            <div class="inspector-header">
+                Inspector
+            </div>
+
+            <div id="inspector"
+                 class="inspector-body">
+
+                <div class="no-selection">
+                    Select an element on the canvas to edit
+                    its properties.
+                </div>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     CODE MODAL
+========================================================= -->
+
+<div id="codeModal" class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <div class="modal-title">
+                Generated Code
+            </div>
+
+            <button class="modal-close"
+                    onclick="closeModal('codeModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="modal-content">
+
+            <textarea id="codeOutput"
+                      class="code-output"
+                      readonly></textarea>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button class="top-btn"
+                    onclick="copyGeneratedCode()">
+                Copy Code
+            </button>
+
+            <button class="top-btn primary"
+                    onclick="downloadGeneratedCode()">
+                Download HTML
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PREVIEW MODAL
+========================================================= -->
+
+<div id="previewModal" class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <div class="modal-title">
+                Application Preview
+            </div>
+
+            <button class="modal-close"
+                    onclick="closeModal('previewModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="modal-content">
+
+            <iframe id="previewFrame"
+                    class="preview-frame">
+            </iframe>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   PROJECT DATA
+========================================================= */
+
+let project = {
+
+    name: "My First Project",
+
+    scenes: [
+
+        {
+            id: "scene-home",
+            name: "Home",
+            elements: [
+
+                {
+                    id: "title-1",
+                    type: "text",
+                    x: 100,
+                    y: 90,
+                    width: 400,
+                    height: 60,
+                    text: "Welcome to My Application",
+                    fontSize: 30,
+                    fontWeight: "700",
+                    color: "#111827",
+                    background: "transparent"
+                },
+
+                {
+                    id: "button-1",
+                    type: "button",
+                    x: 100,
+                    y: 190,
+                    width: 150,
+                    height: 48,
+                    text: "Get Started",
+                    fontSize: 15,
+                    fontWeight: "600",
+                    color: "#ffffff",
+                    background: "#2563eb",
+                    borderRadius: 7
+                }
+
+            ]
+        }
+
+    ]
+
+};
+
+
+let currentSceneId = "scene-home";
+let selectedElementId = null;
+
+let canvasWidth = 1000;
+let canvasHeight = 625;
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    renderSceneList();
+    renderCanvas();
+
+});
+
+
+/* =========================================================
+   CURRENT SCENE
+========================================================= */
+
+function getCurrentScene() {
+
+    return project.scenes.find(
+        scene => scene.id === currentSceneId
+    );
+
+}
+
+
+/* =========================================================
+   RENDER SCENE LIST
+========================================================= */
+
+function renderSceneList() {
+
+    const list = document.getElementById("sceneList");
+
+    list.innerHTML = "";
+
+    project.scenes.forEach(scene => {
+
+        const item = document.createElement("div");
+
+        item.className =
+            "scene-item " +
+            (scene.id === currentSceneId ? "active" : "");
+
+        item.innerHTML = `
+            <span>
+                <span class="scene-icon">▣</span>
+                ${escapeHTML(scene.name)}
+            </span>
+        `;
+
+        item.onclick = () => {
+
+            currentSceneId = scene.id;
+            selectedElementId = null;
+
+            renderSceneList();
+            renderCanvas();
+
+        };
+
+        list.appendChild(item);
+
+    });
+
+}
+
+
+/* =========================================================
+   ADD SCENE
+========================================================= */
+
+function addScene() {
+
+    const number = project.scenes.length + 1;
+
+    const scene = {
+
+        id:
+            "scene-" +
+            Date.now(),
+
+        name:
+            "Scene " +
+            number,
+
+        elements: []
+
+    };
+
+    project.scenes.push(scene);
+
+    currentSceneId = scene.id;
+
+    selectedElementId = null;
+
+    renderSceneList();
+    renderCanvas();
+
+}
+
+
+/* =========================================================
+   RENDER CANVAS
+========================================================= */
+
+function renderCanvas() {
+
+    const canvas =
+        document.getElementById("designCanvas");
+
+    canvas.innerHTML = "";
+
+    const scene = getCurrentScene();
+
+    document.getElementById(
+        "currentSceneName"
+    ).textContent = scene.name;
+
+
+    if (!scene.elements.length) {
+
+        canvas.innerHTML = `
+            <div class="canvas-empty">
+                Add a component from the left panel
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    scene.elements.forEach(element => {
+
+        renderElement(element);
+
+    });
+
+}
+
+
+/* =========================================================
+   RENDER ELEMENT
+========================================================= */
+
+function renderElement(element) {
+
+    const canvas =
+        document.getElementById("designCanvas");
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "canvas-element";
+
+    if (element.id === selectedElementId) {
+
+        wrapper.classList.add("selected");
+
+    }
+
+
+    wrapper.dataset.id = element.id;
+
+    wrapper.style.left =
+        element.x + "px";
+
+    wrapper.style.top =
+        element.y + "px";
+
+    wrapper.style.width =
+        element.width + "px";
+
+    wrapper.style.height =
+        element.height + "px";
+
+
+    const label =
+        document.createElement("div");
+
+    label.className =
+        "element-label";
+
+    label.textContent =
+        element.type;
+
+    wrapper.appendChild(label);
+
+
+    let content;
+
+
+    if (element.type === "text") {
+
+        content =
+            document.createElement("div");
+
+        content.className =
+            "element-text";
+
+        content.textContent =
+            element.text;
+
+        content.style.fontSize =
+            element.fontSize + "px";
+
+        content.style.fontWeight =
+            element.fontWeight;
+
+        content.style.color =
+            element.color;
+
+        content.style.background =
+            element.background;
+
+    }
+
+
+    else if (element.type === "button") {
+
+        content =
+            document.createElement("button");
+
+        content.className =
+            "element-button";
+
+        content.textContent =
+            element.text;
+
+        content.style.fontSize =
+            element.fontSize + "px";
+
+        content.style.fontWeight =
+            element.fontWeight;
+
+        content.style.background =
+            element.background;
+
+        content.style.borderRadius =
+            element.borderRadius + "px";
+
+        content.style.color =
+            element.color;
+
+    }
+
+
+    else if (element.type === "input") {
+
+        content =
+            document.createElement("input");
+
+        content.className =
+            "element-input";
+
+        content.placeholder =
+            element.placeholder ||
+            "Enter text...";
+
+    }
+
+
+    else if (element.type === "container") {
+
+        content =
+            document.createElement("div");
+
+        content.className =
+            "element-container";
+
+    }
+
+
+    else if (element.type === "image") {
+
+        content =
+            document.createElement("div");
+
+        content.className =
+            "element-image";
+
+        content.textContent =
+            "IMAGE";
+
+    }
+
+
+    wrapper.appendChild(content);
+
+
+    const resize =
+        document.createElement("div");
+
+    resize.className =
+        "resize-handle";
+
+    wrapper.appendChild(resize);
+
+
+    wrapper.addEventListener(
+        "mousedown",
+        startDrag
+    );
+
+
+    wrapper.addEventListener(
+        "click",
+        event => {
+
+            event.stopPropagation();
+
+            selectedElementId =
+                element.id;
+
+            renderCanvas();
+            renderInspector();
+
+        }
+    );
+
+
+    resize.addEventListener(
+        "mousedown",
+        event => {
+
+            event.stopPropagation();
+
+            startResize(
+                event,
+                element
+            );
+
+        }
+    );
+
+
+    canvas.appendChild(wrapper);
+
+}
+
+
+/* =========================================================
+   DRAGGING
+========================================================= */
+
+let dragState = null;
+
+function startDrag(event) {
+
+    if (
+        event.target.classList.contains(
+            "resize-handle"
+        )
+    ) {
+        return;
+    }
+
+
+    const id =
+        event.currentTarget.dataset.id;
+
+    const scene =
+        getCurrentScene();
+
+    const element =
+        scene.elements.find(
+            item => item.id === id
+        );
+
+    if (!element) return;
+
+
+    selectedElementId =
+        id;
+
+
+    const canvas =
+        document.getElementById(
+            "designCanvas"
+        );
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+
+    dragState = {
+
+        element,
+
+        startMouseX:
+            event.clientX,
+
+        startMouseY:
+            event.clientY,
+
+        startX:
+            element.x,
+
+        startY:
+            element.y
+
+    };
+
+
+    document.addEventListener(
+        "mousemove",
+        dragMove
+    );
+
+    document.addEventListener(
+        "mouseup",
+        endDrag
+    );
+
+}
+
+
+function dragMove(event) {
+
+    if (!dragState) return;
+
+
+    const dx =
+        event.clientX -
+        dragState.startMouseX;
+
+    const dy =
+        event.clientY -
+        dragState.startMouseY;
+
+
+    dragState.element.x =
+        Math.max(
+            0,
+            dragState.startX + dx
+        );
+
+
+    dragState.element.y =
+        Math.max(
+            0,
+            dragState.startY + dy
+        );
+
+
+    renderCanvas();
+
+}
+
+
+function endDrag() {
+
+    document.removeEventListener(
+        "mousemove",
+        dragMove
+    );
+
+    document.removeEventListener(
+        "mouseup",
+        endDrag
+    );
+
+    dragState = null;
+
+    renderInspector();
+
+}
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+let resizeState = null;
+
+function startResize(event, element) {
+
+    resizeState = {
+
+        element,
+
+        startMouseX:
+            event.clientX,
+
+        startMouseY:
+            event.clientY,
+
+        startWidth:
+            element.width,
+
+        startHeight:
+            element.height
+
+    };
+
+
+    document.addEventListener(
+        "mousemove",
+        resizeMove
+    );
+
+    document.addEventListener(
+        "mouseup",
+        endResize
+    );
+
+}
+
+
+function resizeMove(event) {
+
+    if (!resizeState) return;
+
+
+    const dx =
+        event.clientX -
+        resizeState.startMouseX;
+
+    const dy =
+        event.clientY -
+        resizeState.startMouseY;
+
+
+    resizeState.element.width =
+        Math.max(
+            40,
+            resizeState.startWidth + dx
+        );
+
+
+    resizeState.element.height =
+        Math.max(
+            25,
+            resizeState.startHeight + dy
+        );
+
+
+    renderCanvas();
+
+}
+
+
+function endResize() {
+
+    document.removeEventListener(
+        "mousemove",
+        resizeMove
+    );
+
+    document.removeEventListener(
+        "mouseup",
+        endResize
+    );
+
+    resizeState = null;
+
+    renderInspector();
+
+}
+
+
+/* =========================================================
+   ADD ELEMENT
+========================================================= */
+
+function addElement(type) {
+
+    const scene =
+        getCurrentScene();
+
+    const count =
+        scene.elements.length;
+
+    const element = {
+
+        id:
+            type +
+            "-" +
+            Date.now(),
+
+        type,
+
+        x:
+            100 + (count * 20),
+
+        y:
+            100 + (count * 20),
+
+        width:
+            type === "text"
+                ? 300
+                : type === "container"
+                    ? 400
+                    : 160,
+
+        height:
+            type === "text"
+                ? 50
+                : type === "container"
+                    ? 220
+                    : 48,
+
+        text:
+            type === "text"
+                ? "New Text"
+                : type === "button"
+                    ? "Button"
+                    : "",
+
+        fontSize: 16,
+
+        fontWeight:
+            "400",
+
+        color:
+            "#111827",
+
+        background:
+            type === "button"
+                ? "#2563eb"
+                : "transparent",
+
+        borderRadius:
+            7,
+
+        placeholder:
+            "Enter text..."
+
+    };
+
+
+    scene.elements.push(element);
+
+    selectedElementId =
+        element.id;
+
+    renderCanvas();
+    renderInspector();
+
+}
+
+
+/* =========================================================
+   INSPECTOR
+========================================================= */
+
+function renderInspector() {
+
+    const inspector =
+        document.getElementById(
+            "inspector"
+        );
+
+
+    if (!selectedElementId) {
+
+        inspector.innerHTML = `
+            <div class="no-selection">
+                Select an element on the canvas
+                to edit its properties.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    const scene =
+        getCurrentScene();
+
+    const element =
+        scene.elements.find(
+            item =>
+                item.id ===
+                selectedElementId
+        );
+
+
+    if (!element) return;
+
+
+    inspector.innerHTML = `
+
+        <div class="inspector-group">
+
+            <div class="inspector-label">
+                Element
+            </div>
+
+            <div class="field">
+
+                <label>Type</label>
+
+                <input
+                    value="${escapeAttribute(element.type)}"
+                    disabled
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="inspector-group">
+
+            <div class="inspector-label">
+                Position
+            </div>
+
+            <div class="position-grid">
+
+                <div class="field">
+
+                    <label>X</label>
+
+                    <input
+                        type="number"
+                        value="${element.x}"
+                        oninput="updateProperty('x', this.value)"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label>Y</label>
+
+                    <input
+                        type="number"
+                        value="${element.y}"
+                        oninput="updateProperty('y', this.value)"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label>Width</label>
+
+                    <input
+                        type="number"
+                        value="${element.width}"
+                        oninput="updateProperty('width', this.value)"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label>Height</label>
+
+                    <input
+                        type="number"
+                        value="${element.height}"
+                        oninput="updateProperty('height', this.value)"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="inspector-group">
+
+            <div class="inspector-label">
+                Appearance
+            </div>
+
+            ${
+                element.type !== "container"
+                ? `
+                    <div class="field">
+
+                        <label>Text</label>
+
+                        <input
+                            value="${escapeAttribute(element.text || "")}"
+                            oninput="updateProperty('text', this.value)"
+                        >
+
+                    </div>
+                `
+                : ""
+            }
+
+
+            <div class="field">
+
+                <label>Font Size</label>
+
+                <input
+                    type="number"
+                    value="${element.fontSize || 16}"
+                    oninput="updateProperty('fontSize', this.value)"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Text Color</label>
+
+                <input
+                    type="text"
+                    value="${escapeAttribute(element.color || "#111827")}"
+                    oninput="updateProperty('color', this.value)"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Background</label>
+
+                <input
+                    type="text"
+                    value="${escapeAttribute(element.background || "transparent")}"
+                    oninput="updateProperty('background', this.value)"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>Border Radius</label>
+
+                <input
+                    type="number"
+                    value="${element.borderRadius || 0}"
+                    oninput="updateProperty('borderRadius', this.value)"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="inspector-group">
+
+            <div class="inspector-label">
+                Actions
+            </div>
+
+            <button
+                class="top-btn"
+                style="width:100%;"
+                onclick="deleteSelected()"
+            >
+                Delete Element
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   UPDATE PROPERTY
+========================================================= */
+
+function updateProperty(
+    property,
+    value
+) {
+
+    const scene =
+        getCurrentScene();
+
+    const element =
+        scene.elements.find(
+            item =>
+                item.id ===
+                selectedElementId
+        );
+
+
+    if (!element) return;
+
+
+    const numericProperties = [
+
+        "x",
+        "y",
+        "width",
+        "height",
+        "fontSize",
+        "borderRadius"
+
+    ];
+
+
+    if (
+        numericProperties.includes(
+            property
+        )
+    ) {
+
+        element[property] =
+            Number(value);
+
+    }
+
+    else {
+
+        element[property] =
+            value;
+
+    }
+
+
+    renderCanvas();
+
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+function deleteSelected() {
+
+    if (!selectedElementId) return;
+
+
+    const scene =
+        getCurrentScene();
+
+
+    scene.elements =
+        scene.elements.filter(
+            element =>
+                element.id !==
+                selectedElementId
+        );
+
+
+    selectedElementId = null;
+
+    renderCanvas();
+    renderInspector();
+
+}
+
+
+/* =========================================================
+   DEVICE
+========================================================= */
+
+function changeDevice() {
+
+    const value =
+        document.getElementById(
+            "deviceSelector"
+        ).value;
+
+
+    const canvas =
+        document.getElementById(
+            "designCanvas"
+        );
+
+
+    if (value === "desktop") {
+
+        canvas.style.width =
+            "min(100%, 1000px)";
+
+        canvas.style.aspectRatio =
+            "16 / 10";
+
+        canvasWidth = 1000;
+        canvasHeight = 625;
+
+    }
+
+
+    else if (value === "tablet") {
+
+        canvas.style.width =
+            "768px";
+
+        canvas.style.aspectRatio =
+            "4 / 3";
+
+        canvasWidth = 768;
+        canvasHeight = 576;
+
+    }
+
+
+    else {
+
+        canvas.style.width =
+            "390px";
+
+        canvas.style.aspectRatio =
+            "390 / 844";
+
+        canvasWidth = 390;
+        canvasHeight = 844;
+
+    }
+
+
+    document.getElementById(
+        "canvasSize"
+    ).textContent =
+        canvasWidth +
+        " × " +
+        canvasHeight;
+
+}
+
+
+/* =========================================================
+   SAVE PROJECT
+========================================================= */
+
+function saveProject() {
+
+    localStorage.setItem(
+        "visualSoftwareProject",
+        JSON.stringify(project)
+    );
+
+
+    alert(
+        "Project saved locally."
+    );
+
+}
+
+
+/* =========================================================
+   LOAD PROJECT
+========================================================= */
+
+function loadProject() {
+
+    const saved =
+        localStorage.getItem(
+            "visualSoftwareProject"
+        );
+
+
+    if (!saved) return;
+
+
+    try {
+
+        project =
+            JSON.parse(saved);
+
+        currentSceneId =
+            project.scenes[0].id;
+
+        selectedElementId =
+            null;
+
+        renderSceneList();
+        renderCanvas();
+        renderInspector();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Could not load project.",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   GENERATE CODE
+========================================================= */
+
+function generateCode() {
+
+    const scene =
+        getCurrentScene();
+
+
+    let html = "";
+
+    let css = "";
+
+    let js = "";
+
+
+    scene.elements.forEach(
+        (element, index) => {
+
+            const id =
+                "element-" +
+                index;
+
+
+            if (
+                element.type ===
+                "text"
+            ) {
+
+                html += `
+    <div id="${id}" class="text-element">
+        ${escapeHTML(element.text)}
+    </div>
+`;
+
+                css += `
+#${id} {
+    position: absolute;
+    left: ${element.x}px;
+    top: ${element.y}px;
+    width: ${element.width}px;
+    height: ${element.height}px;
+    display: flex;
+    align-items: center;
+    font-size: ${element.fontSize}px;
+    font-weight: ${element.fontWeight};
+    color: ${element.color};
+    background: ${element.background};
+}
+`;
+
+            }
+
+
+            else if (
+                element.type ===
+                "button"
+            ) {
+
+                html += `
+    <button id="${id}">
+        ${escapeHTML(element.text)}
+    </button>
+`;
+
+                css += `
+#${id} {
+    position: absolute;
+    left: ${element.x}px;
+    top: ${element.y}px;
+    width: ${element.width}px;
+    height: ${element.height}px;
+    border: none;
+    border-radius: ${element.borderRadius}px;
+    background: ${element.background};
+    color: ${element.color};
+    font-size: ${element.fontSize}px;
+    font-weight: ${element.fontWeight};
+    cursor: pointer;
+}
+`;
+
+                js += `
+document.getElementById("${id}")
+    .addEventListener("click", function() {
+        console.log("Button clicked");
+    });
+`;
+
+            }
+
+
+            else if (
+                element.type ===
+                "input"
+            ) {
+
+                html += `
+    <input
+        id="${id}"
+        placeholder="${escapeAttribute(
+            element.placeholder ||
+            "Enter text..."
+        )}"
+    >
+`;
+
+                css += `
+#${id} {
+    position: absolute;
+    left: ${element.x}px;
+    top: ${element.y}px;
+    width: ${element.width}px;
+    height: ${element.height}px;
+    border: 1px solid #cbd5e1;
+    border-radius: ${element.borderRadius}px;
+    padding: 0 10px;
+    font-size: ${element.fontSize}px;
+}
+`;
+
+            }
+
+
+            else if (
+                element.type ===
+                "container"
+            ) {
+
+                html += `
+    <div id="${id}"></div>
+`;
+
+                css += `
+#${id} {
+    position: absolute;
+    left: ${element.x}px;
+    top: ${element.y}px;
+    width: ${element.width}px;
+    height: ${element.height}px;
+    border: 2px dashed #94a3b8;
+    background: rgba(148,163,184,.08);
+    border-radius: ${element.borderRadius}px;
+}
+`;
+
+            }
+
+
+            else if (
+                element.type ===
+                "image"
+            ) {
+
+                html += `
+    <div id="${id}" class="image-placeholder">
+        IMAGE
+    </div>
+`;
+
+                css += `
+#${id} {
+    position: absolute;
+    left: ${element.x}px;
+    top: ${element.y}px;
+    width: ${element.width}px;
+    height: ${element.height}px;
+    display: grid;
+    place-items: center;
+    background: #dbeafe;
+    color: #64748b;
+    border-radius: ${element.borderRadius}px;
+}
+`;
+
+            }
+
+        }
+    );
+
+
+    return `<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>${escapeHTML(scene.name)}</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    font-family: Arial, sans-serif;
+}
+
+.app {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+${css}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+${html}
+
+</div>
+
+<script>
+
+${js}
+
+<\/script>
+
+</body>
+
+</html>`;
+}
+
+
+/* =========================================================
+   EXPORT MODAL
+========================================================= */
+
+function openCodeExport() {
+
+    const code =
+        generateCode();
+
+
+    document.getElementById(
+        "codeOutput"
+    ).value = code;
+
+
+    document.getElementById(
+        "codeModal"
+    ).classList.add("open");
+
+}
+
+
+function copyGeneratedCode() {
+
+    const textarea =
+        document.getElementById(
+            "codeOutput"
+        );
+
+
+    navigator.clipboard.writeText(
+        textarea.value
+    );
+
+
+    alert(
+        "Generated code copied."
+    );
+
+}
+
+
+function downloadGeneratedCode() {
+
+    const code =
+        document.getElementById(
+            "codeOutput"
+        ).value;
+
+
+    const blob =
+        new Blob(
+            [code],
+            {
+                type:
+                    "text/html"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href = url;
+
+    link.download =
+        "generated-app.html";
+
+    link.click();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+function openPreview() {
+
+    const code =
+        generateCode();
+
+
+    const frame =
+        document.getElementById(
+            "previewFrame"
+        );
+
+
+    frame.srcdoc =
+        code;
+
+
+    document.getElementById(
+        "previewModal"
+    ).classList.add("open");
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeModal(id) {
+
+    document.getElementById(
+        id
+    ).classList.remove("open");
+
+}
+
+
+/* =========================================================
+   ESCAPE HELPERS
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+function escapeAttribute(value) {
+
+    return escapeHTML(value);
+
+}
+
+
+/* =========================================================
+   CANVAS CLICK
+========================================================= */
+
+document
+    .getElementById("designCanvas")
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "designCanvas"
+            ) {
+
+                selectedElementId =
+                    null;
+
+                renderCanvas();
+                renderInspector();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   AUTO LOAD
+========================================================= */
+
+loadProject();
+
+</script>
+
+</body>
+</html>
+```
