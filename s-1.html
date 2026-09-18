@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlas College - Online Academic Application Process</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --primary-hover: #004085;
+            --primary-light: #e7f1ff;
+            --bg-color: #f4f7f9;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #555555;
+            --border-color: #d1d8e0;
+            --danger: #d9534f;
+            --transition-speed: 0.3s ease;
+            --page-padding: clamp(16px, 3vw, 60px);
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            width: 100%;
+            min-height: 100%;
+            scroll-behavior: smooth;
+        }
+        body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        button, input, select {
+            font: inherit;
+        }
+        a {
+            color: var(--primary-color);
+        }
+        .page {
+            width: 100%;
+            min-height: 100vh;
+        }
+        .page-content {
+            width: 100%;
+            padding-left: var(--page-padding);
+            padding-right: var(--page-padding);
+        }
+        .site-header {
+            width: 100%;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .site-header-inner {
+            width: 100%;
+            min-height: 74px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px var(--page-padding);
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+        }
+        .atlas-logo {
+            font-weight: 800;
+            font-size: clamp(1rem, 1.8vw, 1.45rem);
+            color: var(--primary-color);
+            letter-spacing: -0.5px;
+        }
+        .menu-button {
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #444;
+            transition: 0.2s ease;
+        }
+        .menu-button:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-color);
+        }
+        .menu-icon {
+            width: 22px;
+            height: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .menu-icon span {
+            width: 100%;
+            height: 2px;
+            background: #444;
+            border-radius: 2px;
+        }
+        .welcome-section {
+            width: 100%;
+            background: linear-gradient(90deg, #eef8ff 0%, #e4f3ff 50%, #eef8ff 100%);
+            border-bottom: 1px solid #d7e9f7;
+        }
+        .welcome-inner {
+            width: 100%;
+            padding-top: clamp(28px, 4vw, 55px);
+            padding-bottom: clamp(28px, 4vw, 55px);
+        }
+        .welcome-section h1 {
+            color: #173d70;
+            font-size: clamp(1.55rem, 3vw, 2.5rem);
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+        .welcome-section h2 {
+            color: var(--primary-color);
+            font-size: clamp(1.15rem, 2vw, 1.55rem);
+            margin-top: 28px;
+            margin-bottom: 10px;
+        }
+        .welcome-intro {
+            max-width: 1100px;
+            color: #44566c;
+            font-size: clamp(0.9rem, 1.2vw, 1rem);
+        }
+        .process-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: clamp(15px, 2vw, 30px);
+            margin-top: 22px;
+        }
+        .process-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .process-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: #42546a;
+            font-size: clamp(0.85rem, 1vw, 0.98rem);
+        }
+        .process-number {
+            flex-shrink: 0;
+            width: 27px;
+            height: 27px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        .help-bar {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px clamp(15px, 2vw, 25px);
+            border: 1px solid #b8daff;
+            background: #e7f1ff;
+            border-radius: 7px;
+            color: #004085;
+        }
+        .help-bar strong {
+            display: block;
+            margin-bottom: 2px;
+        }
+        .application-section {
+            width: 100%;
+            padding-top: clamp(20px, 3vw, 40px);
+            padding-bottom: clamp(30px, 5vw, 70px);
+        }
+        .card {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 9px;
+            padding: clamp(18px, 2.5vw, 32px);
+            margin-bottom: clamp(16px, 2vw, 25px);
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.035);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .card:hover {
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+        }
+        .question-row {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: clamp(0.9rem, 1.2vw, 1rem);
+            font-weight: 600;
+        }
+        .question-row label {
+            flex: 1 1 300px;
+        }
+        .question-row select {
+            min-width: 190px;
+            padding: 10px 13px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: white;
+            color: var(--text-main);
+            cursor: pointer;
+            outline: none;
+        }
+        .question-row select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+        }
+        .required-star {
+            color: var(--danger);
+        }
+        .form-title {
+            color: var(--primary-color);
+            font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .form-description {
+            color: var(--text-muted);
+            font-size: clamp(0.85rem, 1vw, 0.95rem);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            width: 100%;
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-size: clamp(0.82rem, 1vw, 0.92rem);
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+        .form-control {
+            width: 100%;
+            min-height: 46px;
+            padding: 11px 13px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: #ffffff;
+            color: var(--text-main);
+            font-size: clamp(0.88rem, 1vw, 0.96rem);
+            outline: none;
+        }
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+        }
+        .or-divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0 20px;
+            color: #777;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .or-divider::before,
+        .or-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+        .popia-box {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            background: #fafbfc;
+            padding: clamp(15px, 2vw, 25px);
+            border-radius: 5px;
+            height: clamp(180px, 25vw, 300px);
+            overflow-y: auto;
+            font-size: clamp(0.82rem, 1vw, 0.92rem);
+            margin-bottom: 20px;
+        }
+        .popia-box p {
+            margin-bottom: 10px;
+        }
+        .consent-title {
+            font-size: clamp(0.88rem, 1vw, 0.96rem);
+            margin-bottom: 10px;
+        }
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 30px;
+            margin-bottom: 20px;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 7px 0;
+        }
+        .radio-option input {
+            width: 17px;
+            height: 17px;
+            accent-color: var(--primary-color);
+            cursor: pointer;
+        }
+        .portal-alert {
+            background: #e7f1ff;
+            border: 1px solid #b8daff;
+            padding: clamp(16px, 2vw, 25px);
+            border-radius: 7px;
+            color: #004085;
+            font-size: clamp(0.88rem, 1vw, 0.98rem);
+            line-height: 1.7;
+        }
+        .portal-alert a {
+            color: var(--primary-color);
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .submit-btn {
+            width: 100%;
+            min-height: 46px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+        .submit-btn:hover {
+            background-color: var(--primary-hover);
+        }
+        .submit-btn:active {
+            transform: scale(0.99);
+        }
+        .academic-heading {
+            margin-bottom: 25px;
+        }
+        .academic-heading h2 {
+            color: var(--primary-color);
+            font-size: clamp(1.4rem, 2.5vw, 2.1rem);
+            margin-bottom: 5px;
+        }
+        .academic-heading p {
+            color: var(--text-muted);
+            font-size: clamp(0.85rem, 1vw, 0.98rem);
+        }
+        .academic-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: clamp(15px, 2vw, 30px);
+        }
+        .academic-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 9px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
+        }
+        .academic-card-content {
+            padding: clamp(18px, 2vw, 28px);
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .level-label {
+            color: var(--primary-color);
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .academic-card h3 {
+            color: #173d70;
+            font-size: clamp(1rem, 1.5vw, 1.3rem);
+            line-height: 1.3;
+            margin-bottom: 10px;
+        }
+        .academic-card p {
+            color: var(--text-muted);
+            font-size: clamp(0.83rem, 1vw, 0.94rem);
+            margin-bottom: 22px;
+            flex: 1;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .fade-in {
+            animation: fadeIn var(--transition-speed) forwards;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-7px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .site-footer {
+            width: 100%;
+            background: linear-gradient(135deg, #073c78, #002d62);
+            color: white;
+            margin-top: 0;
+        }
+        .footer-inner {
+            width: 100%;
+            padding: clamp(30px, 5vw, 65px) var(--page-padding);
+        }
+        .footer-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+            gap: clamp(25px, 4vw, 70px);
+        }
+        .footer-brand {
+            min-width: 0;
+        }
+        .footer-logo {
+            font-size: clamp(1.1rem, 1.7vw, 1.5rem);
+            font-weight: 800;
+            color: #48aaff;
+            margin-bottom: 15px;
+        }
+        .footer-brand p {
+            color: #dcecff;
+            font-size: clamp(0.8rem, 1vw, 0.92rem);
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+        .footer-column h4 {
+            font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+            margin-bottom: 15px;
+        }
+        .footer-column ul {
+            list-style: none;
+        }
+        .footer-column li {
+            margin-bottom: 9px;
+        }
+        .footer-column a {
+            color: #dcecff;
+            text-decoration: none;
+            font-size: clamp(0.78rem, 1vw, 0.9rem);
+        }
+        .footer-column a:hover {
+            text-decoration: underline;
+        }
+        .contact-item {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            color: #dcecff;
+            font-size: clamp(0.78rem, 1vw, 0.9rem);
+            margin-bottom: 12px;
+        }
+        .contact-icon {
+            flex-shrink: 0;
+            width: 20px;
+        }
+        .socials {
+            display: flex;
+            gap: 10px;
+        }
+        .social {
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: 0.2s ease;
+        }
+        .social:hover {
+            background: white;
+            color: var(--primary-color);
+        }
+        .footer-bottom {
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            color: #dcecff;
+            font-size: clamp(0.72rem, 0.9vw, 0.82rem);
+        }
+        .footer-legal {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        .footer-legal a {
+            color: #dcecff;
+            text-decoration: none;
+        }
+        .footer-legal a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 900px) {
+            .academic-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .footer-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        @media (max-width: 700px) {
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+            .academic-grid {
+                grid-template-columns: 1fr;
+            }
+            .question-row {
+                align-items: stretch;
+                flex-direction: column;
+            }
+            .question-row label {
+                flex: none;
+            }
+            .question-row select {
+                width: 100%;
+                min-width: 0;
+            }
+            .radio-group {
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+        @media (max-width: 500px) {
+            :root {
+                --page-padding: 14px;
+            }
+            .site-header-inner {
+                min-height: 62px;
+            }
+            .menu-button {
+                width: 40px;
+                height: 40px;
+            }
+            .welcome-inner {
+                padding-top: 25px;
+                padding-bottom: 25px;
+            }
+            .card {
+                padding: 17px;
+                border-radius: 7px;
+            }
+            .popia-box {
+                height: 220px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .footer-legal {
+                gap: 15px;
+            }
+        }
+        @media (max-width: 350px) {
+            :root {
+                --page-padding: 10px;
+            }
+            .process-item {
+                gap: 8px;
+            }
+            .process-number {
+                width: 24px;
+                height: 24px;
+                font-size: 0.7rem;
+            }
+            .card {
+                padding: 14px;
+            }
+            .submit-btn {
+                font-size: 0.86rem;
+            }
+        }
+        @media (min-width: 1600px) {
+            :root {
+                --page-padding: 5vw;
+            }
+            .welcome-inner,
+            .application-section {
+                padding-top: 55px;
+                padding-bottom: 65px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="site-header">
+        <div class="site-header-inner">
+            <div class="logo-area">
+                <div class="atlas-logo">
+                    ATLAS COLLEGE
+                </div>
+            </div>
+            <button
+                class="menu-button"
+                aria-label="Open menu"
+                type="button"
+            >
+                <div class="menu-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+        </div>
+    </header>
+    <section class="welcome-section">
+        <div class="page-content welcome-inner">
+            <h1>
+                Welcome to Atlas College
+            </h1>
+            <p class="welcome-intro">
+                We are excited that you are considering Atlas College
+                for your future. This online academic application process
+                will guide you through the steps required to submit your
+                application and begin your academic journey with us.
+            </p>
+            <h2>
+                Online Academic Application Process
+            </h2>
+            <p class="welcome-intro">
+                To ensure a smooth and successful application, please
+                follow the steps below. You will need to provide accurate
+                and complete information and have your identification
+                documents and academic records ready before you begin.
+            </p>
+            <div class="process-grid">
+                <div class="process-column">
+                    <div class="process-item">
+                        <span class="process-number">1</span>
+                        <span>
+                            Complete the online application form.
+                        </span>
+                    </div>
+                    <div class="process-item">
+                        <span class="process-number">2</span>
+                        <span>
+                            Provide the required supporting documents.
+                        </span>
+                    </div>
+                    <div class="process-item">
+                        <span class="process-number">3</span>
+                        <span>
+                            Pay the application fee, if applicable.
+                        </span>
+                    </div>
+                </div>
+                <div class="process-column">
+                    <div class="process-item">
+                        <span class="process-number">4</span>
+                        <span>
+                            Wait for your application to be reviewed.
+                        </span>
+                    </div>
+                    <div class="process-item">
+                        <span class="process-number">5</span>
+                        <span>
+                            Receive your admission decision via email.
+                        </span>
+                    </div>
+                    <div class="process-item">
+                        <span class="process-number">6</span>
+                        <span>
+                            Follow the next steps to register and enrol.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="help-bar">
+                <strong>
+                    Need help?
+                </strong>
+                <span>
+                    If you experience any difficulties, please contact
+                    our admissions office for assistance.
+                </span>
+            </div>
+        </div>
+    </section>
+    <main class="application-section">
+        <div class="page-content">
+            <div class="card" id="step1-card">
+                <div class="question-row">
+                    <label for="student-number-select">
+                        Do you already have a student number?
+                    </label>
+                    <select
+                        id="student-number-select"
+                        onchange="handleStudentNumberChange(this.value)"
+                    >
+                        <option value="">
+                            --- Please select ---
+                        </option>
+                        <option value="yes">
+                            Yes
+                        </option>
+                        <option value="no">
+                            No
+                        </option>
+                    </select>
+                    <span class="required-star">
+                        *
+                    </span>
+                </div>
+            </div>
+            <div
+                class="card hidden fade-in"
+                id="portal-redirect-card"
+            >
+                <div class="portal-alert">
+                    <strong>
+                        Welcome back.
+                    </strong>
+                    <br>
+                    You already have a student number.
+                    Please proceed to log into your online
+                    student application portal using your
+                    student number and PIN.
+                    <br><br>
+                    Click
+                    <a href="#ienabler-portal">
+                        here
+                    </a>
+                    to access your myAtlas portal.
+                </div>
+            </div>
+            <div
+                class="card hidden fade-in"
+                id="step2-card"
+            >
+                <div class="question-row">
+                    <label for="returning-select">
+                        Are you returning to complete an application?
+                    </label>
+                    <select
+                        id="returning-select"
+                        onchange="handleReturningChange(this.value)"
+                    >
+                        <option value="">
+                            --- Please select ---
+                        </option>
+                        <option value="yes">
+                            Yes
+                        </option>
+                        <option value="no">
+                            No
+                        </option>
+                    </select>
+                    <span class="required-star">
+                        *
+                    </span>
+                </div>
+            </div>
+            <div
+                class="card hidden fade-in"
+                id="step3-card"
+            >
+                <div class="form-title">
+                    Find Your Application
+                </div>
+                <div class="form-description">
+                    Please enter the identification details
+                    you used when starting your application.
+                </div>
+                <div class="form-group">
+                    <label for="sa-id">
+                        South African ID Number
+                    </label>
+                    <input
+                        type="text"
+                        id="sa-id"
+                        class="form-control"
+                        placeholder="Enter your ID number"
+                    >
+                </div>
+                <div class="or-divider">
+                    OR
+                </div>
+                <div class="form-group">
+                    <label for="passport">
+                        Passport Number
+                        (if no ID number)
+                    </label>
+                    <input
+                        type="text"
+                        id="passport"
+                        class="form-control"
+                        placeholder="Enter your passport number"
+                    >
+                </div>
+                <button
+                    class="submit-btn"
+                    type="button"
+                    onclick="findApplication()"
+                >
+                    Find My Application ➔
+                </button>
+            </div>
+            <div
+                class="card hidden fade-in"
+                id="step4-card"
+            >
+                <div class="form-title">
+                    POPIA – Privacy Notice
+                </div>
+                <div class="form-description">
+                    Please read the privacy notice below before
+                    continuing with your application.
+                </div>
+                <div class="popia-box">
+                    <p>
+                        <strong>
+                            POPIA Privacy Notice
+                        </strong>
+                    </p>
+                    <p>
+                        <strong>
+                            1. Introduction
+                        </strong>
+                        <br>
+                        Atlas College is committed to protecting
+                        your personal information in accordance
+                        with the Protection of Personal Information
+                        Act (POPIA).
+                    </p>
+                    <p>
+                        This notice explains how we collect, use,
+                        store and protect your personal information
+                        when you apply to study at our college.
+                    </p>
+                    <p>
+                        <strong>
+                            2. Information We Collect
+                        </strong>
+                        <br>
+                        We may collect personal details including
+                        your name, identity number, passport number,
+                        contact details, academic history and
+                        supporting documentation.
+                    </p>
+                    <p>
+                        <strong>
+                            3. Purpose of Collection
+                        </strong>
+                        <br>
+                        Personal information is collected for the
+                        purpose of processing your application,
+                        communicating with you regarding your
+                        application, maintaining student records
+                        and fulfilling applicable legal and
+                        regulatory requirements.
+                    </p>
+                    <p>
+                        <strong>
+                            4. Protection of Information
+                        </strong>
+                        <br>
+                        Atlas College takes reasonable measures
+                        to protect personal information against
+                        unauthorised access, loss, misuse,
+                        alteration or disclosure.
+                    </p>
+                    <p>
+                        <strong>
+                            5. Applicant Rights
+                        </strong>
+                        <br>
+                        Applicants may have rights relating to
+                        access to, correction of and protection
+                        of their personal information as provided
+                        for under applicable legislation.
+                    </p>
+                    <p>
+                        <strong>
+                            6. Contact
+                        </strong>
+                        <br>
+                        If you have questions regarding the
+                        processing of your personal information,
+                        please contact the Atlas College
+                        admissions office.
+                    </p>
+                </div>
+                <div class="consent-title">
+                    <strong>
+                        Consent & Agreement
+                    </strong>
+                    <br>
+                    Please select one of the options below
+                    to continue.
+                </div>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input
+                            type="radio"
+                            name="popia_consent"
+                            value="accept"
+                        >
+                        <span>
+                            I accept
+                        </span>
+                    </label>
+                    <label class="radio-option">
+                        <input
+                            type="radio"
+                            name="popia_consent"
+                            value="decline"
+                        >
+                        <span>
+                            I do not accept
+                        </span>
+                    </label>
+                </div>
+                <button
+                    class="submit-btn"
+                    type="button"
+                    onclick="handlePopiaContinue()"
+                >
+                    NEXT ➔
+                </button>
+            </div>
+            <section
+                id="academic-level-section"
+                class="hidden fade-in"
+            >
+                <div class="academic-heading">
+                    <h2>
+                        Choose Your Application Level
+                    </h2>
+                    <p>
+                        Select the academic category that matches
+                        your qualifications to proceed with your
+                        online application form.
+                    </p>
+                </div>
+                <div class="academic-grid">
+                    <div class="academic-card">
+                        <div class="academic-card-content">
+                            <div class="level-label">
+                                Level 01
+                            </div>
+                            <h3>
+                                Undergraduate Studies
+                            </h3>
+                            <p>
+                                Explore Higher Certificates,
+                                Diplomas, and Bachelor Degrees
+                                designed for school leavers
+                                and career starters.
+                            </p>
+                            <button
+                                class="submit-btn"
+                                type="button"
+                                onclick="selectAcademicLevel('Undergraduate')"
+                            >
+                                Apply for Undergraduate ➔
+                            </button>
+                        </div>
+                    </div>
+                    <div class="academic-card">
+                        <div class="academic-card-content">
+                            <div class="level-label">
+                                Level 02
+                            </div>
+                            <h3>
+                                Honours & Postgraduate Diplomas
+                            </h3>
+                            <p>
+                                Advance your expertise with
+                                specialised postgraduate
+                                diplomas, advanced certificates,
+                                and honours degrees.
+                            </p>
+                            <button
+                                class="submit-btn"
+                                type="button"
+                                onclick="selectAcademicLevel('Postgraduate')"
+                            >
+                                Apply for Postgraduate ➔
+                            </button>
+                        </div>
+                    </div>
+                    <div class="academic-card">
+                        <div class="academic-card-content">
+                            <div class="level-label">
+                                Level 03
+                            </div>
+                            <h3>
+                                Master's & Doctoral
+                            </h3>
+                            <p>
+                                Engage in high-level academic
+                                research and leadership
+                                specialisations with our
+                                master's and doctoral programmes.
+                            </p>
+                            <button
+                                class="submit-btn"
+                                type="button"
+                                onclick="selectAcademicLevel('Research Degree')"
+                            >
+                                Apply for Research Degree ➔
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        ATLAS COLLEGE
+                    </div>
+                    <p>
+                        Empowering students with education,
+                        skills, and opportunities for a better
+                        tomorrow.
+                    </p>
+                    <div class="socials">
+                        <a
+                            href="#"
+                            class="social"
+                            aria-label="Facebook"
+                        >
+                            f
+                        </a>
+                        <a
+                            href="#"
+                            class="social"
+                            aria-label="Instagram"
+                        >
+                            ◎
+                        </a>
+                        <a
+                            href="#"
+                            class="social"
+                            aria-label="YouTube"
+                        >
+                            ▶
+                        </a>
+                        <a
+                            href="#"
+                            class="social"
+                            aria-label="LinkedIn"
+                        >
+                            in
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>
+                        Quick Links
+                    </h4>
+                    <ul>
+                        <li>
+                            <a href="#">
+                                Programs
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Admissions
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                About Us
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Contact
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>
+                        Student Info
+                    </h4>
+                    <ul>
+                        <li>
+                            <a href="#">
+                                How to Apply
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Fees & Payments
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Student Support
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                FAQ
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>
+                        Contact Us
+                    </h4>
+                    <div class="contact-item">
+                        <span class="contact-icon">
+                            ◆
+                        </span>
+                        <span>
+                            123 Education Road<br>
+                            Knowledge City, KC 10001
+                        </span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">
+                            ☎
+                        </span>
+                        <span>
+                            +1 234 567 8900
+                        </span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">
+                            ✉
+                        </span>
+                        <span>
+                            info@atlascollege.edu
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>
+                    © 2026 Atlas College.
+                    All rights reserved.
+                </div>
+                <div class="footer-legal">
+                    <a href="#">
+                        Privacy Policy
+                    </a>
+                    <a href="#">
+                        Terms & Conditions
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+<script>
+    function handleStudentNumberChange(value) {
+        const portalCard = document.getElementById('portal-redirect-card');
+        const step2Card = document.getElementById('step2-card');
+        const step3Card = document.getElementById('step3-card');
+        const step4Card = document.getElementById('step4-card');
+        const academicSection = document.getElementById('academic-level-section');
+
+        portalCard.classList.add('hidden');
+        step2Card.classList.add('hidden');
+        step3Card.classList.add('hidden');
+        step4Card.classList.add('hidden');
+        academicSection.classList.add('hidden');
+
+        if (value === 'yes') {
+            portalCard.classList.remove('hidden');
+            portalCard.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        } else if (value === 'no') {
+            step2Card.classList.remove('hidden');
+            step2Card.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+
+    function handleReturningChange(value) {
+        const step3Card = document.getElementById('step3-card');
+        const step4Card = document.getElementById('step4-card');
+        const academicSection = document.getElementById('academic-level-section');
+
+        step3Card.classList.add('hidden');
+        step4Card.classList.add('hidden');
+        academicSection.classList.add('hidden');
+
+        if (value === 'yes') {
+            step3Card.classList.remove('hidden');
+            step3Card.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        } else if (value === 'no') {
+            step4Card.classList.remove('hidden');
+            step4Card.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+
+    function findApplication() {
+        const id = document.getElementById('sa-id').value.trim();
+        const passport = document.getElementById('passport').value.trim();
+
+        if (!id && !passport) {
+            alert('Please enter your South African ID number or passport number.');
+            return;
+        }
+
+        alert('Searching for your existing application...');
+    }
+
+    function handlePopiaContinue() {
+        const selectedOption = document.querySelector('input[name="popia_consent"]:checked');
+
+        if (!selectedOption) {
+            alert('Please select whether you accept or do not accept the POPIA terms to continue.');
+            return;
+        }
+
+        if (selectedOption.value === 'accept') {
+            const academicSection = document.getElementById('academic-level-section');
+            academicSection.classList.remove('hidden');
+            academicSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        } else {
+            alert('You must accept the POPIA terms to proceed with your application.');
+        }
+    }
+
+    function selectAcademicLevel(level) {
+        alert('You selected: ' + level + '. The relevant application form will open here.');
+    }
+</script>
+</body>
+</html>
