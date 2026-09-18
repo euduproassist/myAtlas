@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#eaf4ff">
+<title>Atlas — Price Memorandum</title>
+
+<style>
+:root{
+  --white:#ffffff;
+  --blue:#eaf4ff;
+  --blue2:#d8ebff;
+  --blue3:#b8d9f8;
+  --black:#17202a;
+  --text:#2d3742;
+  --muted:#69737d;
+  --grey:#f5f7f9;
+  --line:#dfe5eb;
+  --radius:20px;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html,
+body{
+  width:100%;
+  min-height:100%;
+  overflow-x:hidden;
+}
+
+body{
+  background:var(--blue);
+  color:var(--black);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
+
+button{
+  font:inherit;
+}
+
+.page{
+  width:100%;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar{
+  width:100%;
+  background:var(--white);
+  border-bottom:1px solid var(--line);
+  padding:
+    max(18px,env(safe-area-inset-top))
+    clamp(16px,4vw,60px)
+    18px;
+}
+
+.topbar-inner{
+  width:100%;
+  max-width:1700px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:25px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+
+.logo{
+  width:46px;
+  height:46px;
+  flex-shrink:0;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--blue);
+  border:1px solid var(--blue2);
+  color:#286797;
+  font-size:21px;
+  font-weight:900;
+}
+
+.brand-name{
+  font-size:20px;
+  font-weight:850;
+  letter-spacing:-.03em;
+}
+
+.brand-subtitle{
+  margin-top:2px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.document-label{
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  text-align:right;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+  width:100%;
+  background:var(--blue);
+  padding:
+    clamp(38px,7vw,90px)
+    clamp(16px,4vw,60px);
+}
+
+.hero-inner{
+  width:100%;
+  max-width:1700px;
+  margin:auto;
+}
+
+.eyebrow{
+  display:inline-flex;
+  padding:8px 12px;
+  border-radius:999px;
+  background:var(--white);
+  border:1px solid var(--blue2);
+  color:#286797;
+  font-size:11px;
+  font-weight:850;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+h1{
+  margin-top:17px;
+  max-width:1000px;
+  font-size:clamp(35px,6vw,76px);
+  line-height:.98;
+  letter-spacing:-.055em;
+}
+
+.hero-description{
+  max-width:800px;
+  margin-top:17px;
+  color:var(--muted);
+  font-size:clamp(15px,1.7vw,19px);
+  line-height:1.65;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+  width:100%;
+  background:var(--white);
+  padding:
+    clamp(25px,4vw,60px)
+    clamp(16px,4vw,60px)
+    70px;
+}
+
+.main-inner{
+  width:100%;
+  max-width:1700px;
+  margin:auto;
+}
+
+.section-heading{
+  margin-bottom:22px;
+}
+
+.section-heading h2{
+  font-size:clamp(23px,3vw,36px);
+  letter-spacing:-.04em;
+}
+
+.section-heading p{
+  max-width:760px;
+  margin-top:8px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+}
+
+/* =========================
+   LICENCE CARDS
+========================= */
+
+.pricing-grid{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:12px;
+}
+
+.price-card{
+  min-height:185px;
+  padding:20px 17px;
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:var(--grey);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.capacity{
+  color:#286797;
+  font-size:13px;
+  font-weight:850;
+  line-height:1.35;
+}
+
+.amount{
+  margin-top:18px;
+  font-size:clamp(22px,2.2vw,32px);
+  font-weight:900;
+  letter-spacing:-.04em;
+}
+
+.period{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* =========================
+   IMPLEMENTATION
+========================= */
+
+.implementation{
+  width:100%;
+  margin-top:40px;
+  display:grid;
+  grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);
+  gap:18px;
+}
+
+.implementation-main,
+.implementation-info{
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+
+.implementation-main{
+  padding:clamp(25px,4vw,46px);
+  background:var(--blue);
+}
+
+.implementation-info{
+  padding:clamp(25px,4vw,46px);
+  background:var(--white);
+}
+
+.kicker{
+  color:#286797;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+
+.implementation-title{
+  margin-top:10px;
+  font-size:clamp(27px,3.6vw,45px);
+  line-height:1.05;
+  letter-spacing:-.045em;
+}
+
+.implementation-price{
+  margin-top:10px;
+  font-size:clamp(36px,4.5vw,58px);
+  font-weight:950;
+  letter-spacing:-.055em;
+}
+
+.implementation-description{
+  margin-top:15px;
+  max-width:700px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.65;
+}
+
+.features{
+  list-style:none;
+  margin-top:22px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px 20px;
+}
+
+.features li{
+  position:relative;
+  padding-left:21px;
+  color:var(--text);
+  font-size:13px;
+  line-height:1.45;
+}
+
+.features li::before{
+  content:"✓";
+  position:absolute;
+  left:0;
+  top:0;
+  font-weight:900;
+  color:#24704a;
+}
+
+.info-title{
+  margin-top:10px;
+  font-size:28px;
+  line-height:1.1;
+  letter-spacing:-.04em;
+}
+
+.info-description{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.65;
+}
+
+.example{
+  margin-top:25px;
+  padding:20px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:var(--grey);
+}
+
+.example-label{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:850;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+
+.example-total{
+  margin-top:7px;
+  font-size:29px;
+  font-weight:900;
+  letter-spacing:-.04em;
+}
+
+.example-text{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+/* =========================
+   PRINCIPLES
+========================= */
+
+.principles{
+  width:100%;
+  margin-top:40px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+.principle{
+  padding:23px;
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:var(--white);
+}
+
+.principle h3{
+  font-size:17px;
+  letter-spacing:-.02em;
+}
+
+.principle p{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+}
+
+/* =========================
+   NOTES
+========================= */
+
+.notes{
+  width:100%;
+  margin-top:40px;
+  padding:25px;
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:var(--grey);
+}
+
+.notes h3{
+  font-size:17px;
+}
+
+.notes ul{
+  margin-top:12px;
+  padding-left:20px;
+  color:#4b5560;
+  font-size:13px;
+  line-height:1.75;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+  width:100%;
+  background:var(--black);
+  color:white;
+  padding:
+    27px
+    clamp(16px,4vw,60px)
+    max(27px,env(safe-area-inset-bottom));
+}
+
+.footer-inner{
+  width:100%;
+  max-width:1700px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.footer strong{
+  font-size:14px;
+}
+
+.footer span{
+  font-size:12px;
+  opacity:.7;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1250px){
+  .pricing-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+}
+
+@media(max-width:850px){
+  .topbar-inner,
+  .footer-inner{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .document-label{
+    text-align:left;
+  }
+
+  .implementation{
+    grid-template-columns:1fr;
+  }
+
+  .principles{
+    grid-template-columns:1fr;
+  }
+
+  .pricing-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(max-width:500px){
+  .pricing-grid{
+    grid-template-columns:1fr;
+  }
+
+  .features{
+    grid-template-columns:1fr;
+  }
+
+  .price-card{
+    min-height:150px;
+  }
+
+  h1{
+    font-size:39px;
+  }
+}
+
+/* Landscape phones / short screens */
+@media(orientation:landscape) and (max-height:520px){
+  .hero{
+    padding-top:30px;
+    padding-bottom:30px;
+  }
+
+  h1{
+    font-size:43px;
+  }
+}
+
+/* Print / PDF */
+@media print{
+  @page{
+    size:A4;
+    margin:12mm;
+  }
+
+  body{
+    background:white;
+  }
+
+  .hero{
+    padding:30px 0;
+  }
+
+  .main{
+    padding:25px 0;
+  }
+
+  .pricing-grid{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .implementation{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .principles{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .price-card,
+  .implementation-main,
+  .implementation-info,
+  .principle,
+  .notes{
+    break-inside:avoid;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-inner">
+
+      <div class="brand">
+        <div class="logo">A</div>
+
+        <div>
+          <div class="brand-name">Atlas</div>
+          <div class="brand-subtitle">
+            Student Admissions Platform
+          </div>
+        </div>
+      </div>
+
+      <div class="document-label">
+        Commercial Price Memorandum
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+
+      <div class="eyebrow">
+        Private College Pricing
+      </div>
+
+      <h1>
+        Atlas Implementation &amp; Annual Licence
+      </h1>
+
+      <p class="hero-description">
+        A clear commercial structure for small-to-medium private colleges
+        transitioning from manual admissions processes to a modern online
+        application and applicant management platform.
+      </p>
+
+    </div>
+  </section>
+
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="main-inner">
+
+      <!-- LICENCE -->
+      <section>
+
+        <div class="section-heading">
+          <h2>Annual Atlas Software Licence</h2>
+
+          <p>
+            The annual licence is selected according to the number of students
+            covered by the college's Atlas licence during the applicable licence
+            period.
+          </p>
+        </div>
+
+
+        <div class="pricing-grid">
+
+          <article class="price-card">
+            <div class="capacity">
+              Up to 500 students
+            </div>
+
+            <div>
+              <div class="amount">R35,000</div>
+              <div class="period">per year</div>
+            </div>
+          </article>
+
+
+          <article class="price-card">
+            <div class="capacity">
+              Up to 1,000 students
+            </div>
+
+            <div>
+              <div class="amount">R55,000</div>
+              <div class="period">per year</div>
+            </div>
+          </article>
+
+
+          <article class="price-card">
+            <div class="capacity">
+              Up to 2,000 students
+            </div>
+
+            <div>
+              <div class="amount">R80,000</div>
+              <div class="period">per year</div>
+            </div>
+          </article>
+
+
+          <article class="price-card">
+            <div class="capacity">
+              Up to 3,500 students
+            </div>
+
+            <div>
+              <div class="amount">R110,000</div>
+              <div class="period">per year</div>
+            </div>
+          </article>
+
+
+          <article class="price-card">
+            <div class="capacity">
+              Up to 5,000 students
+            </div>
+
+            <div>
+              <div class="amount">R145,000</div>
+              <div class="period">per year</div>
+            </div>
+          </article>
+
+
+          <article class="price-card">
+            <div class="capacity">
+              Up to 7,500 students
+            </div>
+
+            <div>
+              <div class="amount">R190,000</div>
+              <div class="period">per year</div>
+            </div>
+          </article>
+
+
+          <article class="price-card">
+            <div class="capacity">
+              Up to 10,000 students
+            </div>
+
+            <div>
+              <div class="amount">R240,000</div>
+              <div class="period">per year</div>
+            </div>
+          </article>
+
+        </div>
+
+      </section>
+
+
+      <!-- IMPLEMENTATION -->
+      <section class="implementation">
+
+        <article class="implementation-main">
+
+          <div class="kicker">
+            Once-off professional service
+          </div>
+
+          <h2 class="implementation-title">
+            Implementation, Customisation &amp; Deployment
+          </h2>
+
+          <div class="implementation-price">
+            R50,000
+          </div>
+
+          <p class="implementation-description">
+            A once-off fee for preparing Atlas for the college, configuring
+            institution-specific requirements, completing deployment,
+            testing the configured environment and preparing the college
+            for go-live.
+          </p>
+
+
+          <ul class="features">
+
+            <li>College branding and logo</li>
+            <li>College landing page</li>
+
+            <li>Programme and campus setup</li>
+            <li>Application form configuration</li>
+
+            <li>Application process configuration</li>
+            <li>MyAtlas configuration</li>
+
+            <li>Required document setup</li>
+            <li>Payment configuration</li>
+
+            <li>Automated email templates</li>
+            <li>Acceptance-letter configuration</li>
+
+            <li>Staff/admin portal setup</li>
+            <li>Roles and permissions setup</li>
+
+            <li>Production deployment</li>
+            <li>Pre-launch testing</li>
+
+            <li>Staff onboarding/training</li>
+            <li>Go-live preparation</li>
+
+          </ul>
+
+        </article>
+
+
+        <article class="implementation-info">
+
+          <div class="kicker">
+            Commercial structure
+          </div>
+
+          <h2 class="info-title">
+            Two separate charges
+          </h2>
+
+          <p class="info-description">
+            Atlas separates the initial implementation work from the recurring
+            software licence. Implementation and customisation are paid once,
+            while continued use of Atlas is covered by the annual software
+            licence.
+          </p>
+
+
+          <div class="example">
+
+            <div class="example-label">
+              First-year example
+            </div>
+
+            <div class="example-total">
+              R85,000
+            </div>
+
+            <div class="example-text">
+              R50,000 implementation + R35,000 annual licence
+              for a college in the up-to-500-student tier.
+            </div>
+
+          </div>
+
+
+          <p class="info-description" style="margin-top:22px;">
+            Colleges move into the appropriate annual licence tier according
+            to the student capacity covered by their Atlas licence.
+          </p>
+
+        </article>
+
+      </section>
+
+
+      <!-- PRINCIPLES -->
+      <section class="principles">
+
+        <article class="principle">
+          <h3>Simple budgeting</h3>
+
+          <p>
+            Colleges know the annual licence amount associated with their
+            selected student scale instead of paying for individual
+            software actions.
+          </p>
+        </article>
+
+
+        <article class="principle">
+          <h3>Scales with the institution</h3>
+
+          <p>
+            The licence grows with the size of the college rather than
+            applying one identical annual price to every institution.
+          </p>
+        </article>
+
+
+        <article class="principle">
+          <h3>Clear separation</h3>
+
+          <p>
+            Implementation and customisation are once-off professional
+            services, while ongoing Atlas access is covered by the annual
+            software licence.
+          </p>
+        </article>
+
+      </section>
+
+
+      <!-- NOTES -->
+      <section class="notes">
+
+        <h3>Pricing Notes</h3>
+
+        <ul>
+
+          <li>
+            The implementation, customisation and deployment fee is a
+            once-off charge per college.
+          </li>
+
+          <li>
+            The annual software licence is recurring and is selected
+            according to the applicable student-capacity tier.
+          </li>
+
+          <li>
+            Licence tiers are fixed annual amounts rather than
+            per-transaction application credits.
+          </li>
+
+          <li>
+            The annual licence covers continued use of the Atlas platform
+            and its configured admissions functionality during the
+            applicable licence period.
+          </li>
+
+          <li>
+            College-specific work outside the agreed implementation scope
+            may require a separate written quotation.
+          </li>
+
+          <li>
+            All prices are stated in South African Rand (ZAR).
+          </li>
+
+        </ul>
+
+      </section>
+
+    </div>
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+
+    <div class="footer-inner">
+
+      <strong>
+        Atlas — Student Admissions Platform
+      </strong>
+
+      <span>
+        Commercial Price Memorandum
+      </span>
+
+    </div>
+
+  </footer>
+
+</div>
+
+
+<script>
+/*
+  Atlas Price Memorandum
+  Standalone JavaScript
+
+  The document is fully functional as a local HTML file.
+  Ctrl/Cmd + P can be used to print or save the memorandum as PDF.
+*/
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  // Prevent accidental horizontal overflow caused by viewport changes.
+  document.documentElement.style.overflowX = "hidden";
+  document.body.style.overflowX = "hidden";
+
+  // Keep viewport-dependent layout responsive after orientation changes.
+  window.addEventListener("orientationchange", function () {
+    document.documentElement.style.width = "100%";
+    document.body.style.width = "100%";
+  });
+
+});
+</script>
+
+</body>
+</html>
