@@ -47,8 +47,17 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    img, svg, video, canvas {
+      display: block;
+      max-width: 100%;
+    }
+
+    p, h1, h2, h3, a, span {
+      overflow-wrap: break-word;
+    }
+
     /* =========================
-       PAGE WRAPPER (STRETCHED EDGE-TO-EDGE)
+       PAGE WRAPPER
        ========================= */
     .page {
       width: 100%;
@@ -66,12 +75,13 @@
        ========================= */
     .site-header {
       width: 100%;
+      max-width: 100%;
       height: 84px;
       min-height: 84px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 clamp(24px, 5vw, 68px);
+      padding: 0 25px;
       background: #fff;
       border-bottom: 1px solid #dcebf8;
       position: relative;
@@ -126,11 +136,6 @@
       background: #fff;
     }
 
-    /*
-      The image is a separate layer so the left-to-right white fade can
-      be controlled independently. This is the "fading thingy" between
-      the text/details and the woman.
-    */
     .hero-image {
       position: absolute;
       inset: 0 0 0 47%;
@@ -185,11 +190,12 @@
     .hero-left {
       width: 52%;
       max-width: 760px;
+      min-width: 0;
       padding:
         clamp(76px, 7vw, 105px)
-        clamp(34px, 6.5vw, 92px)
+        25px
         90px
-        clamp(34px, 6.5vw, 92px);
+        25px;
     }
 
     .eyebrow {
@@ -218,6 +224,7 @@
 
     .hero-description {
       max-width: 560px;
+      min-width: 0;
       color: #2879e8;
       font-size: clamp(16px, 1.45vw, 21px);
       line-height: 1.58;
@@ -233,6 +240,7 @@
       gap: 31px;
       width: 100%;
       max-width: 650px;
+      min-width: 0;
     }
 
     .feature {
@@ -240,6 +248,7 @@
       grid-template-columns: 72px minmax(0, 1fr);
       gap: 25px;
       align-items: center;
+      min-width: 0;
     }
 
     .feature-icon {
@@ -269,6 +278,7 @@
       line-height: 1.25;
       font-weight: 750;
       margin-bottom: 7px;
+      min-width: 0;
     }
 
     .feature-text {
@@ -276,6 +286,7 @@
       font-size: clamp(14px, 1.27vw, 18px);
       line-height: 1.55;
       font-weight: 400;
+      min-width: 0;
     }
 
     /* =========================
@@ -287,6 +298,7 @@
       border-top: 1px solid #cfe1f4;
       width: 100%;
       max-width: 650px;
+      min-width: 0;
     }
 
     .cta {
@@ -384,7 +396,7 @@
       color: #fff;
       padding:
         42px
-        clamp(24px, 5.7vw, 82px)
+        25px
         28px;
       flex-shrink: 0;
     }
@@ -392,10 +404,15 @@
     .footer-grid {
       width: 100%;
       max-width: 100%;
+      min-width: 0;
       display: grid;
       grid-template-columns: 1.2fr .8fr .8fr 1.1fr;
       gap: clamp(30px, 5vw, 80px);
       padding-bottom: 32px;
+    }
+
+    .footer-brand {
+      min-width: 0;
     }
 
     .footer-brand img {
@@ -434,6 +451,10 @@
       opacity: .7;
     }
 
+    .footer-column {
+      min-width: 0;
+    }
+
     .footer-heading {
       font-size: 15px;
       font-weight: 750;
@@ -454,6 +475,10 @@
 
     .footer-links a:hover {
       text-decoration: underline;
+    }
+
+    .footer-contact {
+      min-width: 0;
     }
 
     .contact-list {
@@ -509,8 +534,8 @@
 
       .hero-left {
         width: 56%;
-        padding-left: 6vw;
-        padding-right: 4vw;
+        padding-left: 25px;
+        padding-right: 25px;
       }
 
       .hero-image {
@@ -557,7 +582,7 @@
       .site-header {
         height: 70px;
         min-height: 70px;
-        padding: 0 20px;
+        padding: 0 18px;
       }
 
       .brand-mark {
@@ -579,11 +604,6 @@
         background: #fff;
       }
 
-      /*
-        On mobile the image becomes a normal full-width section behind
-        the right-side message. The desktop fade remains active but is
-        rotated into a vertical fade so the text stays readable.
-      */
       .hero-image {
         position: relative;
         inset: auto;
@@ -623,7 +643,7 @@
       .hero-left {
         width: 100%;
         max-width: none;
-        padding: 42px 22px 56px;
+        padding: 42px 18px 56px;
         background: #fff;
       }
 
@@ -689,7 +709,7 @@
         top: 26px;
         left: 0;
         width: 100%;
-        padding: 0 22px;
+        padding: 0 18px;
         z-index: 4;
       }
 
@@ -710,7 +730,7 @@
       }
 
       .site-footer {
-        padding: 38px 22px 25px;
+        padding: 38px 18px 25px;
       }
 
       .footer-grid {
@@ -735,7 +755,7 @@
 
     @media (max-width: 420px) {
       .site-header {
-        padding: 0 15px;
+        padding: 0 14px;
       }
 
       .brand-mark {
@@ -747,13 +767,13 @@
       }
 
       .hero-left {
-        padding-left: 18px;
-        padding-right: 18px;
+        padding-left: 14px;
+        padding-right: 14px;
       }
 
       .hero-right-copy {
-        padding-left: 18px;
-        padding-right: 18px;
+        padding-left: 14px;
+        padding-right: 14px;
       }
 
       .feature {
@@ -772,26 +792,9 @@
       }
 
       .site-footer {
-        padding-left: 18px;
-        padding-right: 18px;
+        padding-left: 14px;
+        padding-right: 14px;
       }
-    }
-
-    /* Prevent accidental horizontal overflow from long content. */
-    img,
-    svg,
-    video,
-    canvas {
-      max-width: 100%;
-    }
-
-    p,
-    h1,
-    h2,
-    h3,
-    a,
-    span {
-      overflow-wrap: break-word;
     }
   </style>
 </head>
@@ -826,7 +829,6 @@
   </header>
 
   <main>
-
     <section class="hero">
 
       <!-- Main photographic asset -->
@@ -847,7 +849,6 @@
       </div>
 
       <div class="hero-content">
-
         <div class="hero-left">
 
           <div class="eyebrow">WELCOME TO THE ATLAS COLLEGE</div>
@@ -945,13 +946,10 @@
         </div>
       </div>
     </section>
-
   </main>
 
   <footer class="site-footer">
-
     <div class="footer-grid">
-
       <div class="footer-brand">
         <svg width="150" height="48" viewBox="0 0 220 70" aria-label="Atlas College">
           <defs>
@@ -982,7 +980,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="footer-column">
         <h3 class="footer-heading">Quick Links</h3>
         <nav class="footer-links">
           <a href="#">Home</a>
@@ -993,7 +991,7 @@
         </nav>
       </div>
 
-      <div>
+      <div class="footer-column">
         <h3 class="footer-heading">Staff Portal</h3>
         <nav class="footer-links">
           <a href="#">Sign In</a>
@@ -1022,27 +1020,22 @@
           </div>
         </div>
       </div>
-
     </div>
 
     <div class="footer-bottom">
-      <span>© 2025 Atlas College. All rights reserved.</span>
+      <span>© 2026 Atlas College. All rights reserved.</span>
 
       <div class="legal">
         <a href="#">Privacy Policy</a>
         <a href="#">Terms &amp; Conditions</a>
       </div>
     </div>
-
   </footer>
 </div>
 
-  <script>
-    // Prevent accidental horizontal overflow caused by dynamically
-    // inserted content in the future.
-    document.documentElement.style.overflowX = "hidden";
-    document.body.style.overflowX = "hidden";
-  </script>
-
+<script>
+  document.documentElement.style.overflowX = "hidden";
+  document.body.style.overflowX = "hidden";
+</script>
 </body>
 </html>
