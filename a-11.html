@@ -187,6 +187,33 @@
     }
 
     /* =========================
+       VIEWS & TRANSITIONS
+       ========================= */
+    .view-container {
+      position: relative;
+      width: 100%;
+      flex: 1;
+    }
+
+    .view-section {
+      width: 100%;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .view-section.hidden {
+      display: none;
+      opacity: 0;
+      transform: translateY(15px);
+      pointer-events: none;
+    }
+
+    .view-section.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================
        MAIN HERO
        ========================= */
     .hero {
@@ -287,7 +314,7 @@
     .hero-description {
       max-width: 560px;
       min-width: 0;
-      color: #2879e8;
+      color: #557198;
       font-size: clamp(16px, 1.45vw, 21px);
       line-height: 1.58;
       font-weight: 400;
@@ -344,7 +371,7 @@
     }
 
     .feature-text {
-      color: #2879e8;
+      color: #557198;
       font-size: clamp(14px, 1.27vw, 18px);
       line-height: 1.55;
       font-weight: 400;
@@ -446,6 +473,166 @@
       color: rgba(255,255,255,.96);
       font-size: clamp(15px, 1.45vw, 20px);
       line-height: 1.5;
+    }
+
+    /* =========================
+       COMPLETE PROFILE VIEW (PHOTO 2)
+       ========================= */
+    .profile-view {
+      width: 100%;
+      background: #fff;
+      padding: clamp(40px, 5vw, 70px) 25px 80px;
+    }
+
+    .profile-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .profile-eyebrow {
+      color: #0068ed;
+      font-size: clamp(12px, 1.1vw, 15px);
+      letter-spacing: .14em;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .profile-title {
+      color: #143f88;
+      font-size: clamp(40px, 4.5vw, 64px);
+      line-height: 1;
+      letter-spacing: -.04em;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .profile-description {
+      color: #557198;
+      font-size: clamp(15px, 1.35vw, 18px);
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    .profile-form {
+      display: grid;
+      gap: 22px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      color: #0b3d91;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      color: #557198;
+      font-size: 16px;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .form-input,
+    .form-select {
+      width: 100%;
+      height: 50px;
+      padding: 0 14px 0 44px;
+      border: 1px solid #d2def1;
+      border-radius: 8px;
+      background: #fff;
+      font: inherit;
+      font-size: 15px;
+      color: #0b3d91;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23557198' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 18px;
+      padding-right: 40px;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      border-color: #0878f8;
+      box-shadow: 0 0 0 3px rgba(8, 120, 248, 0.12);
+    }
+
+    .form-input::placeholder {
+      color: #9cb3d0;
+    }
+
+    .password-criteria {
+      display: grid;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .criterion {
+      font-size: 13px;
+      color: #cc2b2b;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .criterion.met {
+      color: #0e8c46;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #0878f8;
+      cursor: pointer;
+    }
+
+    .checkbox-group label {
+      font-size: 14px;
+      color: #0b3d91;
+      cursor: pointer;
+    }
+
+    .checkbox-group label a {
+      color: #0068ed;
+      text-decoration: underline;
     }
 
     /* =========================
@@ -785,6 +972,10 @@
         line-height: 1.45;
       }
 
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
       .site-footer {
         padding: 38px 18px 25px;
       }
@@ -877,121 +1068,238 @@
     </div>
   </header>
 
-  <main>
-    <section class="hero">
+  <main class="view-container">
+    <!-- VIEW 1: STAFF PORTAL WELCOME (PHOTO 1) -->
+    <section id="view-welcome" class="view-section active">
+      <div class="hero">
 
-      <!-- Main photographic asset -->
-      <div class="hero-image" aria-hidden="true"></div>
+        <!-- Main photographic asset -->
+        <div class="hero-image" aria-hidden="true"></div>
 
-      <!-- Right-side text over the photograph -->
-      <div class="hero-right-copy">
-        <div class="right-eyebrow">ATLAS COLLEGE STAFF PORTAL</div>
-        <h2 class="right-title">
-          Support Students.
-          <span>Build Their Future.</span>
-        </h2>
-        <p class="right-description">
-          Manage applications, track progress,<br class="desktop-break">
-          and provide the support your students<br class="desktop-break">
-          need to succeed.
-        </p>
+        <!-- Right-side text over the photograph -->
+        <div class="hero-right-copy">
+          <div class="right-eyebrow">ATLAS COLLEGE STAFF PORTAL</div>
+          <h2 class="right-title">
+            Support Students.
+            <span>Build Their Future.</span>
+          </h2>
+          <p class="right-description">
+            Manage applications, track progress,<br class="desktop-break">
+            and provide the support your students<br class="desktop-break">
+            need to succeed.
+          </p>
+        </div>
+
+        <div class="hero-content">
+          <div class="hero-left">
+
+            <div class="eyebrow">WELCOME TO THE ATLAS COLLEGE</div>
+
+            <h1 class="hero-title">
+              Staff Portal
+              <span>Welcome!</span>
+            </h1>
+
+            <p class="hero-description">
+              Your hub for managing student applications<br class="desktop-break">
+              and supporting the next generation of learners.<br class="desktop-break">
+              Here, you can easily access, review, and process<br class="desktop-break">
+              online applications — all in one place.
+            </p>
+
+            <div class="features">
+
+              <article class="feature">
+                <div class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 48 48">
+                    <rect x="11" y="7" width="26" height="34" rx="2"></rect>
+                    <path d="M17 17h14M17 24h14M17 31h9"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="feature-title">View Applications</h3>
+                  <p class="feature-text">
+                    Access all student course applications<br class="desktop-break">
+                    submitted online.
+                  </p>
+                </div>
+              </article>
+
+              <article class="feature">
+                <div class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 48 48">
+                    <path d="M4 24s7-11 20-11 20 11 20 11-7 11-20 11S4 24 4 24Z"></path>
+                    <circle cx="24" cy="24" r="6"></circle>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="feature-title">Review &amp; Verify Documents</h3>
+                  <p class="feature-text">
+                    Check and verify the required documents<br class="desktop-break">
+                    for each application.
+                  </p>
+                </div>
+              </article>
+
+              <article class="feature">
+                <div class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 48 48">
+                    <path d="M19 5h10l2 6 5 3 6-2 5 9-5 4v6l5 4-5 9-6-2-5 3-2 6H19l-2-6-5-3-6 2-5-9 5-4v-6l-5-4 5-9 6 2 5-3 2-6Z"
+                          transform="translate(5 0) scale(.79)"></path>
+                    <circle cx="24" cy="24" r="7"></circle>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="feature-title">Update Application Status</h3>
+                  <p class="feature-text">
+                    Keep applicants informed by updating<br class="desktop-break">
+                    their status in real time.
+                  </p>
+                </div>
+              </article>
+
+              <article class="feature">
+                <div class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 48 48">
+                    <circle cx="24" cy="24" r="18"></circle>
+                    <path d="m15 24 6 6 12-13"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="feature-title">Accept or Reject Applications</h3>
+                  <p class="feature-text">
+                    Make the final decision and help us<br class="desktop-break">
+                    build a brighter future for our students.
+                  </p>
+                </div>
+              </article>
+
+            </div>
+
+            <div class="cta-area">
+              <button type="button" id="activate-btn" class="cta">
+                <span>Activate MyAtlas</span>
+                <span class="cta-arrow">→</span>
+              </button>
+
+              <a href="#" class="signin">Already have an account? Sign in</a>
+            </div>
+
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="hero-content">
-        <div class="hero-left">
-
-          <div class="eyebrow">WELCOME TO THE ATLAS COLLEGE</div>
-
-          <h1 class="hero-title">
-            Staff Portal
-            <span>Welcome!</span>
-          </h1>
-
-          <p class="hero-description">
-            Your hub for managing student applications<br class="desktop-break">
-            and supporting the next generation of learners.<br class="desktop-break">
-            Here, you can easily access, review, and process<br class="desktop-break">
-            online applications — all in one place.
+    <!-- VIEW 2: COMPLETE YOUR PROFILE (PHOTO 2) -->
+    <section id="view-profile" class="view-section hidden">
+      <div class="profile-view">
+        <div class="profile-inner">
+          <div class="profile-eyebrow">ACTIVATE YOUR MYATLAS ACCOUNT</div>
+          <h1 class="profile-title">Complete Your Profile</h1>
+          <p class="profile-description">
+            Almost there! Please provide your personal and account details to activate your MyAtlas account. This helps us keep your information secure and ensures you get the right support throughout your journey.
           </p>
 
-          <div class="features">
-
-            <article class="feature">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 48 48">
-                  <rect x="11" y="7" width="26" height="34" rx="2"></rect>
-                  <path d="M17 17h14M17 24h14M17 31h9"></path>
-                </svg>
+          <form class="profile-form" onsubmit="return false;">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="initials">Initials *</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">👤</span>
+                  <input type="text" id="initials" class="form-input" placeholder="e.g. R. M." required>
+                </div>
               </div>
-              <div>
-                <h3 class="feature-title">View Applications</h3>
-                <p class="feature-text">
-                  Access all student course applications<br class="desktop-break">
-                  submitted online.
-                </p>
+              <div class="form-group">
+                <label class="form-label" for="firstname">First Name *</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">👤</span>
+                  <input type="text" id="firstname" class="form-input" placeholder="e.g. Raymond" required>
+                </div>
               </div>
-            </article>
+            </div>
 
-            <article class="feature">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 48 48">
-                  <path d="M4 24s7-11 20-11 20 11 20 11-7 11-20 11S4 24 4 24Z"></path>
-                  <circle cx="24" cy="24" r="6"></circle>
-                </svg>
+            <div class="form-group full">
+              <label class="form-label" for="surname">Surname *</label>
+              <div class="input-wrapper">
+                <span class="input-icon">👤</span>
+                <input type="text" id="surname" class="form-input" placeholder="e.g. Mokoena" required>
               </div>
-              <div>
-                <h3 class="feature-title">Review &amp; Verify Documents</h3>
-                <p class="feature-text">
-                  Check and verify the required documents<br class="desktop-break">
-                  for each application.
-                </p>
+            </div>
+
+            <div class="form-group full">
+              <label class="form-label" for="email">Email Address *</label>
+              <div class="input-wrapper">
+                <span class="input-icon">✉</span>
+                <input type="email" id="email" class="form-input" placeholder="e.g. raymond@example.com" required>
               </div>
-            </article>
+            </div>
 
-            <article class="feature">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 48 48">
-                  <path d="M19 5h10l2 6 5 3 6-2 5 9-5 4v6l5 4-5 9-6-2-5 3-2 6H19l-2-6-5-3-6 2-5-9 5-4v-6l-5-4 5-9 6 2 5-3 2-6Z"
-                        transform="translate(5 0) scale(.79)"></path>
-                  <circle cx="24" cy="24" r="7"></circle>
-                </svg>
+            <div class="form-group full">
+              <label class="form-label" for="phone">Phone Number *</label>
+              <div class="input-wrapper">
+                <span class="input-icon">📞</span>
+                <input type="tel" id="phone" class="form-input" placeholder="e.g. +27 71 123 4567" required>
               </div>
-              <div>
-                <h3 class="feature-title">Update Application Status</h3>
-                <p class="feature-text">
-                  Keep applicants informed by updating<br class="desktop-break">
-                  their status in real time.
-                </p>
+            </div>
+
+            <div class="form-group full">
+              <label class="form-label" for="role">Role *</label>
+              <div class="input-wrapper">
+                <span class="input-icon">💼</span>
+                <select id="role" class="form-select" required>
+                  <option value="" disabled selected>Select your role</option>
+                  <option value="student">Student</option>
+                  <option value="tutor">Tutor</option>
+                  <option value="counsellor">Counsellor</option>
+                  <option value="administrator">Administrator</option>
+                </select>
               </div>
-            </article>
+            </div>
 
-            <article class="feature">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 48 48">
-                  <circle cx="24" cy="24" r="18"></circle>
-                  <path d="m15 24 6 6 12-13"></path>
-                </svg>
+            <div class="form-group full">
+              <label class="form-label" for="temppass">Temporary Password *</label>
+              <div class="input-wrapper">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="temppass" class="form-input" placeholder="e.g. Temp123_" required>
               </div>
-              <div>
-                <h3 class="feature-title">Accept or Reject Applications</h3>
-                <p class="feature-text">
-                  Make the final decision and help us<br class="desktop-break">
-                  build a brighter future for our students.
-                </p>
+            </div>
+
+            <div class="form-group full">
+              <label class="form-label" for="newpass">New Password *</label>
+              <div class="input-wrapper">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="newpass" class="form-input" placeholder="Enter your new password" required>
               </div>
-            </article>
+              <div class="password-criteria">
+                <div class="criterion">✕ Must be 8 to 12 characters</div>
+                <div class="criterion">✕ Include at least one uppercase letter</div>
+                <div class="criterion">✕ Includes at least one number</div>
+                <div class="criterion">✕ Includes at least one underscore</div>
+              </div>
+            </div>
 
-          </div>
+            <div class="form-group full">
+              <label class="form-label" for="confirmpass">Confirm New Password *</label>
+              <div class="input-wrapper">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="confirmpass" class="form-input" placeholder="Re-enter your new password" required>
+              </div>
+            </div>
 
-          <div class="cta-area">
-            <a href="#" class="cta">
-              <span>Activate MyAtlas</span>
-              <span class="cta-arrow">→</span>
-            </a>
+            <div class="checkbox-group full">
+              <input type="checkbox" id="terms" required>
+              <label for="terms">I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a> *</label>
+            </div>
 
-            <a href="#" class="signin">Already have an account? Sign in</a>
-          </div>
+            <div class="cta-area full" style="margin-top: 10px; border-top: none; padding-top: 0;">
+              <button type="submit" class="cta">
+                <span>Activate MyAtlas</span>
+                <span class="cta-arrow">→</span>
+              </button>
 
+              <a href="#" class="signin">Already have an account? Sign in</a>
+            </div>
+          </form>
         </div>
       </div>
     </section>
@@ -1070,6 +1378,54 @@
 <script>
   document.documentElement.style.overflowX = "hidden";
   document.body.style.overflowX = "hidden";
+
+  const viewWelcome = document.getElementById('view-welcome');
+  const viewProfile = document.getElementById('view-profile');
+  const activateBtn = document.getElementById('activate-btn');
+
+  function showProfileView(pushState = true) {
+    viewWelcome.classList.remove('active');
+    viewWelcome.classList.add('hidden');
+    viewProfile.classList.remove('hidden');
+    viewProfile.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (pushState) {
+      history.pushState({ view: 'profile' }, '', '#complete-profile');
+    }
+  }
+
+  function showWelcomeView(pushState = true) {
+    viewProfile.classList.remove('active');
+    viewProfile.classList.add('hidden');
+    viewWelcome.classList.remove('hidden');
+    viewWelcome.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (pushState) {
+      history.pushState({ view: 'welcome' }, '', window.location.pathname);
+    }
+  }
+
+  activateBtn.addEventListener('click', () => {
+    showProfileView(true);
+  });
+
+  // Utilize the device's native built-in history navigation (back/forward buttons or device gestures)
+  window.addEventListener('popstate', (event) => {
+    if (event.state && event.state.view === 'profile') {
+      showProfileView(false);
+    } else {
+      showWelcomeView(false);
+    }
+  });
+
+  // Handle initial page load if hash is already present
+  if (window.location.hash === '#complete-profile') {
+    showProfileView(false);
+  } else {
+    history.replaceState({ view: 'welcome' }, '', window.location.pathname);
+  }
 </script>
 </body>
 </html>
