@@ -29,8 +29,8 @@
       overflow-x: hidden;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
                    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      color: #071947;
-      background: #ffffff;
+      color: #0b3d91;
+      background: #fff;
       -webkit-font-smoothing: antialiased;
       display: flex;
       flex-direction: column;
@@ -82,46 +82,113 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 25px;
-      background: #ffffff;
+      background: #fff;
       border-bottom: 1px solid #dcebf8;
       position: relative;
-      z-index: 20;
+      z-index: 50;
       flex-shrink: 0;
     }
 
-    .brand {
-      display: inline-flex;
+    .header-inner {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+      display: flex;
       align-items: center;
-      flex-shrink: 0;
+      justify-content: space-between;
+      gap: 25px;
     }
 
-    .brand-mark {
-      display: block;
-      width: clamp(142px, 15vw, 178px);
+    .logo-link {
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+      cursor: pointer;
+    }
+
+    .logo {
+      width: 126px;
       height: auto;
       object-fit: contain;
     }
 
-    .back-home {
-      display: inline-flex;
+    /* =========================
+       MENU TOGGLE (HAMBURGER) & MOBILE DRAWER
+       ========================= */
+    .menu-toggle {
+      flex: 0 0 auto;
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: 1px solid #dfe6f1;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 12px;
-      color: #0957e8;
-      font-size: clamp(14px, 1.35vw, 18px);
-      font-weight: 500;
-      white-space: nowrap;
-      transition: opacity .2s ease, transform .2s ease;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: border-color 0.25s ease, background 0.25s ease;
+      margin-left: auto;
     }
-
-    .back-home:hover {
-      opacity: .78;
-      transform: translateX(-2px);
+    .menu-toggle:hover {
+      border-color: var(--blue, #0957e8);
+      background: var(--light-blue, #f5f9ff);
     }
-
-    .back-arrow {
-      font-size: 27px;
-      line-height: 1;
-      font-weight: 300;
+    .menu-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: #0b3d91;
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    #menu-checkbox {
+      display: none;
+    }
+    .mobile-menu-drawer {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: #ffffff;
+      border-bottom: 1px solid #edf1f7;
+      box-shadow: 0 12px 30px rgba(7, 25, 71, 0.08);
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+      z-index: 100;
+    }
+    .mobile-menu-drawer .nav-link {
+      padding: 14px 24px;
+      font-size: 15px;
+      border-bottom: 1px solid #f2f5fb;
+      width: 100%;
+      font-weight: 600;
+      color: #0b3d91;
+      cursor: pointer;
+    }
+    .mobile-menu-drawer .nav-link:hover {
+      background: #f5f9ff;
+      color: #0068ed;
+    }
+    #menu-checkbox:checked ~ .mobile-menu-drawer {
+      max-height: 350px;
+      padding: 10px 0;
+    }
+    #menu-checkbox:checked + label .menu-toggle span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    #menu-checkbox:checked + label .menu-toggle span:nth-child(2) {
+      opacity: 0;
+    }
+    #menu-checkbox:checked + label .menu-toggle span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
     }
 
     /* =========================
@@ -133,7 +200,7 @@
       max-width: 100%;
       min-height: 1140px;
       overflow: hidden;
-      background: #ffffff;
+      background: #fff;
     }
 
     .hero-image {
@@ -170,8 +237,8 @@
       inset: 0;
       background: linear-gradient(
         180deg,
-        rgba(7, 25, 71, .02) 0%,
-        rgba(7, 25, 71, 0) 40%,
+        rgba(0, 62, 125, .02) 0%,
+        rgba(0, 62, 125, 0) 40%,
         rgba(255,255,255,.10) 100%
       );
       pointer-events: none;
@@ -199,7 +266,7 @@
     }
 
     .eyebrow {
-      color: #0957e8;
+      color: #0068ed;
       font-size: clamp(13px, 1.25vw, 18px);
       line-height: 1.35;
       letter-spacing: .14em;
@@ -209,7 +276,7 @@
     }
 
     .hero-title {
-      color: #071947;
+      color: #143f88;
       font-size: clamp(52px, 5.15vw, 82px);
       line-height: .99;
       letter-spacing: -.045em;
@@ -219,13 +286,13 @@
 
     .hero-title span {
       display: block;
-      color: #0957e8;
+      color: #0068f5;
     }
 
     .hero-description {
       max-width: 560px;
       min-width: 0;
-      color: #596985;
+      color: #2879e8;
       font-size: clamp(16px, 1.45vw, 21px);
       line-height: 1.58;
       font-weight: 400;
@@ -255,10 +322,10 @@
       width: 72px;
       height: 72px;
       border-radius: 10px;
-      background: #f5f9ff;
+      background: rgba(205, 232, 255, .72);
       display: grid;
       place-items: center;
-      color: #0957e8;
+      color: #006cf2;
       flex-shrink: 0;
     }
 
@@ -273,7 +340,7 @@
     }
 
     .feature-title {
-      color: #071947;
+      color: #0644ad;
       font-size: clamp(16px, 1.42vw, 20px);
       line-height: 1.25;
       font-weight: 750;
@@ -282,7 +349,7 @@
     }
 
     .feature-text {
-      color: #596985;
+      color: #2879e8;
       font-size: clamp(14px, 1.27vw, 18px);
       line-height: 1.55;
       font-weight: 400;
@@ -295,7 +362,7 @@
     .cta-area {
       margin-top: 50px;
       padding-top: 29px;
-      border-top: 1px solid #e1e8f3;
+      border-top: 1px solid #cfe1f4;
       width: 100%;
       max-width: 650px;
       min-width: 0;
@@ -306,8 +373,8 @@
       min-height: 54px;
       border: 0;
       border-radius: 7px;
-      background: #0957e8;
-      color: #ffffff;
+      background: #0878f8;
+      color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -317,14 +384,14 @@
       font-size: clamp(16px, 1.35vw, 19px);
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 7px 18px rgba(9, 87, 232, .14);
+      box-shadow: 0 7px 18px rgba(0, 105, 235, .14);
       transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
     }
 
     .cta:hover {
-      background: #062b73;
+      background: #006de8;
       transform: translateY(-1px);
-      box-shadow: 0 10px 24px rgba(9, 87, 232, .2);
+      box-shadow: 0 10px 24px rgba(0, 105, 235, .2);
     }
 
     .cta-arrow {
@@ -336,7 +403,7 @@
     .signin {
       display: block;
       text-align: center;
-      color: #0957e8;
+      color: #0068ed;
       font-size: clamp(14px, 1.2vw, 17px);
       margin-top: 29px;
     }
@@ -354,7 +421,7 @@
       top: clamp(68px, 7vw, 100px);
       left: 55.2%;
       width: min(40%, 650px);
-      color: #ffffff;
+      color: #fff;
       pointer-events: none;
     }
 
@@ -393,12 +460,20 @@
       width: 100%;
       max-width: 100%;
       background: linear-gradient(110deg, #052b72 0%, #06265f 45%, #031e50 100%);
-      color: #ffffff;
+      color: #fff;
       padding:
-        42px
+        27px
         25px
-        28px;
+        13px;
       flex-shrink: 0;
+    }
+
+    .section-inner {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding-left: 25px;
+      padding-right: 25px;
     }
 
     .footer-grid {
@@ -406,9 +481,8 @@
       max-width: 100%;
       min-width: 0;
       display: grid;
-      grid-template-columns: 1.2fr .8fr .8fr 1.1fr;
-      gap: clamp(30px, 5vw, 80px);
-      padding-bottom: 32px;
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      gap: 40px;
     }
 
     .footer-brand {
@@ -416,108 +490,120 @@
     }
 
     .footer-brand img {
-      width: 150px;
+      width: 126px;
+      height: auto;
       max-width: 100%;
-      margin-bottom: 13px;
-    }
-
-    .footer-brand p {
-      max-width: 220px;
-      color: rgba(255,255,255,.92);
-      font-size: 14px;
-      line-height: 1.4;
       margin-bottom: 15px;
     }
 
+    .footer-brand p {
+      max-width: 245px;
+      color: rgba(255,255,255,0.84);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+
     .socials {
+      margin-top: 16px;
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 16px;
     }
 
-    .socials a {
-      width: 22px;
-      height: 22px;
-      display: grid;
-      place-items: center;
-      font-size: 16px;
+    .social {
+      width: 23px;
+      height: 23px;
+      border: 1px solid rgba(255,255,255,0.75);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
       font-weight: 700;
-      color: #ffffff;
-      border-radius: 4px;
-      transition: opacity .2s ease;
+      color: #fff;
+      transition: transform 0.25s ease, background 0.25s ease;
     }
 
-    .socials a:hover {
-      opacity: .7;
+    .social:hover {
+      transform: translateY(-3px);
+      background: rgba(255,255,255,0.12);
     }
 
     .footer-column {
       min-width: 0;
     }
 
-    .footer-heading {
+    .footer-column h3 {
+      margin: 4px 0 15px;
       font-size: 15px;
+      line-height: 1.2;
       font-weight: 750;
-      margin-bottom: 15px;
     }
 
-    .footer-links {
-      display: grid;
-      gap: 8px;
+    .footer-column a {
+      display: block;
+      margin-bottom: 9px;
+      color: rgba(255,255,255,0.82);
+      font-size: 13px;
+      line-height: 1.45;
+      cursor: pointer;
+      transition: color 0.2s ease, transform 0.2s ease;
     }
 
-    .footer-links a,
-    .contact-line {
-      color: rgba(255,255,255,.94);
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .footer-links a:hover {
-      text-decoration: underline;
+    .footer-column a:hover {
+      color: #ffffff;
+      transform: translateX(3px);
+      text-decoration: none;
     }
 
     .footer-contact {
       min-width: 0;
     }
 
-    .contact-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .contact-line {
-      display: grid;
-      grid-template-columns: 24px minmax(0, 1fr);
-      gap: 9px;
-      align-items: start;
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+      color: rgba(255,255,255,0.84);
+      font-size: 13px;
+      line-height: 1.5;
     }
 
     .contact-icon {
-      font-size: 17px;
-      line-height: 1.2;
+      width: 17px;
+      flex: 0 0 17px;
+      text-align: center;
     }
 
     .footer-bottom {
       width: 100%;
       max-width: 100%;
-      border-top: 1px solid rgba(255,255,255,.25);
-      padding-top: 20px;
+      margin-top: 22px;
+      padding-top: 13px;
+      border-top: 1px solid rgba(255,255,255,0.20);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 20px;
-      color: rgba(255,255,255,.9);
+      color: rgba(255,255,255,0.82);
       font-size: 12px;
     }
 
-    .legal {
+    .footer-legal {
       display: flex;
-      gap: 24px;
+      align-items: center;
+      gap: 30px;
     }
 
-    .legal a:hover {
-      text-decoration: underline;
+    .footer-legal a {
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .footer-legal a:hover {
+      color: #ffffff;
     }
 
     /* =========================
@@ -567,11 +653,7 @@
       }
 
       .footer-grid {
-        grid-template-columns: 1.2fr 1fr 1fr;
-      }
-
-      .footer-contact {
-        grid-column: 1 / -1;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
@@ -580,28 +662,25 @@
        ========================= */
     @media (max-width: 760px) {
       .site-header {
-        height: 70px;
-        min-height: 70px;
+        height: auto;
+        min-height: 67px;
         padding: 0 18px;
       }
 
-      .brand-mark {
-        width: 128px;
+      .header-inner {
+        min-height: 67px;
+        padding: 10px 0;
+        gap: 14px;
       }
 
-      .back-home {
-        font-size: 13px;
-        gap: 7px;
-      }
-
-      .back-arrow {
-        font-size: 22px;
+      .logo {
+        width: 108px;
       }
 
       .hero {
         min-height: 0;
         overflow: hidden;
-        background: #ffffff;
+        background: #fff;
       }
 
       .hero-image {
@@ -618,11 +697,11 @@
         background:
           linear-gradient(
             180deg,
-            rgba(7,25,71,.88) 0%,
-            rgba(7,25,71,.45) 27%,
+            rgba(7,50,92,.88) 0%,
+            rgba(7,50,92,.45) 27%,
             rgba(255,255,255,.05) 51%,
             rgba(255,255,255,.82) 91%,
-            #ffffff 100%
+            #fff 100%
           );
       }
 
@@ -644,7 +723,7 @@
         width: 100%;
         max-width: none;
         padding: 42px 18px 56px;
-        background: #ffffff;
+        background: #fff;
       }
 
       .hero-title {
@@ -730,7 +809,14 @@
       }
 
       .site-footer {
-        padding: 38px 18px 25px;
+        padding-top: 30px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .section-inner {
+        padding-left: 18px;
+        padding-right: 18px;
       }
 
       .footer-grid {
@@ -738,35 +824,36 @@
         gap: 28px;
       }
 
-      .footer-contact {
-        grid-column: auto;
+      .footer-brand p {
+        max-width: 100%;
       }
 
       .footer-bottom {
-        align-items: flex-start;
         flex-direction: column;
-        gap: 15px;
+        align-items: flex-start;
       }
 
-      .legal {
-        gap: 17px;
+      .footer-legal {
+        flex-wrap: wrap;
+        gap: 14px 24px;
       }
     }
 
-    @media (max-width: 420px) {
+    @media (max-width: 430px) {
       .site-header {
         padding: 0 14px;
       }
 
-      .brand-mark {
-        width: 116px;
-      }
-
-      .back-home {
-        font-size: 12px;
+      .logo {
+        width: 101px;
       }
 
       .hero-left {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .section-inner {
         padding-left: 14px;
         padding-right: 14px;
       }
@@ -790,11 +877,6 @@
         width: 29px;
         height: 29px;
       }
-
-      .site-footer {
-        padding-left: 14px;
-        padding-right: 14px;
-      }
     }
   </style>
 </head>
@@ -802,30 +884,27 @@
 <body>
 <div class="page">
   <header class="site-header">
-    <a href="#" class="brand" aria-label="Atlas College Home">
-      <!-- Replace this SVG with your actual logo asset if you already have one. -->
-      <svg class="brand-mark" viewBox="0 0 220 70" role="img" aria-label="Atlas College">
-        <defs>
-          <linearGradient id="logoBlue" x1="0" x2="1">
-            <stop offset="0" stop-color="#0957e8"/>
-            <stop offset="1" stop-color="#2177e8"/>
-          </linearGradient>
-        </defs>
-        <path d="M10 57 43 7h18l-31 50H10Zm18-11 16-29 22 40H50L39 37Z"
-              fill="url(#logoBlue)"/>
-        <path d="M15 47c24-2 49-15 63-31 2 11-6 25-18 34-14 10-31 12-45 8Z"
-              fill="none" stroke="#0957e8" stroke-width="5"/>
-        <text x="75" y="31" fill="#071947" font-size="24" font-weight="800"
-              font-family="Arial, sans-serif">ATLAS</text>
-        <text x="75" y="55" fill="#0957e8" font-size="22" font-weight="800"
-              font-family="Arial, sans-serif">COLLEGE</text>
-      </svg>
-    </a>
-
-    <a class="back-home" href="#">
-      <span class="back-arrow">←</span>
-      <span>Back to Home</span>
-    </a>
+    <div class="header-inner">
+      <a href="#" class="logo-link">
+        <img class="logo" src="assets/logos.png" alt="Atlas College">
+      </a>
+      
+      <input type="checkbox" id="menu-checkbox" aria-label="Toggle navigation menu">
+      <label for="menu-checkbox">
+        <div class="menu-toggle" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </label>
+      <div class="mobile-menu-drawer">
+        <a href="#" class="nav-link">Home</a>
+        <a href="#" class="nav-link">Programs</a>
+        <a href="#" class="nav-link">Admissions</a>
+        <a href="#" class="nav-link">About Us</a>
+        <a href="#" class="nav-link">Contact</a>
+      </div>
+    </div>
   </header>
 
   <main>
@@ -949,85 +1028,70 @@
   </main>
 
   <footer class="site-footer">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <svg width="150" height="48" viewBox="0 0 220 70" aria-label="Atlas College">
-          <defs>
-            <linearGradient id="footerLogoBlue" x1="0" x2="1">
-              <stop offset="0" stop-color="#0957e8"/>
-              <stop offset="1" stop-color="#2177e8"/>
-            </linearGradient>
-          </defs>
-          <path d="M10 57 43 7h18l-31 50H10Zm18-11 16-29 22 40H50L39 37Z"
-                fill="url(#footerLogoBlue)"/>
-          <path d="M15 47c24-2 49-15 63-31 2 11-6 25-18 34-14 10-31 12-45 8Z"
-                fill="none" stroke="#0957e8" stroke-width="5"/>
-          <text x="75" y="31" fill="#ffffff" font-size="24" font-weight="800"
-                font-family="Arial, sans-serif">ATLAS</text>
-          <text x="75" y="55" fill="#55ddf4" font-size="22" font-weight="800"
-                font-family="Arial, sans-serif">COLLEGE</text>
-        </svg>
-
-        <p>
-          Empowering students with education, skills, and opportunities for a better tomorrow.
-        </p>
-
-        <div class="socials" aria-label="Social links">
-          <a href="#" aria-label="Facebook">f</a>
-          <a href="#" aria-label="Instagram">◎</a>
-          <a href="#" aria-label="Twitter">♥</a>
-          <a href="#" aria-label="LinkedIn">in</a>
+    <div class="section-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img class="footer-logo" src="assets/logos.png" alt="Atlas College">
+          <p>
+            Empowering students with education, skills, and opportunities for a better tomorrow.
+          </p>
+          <div class="socials">
+            <span class="social">f</span>
+            <span class="social">◎</span>
+            <span class="social">♥</span>
+            <span class="social">in</span>
+          </div>
         </div>
-      </div>
-
-      <div class="footer-column">
-        <h3 class="footer-heading">Quick Links</h3>
-        <nav class="footer-links">
-          <a href="#">Home</a>
-          <a href="#">About Us</a>
+        <div class="footer-column">
+          <h3>
+            Quick Links
+          </h3>
           <a href="#">Programs</a>
           <a href="#">Admissions</a>
+          <a href="#">About Us</a>
           <a href="#">Contact</a>
-        </nav>
-      </div>
-
-      <div class="footer-column">
-        <h3 class="footer-heading">Staff Portal</h3>
-        <nav class="footer-links">
+        </div>
+        <div class="footer-column">
+          <h3>
+            Staff Portal
+          </h3>
           <a href="#">Sign In</a>
           <a href="#">Create Account</a>
           <a href="#">Help &amp; Support</a>
-        </nav>
-      </div>
-
-      <div class="footer-contact">
-        <h3 class="footer-heading">Contact Us</h3>
-
-        <div class="contact-list">
-          <div class="contact-line">
-            <span class="contact-icon">●</span>
-            <span>123 Education Road<br>Knowledge City, KC 10001</span>
+        </div>
+        <div class="footer-column">
+          <h3>
+            Contact Us
+          </h3>
+          <div class="contact-item">
+            <span class="contact-icon">⌖</span>
+            <span>
+              123 Education Road<br>
+              Knowledge City, KC 10001
+            </span>
           </div>
-
-          <div class="contact-line">
+          <div class="contact-item">
             <span class="contact-icon">⌕</span>
-            <span>+1 234 567 8900</span>
+            <span>
+              +1 234 567 8900
+            </span>
           </div>
-
-          <div class="contact-line">
+          <div class="contact-item">
             <span class="contact-icon">✉</span>
-            <span>info@atlascollege.edu</span>
+            <span>
+              info@atlascollege.edu
+            </span>
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="footer-bottom">
-      <span>© 2026 Atlas College. All rights reserved.</span>
-
-      <div class="legal">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms &amp; Conditions</a>
+      <div class="footer-bottom">
+        <span>
+          © 2026 Atlas College. All rights reserved.
+        </span>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms &amp; Conditions</a>
+        </div>
       </div>
     </div>
   </footer>
