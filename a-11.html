@@ -71,74 +71,53 @@
     }
 
     /* =========================
-       HEADER (STRETCHED EDGE-TO-EDGE WITH HAMBURGER MENU)
+       HEADER & NAVIGATION
        ========================= */
     .site-header {
       width: 100%;
       max-width: 100%;
-      height: 84px;
-      min-height: 84px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 25px;
-      background: #fff;
-      border-bottom: 1px solid #dcebf8;
+      height: 66px;
+      background: #ffffff;
+      border-bottom: 1px solid #edf1f7;
       position: relative;
       z-index: 50;
       flex-shrink: 0;
     }
-
-    .brand {
-      display: inline-flex;
+    .header-inner {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 0 25px;
+      display: flex;
       align-items: center;
-      flex-shrink: 0;
+      justify-content: space-between;
+      gap: 25px;
     }
-
-    .brand-mark {
-      display: block;
-      width: clamp(142px, 15vw, 178px);
+    .logo-link {
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+      cursor: pointer;
+    }
+    .logo {
+      width: 126px;
       height: auto;
       object-fit: contain;
     }
-
-    .header-right-wrap {
-      display: flex;
-      align-items: center;
-      gap: 25px;
-    }
-
-    .back-home {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      color: #0068ed;
-      font-size: clamp(14px, 1.35vw, 18px);
-      font-weight: 500;
-      white-space: nowrap;
-      transition: opacity .2s ease, transform .2s ease;
-    }
-
-    .back-home:hover {
-      opacity: .78;
-      transform: translateX(-2px);
-    }
-
-    .back-arrow {
-      font-size: 27px;
-      line-height: 1;
-      font-weight: 300;
+    .main-nav {
+      display: none;
     }
 
     /* =========================
-       MENU TOGGLE (HAMBURGER) & MOBILE DRAWER
+       MENU TOGGLE & MOBILE DRAWER
        ========================= */
     .menu-toggle {
       flex: 0 0 auto;
       width: 40px;
       height: 40px;
       background: transparent;
-      border: 1px solid #dcebf8;
+      border: 1px solid #dfe6f1;
       border-radius: 5px;
       display: flex;
       flex-direction: column;
@@ -147,16 +126,17 @@
       gap: 5px;
       cursor: pointer;
       transition: border-color 0.25s ease, background 0.25s ease;
+      margin-left: auto;
     }
     .menu-toggle:hover {
-      border-color: #0068ed;
+      border-color: #0957e8;
       background: #f5f9ff;
     }
     .menu-toggle span {
       display: block;
       width: 18px;
       height: 2px;
-      background: #0b3d91;
+      background: #071947;
       border-radius: 2px;
       transition: transform 0.3s ease, opacity 0.3s ease;
     }
@@ -169,7 +149,7 @@
       left: 0;
       width: 100%;
       background: #ffffff;
-      border-bottom: 1px solid #dcebf8;
+      border-bottom: 1px solid #edf1f7;
       box-shadow: 0 12px 30px rgba(7, 25, 71, 0.08);
       display: flex;
       flex-direction: column;
@@ -185,12 +165,12 @@
       border-bottom: 1px solid #f2f5fb;
       width: 100%;
       font-weight: 600;
-      color: #0b3d91;
+      color: #071947;
       cursor: pointer;
     }
     .mobile-menu-drawer .nav-link:hover {
       background: #f5f9ff;
-      color: #0068ed;
+      color: #0957e8;
     }
     #menu-checkbox:checked ~ .mobile-menu-drawer {
       max-height: 350px;
@@ -469,7 +449,7 @@
     }
 
     /* =========================
-       FOOTER (STRETCHED EDGE-TO-EDGE GRID)
+       FOOTER
        ========================= */
     .site-footer {
       width: 100%;
@@ -488,7 +468,7 @@
       max-width: 100%;
       min-width: 0;
       display: grid;
-      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      grid-template-columns: 1.2fr .8fr .8fr 1.1fr;
       gap: clamp(30px, 5vw, 80px);
       padding-bottom: 32px;
     }
@@ -498,13 +478,13 @@
     }
 
     .footer-brand img {
-      width: 150px;
+      width: 126px;
       max-width: 100%;
       margin-bottom: 13px;
     }
 
     .footer-brand p {
-      max-width: 245px;
+      max-width: 220px;
       color: rgba(255,255,255,.92);
       font-size: 14px;
       line-height: 1.4;
@@ -649,11 +629,11 @@
       }
 
       .footer-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 1.2fr 1fr 1fr;
       }
 
       .footer-contact {
-        grid-column: auto;
+        grid-column: 1 / -1;
       }
     }
 
@@ -662,22 +642,16 @@
        ========================= */
     @media (max-width: 760px) {
       .site-header {
-        height: 70px;
-        min-height: 70px;
-        padding: 0 18px;
+        height: auto;
+        min-height: 67px;
       }
-
-      .brand-mark {
-        width: 128px;
+      .header-inner {
+        min-height: 67px;
+        padding: 10px 18px;
+        gap: 14px;
       }
-
-      .back-home {
-        font-size: 13px;
-        gap: 7px;
-      }
-
-      .back-arrow {
-        font-size: 22px;
+      .logo {
+        width: 108px;
       }
 
       .hero {
@@ -836,16 +810,12 @@
     }
 
     @media (max-width: 420px) {
-      .site-header {
-        padding: 0 14px;
+      .header-inner {
+        padding-left: 14px;
+        padding-right: 14px;
       }
-
-      .brand-mark {
-        width: 116px;
-      }
-
-      .back-home {
-        font-size: 12px;
+      .logo {
+        width: 92px;
       }
 
       .hero-left {
@@ -884,31 +854,11 @@
 <body>
 <div class="page">
   <header class="site-header">
-    <a href="#" class="brand" aria-label="Atlas College Home">
-      <svg class="brand-mark" viewBox="0 0 220 70" role="img" aria-label="Atlas College">
-        <defs>
-          <linearGradient id="logoBlue" x1="0" x2="1">
-            <stop offset="0" stop-color="#0068ed"/>
-            <stop offset="1" stop-color="#14aef4"/>
-          </linearGradient>
-        </defs>
-        <path d="M10 57 43 7h18l-31 50H10Zm18-11 16-29 22 40H50L39 37Z"
-              fill="url(#logoBlue)"/>
-        <path d="M15 47c24-2 49-15 63-31 2 11-6 25-18 34-14 10-31 12-45 8Z"
-              fill="none" stroke="#0b5eea" stroke-width="5"/>
-        <text x="75" y="31" fill="#0869dc" font-size="24" font-weight="800"
-              font-family="Arial, sans-serif">ATLAS</text>
-        <text x="75" y="55" fill="#18a9ef" font-size="22" font-weight="800"
-              font-family="Arial, sans-serif">COLLEGE</text>
-      </svg>
-    </a>
-
-    <div class="header-right-wrap">
-      <a class="back-home" href="#">
-        <span class="back-arrow">←</span>
-        <span>Back to Home</span>
+    <div class="header-inner">
+      <a href="#" class="logo-link">
+        <img class="logo" src="assets/logos.png" alt="Atlas College">
       </a>
-
+      
       <input type="checkbox" id="menu-checkbox" aria-label="Toggle navigation menu">
       <label for="menu-checkbox">
         <div class="menu-toggle" aria-hidden="true">
@@ -1050,22 +1000,7 @@
   <footer class="site-footer">
     <div class="footer-grid">
       <div class="footer-brand">
-        <svg width="150" height="48" viewBox="0 0 220 70" aria-label="Atlas College">
-          <defs>
-            <linearGradient id="footerLogoBlue" x1="0" x2="1">
-              <stop offset="0" stop-color="#0878f8"/>
-              <stop offset="1" stop-color="#15b4f2"/>
-            </linearGradient>
-          </defs>
-          <path d="M10 57 43 7h18l-31 50H10Zm18-11 16-29 22 40H50L39 37Z"
-                fill="url(#footerLogoBlue)"/>
-          <path d="M15 47c24-2 49-15 63-31 2 11-6 25-18 34-14 10-31 12-45 8Z"
-                fill="none" stroke="#0878f8" stroke-width="5"/>
-          <text x="75" y="31" fill="#0878f8" font-size="24" font-weight="800"
-                font-family="Arial, sans-serif">ATLAS</text>
-          <text x="75" y="55" fill="#18a9ef" font-size="22" font-weight="800"
-                font-family="Arial, sans-serif">COLLEGE</text>
-        </svg>
+        <img class="footer-logo" src="assets/logos.png" alt="Atlas College">
 
         <p>
           Empowering students with education, skills, and opportunities for a better tomorrow.
