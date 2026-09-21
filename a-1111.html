@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>myAtlas College — Create Application Cycle</title>
+<style>
+:root{--b:#0878f9;--dark:#123b69;--muted:#6782a4;--line:#d9e8f7;--soft:#eef7ff;--foot:#083b68}
+*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;overflow-x:hidden}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--dark);background:#fff}
+button,input,select{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
+.page{min-height:100vh;display:flex;flex-direction:column}
+.topbar{height:58px;flex:0 0 58px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 4.4%;background:#fff}
+.logo{width:142px;height:auto;display:block}.top-actions{display:flex;align-items:center;gap:24px}
+.search{width:min(390px,38vw);height:36px;border:1px solid #cfe5ff;border-radius:7px;display:flex;align-items:center;gap:10px;padding:0 13px;color:#7190b3;font-size:12px}
+.search svg{width:15px;flex:none}.help{width:21px;height:21px;border:1.7px solid var(--dark);border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700}
+.profile{display:flex;align-items:center;gap:10px}.avatar{width:32px;height:32px;border-radius:50%;background:var(--b);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700}.chev{font-size:17px;color:#4b6c91}
+.workspace{display:grid;grid-template-columns:minmax(250px,23.2%) minmax(0,1fr);flex:1 0 auto}
+.welcome{border-right:1px solid var(--line);padding:48px 32px 55px}
+.illustration{width:150px;height:118px;display:block;margin:0 auto 20px}
+.welcome h2{font-size:25px;line-height:1.28;margin:0 0 16px;font-weight:750}
+.welcome p{max-width:275px;margin:0;color:var(--muted);font-size:15px;line-height:1.55}
+.help-link{margin-top:34px;color:var(--b);font-size:14px;font-weight:600}
+.content{min-width:0;padding:28px clamp(22px,2.6vw,42px) 44px}
+.inner{width:100%;max-width:1160px;margin:auto}
+.back{display:inline-flex;gap:8px;color:var(--b);font-size:13px;font-weight:600;margin-bottom:12px}
+.title{margin-bottom:22px}.title h1{margin:0;font-size:30px;line-height:1.2;letter-spacing:-.5px}.title p{margin:7px 0 0;color:var(--muted);font-size:13px}
+.steps{border:1px solid #cfe5ff;border-radius:8px;padding:17px 20px;margin-bottom:20px;display:flex;align-items:center;box-shadow:0 1px 4px rgba(22,70,110,.05)}
+.step{display:flex;align-items:center;min-width:0;flex:1;color:#7890ad;font-size:12px;font-weight:650}.step:last-child{flex:0 1 auto}
+.num{width:29px;height:29px;border-radius:50%;border:1px solid #bcd9f7;display:grid;place-items:center;flex:none;margin-right:9px}.active{color:#173e67}.active .num{background:var(--b);border-color:var(--b);color:#fff}
+.step-line{height:1px;background:#dbe8f4;flex:1;margin:0 14px;min-width:12px}
+.card{border:1px solid #cfe5ff;border-radius:8px;background:#fff;box-shadow:0 1px 4px rgba(22,70,110,.05);margin-bottom:18px}
+.card-head{padding:19px 22px 16px;border-bottom:1px solid #e8f0f7}.card-head h2{margin:0;font-size:18px}.card-head p{margin:6px 0 0;color:var(--muted);font-size:12.5px;line-height:1.5}
+.card-body{padding:23px 22px 25px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px}.field{min-width:0}.full{grid-column:1/-1}
+label{display:block;color:#294e75;font-size:13px;font-weight:650;margin-bottom:8px}.req{color:var(--b)}
+input[type=text],input[type=date],select{width:100%;height:43px;border:1px solid #cfe0ef;border-radius:6px;outline:0;padding:0 13px;color:#24486f;background:#fff;font-size:13px}
+input:focus,select:focus{border-color:#74b5ff;box-shadow:0 0 0 3px #eef7ff}.hint{color:#7890ad;font-size:11.5px;line-height:1.45;margin-top:6px}
+.degrees{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.degree{position:relative}.degree input{position:absolute;opacity:0}
+.degree label{min-height:74px;border:1px solid #d5e4f1;border-radius:6px;padding:13px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;margin:0}
+.degree strong{font-size:12.5px;margin-bottom:4px}.degree span{font-size:10.5px;color:#7890ad}.degree input:checked+label{border-color:#76b9ff;background:var(--soft);box-shadow:inset 0 0 0 1px #76b9ff}
+.documents{border:1px solid #d8e6f2;border-radius:6px;overflow:hidden}.doc{min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:10px 13px;border-bottom:1px solid #e7eef5}.doc:last-child{border-bottom:0}.doc-left{display:flex;align-items:center;gap:10px;min-width:0}.check{width:17px;height:17px;accent-color:var(--b);flex:none}.doc-name{font-size:12px;color:#315576;overflow-wrap:anywhere}.optional{font-size:10px;color:#7790ae;white-space:nowrap}
+.actions{display:flex;align-items:center;justify-content:space-between;gap:15px}.note{color:#7890ad;font-size:11.5px}.buttons{display:flex;gap:10px}.btn{min-height:40px;border-radius:6px;border:1px solid #cfe0ef;background:#fff;color:#315576;padding:0 17px;font-size:12.5px;font-weight:650}.primary{background:var(--b);border-color:var(--b);color:#fff}
+.footer{background:var(--foot);color:#fff;padding:26px 2.2% 20px}.footer-grid{display:grid;grid-template-columns:1.15fr 1fr 1fr 1.15fr;gap:35px;max-width:1600px;margin:auto}.footer-logo{width:150px;margin-bottom:10px}.footer p,.footer a,.footer-contact div{color:#d9e8f6;font-size:11.5px;line-height:1.45}.footer p{max-width:245px;margin:0}.footer h3{font-size:12px;margin:2px 0 10px}.footer a{display:block;margin-bottom:7px}.footer-contact div{display:flex;gap:10px;margin-bottom:9px}.footer-bottom{max-width:1600px;margin:18px auto 0;padding-top:13px;border-top:1px solid rgba(255,255,255,.35);display:flex;justify-content:space-between;gap:20px;color:#d9e8f6;font-size:10.5px}.footer-bottom a{display:inline-block;margin-left:22px}
+
+@media(max-width:1100px){.workspace{grid-template-columns:280px minmax(0,1fr)}.welcome{padding-left:25px;padding-right:25px}.degrees{grid-template-columns:repeat(2,1fr)}.footer-grid{grid-template-columns:1.2fr 1fr 1fr}.footer-contact{grid-column:1/-1}}
+@media(max-width:800px){.topbar{padding:0 18px}.top-actions{gap:13px}.search{width:min(310px,42vw)}.workspace{display:block}.welcome{border-right:0;border-bottom:1px solid var(--line);padding:28px 20px 25px;display:grid;grid-template-columns:110px minmax(0,1fr);gap:18px;align-items:center}.illustration{width:105px;height:85px;margin:0;grid-row:1/span 3}.welcome h2{font-size:21px;margin-bottom:7px}.welcome p{font-size:13px;max-width:none}.help-link{margin-top:9px}.content{padding:24px 18px 35px}.title h1{font-size:25px}.steps{overflow:hidden}.step{font-size:0}.step .num{margin-right:0}.step-line{margin:0 8px}.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+@media(max-width:560px){.topbar{padding:0 14px}.logo{width:118px}.search{width:42px;padding:0;justify-content:center;border-color:transparent}.search span{display:none}.top-actions{gap:13px}.welcome{grid-template-columns:1fr;text-align:left;padding:23px 18px 25px}.illustration{width:100px;height:78px;grid-row:auto;margin:0}.welcome h2{font-size:22px}.content{padding:20px 13px 30px}.title h1{font-size:24px}.steps{padding:14px 10px}.num{width:26px;height:26px;font-size:11px}.step-line{margin:0 5px}.card-head{padding:17px 15px 14px}.card-body{padding:18px 15px 20px}.degrees{grid-template-columns:1fr}.actions{align-items:stretch;flex-direction:column-reverse}.buttons{width:100%}.buttons .btn{flex:1}.note{text-align:center}.footer-grid{grid-template-columns:1fr;gap:22px}.footer-contact{grid-column:auto}.footer-bottom{flex-direction:column;align-items:flex-start}.footer-bottom a{margin:0 20px 0 0}}
+@media(max-width:360px){.topbar{padding:0 10px}.logo{width:105px}.help{display:none}.content{padding-left:10px;padding-right:10px}.card-body{padding-left:12px;padding-right:12px}}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+  <svg class="logo" viewBox="0 0 330 82" aria-label="myAtlas College">
+    <path d="M18 66 49 11c3-6 11-7 15-1l12 18 13-23c3-5 10-6 14-2l29 30-12 11-19-19-17 31c-3 6-12 7-16 1L55 42 39 72z" fill="#1683f7"/>
+    <path d="M47 48 60 27l12 19-10 18z" fill="#56b4ff"/>
+    <text x="112" y="43" font-size="29" font-weight="750" font-family="Arial" fill="#0878f9">myAtlas</text>
+    <text x="114" y="65" font-size="16" font-weight="700" letter-spacing="3" font-family="Arial" fill="#0878f9">COLLEGE</text>
+  </svg>
+  <div class="top-actions">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
+      <span>Search applications, cycles, students...</span>
+    </div>
+    <div class="help">?</div>
+    <div class="profile"><div class="avatar">RS</div><div class="chev">⌄</div></div>
+  </div>
+</header>
+
+<main class="workspace">
+<aside class="welcome">
+  <svg class="illustration" viewBox="0 0 180 140" aria-hidden="true">
+    <circle cx="91" cy="65" r="48" fill="#f5faff"/><circle cx="34" cy="49" r="4" fill="#d8ecff"/><circle cx="142" cy="31" r="4" fill="#d8ecff"/>
+    <rect x="49" y="25" width="78" height="87" rx="11" fill="#fff" stroke="#9dbfe2" stroke-width="3"/>
+    <path d="M64 49h48M64 66h48M64 83h31" stroke="#7ca5cd" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="130" cy="101" r="22" fill="#0878f9"/><path d="M130 91v20M120 101h20" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  </svg>
+  <div>
+    <h2>Create an application cycle</h2>
+    <p>Set up a new admissions cycle by choosing its dates, degree types, application fields and required documents.</p>
+    <div class="help-link">Need help? View our guide →</div>
+  </div>
+</aside>
+
+<section class="content">
+<div class="inner">
+<a class="back" href="staff.html" id="back">← Back to home</a>
+<div class="title"><h1>Create application cycle</h1><p>Configure the admissions cycle students will use to submit applications.</p></div>
+
+<div class="steps">
+  <div class="step active"><div class="num">1</div><span>Basic details</span></div><div class="step-line"></div>
+  <div class="step"><div class="num">2</div><span>Degree types</span></div><div class="step-line"></div>
+  <div class="step"><div class="num">3</div><span>Application form</span></div><div class="step-line"></div>
+  <div class="step"><div class="num">4</div><span>Review</span></div>
+</div>
+
+<section class="card">
+<div class="card-head"><h2>Cycle details</h2><p>Give this application cycle a clear name and define when students can apply.</p></div>
+<div class="card-body"><div class="grid">
+<div class="field full"><label for="name">Application cycle name <span class="req">*</span></label><input id="name" type="text" placeholder="e.g. 2027 Undergraduate Intake"><div class="hint">This name will be visible to staff and used to identify the cycle.</div></div>
+<div class="field"><label for="open">Opening date <span class="req">*</span></label><input id="open" type="date"><div class="hint">Applications become available from this date.</div></div>
+<div class="field"><label for="close">Closing date <span class="req">*</span></label><input id="close" type="date"><div class="hint">Applications will no longer be accepted after this date.</div></div>
+<div class="field"><label for="status">Initial cycle status</label><select id="status"><option value="draft">Draft — configure before opening</option><option>Scheduled — open automatically</option><option>Open — accept applications</option></select><div class="hint">You can change the status later from cycle settings.</div></div>
+<div class="field"><label for="visibility">Application visibility</label><select id="visibility"><option>Visible to applicants</option><option>Hidden until opening date</option></select><div class="hint">Controls whether applicants can see this cycle.</div></div>
+</div></div>
+</section>
+
+<section class="card">
+<div class="card-head"><h2>Degree types</h2><p>Select the degree levels that should be available in this application cycle.</p></div>
+<div class="card-body"><div class="degrees">
+<div class="degree"><input id="ug" type="checkbox" checked><label for="ug"><strong>Undergraduate</strong><span>Bachelor's and equivalent programmes</span></label></div>
+<div class="degree"><input id="hon" type="checkbox"><label for="hon"><strong>Honours</strong><span>Honours and equivalent programmes</span></label></div>
+<div class="degree"><input id="mas" type="checkbox"><label for="mas"><strong>Masters</strong><span>Master's degree programmes</span></label></div>
+<div class="degree"><input id="doc" type="checkbox"><label for="doc"><strong>Doctoral</strong><span>Doctoral and PhD programmes</span></label></div>
+</div></div>
+</section>
+
+<section class="card">
+<div class="card-head"><h2>Required documents</h2><p>Choose the documents applicants must provide with their application.</p></div>
+<div class="card-body"><div class="documents">
+<label class="doc"><span class="doc-left"><input class="check" type="checkbox" checked><span class="doc-name">Academic transcript</span></span><span class="optional">Required</span></label>
+<label class="doc"><span class="doc-left"><input class="check" type="checkbox" checked><span class="doc-name">Identity document / passport</span></span><span class="optional">Required</span></label>
+<label class="doc"><span class="doc-left"><input class="check" type="checkbox"><span class="doc-name">Curriculum vitae</span></span><span class="optional">Optional</span></label>
+<label class="doc"><span class="doc-left"><input class="check" type="checkbox"><span class="doc-name">Motivation letter</span></span><span class="optional">Optional</span></label>
+</div></div>
+</section>
+
+<div class="actions"><div class="note">You can edit these settings after creating the cycle.</div><div class="buttons"><button class="btn" id="cancel">Cancel</button><button class="btn primary" id="continue">Continue →</button></div></div>
+</div>
+</section>
+</main>
+
+<footer class="footer">
+<div class="footer-grid">
+<div><svg class="footer-logo" viewBox="0 0 330 82" aria-label="Atlas College"><path d="M18 66 49 11c3-6 11-7 15-1l12 18 13-23c3-5 10-6 14-2l29 30-12 11-19-19-17 31c-3 6-12 7-16 1L55 42 39 72z" fill="#24a0ff"/><path d="M47 48 60 27l12 19-10 18z" fill="#6bc7ff"/><text x="112" y="43" font-size="29" font-weight="750" font-family="Arial" fill="#36a7ff">ATLAS</text><text x="114" y="65" font-size="16" font-weight="700" letter-spacing="2" font-family="Arial" fill="#36a7ff">COLLEGE</text></svg><p>Empowering students with education, skills, and opportunities for a better tomorrow.</p></div>
+<div><h3>Quick Links</h3><a href="#">Home</a><a href="#">About Us</a><a href="#">Programs</a><a href="#">Admissions</a><a href="#">Contact</a></div>
+<div><h3>Staff Portal</h3><a href="#">Sign In</a><a href="#">Create Account</a><a href="#">Help &amp; Support</a></div>
+<div class="footer-contact"><h3>Contact Us</h3><div><span>●</span><span>123 Education Road<br>Knowledge City, KC 10001</span></div><div><span>⌕</span><span>+1 234 567 8900</span></div><div><span>✉</span><span>info@atlascollege.edu</span></div></div>
+</div>
+<div class="footer-bottom"><span>© 2026 Atlas College. All rights reserved.</span><span><a href="#">Privacy Policy</a><a href="#">Terms &amp; Conditions</a></span></div>
+</footer>
+</div>
+
+<script>
+const nameField=document.getElementById('name'),openField=document.getElementById('open'),closeField=document.getElementById('close');
+openField.addEventListener('change',()=>{closeField.min=openField.value;if(closeField.value&&closeField.value<openField.value)closeField.value='';});
+document.getElementById('continue').addEventListener('click',()=>{
+ if(!nameField.value.trim())return alert('Please enter an application cycle name.');
+ if(!openField.value)return alert('Please choose an opening date.');
+ if(!closeField.value)return alert('Please choose a closing date.');
+ if(closeField.value<openField.value)return alert('The closing date cannot be before the opening date.');
+ if(!document.querySelectorAll('.degree input:checked').length)return alert('Please select at least one degree type.');
+ alert('Cycle details saved for review.\n\nNext step: configure the application form fields.');
+});
+document.getElementById('cancel').addEventListener('click',()=>{if(confirm('Discard this application cycle setup?'))location.href='staff.html';});
+document.getElementById('back').addEventListener('click',e=>{e.preventDefault();location.href='staff.html';});
+</script>
+</body>
+                                                                                         </html>
