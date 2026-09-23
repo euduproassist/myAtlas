@@ -35,7 +35,7 @@ Undi meme...
 [No Spoken Words]
 [No Vocal Ad-libs]
 
-[Verse]
+[Verse 1]
 
 Ngithi undi meme, ngiza guza fast fast
 Asena saku faga i-makeup
@@ -49,7 +49,7 @@ Kungathi ndingu-host, bebendilindile
 [Background]
 Yey wena man!
 
-[Verse - Repeat]
+[Verse 2]
 
 Undi meme, ngiza guza fast fast
 Asena saku faga i-makeup
