@@ -1,24 +1,16 @@
-[Verse 1]
-
-
+[Verse]
 
 Ngithi undi meme, ngiza guza fast fast
-Akukho xesha lokufaka i-makeup
-Si-geze ubuso, sixete se sibethe indlela
-Asifoni, masiye e-event, sele iza kuphela
-
-
+Asena saku faga i-makeup
+Si-geze ubuso, sixete se sibethe indlel
+Asifoni ku figa e partying ese i phela
 
 Mina wadi mema, ngiza right on time
 Angizi ngedwa, ngiza nabo nge-hype
 Kungathi ndingu-host, bebendilindile
 
-
-
 [Background]
 Yey wena man!
-
-
 
 Ngithi... ungi meme
 Ungi meme
