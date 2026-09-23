@@ -1,3 +1,9 @@
+An electronic instrumental with upbeat energy, featuring electronic drums and synthesizer.
+
+Minimal acoustic folk, uploaded rhythm and timing preserved, uploaded vocal delivery and tone maintained, fingerpicked acoustic guitar, extremely simple close production with sparse room ambience and natural dynamics
+
+Minimal acoustic folk, uploaded rhythm and timing preserved, uploaded vocal delivery and tone maintained, fingerpicked acoustic guitar, extremely simple close production with sparse room ambience
+
 [Instrumental Intro - 45 Seconds]
 [Deep Bass + Log Drum Beat Only]
 [No Vocals]
