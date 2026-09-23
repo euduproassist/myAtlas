@@ -59,6 +59,7 @@ Kungathi ndingu-host, bebendilindile
 [Background]
 Yey wena man!
 
+[Hook]
 Ungi meme
 Ungi meme
 Ungi meme
