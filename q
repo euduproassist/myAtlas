@@ -1,4 +1,4 @@
-Instrumental Intro - 45 Seconds]
+[Instrumental Intro - 45 Seconds]
 [Deep Bass + Log Drum Beat Only]
 [No Vocals]
 [No Singing]
@@ -45,7 +45,21 @@ Kungathi ndingu-host, bebendilindile
 [Background]
 Yey wena man!
 
-Ngithi... ungi meme
+[Verse - Repeat]
+
+Undi meme, ngiza guza fast fast
+Asena saku faga i-makeup
+Si-geze ubuso, sixete se sibethe indlel
+Asifoni ku figa e partying ese i phela
+
+Mina wadi mema, ngiza right on time
+Angizi ngedwa, ngiza nabo nge-hype
+Kungathi ndingu-host, bebendilindile
+
+[Background]
+Yey wena man!
+
+Ungi meme
 Ungi meme
 Ungi meme
 Ungi meme
@@ -59,7 +73,7 @@ Undi meme...
 Undi meme..
 Undi meme...
 
-Instrumental Break - 1 Minute]
+[Instrumental Break - 1 Minute]
 [Deep Bass + Heavy Log Drum Beat Only]
 [No Vocals]
 [No Singing]
@@ -92,3 +106,4 @@ Undi meme...
 [No Vocal Ad-libs]
 
 [Outro]
+
