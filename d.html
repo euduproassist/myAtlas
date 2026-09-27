@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>myAtlas — Staff Portal</title>
+<style>
+  :root {
+    --blue: #087df5;
+    --navy: #123a69;
+    --text: #163b68;
+    --muted: #708aaa;
+    --line: #d8e8f8;
+    --card-border: #cfe3f7;
+    --white: #fff;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; width: 100%; min-height: 100vh; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: var(--white);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  button, input { font: inherit; }
+  button { cursor: pointer; }
+  a { text-decoration: none; color: inherit; }
+
+  /* HEADER */
+  .topbar {
+    width: 100%;
+    height: 72px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    background: var(--white);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .brand-logo {
+    width: 110px;
+    height: auto;
+    display: block;
+  }
+  .portal-divider {
+    width: 1px;
+    height: 22px;
+    background: #c5d8ed;
+  }
+  .portal-title {
+    font-size: 14px;
+    color: #6180a6;
+    font-weight: 400;
+  }
+
+  .top-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .search {
+    width: 320px;
+    height: 38px;
+    border: 1px solid #cfe2f6;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    color: #7b96b6;
+    background: #fbfdff;
+  }
+  .search svg { width: 16px; height: 16px; flex: 0 0 auto; margin-right: 10px; color: #8fa6c2; }
+  .search input {
+    border: 0;
+    outline: 0;
+    width: 100%;
+    color: var(--text);
+    background: transparent;
+    font-size: 13px;
+  }
+  .search input::placeholder { color: #8fa6c2; }
+
+  .help {
+    width: 28px; height: 28px;
+    border: 1.5px solid #6b8bb0;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    color: #6b8bb0;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    display: grid; place-items: center;
+    font-size: 13px; font-weight: 700;
+  }
+
+  /* MAIN SHELL */
+  .shell {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 440px minmax(0, 1fr);
+    flex: 1;
+  }
+
+  /* LEFT WELCOME PANEL */
+  .welcome {
+    border-right: 1px solid var(--line);
+    padding: 56px 48px;
+  }
+  .welcome-subtitle {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--blue);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .welcome h1 {
+    margin: 0 0 20px;
+    font-size: 34px;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    font-weight: 800;
+  }
+  .welcome p {
+    margin: 0 0 32px;
+    color: var(--muted);
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+
+  .primary {
+    border: 0;
+    background: var(--blue);
+    color: #fff;
+    border-radius: 6px;
+    height: 44px;
+    padding: 0 20px;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(8, 125, 245, 0.2);
+  }
+  .primary:hover { background: #0770db; }
+  .welcome .primary { width: 100%; margin-bottom: 40px; }
+  .plus-sign { font-size: 18px; margin-right: 8px; font-weight: 400; line-height: 1; }
+
+  .setup-box {
+    border-top: 1px solid var(--line);
+    padding-top: 36px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .help-icon {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: #f0f7ff;
+    display: grid; place-items: center;
+    flex: 0 0 48px;
+    color: var(--blue);
+  }
+  .help-icon svg { width: 22px; height: 22px; }
+  .setup-copy strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: var(--text);
+    font-weight: 700;
+  }
+  .setup-copy span {
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.5;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .setup-link {
+    color: var(--blue);
+    font-size: 13.5px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* RIGHT CONTENT PANEL (How it works) */
+  .main {
+    padding: 56px 48px;
+  }
+  .main h2 {
+    font-size: 28px;
+    line-height: 1.2;
+    margin: 0 0 8px;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .main > p {
+    margin: 0 0 32px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .step-card {
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 24px;
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+    position: relative;
+  }
+  .step-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .step-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: #f0f7ff;
+    display: grid; place-items: center;
+    color: var(--blue);
+  }
+  .step-icon svg { width: 20px; height: 20px; }
+  .step-number {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blue);
+  }
+  .step-card h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .step-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .step-footer {
+    margin-top: auto;
+    padding-top: 16px;
+  }
+  .see-more {
+    color: var(--blue);
+    font-size: 13.5px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid var(--line);
+    padding: 24px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--white);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .footer-logo {
+    width: 95px;
+    height: auto;
+  }
+  .footer-right {
+    display: flex;
+    gap: 24px;
+  }
+  .footer-right a:hover { color: var(--blue); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <svg class="brand-logo" viewBox="0 0 260 76" role="img" aria-label="myAtlas College">
+      <defs>
+        <linearGradient id="logoBlue" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#08a5ff"/>
+          <stop offset="1" stop-color="#0876e9"/>
+        </linearGradient>
+      </defs>
+      <path d="M20 57L45 10c4-7 14-8 19-2l11 14-11 8-8-10-20 37z" fill="url(#logoBlue)"/>
+      <path d="M42 51l33-31c5-5 13-5 18 0l9 9-9 8-7-7-28 26z" fill="#54baff"/>
+      <text x="105" y="39" font-size="29" font-weight="750" fill="#087df5">myAtlas</text>
+      <text x="107" y="61" font-size="15" letter-spacing="3" font-weight="700" fill="#087df5">COLLEGE</text>
+    </svg>
+    <div class="portal-divider"></div>
+    <span class="portal-title">Staff Portal</span>
+  </div>
+
+  <div class="top-right">
+    <div class="search" aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="10.7" cy="10.7" r="6.7"></circle>
+        <path d="M16 16l5 5"></path>
+      </svg>
+      <input type="search" placeholder="Search applications, cycles, students..." />
+    </div>
+    <div class="help" aria-label="Help">?</div>
+    <div class="avatar" aria-label="Account">RS</div>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="welcome">
+    <div class="welcome-subtitle">Welcome Back</div>
+    <h1>Welcome to myAtlas Staff Portal</h1>
+    <p>You can create application cycles, manage applications, view submitted documents and update their status — all from one place.</p>
+    <button class="primary" onclick="createCycle()">
+      <span class="plus-sign">+</span>Create application cycle
+    </button>
+
+    <div class="setup-box">
+      <div class="help-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M5 4h10l4 4v12H5z"></path>
+          <path d="M15 4v5h4M8 13h8M8 17h6"></path>
+        </svg>
+      </div>
+      <div class="setup-copy">
+        <strong>Need help getting started?</strong>
+        <span>Check out our quick guide to set up your first application cycle and manage your admissions process.</span>
+        <a class="setup-link" href="#" onclick="showGuide(event)">View setup guide →</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <h2>How it works</h2>
+    <p>Follow these simple steps to set up your first application cycle and start receiving applications from students.</p>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+              <path d="M16 2v4M8 2v4M3 10h18"></path>
+            </svg>
+          </div>
+          <span class="step-number">1</span>
+        </div>
+        <h3>Create Application Cycle</h3>
+        <p>Set opening/closing dates, select degree types and key details for your cycle.</p>
+        <div class="step-footer">
+          <a class="see-more" href="#" onclick="createCycle(event)">See more →</a>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"></path>
+            </svg>
+          </div>
+          <span class="step-number">2</span>
+        </div>
+        <h3>View Applications</h3>
+        <p>Review and manage incoming applications.</p>
+        <div class="step-footer">
+          <a class="see-more" href="#" onclick="viewApps(event)">See more →</a>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <span class="step-number">3</span>
+        </div>
+        <h3>Manage Fields</h3>
+        <p>Configure the information you want to collect from applicants.</p>
+        <div class="step-footer">
+          <a class="see-more" href="#" onclick="manageFields(event)">See more →</a>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-header">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M18 20V10M12 20V4M6 20v-6"></path>
+            </svg>
+          </div>
+          <span class="step-number">4</span>
+        </div>
+        <h3>View Reports</h3>
+        <p>Track progress and download reports.</p>
+        <div class="step-footer">
+          <a class="see-more" href="#" onclick="viewReports(event)">See more →</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer class="footer">
+  <div class="footer-left">
+    <svg class="footer-logo" viewBox="0 0 260 76" role="img" aria-label="myAtlas College">
+      <path d="M20 57L45 10c4-7 14-8 19-2l11 14-11 8-8-10-20 37z" fill="url(#logoBlue)"/>
+      <path d="M42 51l33-31c5-5 13-5 18 0l9 9-9 8-7-7-28 26z" fill="#54baff"/>
+      <text x="105" y="39" font-size="29" font-weight="750" fill="#087df5">myAtlas</text>
+      <text x="107" y="61" font-size="15" letter-spacing="3" font-weight="700" fill="#087df5">COLLEGE</text>
+    </svg>
+    <span>&copy; Atlas College. All rights reserved.</span>
+  </div>
+  <div class="footer-right">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms &amp; Conditions</a>
+    <a href="#">Help &amp; Support</a>
+  </div>
+</footer>
+
+<script>
+  function createCycle(e){
+    if(e) e.preventDefault();
+    alert("Create Application Cycle");
+  }
+  function showGuide(e){
+    if(e) e.preventDefault();
+    alert("Setup Guide");
+  }
+  function viewApps(e){
+    if(e) e.preventDefault();
+    alert("View Applications");
+  }
+  function manageFields(e){
+    if(e) e.preventDefault();
+    alert("Manage Fields");
+  }
+  function viewReports(e){
+    if(e) e.preventDefault();
+    alert("View Reports");
+  }
+</script>
+
+</body>
+</html>
