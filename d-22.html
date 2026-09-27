@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>myAtlas — Staff Portal</title>
+
+<style>
+  :root {
+    --blue: #087df5;
+    --navy: #173c69;
+    --text: #163b68;
+    --muted: #6a86a9;
+    --line: #d8e8f8;
+    --border-light: #cfe3f7;
+    --bg-card: #ffffff;
+    --white: #fff;
+    --shadow: 0 1px 4px rgba(24,76,125,.05);
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html {
+    width: 100%;
+    min-width: 0;
+    min-height: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: #fff;
+    font-size: clamp(13px, 1vw, 14px);
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  button, input { font: inherit; }
+  button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  a { text-decoration: none; color: inherit; -webkit-tap-highlight-color: transparent; }
+
+  img, svg, video, canvas {
+    display: block;
+    max-width: 100%;
+  }
+
+  p, h1, h2, h3, a, span {
+    overflow-wrap: break-word;
+  }
+
+  /* PAGE CONTAINER */
+  .page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  /* HEADER */
+  .topbar {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: clamp(64px, 8vh, 72px);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(20px, 4vw, 40px);
+    background: #fff;
+    flex-shrink: 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+    flex: 0 0 auto;
+  }
+  
+  .brand-logo {
+    width: clamp(110px, 12vw, 132px);
+    height: auto;
+    object-fit: contain;
+  }
+
+  .top-right {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 2vw, 20px);
+    min-width: 0;
+  }
+
+  .search {
+    width: clamp(240px, 25vw, 320px);
+    height: 40px;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    color: #7b96b6;
+    background: #fff;
+    box-shadow: var(--shadow);
+    min-width: 0;
+  }
+  
+  .search svg { width: 16px; height: 16px; flex: 0 0 auto; margin-right: 10px; color: #8fa6c2; }
+  
+  .search input {
+    border: 0;
+    outline: 0;
+    width: 100%;
+    min-width: 0;
+    color: var(--text);
+    background: transparent;
+    font-size: 13px;
+  }
+  .search input::placeholder { color: #8fa6c2; }
+
+  .help {
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid #8fa6c2;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #536d8d;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  
+  .chevron {
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid #536d8d;
+    border-bottom: 2px solid #536d8d;
+    transform: rotate(45deg);
+    margin-left: -10px;
+    flex-shrink: 0;
+  }
+
+  /* LAYOUT SHELL */
+  .shell {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex: 1;
+    display: grid;
+    grid-template-columns: clamp(380px, 32vw, 460px) minmax(0, 1fr);
+  }
+
+  /* LEFT SIDEBAR (Welcome Column) */
+  .welcome {
+    border-right: 1px solid var(--line);
+    padding: clamp(32px, 5vh, 56px) clamp(24px, 4vw, 48px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .welcome-back {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: var(--blue);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .welcome h1 {
+    margin: 0 0 20px;
+    font-size: clamp(28px, 3.2vw, 38px);
+    line-height: 1.15;
+    letter-spacing: -0.8px;
+    color: var(--navy);
+    font-weight: 800;
+    min-width: 0;
+  }
+
+  .welcome p {
+    margin: 0 0 28px;
+    color: var(--muted);
+    font-size: clamp(14px, 1.2vw, 15px);
+    line-height: 1.6;
+    min-width: 0;
+  }
+
+  .primary {
+    border: 0;
+    background: var(--blue);
+    color: #fff;
+    border-radius: 6px;
+    height: 48px;
+    padding: 0 22px;
+    font-weight: 650;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(8,125,245,.2);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-bottom: 40px;
+    transition: background .15s ease, transform .15s ease;
+  }
+  .primary:hover { background: #076fd9; transform: translateY(-1px); }
+  .plus-sign { font-size: 20px; margin-right: 8px; font-weight: 400; line-height: 1; }
+
+  .divider-line {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: 1px;
+    background: var(--line);
+    margin-bottom: 36px;
+  }
+
+  /* Setup Help Card in Sidebar */
+  .setup-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  
+  .setup-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #eaf5ff;
+    display: grid;
+    place-items: center;
+    color: var(--blue);
+    flex-shrink: 0;
+  }
+  
+  .setup-icon-wrap svg { width: 22px; height: 22px; }
+  
+  .setup-content {
+    width: 100%;
+    min-width: 0;
+  }
+  
+  .setup-content h3 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    min-width: 0;
+  }
+  
+  .setup-content p {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    min-width: 0;
+  }
+  
+  .setup-link {
+    color: var(--blue);
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  /* MAIN CONTENT AREA */
+  .main {
+    padding: clamp(32px, 5vh, 56px) clamp(24px, 4vw, 56px);
+    background: #fff;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .main h2.section-heading {
+    margin: 0 0 8px;
+    font-size: clamp(26px, 2.8vw, 32px);
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+    min-width: 0;
+  }
+
+  .main > p.section-sub {
+    margin: 0 0 32px;
+    color: var(--muted);
+    font-size: clamp(14px, 1.2vw, 15px);
+    line-height: 1.5;
+    min-width: 0;
+  }
+
+  /* 2x2 Grid for "How it works" */
+  .grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 24px);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .step-card {
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: clamp(24px, 3vw, 32px);
+    background: var(--bg-card);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 220px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    position: relative;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  
+  .step-card:hover {
+    border-color: #b3d7ff;
+    box-shadow: 0 4px 12px rgba(8,125,245,.06);
+  }
+
+  .card-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 100%;
+    min-width: 0;
+  }
+  
+  .step-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #eaf5ff;
+    display: grid;
+    place-items: center;
+    color: var(--blue);
+    flex-shrink: 0;
+  }
+  
+  .step-icon svg { width: 22px; height: 22px; }
+  
+  .step-number {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blue);
+    flex-shrink: 0;
+  }
+
+  .step-body {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .step-body h3 {
+    margin: 0 0 8px;
+    font-size: clamp(16px, 1.4vw, 17px);
+    font-weight: 750;
+    color: var(--navy);
+    min-width: 0;
+  }
+  
+  .step-body p {
+    margin: 0 0 20px;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.55;
+    min-width: 0;
+  }
+
+  .see-more {
+    color: var(--blue);
+    font-size: 13.5px;
+    font-weight: 650;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+    min-width: 0;
+  }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid var(--line);
+    background: #fff;
+    padding: clamp(20px, 3vh, 24px) clamp(20px, 4vw, 40px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex-shrink: 0;
+  }
+  
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+  }
+  
+  .footer-logo {
+    width: clamp(95px, 10vw, 110px);
+    height: auto;
+    object-fit: contain;
+  }
+  
+  .footer-right {
+    display: flex;
+    align-items: center;
+    gap: clamp(20px, 3vw, 32px);
+    min-width: 0;
+  }
+  
+  .footer-right a {
+    font-size: 13px;
+    color: #708aa8;
+    font-weight: 500;
+    transition: color .15s ease;
+    min-width: 0;
+  }
+  .footer-right a:hover { color: var(--blue); }
+
+  /* RESPONSIVE DESIGN */
+  @media (max-width: 1100px) {
+    .shell { grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); }
+  }
+
+  @media (max-width: 850px) {
+    .shell { display: flex; flex-direction: column; width: 100%; }
+    .welcome { border-right: none; border-bottom: 1px solid var(--line); }
+    .grid-2x2 { grid-template-columns: 1fr; }
+    .footer { flex-direction: column; gap: 16px; align-items: flex-start; }
+    .footer-right { gap: 20px; flex-wrap: wrap; }
+  }
+
+  @media (max-width: 600px) {
+    .topbar { height: 64px; }
+    .search { width: 36px; height: 36px; padding: 0; justify-content: center; border: none; background: #f5f9fd; box-shadow: none; }
+    .search input { display: none; }
+    .search svg { margin: 0; }
+  }
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="brand">
+      <a href="#" aria-label="myAtlas home">
+        <img class="brand-logo" src="assets/logos.png" alt="myAtlas College">
+      </a>
+    </div>
+
+    <div class="top-right">
+      <label class="search" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="10.7" cy="10.7" r="6.7"></circle>
+          <path d="M16 16l5 5"></path>
+        </svg>
+        <input type="search" placeholder="Search applications, cycles, students..." />
+      </label>
+      <div class="help" aria-label="Help">?</div>
+      <div class="avatar" aria-label="Account">RS</div>
+      <div class="chevron" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <!-- MAIN SHELL -->
+  <div class="shell">
+
+    <!-- LEFT WELCOME SECTION -->
+    <aside class="welcome">
+      <span class="welcome-back">Welcome back</span>
+      <h1>Welcome to myAtlas Staff Portal</h1>
+      <p>You can create application cycles, manage applications, view submitted documents and update their status — all from one place.</p>
+      
+      <button class="primary" onclick="createCycle()">
+        <span class="plus-sign">+</span>Create application cycle
+      </button>
+
+      <div class="divider-line" aria-hidden="true"></div>
+
+      <div class="setup-card">
+        <div class="setup-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 3a7 7 0 0 0-4 12.75V19h8v-3.25A7 7 0 0 0 12 3z"></path>
+            <path d="M9 22h6M9 19h6"></path>
+          </svg>
+        </div>
+        <div class="setup-content">
+          <h3>Need help getting started?</h3>
+          <p>Check out our quick guide to set up your first application cycle and manage your admissions process.</p>
+          <a class="setup-link" href="#" onclick="showGuide(event)">View setup guide →</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT CONTENT SECTION -->
+    <main class="main">
+      <h2 class="section-heading">How it works</h2>
+      <p class="section-sub">Follow these simple steps to set up your first application cycle and start receiving applications from students.</p>
+
+      <div class="grid-2x2">
+        <!-- Step 1 -->
+        <div class="step-card">
+          <div class="card-top-row">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+                <path d="M8 3v4M16 3v4M4 10h16"></path>
+              </svg>
+            </div>
+            <span class="step-number">1</span>
+          </div>
+          <div class="step-body">
+            <h3>Create Application Cycle</h3>
+            <p>Set opening/closing dates, select degree types and key details for your cycle.</p>
+          </div>
+          <a class="see-more" href="#" onclick="createCycle(event)">See more →</a>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+          <div class="card-top-row">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"></path>
+              </svg>
+            </div>
+            <span class="step-number">2</span>
+          </div>
+          <div class="step-body">
+            <h3>View Applications</h3>
+            <p>Review and manage incoming applications.</p>
+          </div>
+          <a class="see-more" href="#" onclick="viewApplications(event)">See more →</a>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+          <div class="card-top-row">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <span class="step-number">3</span>
+          </div>
+          <div class="step-body">
+            <h3>Manage Fields</h3>
+            <p>Configure the information you want to collect from applicants.</p>
+          </div>
+          <a class="see-more" href="#" onclick="manageFields(event)">See more →</a>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card">
+          <div class="card-top-row">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M18 20V10M12 20V4M6 20v-6"></path>
+              </svg>
+            </div>
+            <span class="step-number">4</span>
+          </div>
+          <div class="step-body">
+            <h3>View Reports</h3>
+            <p>Track progress and download reports.</p>
+          </div>
+          <a class="see-more" href="#" onclick="viewReports(event)">See more →</a>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-left">
+      <img class="footer-logo" src="assets/logos.png" alt="Atlas College">
+    </div>
+    <div class="footer-right">
+      <a href="#" onclick="showPrivacy(event)">Privacy Policy</a>
+      <a href="#" onclick="showTerms(event)">Terms &amp; Conditions</a>
+      <a href="#" onclick="showGuide(event)">Help &amp; Support</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  function createCycle(e){
+    if(e) e.preventDefault();
+    alert("Create Application Cycle clicked");
+  }
+  function viewApplications(e){
+    if(e) e.preventDefault();
+    alert("View Applications clicked");
+  }
+  function manageFields(e){
+    if(e) e.preventDefault();
+    alert("Manage Fields clicked");
+  }
+  function viewReports(e){
+    if(e) e.preventDefault();
+    alert("View Reports clicked");
+  }
+  function showGuide(e){
+    if(e) e.preventDefault();
+    alert("Setup Guide & Support");
+  }
+  function showPrivacy(e){
+    if(e) e.preventDefault();
+    alert("Privacy Policy");
+  }
+  function showTerms(e){
+    if(e) e.preventDefault();
+    alert("Terms & Conditions");
+  }
+</script>
+
+</body>
+</html>
