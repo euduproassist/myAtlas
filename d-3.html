@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="myAtlas College Staff Portal">
+    <title>myAtlas College — Staff Portal</title>
+    <style>
+        :root {
+            --blue: #087df5;
+            --blue-dark: #0d2d5c;
+            --blue-medium: #4f83c4;
+            --blue-light: #edf7ff;
+            --border: #d8e9fb;
+            --text: #0d2d5c;
+            --text-secondary: #6f8db5;
+            --white: #ffffff;
+            --header-height: 72px;
+            --page-padding: clamp(24px, 4vw, 56px);
+            --radius: 8px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0; padding: 0;
+            width: 100%; min-height: 100vh;
+            overflow-x: hidden;
+            background: var(--white);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            display: flex; flex-direction: column;
+        }
+        button, input { font: inherit; }
+        button { border: 0; cursor: pointer; }
+        a { color: inherit; text-decoration: none; }
+
+        /* HEADER */
+        .site-header {
+            width: 100%; height: var(--header-height);
+            border-bottom: 1px solid var(--border);
+            background: var(--white);
+            display: flex; align-items: center;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .header-inner {
+            width: 100%; padding: 0 var(--page-padding);
+            display: flex; align-items: center; justify-content: space-between; gap: 20px;
+        }
+        .brand {
+            display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+        }
+        .brand-mark svg { width: 40px; height: 40px; display: block; }
+        .brand-name { display: flex; flex-direction: column; line-height: 1.1; }
+        .brand-name-main { color: var(--blue); font-size: 20px; font-weight: 750; letter-spacing: -0.5px; }
+        .brand-name-sub { color: var(--blue); font-size: 8px; font-weight: 800; letter-spacing: 2px; margin-top: 2px; }
+        .brand-divider { width: 1px; height: 26px; background: #cbdff4; margin: 0 4px; }
+        .portal-name { color: #7895bb; font-size: 15px; font-weight: 500; white-space: nowrap; }
+
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .search-box {
+            width: min(340px, 30vw); height: 40px;
+            display: flex; align-items: center;
+            border: 1px solid #cfe3f8; border-radius: 6px;
+            background: var(--white);
+            transition: border-color .2s ease, box-shadow .2s ease;
+        }
+        .search-box:focus-within {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(8, 125, 245, 0.1);
+        }
+        .search-icon { width: 16px; height: 16px; margin-left: 12px; color: #6d8db8; flex-shrink: 0; }
+        .search-box input {
+            width: 100%; height: 100%; border: 0; outline: 0;
+            background: transparent; color: var(--text); font-size: 13px; padding: 0 10px;
+        }
+        .search-box input::placeholder { color: #7c98bb; }
+        
+        .header-help {
+            width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #8fa6c2;
+            display: grid; place-items: center; color: #536d8d; font-weight: 600; font-size: 13px;
+            background: transparent;
+        }
+        .profile-avatar {
+            width: 36px; height: 36px; border-radius: 50%; background: var(--blue); color: white;
+            display: grid; place-items: center; font-size: 12px; font-weight: 700;
+        }
+
+        /* MAIN CONTENT LAYOUT */
+        .main-shell {
+            width: 100%; flex: 1;
+            display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            padding: 40px var(--page-padding); gap: 40px; max-width: 1440px; margin: 0 auto;
+        }
+
+        /* LEFT COLUMN */
+        .welcome-column { display: flex; flex-direction: column; justify-content: space-between; padding-right: 20px; }
+        .eyebrow { margin: 0 0 10px; color: var(--blue); font-size: 12px; font-weight: 750; letter-spacing: 1.2px; text-transform: uppercase; }
+        .welcome-title { margin: 0; color: var(--blue-dark); font-size: clamp(34px, 3.2vw, 48px); line-height: 1.12; font-weight: 800; letter-spacing: -1px; }
+        .welcome-text { margin: 20px 0 32px; color: var(--text-secondary); font-size: 15.5px; line-height: 1.6; max-width: 520px; }
+        
+        .create-button {
+            width: fit-content; min-height: 48px; padding: 0 24px;
+            display: inline-flex; align-items: center; gap: 10px;
+            border-radius: 6px; background: var(--blue); color: #ffffff;
+            font-size: 14px; font-weight: 650;
+            box-shadow: 0 3px 8px rgba(8, 125, 245, 0.2);
+            transition: background .15s ease, transform .15s ease;
+        }
+        .create-button:hover { background: #076fd9; transform: translateY(-1px); }
+        .create-button svg { width: 18px; height: 18px; }
+
+        .help-area {
+            margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border);
+            display: flex; align-items: flex-start; gap: 16px; max-width: 520px;
+        }
+        .help-icon {
+            width: 44px; height: 44px; border-radius: 50%; background: var(--blue-light);
+            color: var(--blue); display: grid; place-items: center; flex-shrink: 0;
+        }
+        .help-icon svg { width: 22px; height: 22px; }
+        .help-title { margin: 0 0 4px; color: var(--blue-dark); font-size: 14.5px; font-weight: 750; }
+        .help-description { margin: 0 0 12px; color: var(--text-secondary); font-size: 13.5px; line-height: 1.5; }
+        .setup-link { color: var(--blue); font-size: 13.5px; font-weight: 650; display: inline-flex; align-items: center; gap: 6px; }
+
+        /* RIGHT COLUMN */
+        .how-column { padding-left: 20px; border-left: 1px solid var(--border); display: flex; flex-direction: column; }
+        .how-title { margin: 0 0 8px; color: var(--blue-dark); font-size: clamp(28px, 2.5vw, 38px); font-weight: 800; letter-spacing: -0.5px; }
+        .how-description { margin: 0 0 28px; color: var(--text-secondary); font-size: 15px; line-height: 1.55; }
+
+        .steps-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+        .step-card {
+            border: 1px solid var(--border); border-radius: var(--radius); padding: 24px;
+            background: var(--white); display: flex; flex-direction: column; justify-content: space-between;
+            min-height: 230px; transition: border-color .15s ease, box-shadow .15s ease;
+        }
+        .step-card:hover { border-color: #b3d7ff; box-shadow: 0 6px 16px rgba(8, 125, 245, 0.06); }
+        
+        .step-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .step-icon {
+            width: 44px; height: 44px; border-radius: 50%; background: var(--blue-light);
+            color: var(--blue); display: grid; place-items: center;
+        }
+        .step-icon svg { width: 22px; height: 22px; }
+        .step-number { color: var(--blue); font-size: 15px; font-weight: 750; }
+        
+        .step-title { margin: 0 0 6px; color: var(--blue-dark); font-size: 16px; font-weight: 750; }
+        .step-description { margin: 0 0 16px; color: var(--text-secondary); font-size: 13.5px; line-height: 1.5; }
+        
+        .see-more { color: var(--blue); font-size: 13.5px; font-weight: 650; display: inline-flex; align-items: center; gap: 5px; margin-top: auto; }
+
+        /* FOOTER */
+        .site-footer {
+            border-top: 1px solid var(--border); background: var(--white);
+            padding: 24px var(--page-padding); display: flex; align-items: center; justify-content: space-between;
+        }
+        .footer-links { display: flex; align-items: center; gap: 28px; }
+        .footer-links a { color: #708aa8; font-size: 13px; font-weight: 500; transition: color .15s ease; }
+        .footer-links a:hover { color: var(--blue); }
+
+        /* MODAL OVERLAY */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 500; padding: 20px;
+            background: rgba(13, 45, 92, 0.3); display: none; place-items: center;
+        }
+        .modal-overlay.active { display: grid; }
+        .modal {
+            width: min(500px, 100%); padding: 32px; border-radius: 10px;
+            background: var(--white); box-shadow: 0 20px 40px rgba(13, 45, 92, 0.15);
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+        .modal-title { margin: 0; color: var(--blue-dark); font-size: 22px; font-weight: 750; }
+        .modal-close { background: #f0f6fc; color: #56779f; width: 32px; height: 32px; border-radius: 6px; display: grid; place-items: center; font-size: 18px; }
+        
+        .form-group { margin-bottom: 16px; }
+        .form-label { display: block; margin-bottom: 6px; color: var(--blue-dark); font-size: 13px; font-weight: 650; }
+        .form-input {
+            width: 100%; height: 42px; padding: 0 12px; border: 1px solid #cfe3f8;
+            border-radius: 6px; outline: 0; color: var(--blue-dark); font-size: 14px;
+        }
+        .form-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(8, 125, 245, 0.08); }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+        .btn-secondary { background: #fff; border: 1px solid var(--border); color: #55779f; padding: 0 16px; height: 40px; border-radius: 6px; font-weight: 600; }
+        .btn-primary { background: var(--blue); color: #fff; padding: 0 20px; height: 40px; border-radius: 6px; font-weight: 600; }
+
+        /* RESPONSIVE BREAKPOINTS */
+        @media (max-width: 900px) {
+            .main-shell { grid-template-columns: 1fr; gap: 32px; }
+            .welcome-column { padding-right: 0; }
+            .how-column { padding-left: 0; border-left: none; border-top: 1px solid var(--border); padding-top: 32px; }
+        }
+        @media (max-width: 600px) {
+            .steps-grid { grid-template-columns: 1fr; }
+            .site-footer { flex-direction: column; gap: 16px; align-items: flex-start; }
+            .search-box { width: 36px; overflow: hidden; }
+            .search-box input { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+        <a href="#" class="brand" aria-label="myAtlas home">
+            <div class="brand-mark">
+                <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 39L20.7 9.2C21.9 6.5 25.8 6.4 27.2 9L42.5 38" stroke="#087DF5" stroke-width="8" stroke-linecap="round"/>
+                    <path d="M13 28.5L35.5 28.5" stroke="#087DF5" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M26 13L39 36" stroke="#61B3FF" stroke-width="6" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="brand-name">
+                <span class="brand-name-main">myAtlas</span>
+                <span class="brand-name-sub">COLLEGE</span>
+            </div>
+            <div class="brand-divider"></div>
+            <span class="portal-name">Staff Portal</span>
+        </a>
+
+        <div class="header-right">
+            <div class="search-box">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="6.5"/><path d="M16 16L21 21" stroke-linecap="round"/>
+                </svg>
+                <input type="search" placeholder="Search applications, cycles..." aria-label="Search">
+            </div>
+            <button class="header-help" aria-label="Help">?</button>
+            <div class="profile-avatar" aria-label="Account">RS</div>
+        </div>
+    </div>
+</header>
+
+<main class="main-shell">
+    <section class="welcome-column">
+        <div>
+            <p class="eyebrow">Welcome back</p>
+            <h1 class="welcome-title">Welcome to myAtlas Staff Portal</h1>
+            <p class="welcome-text">You can create application cycles, manage applications, view submitted documents and update their status — all from one place.</p>
+            <button class="create-button" id="openModalBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5V19M5 12H19" stroke-linecap="round"/></svg>
+                <span>Create application cycle</span>
+            </button>
+        </div>
+
+        <div class="help-area">
+            <div class="help-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 3a7 7 0 0 0-4 12.75V19h8v-3.25A7 7 0 0 0 12 3z"/><path d="M9 22h6M9 19h6"/></svg>
+            </div>
+            <div>
+                <h3 class="help-title">Need help getting started?</h3>
+                <p class="help-description">Check out our quick guide to set up your first application cycle.</p>
+                <a class="setup-link" href="#">View setup guide →</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-column">
+        <h2 class="how-title">How it works</h2>
+        <p class="how-description">Follow these simple steps to set up your first application cycle and receive applications.</p>
+
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-top">
+                    <div class="step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>
+                    </div>
+                    <span class="step-number">1</span>
+                </div>
+                <div>
+                    <h3 class="step-title">Create Cycle</h3>
+                    <p class="step-description">Set opening and closing dates for your cycle.</p>
+                </div>
+                <a class="see-more" href="#" id="cardCreateLink">See more →</a>
+            </div>
+
+            <div class="step-card">
+                <div class="step-top">
+                    <div class="step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                    </div>
+                    <span class="step-number">2</span>
+                </div>
+                <div>
+                    <h3 class="step-title">View Applications</h3>
+                    <p class="step-description">Review and manage incoming submissions.</p>
+                </div>
+                <a class="see-more" href="#">See more →</a>
+            </div>
+
+            <div class="step-card">
+                <div class="step-top">
+                    <div class="step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <span class="step-number">3</span>
+                </div>
+                <div>
+                    <h3 class="step-title">Manage Fields</h3>
+                    <p class="step-description">Configure information collected from applicants.</p>
+                </div>
+                <a class="see-more" href="#">See more →</a>
+            </div>
+
+            <div class="step-card">
+                <div class="step-top">
+                    <div class="step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                    </div>
+                    <span class="step-number">4</span>
+                </div>
+                <div>
+                    <h3 class="step-title">View Reports</h3>
+                    <p class="step-description">Track progress and download reports.</p>
+                </div>
+                <a class="see-more" href="#">See more →</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="brand">
+        <span class="brand-name-main" style="font-size:16px;">myAtlas</span>
+        <span class="portal-name" style="margin-left: 8px;">Staff Portal</span>
+    </div>
+    <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Help &amp; Support</a>
+    </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="cycleModal" role="dialog" aria-modal="true">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title">Create application cycle</h2>
+            <button class="modal-close" id="closeModalBtn" aria-label="Close">&times;</button>
+        </div>
+        <form id="cycleForm">
+            <div class="form-group">
+                <label class="form-label" for="cycleName">Cycle name</label>
+                <input class="form-input" id="cycleName" type="text" placeholder="e.g. 2027 Undergraduate" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="openingDate">Opening date</label>
+                <input class="form-input" id="openingDate" type="date" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="closingDate">Closing date</label>
+                <input class="form-input" id="closingDate" type="date" required>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" id="cancelModalBtn">Cancel</button>
+                <button type="submit" class="btn-primary">Continue</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById('cycleModal');
+    const openBtn = document.getElementById('openModalBtn');
+    const cardCreateLink = document.getElementById('cardCreateLink');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const cancelBtn = document.getElementById('cancelModalBtn');
+    const form = document.getElementById('cycleForm');
+
+    function toggleModal(show) {
+        modal.classList.toggle('active', show);
+        document.body.style.overflow = show ? 'hidden' : '';
+        if(show) document.getElementById('cycleName').focus();
+    }
+
+    openBtn.addEventListener('click', () => toggleModal(true));
+    cardCreateLink.addEventListener('click', (e) => { e.preventDefault(); toggleModal(true); });
+    closeBtn.addEventListener('click', () => toggleModal(false));
+    cancelBtn.addEventListener('click', () => toggleModal(false));
+    modal.addEventListener('click', (e) => { if (e.target === modal) toggleModal(false); });
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Application cycle created successfully!');
+        toggleModal(false);
+        form.reset();
+    });
+</script>
+
+</body>
+</html>
