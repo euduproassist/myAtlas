@@ -4,4 +4,14 @@
 
 So the commercial model is:
 
-R20,000 once-off + R30,000/year + R20 per paid application
+R20,000 once-off + R30,000/year + tier table per application[the following table]
+
+| Paid applications per year | Atlas fee per application |
+| -------------------------: | ------------------------: |
+|              **1 – 1,000** |                   **R20** |
+|          **1,001 – 3,000** |                   **R18** |
+|          **3,001 – 7,500** |                   **R16** |
+|         **7,501 – 15,000** |                   **R14** |
+|        **15,001 – 30,000** |                   **R12** |
+|                **30,001+** |                   **R10** |
+
