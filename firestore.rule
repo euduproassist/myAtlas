@@ -1,14 +1,16 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow read access to master courses catalog
-    match /master_courses/{courseId} {
-      allow read: if request.auth != null;
+    // Allow public read for master courses catalog, write restricted
+    match /master_courses/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
     }
     
-    // Allow staff to manage application cycles
-    match /application_cycles/{cycleId} {
+    // Allow authenticated staff to create and manage application cycles
+    match /application_cycles/{document=**} {
       allow read, write: if request.auth != null;
     }
   }
 }
+
