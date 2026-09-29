@@ -25,6 +25,36 @@ let cycleConfig = {
   degreeTypes: ["Undergraduate Degrees", "Postgraduate Degrees"]
 };
 
+// Switch from Dashboard View to Builder View (Hiding sidebar, expanding to full screen)
+function showCycleBuilder(e) {
+  if (e) e.preventDefault();
+  const welcomeSidebar = document.getElementById('welcomeSidebar');
+  const mainShell = document.getElementById('mainShell');
+  
+  if (welcomeSidebar) welcomeSidebar.style.display = 'none';
+  if (mainShell) mainShell.classList.add('builder-active');
+  
+  if (dashboardView) dashboardView.style.display = 'none';
+  if (cycleBuilderView) cycleBuilderView.style.display = 'block';
+  renderDegreeBadges();
+  fetchMasterCourses();
+}
+
+// Switch back to Dashboard, restoring the sidebar and clearing progress
+function cancelCycleCreation(e) {
+  if (e) e.preventDefault();
+  if (confirm("Are you sure you want to cancel? All progress for this cycle will be discarded.")) {
+    selectedCourseIds.clear();
+    const welcomeSidebar = document.getElementById('welcomeSidebar');
+    const mainShell = document.getElementById('mainShell');
+    
+    if (welcomeSidebar) welcomeSidebar.style.display = 'flex';
+    if (mainShell) mainShell.classList.remove('builder-active');
+
+    if (cycleBuilderView) cycleBuilderView.style.display = 'none';
+    if (dashboardView) dashboardView.style.display = 'block';
+  }
+}
 
 // Render Header Degree Badges & Manage "Add Degree" button state
 function renderDegreeBadges() {
