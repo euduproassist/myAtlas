@@ -4,9 +4,7 @@ import { collection, getDocs, addDoc, serverTimestamp } from "https://www.gstati
 document.documentElement.style.overflowX = "hidden";
 document.body.style.overflowX = "hidden";
 
-// UI View Containers & Layout Shell
-const layoutShell = document.getElementById('layoutShell');
-const welcomeSidebar = document.getElementById('welcomeSidebar');
+// UI View Containers
 const dashboardView = document.getElementById('dashboardView');
 const cycleBuilderView = document.getElementById('cycleBuilderView');
 const openModalBtn = document.getElementById('openModalBtn');
@@ -27,35 +25,22 @@ let cycleConfig = {
   degreeTypes: ["Undergraduate Degrees", "Postgraduate Degrees"]
 };
 
-// Switch from Dashboard View to Full Screen Builder View
+// Switch from Dashboard View to Builder View
 function showCycleBuilder(e) {
   if (e) e.preventDefault();
-  
-  // Hide welcome sidebar and expand layout grid to full screen
-  if (welcomeSidebar) welcomeSidebar.style.display = 'none';
-  if (layoutShell) layoutShell.classList.add('builder-active');
-
-  // Switch views inside main section
   if (dashboardView) dashboardView.style.display = 'none';
   if (cycleBuilderView) cycleBuilderView.style.display = 'block';
-
   renderDegreeBadges();
   fetchMasterCourses();
 }
 
-// Switch back to Dashboard, restore sidebar, and clear progress
+// Switch back to Dashboard and clear progress
 function cancelCycleCreation(e) {
   if (e) e.preventDefault();
   if (confirm("Are you sure you want to cancel? All progress for this cycle will be discarded.")) {
     selectedCourseIds.clear();
-    
-    // Hide builder, show dashboard
     if (cycleBuilderView) cycleBuilderView.style.display = 'none';
     if (dashboardView) dashboardView.style.display = 'block';
-
-    // Restore welcome sidebar and layout grid
-    if (welcomeSidebar) welcomeSidebar.style.display = 'flex';
-    if (layoutShell) layoutShell.classList.remove('builder-active');
   }
 }
 
@@ -79,7 +64,7 @@ function renderDegreeBadges() {
     container.appendChild(badge);
   });
 
-  // If user selected all 3, disable add degree button
+  // If user selected all 3, disable add degree button as requested
   if (addBtn) {
     if (cycleConfig.degreeTypes.length >= 3) {
       addBtn.disabled = true;
@@ -252,12 +237,10 @@ async function handleContinueCycle(e) {
     
     alert(`Application cycle successfully created and saved!\nDocument ID: ${docRef.id}`);
     
-    // Reset, restore sidebar, and return to dashboard
+    // Reset and return to dashboard
     selectedCourseIds.clear();
     if (cycleBuilderView) cycleBuilderView.style.display = 'none';
     if (dashboardView) dashboardView.style.display = 'block';
-    if (welcomeSidebar) welcomeSidebar.style.display = 'flex';
-    if (layoutShell) layoutShell.classList.remove('builder-active');
   } catch (err) {
     console.error("Error saving application cycle:", err);
     alert("Failed to save application cycle. Check console for details.");
