@@ -718,6 +718,182 @@
       </div>
     </aside>
 
+        <!-- RIGHT CONTENT SECTION -->
+    <main class="main">
+      <!-- VIEW 1: Default Dashboard -->
+      <div id="dashboardView">
+        <h2 class="section-heading">How it works</h2>
+        <p class="section-sub">Follow these simple steps to set up your first application cycle and start receiving applications from students.</p>
+
+        <div class="grid-2x2">
+          <!-- Step 1 -->
+          <div class="step-card">
+            <div class="card-top-row">
+              <div class="step-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+                  <path d="M8 3v4M16 3v4M4 10h16"></path>
+                </svg>
+              </div>
+              <span class="step-number">1</span>
+            </div>
+            <div class="step-body">
+              <h3>Create Application Cycle</h3>
+              <p>Set opening/closing dates, select degree types and key details for your cycle.</p>
+            </div>
+            <a class="see-more action-step-1" href="#">See more →</a>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-card">
+            <div class="card-top-row">
+              <div class="step-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"></path>
+                </svg>
+              </div>
+              <span class="step-number">2</span>
+            </div>
+            <div class="step-body">
+              <h3>View Applications</h3>
+              <p>Review and manage incoming applications.</p>
+            </div>
+            <a class="see-more" id="viewAppsBtn" href="#">See more →</a>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-card">
+            <div class="card-top-row">
+              <div class="step-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <span class="step-number">3</span>
+            </div>
+            <div class="step-body">
+              <h3>Manage Fields</h3>
+              <p>Configure the information you want to collect from applicants.</p>
+            </div>
+            <a class="see-more" id="manageFieldsBtn" href="#">See more →</a>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="step-card">
+            <div class="card-top-row">
+              <div class="step-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M18 20V10M12 20V4M6 20v-6"></path>
+                </svg>
+              </div>
+              <span class="step-number">4</span>
+            </div>
+            <div class="step-body">
+              <h3>View Reports</h3>
+              <p>Track progress and download reports.</p>
+            </div>
+            <a class="see-more" id="viewReportsBtn" href="#">See more →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 2: Application Cycle Builder Workspace (Matches Screenshot Design) -->
+      <div id="cycleBuilderView" style="display: none;">
+        <div style="margin-bottom: 24px;">
+          <h2 class="section-heading" style="margin-bottom: 4px;">Create application cycle</h2>
+          <p class="section-sub" style="margin-bottom: 16px;">Set up your application cycle and choose the degree types you want to accept.</p>
+          
+          <!-- Selected Degree Badges Bar -->
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 18px; border: 1px solid var(--line); border-radius: 8px; background: #fafcfe;">
+            <div id="degreeBadgesContainer" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center; flex: 1;">
+              <!-- Injected dynamically -->
+            </div>
+            <button id="addDegreeDropdownBtn" class="btn-secondary" style="height: 36px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;">
+              Add degree <span style="font-size: 10px;">▼</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Form Tabs Header -->
+        <div style="display: flex; gap: 32px; border-bottom: 1px solid var(--line); margin-bottom: 28px;">
+          <div style="padding-bottom: 10px; border-bottom: 2px solid var(--blue); font-weight: 700; color: var(--navy); font-size: 14px;">Cycle details</div>
+          <div style="padding-bottom: 10px; color: var(--muted); font-size: 14px;">Application form</div>
+          <div style="padding-bottom: 10px; color: var(--muted); font-size: 14px;">Documents</div>
+        </div>
+
+        <!-- Application Cycle Dates Section -->
+        <div style="border: 1px solid var(--border-light); border-radius: 8px; padding: 24px; margin-bottom: 28px; background: #fafcfe;">
+          <h3 style="font-size: 16px; font-weight: 750; color: var(--navy); margin-bottom: 16px;">Application cycle dates</h3>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 12px;">
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 6px;">Opening date</label>
+              <input type="date" id="openingDateInput" class="form-input" style="background: #fff;">
+            </div>
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 6px;">Closing date</label>
+              <input type="date" id="closingDateInput" class="form-input" style="background: #fff;">
+            </div>
+          </div>
+          <p style="font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 6px;">
+            ℹ️ Students can submit applications only during this period.
+          </p>
+        </div>
+
+        <!-- Courses Table Section -->
+        <div style="border: 1px solid var(--border-light); border-radius: 8px; padding: 24px; margin-bottom: 28px; background: #fafcfe;">
+          <h3 id="courseSectionTitle" style="font-size: 16px; font-weight: 750; color: var(--navy); margin-bottom: 6px;">Undergraduate courses</h3>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 18px;">Select the Courses available in this application cycle.</p>
+
+          <!-- Filters Row -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 12px; margin-bottom: 20px;">
+            <select id="filterCourse" class="form-input" style="background: #fff; font-size: 13px;">
+              <option value="">All courses</option>
+            </select>
+            <select id="filterStudyMode" class="form-input" style="background: #fff; font-size: 13px;">
+              <option value="">All study modes</option>
+            </select>
+            <select id="filterCampus" class="form-input" style="background: #fff; font-size: 13px;">
+              <option value="">All campuses</option>
+            </select>
+            <button id="searchCoursesBtn" class="primary" style="height: 44px; margin: 0; padding: 0 20px; font-size: 13px;">🔍 Search</button>
+          </div>
+
+          <!-- Table Container -->
+          <div style="border: 1px solid var(--line); border-radius: 6px; background: #fff; overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13.5px;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12.5px;">
+                  <th style="padding: 12px 16px; width: 50px;"><input type="checkbox" id="selectAllCourses" style="accent-color: var(--blue);"></th>
+                  <th style="padding: 12px 16px; font-weight: 650;">Course ↕</th>
+                  <th style="padding: 12px 16px; font-weight: 650;">Study mode</th>
+                  <th style="padding: 12px 16px; font-weight: 650;">Campus</th>
+                  <th style="padding: 12px 16px; font-weight: 650;">Academic year</th>
+                </tr>
+              </thead>
+              <tbody id="masterCoursesTableBody">
+                <!-- Populated dynamically from Firestore master_courses -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Footer Count & Action inside table block -->
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 16px;">
+            <span id="selectedCourseCountText" style="font-size: 13px; font-weight: 650; color: var(--navy);">0 courses selected</span>
+            <button id="addSelectedCoursesBtn" class="btn-secondary" style="font-size: 13px;">+ Add selected courses</button>
+          </div>
+        </div>
+
+        <!-- Bottom Action Buttons -->
+        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px;">
+          <button id="cancelCycleBtn" class="btn-secondary">Cancel</button>
+          <button id="continueCycleBtn" class="btn-primary-modal">Continue →</button>
+        </div>
+      </div>
+    </main>
+
   </div>
 
   <!-- FOOTER -->
