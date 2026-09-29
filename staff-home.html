@@ -813,6 +813,147 @@
   </footer>
 </div>
 
+    <!-- =========================
+     MODAL POPUP DIALOG
+     ========================= -->
+<div class="modal-overlay" id="createModalOverlay">
+  <div class="modal-card" id="modalCardContainer">
+    
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-icon-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+            <path d="M16 2v4M8 2v4M3 10h18"></path>
+          </svg>
+        </div>
+        <div class="modal-title-area">
+          <h2>Create Application Cycle</h2>
+          <p>Set up a new application cycle for your institution. Choose a name and select the degree types you want to include.</p>
+        </div>
+      </div>
+      <button class="modal-close-btn" id="closeModalBtn" aria-label="Close modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- STEP 1: INITIAL CREATION FORM -->
+    <div class="modal-body" id="modalStep1Body">
+      <div class="form-group">
+        <label>Application Cycle Name <span>*</span></label>
+        <input type="text" class="form-input" placeholder="e.g. 2026 Academic Year" id="cycleNameInput">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label>Include Degree Types <span>*</span></label>
+        <div class="checkbox-list">
+          <label class="checkbox-item">
+            <input type="checkbox" name="degreeType" value="Undergraduate degrees">
+            <div class="checkbox-text">
+              <strong>Undergraduate Degrees</strong>
+              <span>e.g. Diploma, Bachelor's Degree</span>
+            </div>
+          </label>
+
+          <label class="checkbox-item">
+            <input type="checkbox" name="degreeType" value="Postgraduate degrees">
+            <div class="checkbox-text">
+              <strong>Postgraduate Degrees</strong>
+              <span>e.g. Postgraduate Diploma, Advanced Certificate</span>
+            </div>
+          </label>
+
+          <label class="checkbox-item">
+            <input type="checkbox" name="degreeType" value="Research degrees">
+            <div class="checkbox-text">
+              <strong>Master &amp; Doctoral (Research) Degrees</strong>
+              <span>e.g. Master's Degree, Doctorate (PhD)</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer" id="modalStep1Footer">
+      <button class="btn-secondary" id="cancelModalBtn">Cancel</button>
+      <button class="btn-primary-modal" id="submitCycleBtn">Create Cycle</button>
+    </div>
+
+    <!-- STEP 2: CYCLE CONFIGURATION DASHBOARD (Matches your screenshot) -->
+    <div class="modal-body" id="modalStep2Body" style="display: none; background: #f8fbfe; padding: 20px 24px;">
+      <!-- Top Selected Degree Badges Bar -->
+      <div style="background: #fff; border: 1px solid var(--border-light); border-radius: 8px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+        <div id="selectedBadgesContainer" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <!-- Dynamically injected badges -->
+        </div>
+        <div style="position: relative;">
+          <button id="addDegreeDropdownBtn" class="btn-secondary" style="height: 34px; padding: 0 12px; font-size: 12.5px; display: flex; align-items: center; gap: 6px;">
+            + Add degree <span style="font-size: 10px;">▼</span>
+          </button>
+          <div id="addDegreeDropdownList" style="display: none; position: absolute; right: 0; top: 40px; background: #fff; border: 1px solid var(--border-light); border-radius: 6px; box-shadow: var(--shadow); width: 180px; z-index: 10; padding: 6px 0;">
+            <!-- Remaining degrees populates here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs Header -->
+      <div style="display: flex; gap: 24px; border-bottom: 1px solid var(--line); margin-bottom: 20px; font-weight: 650; font-size: 13.5px;">
+        <div style="color: var(--blue); padding-bottom: 8px; border-bottom: 2px solid var(--blue);">Cycle details</div>
+        <div style="color: var(--muted); padding-bottom: 8px; cursor: pointer;">Application form</div>
+        <div style="color: var(--muted); padding-bottom: 8px; cursor: pointer;">Documents</div>
+      </div>
+
+      <!-- Application Cycle Dates Section -->
+      <div style="background: #fff; border: 1px solid var(--border-light); border-radius: 8px; padding: 18px; margin-bottom: 20px;">
+        <h4 style="font-size: 14px; font-weight: 750; color: var(--navy); margin-bottom: 12px;">Application cycle dates</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div>
+            <label style="display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px;">Opening date</label>
+            <input type="date" id="openingDateInput" class="form-input" style="height: 38px;">
+          </div>
+          <div>
+            <label style="display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px;">Closing date</label>
+            <input type="date" id="closingDateInput" class="form-input" style="height: 38px;">
+          </div>
+        </div>
+        <p style="font-size: 12px; color: var(--muted); margin-top: 10px;">ℹ Students can submit applications only during this period.</p>
+      </div>
+
+      <!-- Master Courses Table Section -->
+      <div style="background: #fff; border: 1px solid var(--border-light); border-radius: 8px; padding: 18px;">
+        <h4 style="font-size: 14px; font-weight: 750; color: var(--navy); margin-bottom: 4px;" id="tableHeadingTitle">Undergraduate courses</h4>
+        <p style="font-size: 12px; color: var(--muted); margin-bottom: 14px;">Select the Courses available in this application cycle.</p>
+        
+        <div style="border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 13px; text-align: left;">
+            <thead>
+              <tr style="background: #f4f9ff; border-bottom: 1px solid var(--line); color: var(--navy); font-weight: 700;">
+                <th style="padding: 10px 12px; width: 40px;"><input type="checkbox" id="selectAllCourses"></th>
+                <th style="padding: 10px 12px;">Course ↕</th>
+                <th style="padding: 10px 12px;">Study mode</th>
+                <th style="padding: 10px 12px;">Campus</th>
+                <th style="padding: 10px 12px;">Academic year</th>
+              </tr>
+            </thead>
+            <tbody id="masterCoursesTableBody">
+              <!-- Dynamically loaded from Firestore master_courses -->
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top: 12px; font-size: 12.5px; color: var(--muted); font-weight: 600;" id="selectedCourseCountText">0 courses selected</div>
+      </div>
+    </div>
+
+    <div class="modal-footer" id="modalStep2Footer" style="display: none;">
+      <button class="btn-secondary" id="cancelCycleBtn">Cancel</button>
+      <button class="btn-primary-modal" id="continueCycleBtn">Continue →</button>
+    </div>
+
+  </div>
+</div>
+
 
 <!-- Connect JavaScript file -->
 <script type="module" src="staff-home.js"></script>
