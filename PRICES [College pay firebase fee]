@@ -6,13 +6,13 @@ Atlas Payment Summary
 
 | Paid applications per year | Fee per application |
 | -------------------------: | ------------------: |
-|                  1 – 1,000 |                 R20 |
-|              1,001 – 3,000 |                 R17 |
-|              3,001 – 7,500 |                 R14 |
-|             7,501 – 15,000 |              R11.50 |
-|            15,001 – 30,000 |                  R9 |
-|            30,001 - 45,000 |                  R6 |
-|                    45,000+ |                  R5 |
+|                  1 – 1,000 |                 R10 |
+|              1,001 – 3,000 |                  R8 |
+|              3,001 – 7,500 |                  R6 |
+|             7,501 – 15,000 |                  R5 |
+|            15,001 – 30,000 |                  R4 |
+|            30,001 - 45,000 |                  R3 |
+|                    45,000+ |               R2.50 |
 
 Firebase / Google Cloud infrastructure: Paid directly by the college.
 
