@@ -22,7 +22,7 @@ let selectedCourseIds = new Set();
 // State tracking simulated for cycle creation
 let cycleConfig = {
   name: "2026 Academic Year",
-  degreeTypes: ["Undergraduate degrees", "Postgraduate degrees"]
+  degreeTypes: ["Undergraduate Degrees", "Postgraduate Degrees"]
 };
 
 // Switch from Dashboard View to Builder View (Hiding sidebar, expanding to full screen)
@@ -66,7 +66,7 @@ function renderDegreeBadges() {
   cycleConfig.degreeTypes.forEach((deg, index) => {
     const badge = document.createElement('div');
     badge.style.cssText = "display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid var(--border-light); padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 650; color: var(--navy);";
-    badge.innerHTML = `<span style="display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: #eaf5ff; color: var(--blue); margin-right: 2px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width: 13px; height: 13px;"><path d="M12 3a7 7 0 0 0-4 12.75V19h8v-3.25A7 7 0 0 0 12 3z"></path><path d="M9 22h6M9 19h6"></path></svg></span> ${deg} <span style="cursor: pointer; color: #8fa6c2; margin-left: 4px;" data-index="${index}">✕</span>`;
+    badge.innerHTML = `<span>🎓</span> ${deg} <span style="cursor: pointer; color: #8fa6c2; margin-left: 4px;" data-index="${index}">✕</span>`;
     
     badge.querySelector('span[data-index]').addEventListener('click', (ev) => {
       const idx = parseInt(ev.target.getAttribute('data-index'));
@@ -95,7 +95,7 @@ const addDegreeDropdownBtn = document.getElementById('addDegreeDropdownBtn');
 if (addDegreeDropdownBtn) {
   addDegreeDropdownBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    const available = ["Undergraduate degrees", "Postgraduate degrees", "Research degrees"]
+    const available = ["Undergraduate Degrees", "Postgraduate Degrees", "Master & Doctoral Degrees"]
       .filter(d => !cycleConfig.degreeTypes.includes(d));
     if (available.length === 0) return;
     
