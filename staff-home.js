@@ -95,7 +95,7 @@ const addDegreeDropdownBtn = document.getElementById('addDegreeDropdownBtn');
 if (addDegreeDropdownBtn) {
   addDegreeDropdownBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    const available = ["Undergraduate Degrees", "Postgraduate Degrees", "Master & Doctoral Degrees"]
+    const available = ["Undergraduate degrees", "Postgraduate degrees", "Research degrees"]
       .filter(d => !cycleConfig.degreeTypes.includes(d));
     if (available.length === 0) return;
     
