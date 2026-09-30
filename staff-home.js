@@ -66,7 +66,7 @@ function renderDegreeBadges() {
   cycleConfig.degreeTypes.forEach((deg, index) => {
     const badge = document.createElement('div');
     badge.style.cssText = "display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid var(--border-light); padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 650; color: var(--navy);";
-    badge.innerHTML = `<span>🎓</span> ${deg} <span style="cursor: pointer; color: #8fa6c2; margin-left: 4px;" data-index="${index}">✕</span>`;
+
     
     badge.querySelector('span[data-index]').addEventListener('click', (ev) => {
       const idx = parseInt(ev.target.getAttribute('data-index'));
