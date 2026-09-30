@@ -1,0 +1,362 @@
+# ATLAS
+
+## Commercial Fees & Payment Schedule
+
+**Document Type:** Commercial Pricing & Payment Schedule
+**Applicable To:** Atlas Admissions Platform
+**Currency:** South African Rand (ZAR)
+**Version:** 1.0
+
+---
+
+## 1. Purpose
+
+This Commercial Fees & Payment Schedule sets out the fees payable by the Institution for the implementation, licensing, support and usage of the Atlas Admissions Platform.
+
+The purpose of this document is to provide a clear and transparent description of the commercial charges applicable to the Institution and to distinguish Atlas charges from third-party infrastructure costs.
+
+This document is intended to form part of the commercial agreement between **Atlas** and the **Institution** and should be read together with the applicable Atlas service agreement, terms and conditions, and any agreed implementation or service documentation.
+
+---
+
+# 2. Atlas Commercial Fee Structure
+
+The Institution's Atlas charges consist of the following:
+
+| Fee                                        |                                   Amount | Frequency                        |
+| ------------------------------------------ | ---------------------------------------: | -------------------------------- |
+| Implementation, Customisation & Deployment |                              **R20,000** | Once-off                         |
+| Annual Atlas Licence & Support             |                              **R30,000** | Annual, paid upfront             |
+| Atlas Application Charge                   | **R7 per successfully paid application** | Annual, billed in arrears        |
+| Firebase / Google Cloud Infrastructure     |         **Paid directly by Institution** | According to third-party billing |
+
+All amounts stated in this document are in **South African Rand (ZAR)**.
+
+Unless otherwise stated in a signed agreement, applicable taxes, including VAT where legally applicable, are additional.
+
+---
+
+# 3. Implementation, Customisation & Deployment Fee
+
+## 3.1 Fee
+
+**R20,000 once-off**
+
+The Implementation, Customisation & Deployment Fee is payable once when the Institution initially adopts and deploys Atlas.
+
+## 3.2 Purpose
+
+This fee covers the initial professional services required to prepare Atlas for operational use by the Institution.
+
+The implementation process may include:
+
+* Initial Atlas environment configuration
+* Institution branding and identity configuration
+* Application process configuration
+* Application field configuration
+* Programme and course configuration
+* Campus configuration
+* Application-cycle configuration
+* Applicant-facing configuration
+* Staff and administrative access configuration
+* Role configuration
+* Initial workflow configuration
+* Payment configuration
+* Initial testing and verification
+* Deployment and production launch
+* Initial implementation support
+
+The specific configuration and customisation delivered to the Institution will be determined during the implementation process and may be documented in an agreed implementation specification.
+
+## 3.3 Payment
+
+The Implementation, Customisation & Deployment Fee is payable in accordance with the agreed implementation commencement terms.
+
+Atlas will commence implementation and deployment activities subject to the applicable commercial and contractual requirements being satisfied.
+
+## 3.4 Once-Off Nature
+
+The Implementation, Customisation & Deployment Fee is a once-off charge for the Institution's initial Atlas implementation.
+
+It does not constitute an annual fee.
+
+Additional implementation work, major customisation projects, integrations or services outside the agreed implementation scope may be quoted separately where applicable.
+
+---
+
+# 4. Annual Atlas Licence & Support Fee
+
+## 4.1 Fee
+
+**R30,000 per year**
+
+The Annual Atlas Licence & Support Fee provides the Institution with continued access to and use of the Atlas software platform during the applicable licence period, together with the ongoing software maintenance and support services included within the Atlas service offering.
+
+## 4.2 The Annual Licence Includes
+
+Subject to the applicable Atlas service agreement, the Annual Atlas Licence & Support Fee covers:
+
+* Continued licence to use Atlas
+* Continued access to the Atlas Admissions Platform
+* Ongoing software maintenance
+* Corrective maintenance and bug fixes
+* Software updates
+* Security-related software maintenance
+* Ongoing technical support
+* Assistance with normal Atlas platform operation
+* Support for authorised Institution users
+* Ongoing maintenance of the Atlas software platform
+* Continued access to applicable Atlas features included within the Institution's licensed service
+
+## 4.3 Licence Period
+
+The standard Atlas annual licence period operates on a yearly basis.
+
+For Institutions commencing Atlas during an existing calendar year, the first-year licence charge may be adjusted in accordance with the agreed commencement date and commercial terms.
+
+Thereafter, the Annual Atlas Licence & Support Fee is payable annually in advance in accordance with the applicable renewal date.
+
+## 4.4 What the Annual Licence Does Not Include
+
+The Annual Atlas Licence & Support Fee does not include the Institution's third-party infrastructure charges, including Firebase or Google Cloud charges.
+
+The Institution remains responsible for maintaining and paying for its required third-party infrastructure directly.
+
+---
+
+# 5. Atlas Application Charge
+
+## 5.1 Fee
+
+**R7 per successfully paid application**
+
+The Atlas Application Charge is a usage-based platform charge calculated according to the number of successfully paid applications processed through the Institution's Atlas environment during the applicable annual application period.
+
+There are **no application-volume tiers or bands**.
+
+Each successfully paid application is charged at the same rate of:
+
+> **R7 per successfully paid application**
+
+## 5.2 Purpose of the Application Charge
+
+The Application Charge represents the application-level use of the Atlas Admissions Platform.
+
+Atlas provides the digital application workflow through which applicants interact with the Institution's admissions process and through which authorised Institution personnel manage applications.
+
+Depending on the Institution's configured Atlas workflow, application-level functionality may include:
+
+* Application submission
+* Application data capture and management
+* Programme or course selection
+* Document submission
+* Document review workflows
+* Application status management
+* Applicant portal access
+* Applicant communications
+* Payment-related application workflow
+* Admissions review workflow
+* Admissions decision processing
+* Acceptance or rejection processing
+* Acceptance documentation
+* Application reporting and administration
+
+The Application Charge is therefore not a separate charge for each individual Atlas feature. It is the agreed **per-application usage charge for the Atlas admissions platform**.
+
+## 5.3 Billing Trigger
+
+An application becomes chargeable when the applicant has successfully completed payment of the applicable application fee through the Atlas application process.
+
+Accordingly:
+
+**Successfully paid application = 1 chargeable Atlas application**
+
+Applications that have not successfully completed the required application-fee payment do not generate an Atlas Application Charge.
+
+## 5.4 Annual Calculation
+
+The Institution's total Atlas Application Charge for the applicable annual application period is calculated as:
+
+**Number of successfully paid applications × R7**
+
+### Example
+
+If an Institution records 5,000 successfully paid applications during the applicable annual application period:
+
+**5,000 × R7 = R35,000**
+
+The Institution's application charge for that period would therefore be:
+
+**R35,000**
+
+## 5.5 Applicant Application Fee
+
+The Atlas Application Charge is separate from the application fee charged by the Institution to applicants.
+
+The Institution determines its own applicant application fee.
+
+The **R7 Atlas Application Charge is payable by the Institution to Atlas** and does not represent the applicant's application fee.
+
+---
+
+# 6. Firebase / Google Cloud Infrastructure
+
+## 6.1 Third-Party Infrastructure
+
+Firebase and/or Google Cloud infrastructure used in connection with the Institution's Atlas deployment is **not included in the Atlas fees**.
+
+The Institution is responsible for its applicable Firebase / Google Cloud account and associated infrastructure costs.
+
+## 6.2 Direct Billing
+
+Where the Atlas deployment uses Firebase and/or Google Cloud services, the applicable infrastructure charges are billed directly to the Institution by the relevant third-party service provider.
+
+Atlas does not include these infrastructure charges within the Annual Atlas Licence & Support Fee or Atlas Application Charge.
+
+## 6.3 Examples of Third-Party Infrastructure Costs
+
+Depending on the Institution's technical configuration and usage, third-party infrastructure charges may include:
+
+* Database usage
+* Cloud storage
+* Data transfer
+* Cloud Functions or other compute services
+* Authentication services
+* Other applicable Firebase services
+* Other applicable Google Cloud services
+
+Actual third-party infrastructure charges are determined by the applicable provider and the Institution's usage.
+
+---
+
+# 7. Annual Billing Cycle
+
+The standard Atlas annual application period operates from **1 January to 30 November**.
+
+The standard commercial cycle is as follows:
+
+| Date / Period           | Payment / Event                                                                                     |
+| ----------------------- | --------------------------------------------------------------------------------------------------- |
+| Initial go-live         | **R20,000** Implementation, Customisation & Deployment Fee                                          |
+| 1 January – 30 November | Annual Atlas Licence period and application activity                                                |
+| 1 January               | **R30,000** Annual Atlas Licence & Support Fee for the new licence year                             |
+| 1 January – 30 November | Successfully paid applications accumulate for application billing                                   |
+| 30 November             | Annual application-volume period closes                                                             |
+| 1–30 December           | Atlas calculates the Application Charge based on the final number of successfully paid applications |
+| 1–30 December           | Institution pays the Application Charge for the completed application period                        |
+| Following 1 January     | New annual licence period begins                                                                    |
+
+For an Institution commencing Atlas after 1 January, the first licence period and application period will be handled according to the agreed commencement date and applicable implementation terms.
+
+---
+
+# 8. Payment Responsibility
+
+The Institution is responsible for payment of:
+
+1. The Implementation, Customisation & Deployment Fee;
+2. The Annual Atlas Licence & Support Fee;
+3. The Atlas Application Charge; and
+4. Any applicable third-party infrastructure costs payable directly to Firebase / Google Cloud.
+
+Atlas fees and third-party infrastructure charges are separate financial obligations.
+
+Payment of Firebase / Google Cloud charges does not satisfy or reduce any amount payable to Atlas.
+
+---
+
+# 9. Fee Summary
+
+| Component                                  |                                   Amount | Paid To                 | Frequency                     |
+| ------------------------------------------ | ---------------------------------------: | ----------------------- | ----------------------------- |
+| Implementation, Customisation & Deployment |                              **R20,000** | Atlas                   | Once-off                      |
+| Annual Atlas Licence & Support             |                              **R30,000** | Atlas                   | Annual, upfront               |
+| Atlas Application Charge                   | **R7 per successfully paid application** | Atlas                   | Annual, in arrears            |
+| Firebase / Google Cloud Infrastructure     |                                 Variable | Firebase / Google Cloud | According to provider billing |
+
+---
+
+# 10. Commercial Model in Simple Terms
+
+The Atlas commercial model can be summarised as follows:
+
+### Initial implementation
+
+**R20,000 once-off**
+
+The Institution pays for the initial configuration, customisation, testing and deployment of Atlas.
+
+### Annual Atlas licence
+
+**R30,000 per year**
+
+The Institution pays for its continued licence to use Atlas together with the applicable ongoing software maintenance and support.
+
+### Application usage
+
+**R7 per successfully paid application**
+
+The Institution pays for application-level usage of the Atlas Admissions Platform based on the number of successfully paid applications processed during the annual application period.
+
+### Cloud infrastructure
+
+**Paid separately by the Institution**
+
+The Institution pays Firebase / Google Cloud directly for its own infrastructure and usage.
+
+---
+
+# 11. Commercial Separation
+
+For the avoidance of doubt:
+
+**Atlas fees are not Firebase / Google Cloud fees.**
+
+The Annual Atlas Licence & Support Fee and Atlas Application Charge are fees payable to Atlas for the Atlas software platform and associated services.
+
+Firebase / Google Cloud charges relate to third-party infrastructure used by the Institution and are payable separately by the Institution.
+
+The two categories of costs should therefore be treated as separate commercial and accounting items.
+
+---
+
+# 12. Pricing Schedule
+
+The following pricing constitutes the standard Atlas commercial pricing:
+
+| Item                                       |                           Standard Price |
+| ------------------------------------------ | ---------------------------------------: |
+| Implementation, Customisation & Deployment |                     **R20,000 once-off** |
+| Annual Atlas Licence & Support             |                     **R30,000 per year** |
+| Atlas Application Charge                   | **R7 per successfully paid application** |
+| Firebase / Google Cloud Infrastructure     |         **Paid directly by Institution** |
+
+Any deviation from the above pricing must be expressly agreed in writing by the authorised representatives of both parties.
+
+---
+
+## 13. Acceptance
+
+By signing the applicable Atlas agreement, the Institution acknowledges that it has reviewed and understood the Atlas commercial fee structure, including the distinction between Atlas charges and third-party Firebase / Google Cloud infrastructure charges.
+
+**For the Institution**
+
+Institution Name: ______________________________________
+
+Authorised Representative: ______________________________
+
+Position: ______________________________________________
+
+Signature: _____________________________________________
+
+Date: _________________________________________________
+
+**For Atlas**
+
+Authorised Representative: ______________________________
+
+Position: ______________________________________________
+
+Signature: _____________________________________________
+
+Date: _________________________________________________
