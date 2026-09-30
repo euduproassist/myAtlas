@@ -22,7 +22,7 @@ let selectedCourseIds = new Set();
 // State tracking simulated for cycle creation
 let cycleConfig = {
   name: "2026 Academic Year",
-  degreeTypes: ["Undergraduate Degrees", "Postgraduate Degrees"]
+  degreeTypes: ["Undergraduate degrees", "Postgraduate degrees"]
 };
 
 // Switch from Dashboard View to Builder View (Hiding sidebar, expanding to full screen)
