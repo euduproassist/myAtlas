@@ -1,0 +1,1089 @@
+Yeah bro. Let’s define the **whole game properly**, not just the home screen.
+
+The core idea is:
+
+> **DLS26 structure + street-football world + shorter, more personal matches.**
+
+The player should immediately understand the game without needing a tutorial explaining what it is.
+
+# 1. The basic idea
+
+You start as a small street-football crew.
+
+You don't have a huge stadium, famous club, expensive kits or superstar squad.
+
+You have:
+
+* A small street pitch
+* A handful of players
+* Basic kits
+* Low reputation
+* Little money
+* A neighbourhood to represent
+
+Then you build upward.
+
+**Play → earn → recruit → improve → unlock → compete → build reputation → repeat.**
+
+The long-term fantasy is:
+
+> **Start playing football in your neighbourhood and eventually become one of the biggest street-football crews in the world.**
+
+---
+
+# 2. What makes it "street football"
+
+This is important because we don't want it to simply become DLS with a different background.
+
+The football itself should feel different.
+
+Instead of 11v11 professional football:
+
+### 4v4 or 5v5
+
+I'd lean toward **5v5** as the main format.
+
+You have:
+
+* 1 goalkeeper
+* 4 outfield players
+
+Matches happen on compact pitches.
+
+No enormous stadium.
+
+No traditional league stadium atmosphere.
+
+Instead:
+
+* Fences
+* Concrete
+* Graffiti
+* Apartment buildings
+* Shops
+* Crowds standing around the pitch
+* Music
+* Street lights
+* Different neighbourhood environments
+
+And because it's 5v5, the player gets much more involved.
+
+Every player matters.
+
+---
+
+# 3. Your team
+
+Your team is essentially your street crew.
+
+At the beginning you might have:
+
+**STREET KINGS**
+
+Overall:
+
+**62 OVR**
+
+Squad:
+
+| Player | Position | OVR |
+| ------ | -------- | --: |
+| Jay    | GK       |  58 |
+| Leo    | DEF      |  61 |
+| Malik  | MID      |  64 |
+| Diego  | MID      |  60 |
+| Kai    | ATT      |  63 |
+
+As you progress, you recruit better players.
+
+Eventually your team might become:
+
+**STREET KINGS**
+
+**89 OVR**
+
+with highly developed players.
+
+The player isn't just collecting numbers.
+
+Each player should have:
+
+* Speed
+* Dribbling
+* Passing
+* Shooting
+* Defending
+* Physical
+* Skill level
+* Position
+* Special abilities
+
+---
+
+# 4. Player recruitment
+
+This is one of the biggest parts of the game.
+
+You need somewhere to discover players.
+
+You could have a **PLAYER MARKET / SCOUT** screen.
+
+For example:
+
+### STREET SCOUT
+
+**Available Players**
+
+**Rico**
+
+* ATT
+* 74 OVR
+* Speed 82
+* Shooting 76
+* Dribbling 79
+* Cost: 4,500 coins
+
+**Musa**
+
+* MID
+* 71 OVR
+* Passing 84
+* Dribbling 73
+* Cost: 3,800 coins
+
+**Andre**
+
+* DEF
+* 76 OVR
+* Defending 81
+* Physical 78
+* Cost: 5,200 coins
+
+This gives the player that:
+
+> "I need that guy."
+
+feeling.
+
+---
+
+# 5. Players should have rarity
+
+This is where the FC Mobile influence can come in.
+
+Players can have different levels of rarity.
+
+For example:
+
+**Common**
+
+**Rare**
+
+**Elite**
+
+**Street Star**
+
+**Legend**
+
+But these shouldn't necessarily be real-world footballers.
+
+They're fictional characters.
+
+That means we avoid expensive football licensing initially.
+
+A rare player could have:
+
+> ⚡ **Street Specialist**
+
+A special player might have:
+
+> 🎯 **Dead-Eye Finisher**
+
+Another:
+
+> 🌀 **Skill Runner**
+
+Another:
+
+> 🧱 **Wall Defender**
+
+Now collecting players becomes part of the game.
+
+---
+
+# 6. The home screen
+
+When you open the game, you're **inside your football world**.
+
+Not a boring menu.
+
+You see your street.
+
+Your players might be standing around the pitch.
+
+Someone is practicing shots.
+
+Someone is sitting near the fence.
+
+A ball is rolling around.
+
+The environment changes as your crew grows.
+
+### Top
+
+**STREET KINGS**
+
+**Level 12**
+
+💰 24,850
+
+💎 340
+
+### Centre
+
+Your street environment.
+
+Then the biggest button:
+
+# PLAY MATCH
+
+Underneath:
+
+**NEXT MATCH**
+
+Street Kings
+vs
+City Crew
+
+**Division 3**
+
+---
+
+# 7. HOME
+
+The Home page is basically your headquarters.
+
+It contains:
+
+### Your crew
+
+Team name
+Team rating
+Reputation
+
+### Next Match
+
+Your upcoming opponent.
+
+### Current competition
+
+For example:
+
+**CITY STREET LEAGUE**
+
+### Progress
+
+**Division 3**
+
+3 wins required to advance.
+
+### Objectives
+
+Examples:
+
+* Score 5 goals
+* Win 2 matches
+* Make 10 assists
+* Sign 1 player
+
+### News/events
+
+Limited-time street tournaments.
+
+So when the player opens the game, there's always something happening.
+
+---
+
+# 8. PLAY / MATCHES
+
+This is the heart of the game.
+
+Press:
+
+# PLAY MATCH
+
+You get a matchup screen.
+
+---
+
+### STREET KINGS
+
+**OVR 68**
+
+VS
+
+### CITY CREW
+
+**OVR 67**
+
+**Division 3**
+
+**Reward**
+
+💰 850 coins
+⭐ 120 reputation
+
+Then:
+
+# PLAY
+
+---
+
+# 9. The actual match
+
+This needs to be fast.
+
+I wouldn't make the player spend 20–30 minutes playing one match.
+
+Something like:
+
+### 5–7 minutes
+
+would make much more sense for mobile.
+
+The camera is a third-person/angled football camera.
+
+You control one player at a time.
+
+The other players are AI-controlled.
+
+Controls could be simple:
+
+### Left side
+
+Virtual joystick.
+
+### Right side
+
+**PASS**
+
+**SHOOT**
+
+**SPRINT**
+
+**SKILL**
+
+And context-sensitive actions.
+
+For example:
+
+If you're defending:
+
+**TACKLE**
+
+**SWITCH**
+
+If you're near your goal:
+
+**CLEAR**
+
+This gives us a relatively simple control system.
+
+---
+
+# 10. Street football gameplay
+
+This is where we make it feel different from DLS.
+
+The pitch is small.
+
+So there's much more:
+
+* Close control
+* Dribbling
+* Quick passes
+* Skills
+* 1v1 situations
+* Rebounds
+* Fast counterattacks
+* Tight defending
+
+You can perform things like:
+
+**Stepovers**
+
+**Body feints**
+
+**Nutmegs**
+
+**Flicks**
+
+**Quick turns**
+
+**Skill combinations**
+
+But we shouldn't turn the game into a ridiculous arcade game.
+
+It should still feel like football.
+
+---
+
+# 11. Match moments
+
+We can have special moments.
+
+For example:
+
+You're losing:
+
+**3–2**
+
+10 seconds remaining.
+
+You get the ball.
+
+You dribble past one defender.
+
+Skill move.
+
+Shot.
+
+**GOAL!**
+
+3–3.
+
+Crowd goes crazy.
+
+That type of moment is what makes the game memorable.
+
+---
+
+# 12. Match rewards
+
+After every match:
+
+### MATCH COMPLETE
+
+**STREET KINGS 4–2 CITY CREW**
+
+Goals:
+
+⚽ Kai ×2
+⚽ Malik
+⚽ Diego
+
+Rewards:
+
+**+850 Coins**
+
+**+120 Reputation**
+
+**+25 XP**
+
+Maybe a player performed well and receives:
+
+**+1 Form**
+
+---
+
+# 13. TEAM page
+
+This is where you manage your squad.
+
+### YOUR TEAM
+
+**STREET KINGS**
+
+**OVR 72**
+
+Then your five starters appear on the pitch.
+
+GK
+
+DEF
+
+MID
+
+MID
+
+ATT
+
+You can tap a player.
+
+Then:
+
+### PLAYER PROFILE
+
+**KAI**
+
+ATTACKER
+
+**74 OVR**
+
+Speed: 82
+Shooting: 77
+Passing: 69
+Dribbling: 84
+Physical: 61
+
+**LEVEL 12/20**
+
+Buttons:
+
+**UPGRADE**
+
+**TRAIN**
+
+**SELL**
+
+**DETAILS**
+
+---
+
+# 14. Training
+
+Players can improve.
+
+You might spend coins or training points.
+
+Example:
+
+Kai:
+
+74 OVR
+
+After training:
+
+75 OVR
+
+Eventually:
+
+80 OVR
+
+But development should have limits.
+
+You shouldn't instantly turn a 60-rated player into a 95-rated monster.
+
+That makes player progression meaningful.
+
+---
+
+# 15. CLUB / CREW page
+
+This is the bigger progression system.
+
+Your crew has a reputation.
+
+For example:
+
+### STREET KINGS
+
+**REPUTATION 18,420**
+
+You can upgrade:
+
+**Pitch**
+
+**Training**
+
+**Locker Room**
+
+**Street Facility**
+
+**Crowd**
+
+**Crew Reputation**
+
+As these improve, your environment changes.
+
+At the beginning:
+
+Small concrete pitch.
+
+Later:
+
+Much bigger, better-looking street football arena.
+
+---
+
+# 16. The world map
+
+This could become one of the coolest pages.
+
+Instead of a normal league menu, you have a **street-football world map**.
+
+You start in:
+
+### NEIGHBOURHOOD
+
+Then unlock:
+
+### CITY
+
+Then:
+
+### METRO
+
+Then:
+
+### NATIONAL
+
+Then:
+
+### INTERNATIONAL
+
+For example:
+
+**Neighbourhood Tournament**
+
+↓
+
+**City Street League**
+
+↓
+
+**Metro Championship**
+
+↓
+
+**National Street Cup**
+
+↓
+
+**World Street Championship**
+
+The player feels like they're actually travelling upward.
+
+---
+
+# 17. Different street environments
+
+This is where the game becomes globally recognizable.
+
+You don't make the entire game look like one country's street.
+
+Different competitions can have different environments.
+
+For example:
+
+### Urban District
+
+Apartment buildings and concrete.
+
+### Coastal District
+
+Outdoor pitch near the sea.
+
+### Downtown
+
+High-rise buildings and night matches.
+
+### Residential
+
+Small neighbourhood streets.
+
+### Industrial
+
+Warehouses and metal fencing.
+
+### Tropical
+
+Palm trees and colourful buildings.
+
+### Old Town
+
+Narrow streets and older architecture.
+
+The football stays recognizable everywhere.
+
+---
+
+# 18. Competitions
+
+There should be several ways to play.
+
+### STREET LEAGUE
+
+Your main progression.
+
+Win matches → earn points → advance.
+
+---
+
+### STREET CUP
+
+Knockout tournament.
+
+Lose once and you're eliminated.
+
+Win the tournament for a big reward.
+
+---
+
+### CHALLENGE MATCH
+
+Special conditions.
+
+Examples:
+
+**Score 3 goals**
+
+**Win without conceding**
+
+**Score with a defender**
+
+**Win in 4 minutes**
+
+---
+
+### STREET EVENTS
+
+Limited-time competitions.
+
+For example:
+
+**Night Kings**
+
+Matches played under lights.
+
+Or:
+
+**World Street Festival**
+
+A special event with unique rewards.
+
+---
+
+# 19. Online multiplayer
+
+This is something I'd put **later**, not at launch.
+
+Eventually:
+
+### ONLINE STREET
+
+You play against another real player.
+
+5v5.
+
+Your team vs theirs.
+
+Ranking:
+
+Bronze
+Silver
+Gold
+Elite
+Champion
+
+But this dramatically increases development complexity.
+
+So the first version should work without it.
+
+---
+
+# 20. STORE
+
+The Store is where monetization comes in.
+
+But it shouldn't be:
+
+> "Pay or you can't play."
+
+Instead, purchases can accelerate or customize the experience.
+
+Possible categories:
+
+### PLAYER PACKS
+
+Contains fictional players.
+
+### COINS
+
+Normal progression currency.
+
+### GEMS
+
+Premium currency.
+
+### KITS
+
+Cosmetic.
+
+### BALLS
+
+Cosmetic.
+
+### PITCH CUSTOMIZATION
+
+Cosmetic.
+
+### EMOTES
+
+Cosmetic.
+
+### SEASON PASS
+
+Monthly/seasonal rewards.
+
+---
+
+# 21. The important part: the player always has something to chase
+
+This is the real DLS/FC-style loop.
+
+You currently have:
+
+**Team OVR 67**
+
+You see a:
+
+**78 OVR attacker**
+
+You want him.
+
+To get him:
+
+**Play matches**
+
+↓
+
+**Earn coins**
+
+↓
+
+**Win tournaments**
+
+↓
+
+**Improve team**
+
+↓
+
+**Unlock higher competition**
+
+↓
+
+**Earn more**
+
+↓
+
+**Recruit better players**
+
+↓
+
+**Improve again**
+
+That's the engine of the game.
+
+---
+
+# 22. Objectives
+
+Every day/week, the player gets objectives.
+
+### DAILY
+
+Play 2 matches.
+
+Score 3 goals.
+
+Make 5 assists.
+
+### WEEKLY
+
+Win 8 matches.
+
+Recruit 2 players.
+
+Upgrade 3 players.
+
+### SEASON
+
+Reach Division 1.
+
+Win the City Cup.
+
+Score 50 goals.
+
+Rewards can include:
+
+Coins
+Gems
+Players
+Kits
+XP
+Cosmetics
+
+---
+
+# 23. Your player identity
+
+One thing I'd add beyond DLS is **your street identity**.
+
+The player can customize:
+
+**Crew name**
+
+**Logo**
+
+**Kit**
+
+**Colours**
+
+**Pitch**
+
+**Banner**
+
+**Celebration**
+
+**Emotes**
+
+Maybe eventually:
+
+**Captain/avatar**
+
+So the player feels:
+
+> "This is MY crew."
+
+rather than just managing a generic football team.
+
+---
+
+# 24. The complete screen structure
+
+So if we simplify the whole game into pages:
+
+### 🏠 HOME
+
+Your street world, next match, objectives, currencies.
+
+### ⚽ MATCHES
+
+League, Cup, Challenges, Events.
+
+### 👥 TEAM
+
+Starting five, formation, squad management.
+
+### 👤 PLAYERS
+
+Player collection, recruitment, upgrades, training.
+
+### 🌆 CLUB / CREW
+
+Your facilities, reputation, customization and progression.
+
+### 🗺️ WORLD
+
+Different cities, districts and competitions.
+
+### 🏆 EVENTS
+
+Limited-time competitions and seasonal content.
+
+### 🛒 STORE
+
+Players, packs, currency, cosmetics and passes.
+
+### ⚙️ SETTINGS
+
+Account, controls, graphics, audio, language, support.
+
+---
+
+# 25. The entire player journey
+
+A new player downloads the game.
+
+### Day 1
+
+Creates:
+
+**STREET KINGS**
+
+Gets a basic squad.
+
+Plays first street match.
+
+Wins.
+
+Gets coins.
+
+Signs first new player.
+
+---
+
+### Week 1
+
+Team improves.
+
+Unlocks better neighbourhood.
+
+Starts competing in city competitions.
+
+Gets attached to certain players.
+
+---
+
+### Month 1
+
+Team becomes much stronger.
+
+Unlocks new environments.
+
+Has rare players.
+
+Competes in higher divisions.
+
+Customizes the crew.
+
+---
+
+### Long term
+
+The goal becomes:
+
+> **Build the ultimate street-football crew.**
+
+Not:
+
+> "Finish the game."
+
+There isn't really an endpoint.
+
+There are always:
+
+* Better players
+* New seasons
+* New competitions
+* New environments
+* New cosmetics
+* New challenges
+* New events
+* Higher rankings
+
+---
+
+# The most important thing
+
+I wouldn't try to build **all of this** immediately.
+
+For a solo developer, the first playable version should be brutally small:
+
+**Home → Team → Players → Match → Rewards → Upgrade → Match again.**
+
+That's it.
+
+If that six-part loop feels good, **then** add:
+
+**League → Cups → Events → World map → customization → online multiplayer.**
+
+Because the game doesn't need 20 pages to be fun.
+
+It needs one extremely satisfying loop:
+
+> **I play a street match → I earn something → I improve my crew → I want to play the next match.**
+
+That's the actual foundation of our **street DLS** idea.
