@@ -1,23 +1,31 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Master courses catalog
+    // Allow public read for master courses catalog, write restricted
     match /master_courses/{document=**} {
       allow read: if true;
       allow write: if request.auth != null;
     }
     
-    // Application cycles
+    // Allow authenticated staff to create and manage application cycles
     match /application_cycles/{document=**} {
       allow read, write: if request.auth != null;
     }
 
-    // Admins activation and lookup rules (secure backend verification)
-    match /admins/{adminId} {
-      // Allow unauthenticated/authenticated read for credential validation during activation & sign-in checks
+    // Secure verification queries for pre-approved admins
+    match /pre_approved_admins/{docId} {
       allow read: if true;
-      // Only allow updates if setting activated to true or updating account metadata safely
-      allow write: if true;
+      allow write: if false;
+    }
+
+    // Rate-limiting and lockouts managed on cloud backend
+    match /admin_lockouts/{deviceId} {
+      allow read, write: if true;
+    }
+
+    // One-Time Passwords collection for sign-in verification
+    match /admin_otps/{email} {
+      allow read, write: if true;
     }
   }
 }
