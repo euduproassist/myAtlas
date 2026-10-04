@@ -137,21 +137,4 @@ newPassInput.addEventListener('input', (e) => {
     critUpper.textContent = '✕ Include at least one uppercase letter';
   }
 
-  // Number
-  if (/[0-9]/.test(val)) {
-    critNumber.className = 'criterion valid';
-    critNumber.textContent = '✓ Includes at least one number';
-  } else {
-    critNumber.className = 'criterion invalid';
-    critNumber.textContent = '✕ Includes at least one number';
-  }
-
-  // Underscore
-  if (/_/.test(val)) {
-    critUnderscore.className = 'criterion valid';
-    critUnderscore.textContent = '✓ Includes at least one underscore';
-  } else {
-    critUnderscore.className = 'criterion invalid';
-    critUnderscore.textContent = '✕ Includes at least one underscore';
-  }
-});
+  
