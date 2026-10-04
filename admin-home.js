@@ -172,27 +172,21 @@ activationForm.addEventListener('submit', async (e) => {
   const newPass = document.getElementById('newpass').value;
   const confirmPass = document.getElementById('confirmpass').value;
 
-  // 1. Validate passwords match first
+  // 1. Restrict activation strictly to 'admin' role for now
+  if (role !== 'admin') {
+    alert('Activation is currently only available for Admin roles. Academic head and System administration activation will be enabled soon.');
+    return;
+  }
+
+  // 2. Validate passwords match
   if (newPass !== confirmPass) {
     alert('New password and confirm password do not match.');
     return;
   }
 
   try {
-    // 2. Determine pre-approved collection and target profile collection based on selected role
-    let preApprovedCollectionName = 'pre_approved_admins';
-    let targetCollectionName = 'admins';
-
-    if (role === 'academic-head') {
-      preApprovedCollectionName = 'pre_approved_academic_heads';
-      targetCollectionName = 'academic_heads';
-    } else if (role === 'system-administration') {
-      preApprovedCollectionName = 'pre_approved_system_admins';
-      targetCollectionName = 'system_admins';
-    }
-
-    // 3. Query the respective pre-approved collection in Firestore to verify user details
-    const preApprovedRef = collection(db, preApprovedCollectionName);
+    // 3. Query Firestore 'pre_approved_admins' to check if manually entered details match
+    const preApprovedRef = collection(db, 'pre_approved_admins');
     const q = query(
       preApprovedRef,
       where('email', '==', email),
@@ -200,7 +194,7 @@ activationForm.addEventListener('submit', async (e) => {
       where('firstname', '==', firstname),
       where('surname', '==', surname),
       where('phone', '==', phone),
-      where('role', '==', role),
+      where('role', '==', 'admin'),
       where('temppass', '==', tempPass)
     );
 
@@ -215,8 +209,8 @@ activationForm.addEventListener('submit', async (e) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, newPass);
     const user = userCredential.user;
 
-    // 5. Save user profile details to their respective Firestore collection
-    await setDoc(doc(db, targetCollectionName, user.uid), {
+    // 5. Save user profile details to Firestore 'admins' collection
+    await setDoc(doc(db, 'admins', user.uid), {
       uid: user.uid,
       initials,
       firstname,
@@ -227,7 +221,7 @@ activationForm.addEventListener('submit', async (e) => {
       createdAt: new Date().toISOString()
     });
 
-    alert('Your MyAtlas account has been successfully activated! You can now sign in.');
+    alert('Your MyAtlas Admin account has been successfully activated! You can now sign in.');
     
     // Switch to Sign-In view automatically
     window.history.pushState({ view: 'signin' }, '', '#sign-in');
@@ -238,4 +232,3 @@ activationForm.addEventListener('submit', async (e) => {
     alert('Error during activation: ' + error.message);
   }
 });
-
