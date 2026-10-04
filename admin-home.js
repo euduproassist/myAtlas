@@ -172,6 +172,62 @@ activationForm.addEventListener('submit', async (e) => {
   const newPass = document.getElementById('newpass').value;
   const confirmPass = document.getElementById('confirmpass').value;
 
+  // 1. Validate passwords match first
+  if (newPass !== confirmPass) {
+    alert('New password and confirm password do not match.');
+    return;
+  }
+
+  try {
+    // 2. Determine pre-approved collection and target profile collection based on selected role
+    let preApprovedCollectionName = 'pre_approved_admins';
+    let targetCollectionName = 'admins';
+
+    if (role === 'academic-head') {
+      preApprovedCollectionName = 'pre_approved_academic_heads';
+      targetCollectionName = 'academic_heads';
+    } else if (role === 'system-administration') {
+      preApprovedCollectionName = 'pre_approved_system_admins';
+      targetCollectionName = 'system_admins';
+    }
+
+    // 3. Query the respective pre-approved collection in Firestore to verify user details
+    const preApprovedRef = collection(db, preApprovedCollectionName);
+    const q = query(
+      preApprovedRef,
+      where('email', '==', email),
+      where('initials', '==', initials),
+      where('firstname', '==', firstname),
+      where('surname', '==', surname),
+      where('phone', '==', phone),
+      where('role', '==', role),
+      where('temppass', '==', tempPass)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      alert('Activation failed: The details entered do not match our pre-approved records in the database. Please verify your information.');
+      return;
+    }
+
+    // 4. Create user in Firebase Authentication
+    const userCredential = await createUserWithEmailAndPassword(auth, email, newPass);
+    const user = userCredential.user;
+
+    // 5. Save user profile details to their respective Firestore collection
+    await setDoc(doc(db, targetCollectionName, user.uid), {
+      uid: user.uid,
+      initials,
+      firstname,
+      surname,
+      email,
+      phone,
+      role,
+      createdAt: new Date().toISOString()
+    });
+
+    alert('Your MyAtlas account has been successfully activated! You can now sign in.');
     
     // Switch to Sign-In view automatically
     window.history.pushState({ view: 'signin' }, '', '#sign-in');
