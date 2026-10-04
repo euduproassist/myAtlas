@@ -172,56 +172,6 @@ activationForm.addEventListener('submit', async (e) => {
   const newPass = document.getElementById('newpass').value;
   const confirmPass = document.getElementById('confirmpass').value;
 
-  // 1. Restrict activation strictly to 'admin' role for now
-  if (role !== 'admin') {
-    alert('Activation is currently only available for Admin roles. Academic head and System administration activation will be enabled soon.');
-    return;
-  }
-
-  // 2. Validate passwords match
-  if (newPass !== confirmPass) {
-    alert('New password and confirm password do not match.');
-    return;
-  }
-
-  try {
-    // 3. Query Firestore 'pre_approved_admins' to check if manually entered details match
-    const preApprovedRef = collection(db, 'pre_approved_admins');
-    const q = query(
-      preApprovedRef,
-      where('email', '==', email),
-      where('initials', '==', initials),
-      where('firstname', '==', firstname),
-      where('surname', '==', surname),
-      where('phone', '==', phone),
-      where('role', '==', 'admin'),
-      where('temppass', '==', tempPass)
-    );
-
-    const querySnapshot = await getDocs(q);
-
-    if (querySnapshot.empty) {
-      alert('Activation failed: The details entered do not match our pre-approved records in the database. Please verify your information.');
-      return;
-    }
-
-    // 4. Create user in Firebase Authentication
-    const userCredential = await createUserWithEmailAndPassword(auth, email, newPass);
-    const user = userCredential.user;
-
-    // 5. Save user profile details to Firestore 'admins' collection
-    await setDoc(doc(db, 'admins', user.uid), {
-      uid: user.uid,
-      initials,
-      firstname,
-      surname,
-      email,
-      phone,
-      role,
-      createdAt: new Date().toISOString()
-    });
-
-    alert('Your MyAtlas Admin account has been successfully activated! You can now sign in.');
     
     // Switch to Sign-In view automatically
     window.history.pushState({ view: 'signin' }, '', '#sign-in');
