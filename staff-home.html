@@ -178,9 +178,6 @@
     display: grid;
     grid-template-columns: 460px minmax(0, 1fr);
   }
-   .shell.builder-active {
-    grid-template-columns: 1fr;
-   }
 
   /* LEFT SIDEBAR (Welcome Column) */
   .welcome {
@@ -691,11 +688,11 @@
     </div>
   </header>
 
-    <!-- MAIN SHELL -->
-  <div class="shell" id="mainShell">
+  <!-- MAIN SHELL -->
+  <div class="shell">
 
     <!-- LEFT WELCOME SECTION -->
-    <aside class="welcome" id="welcomeSidebar">
+    <aside class="welcome">
       <span class="welcome-back">Welcome back</span>
       <h1>Welcome to myAtlas Staff Portal</h1>
       <p>You can create application cycles, manage applications, view submitted documents and update their status — all from one place.</p>
@@ -721,11 +718,10 @@
       </div>
     </aside>
 
-    <!-- RIGHT CONTENT SECTION -->
-    <main class="main" id="mainContentArea">
+        <!-- RIGHT CONTENT SECTION -->
+    <main class="main">
       <!-- VIEW 1: Default Dashboard -->
       <div id="dashboardView">
-
         <h2 class="section-heading">How it works</h2>
         <p class="section-sub">Follow these simple steps to set up your first application cycle and start receiving applications from students.</p>
 
