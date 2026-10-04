@@ -1,1 +1,1 @@
-GET https://euduproassist.github.io/myAtlas/Firebase-config.js net::ERR_ABORTED 404 (Not Found)
+Uncaught SyntaxError: The requested module 'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js' does not provide an export named 'setTimestamp' (at admin-home.js:3:50)
