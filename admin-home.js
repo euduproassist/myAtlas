@@ -1,5 +1,4 @@
-document.documentElement.style.overflowX = "hidden";
-document.body.style.overflowX = "hidden";
+
 
 const viewWelcome = document.getElementById('view-welcome');
 const viewForm = document.getElementById('view-form');
