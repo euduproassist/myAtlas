@@ -156,3 +156,91 @@ newPassInput.addEventListener('input', (e) => {
   }
 });
 
+// --- ACTIVATION SUBMISSION LOGIC ---
+const activationForm = document.querySelector('#view-form form');
+
+activationForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const initials = document.getElementById('initials').value.trim();
+  const firstname = document.getElementById('firstname').value.trim();
+  const surname = document.getElementById('surname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const role = document.getElementById('role').value;
+  const tempPass = document.getElementById('temppass').value;
+  const newPass = document.getElementById('newpass').value;
+  const confirmPass = document.getElementById('confirmpass').value;
+
+  // 1. Validate passwords match
+  if (newPass !== confirmPass) {
+    alert('New password and confirm password do not match.');
+    return;
+  }
+
+  // 2. Map roles to their respective Firestore pre-approved and active profile collections
+  let preApprovedCollection = '';
+  let targetCollection = '';
+
+  if (role === 'admin') {
+    preApprovedCollection = 'pre_approved_admins';
+    targetCollection = 'admins';
+  } else if (role === 'academic_head') {
+    preApprovedCollection = 'pre_approved_academic_heads';
+    targetCollection = 'academic_heads';
+  } else if (role === 'system_admin') {
+    preApprovedCollection = 'pre_approved_system_admins';
+    targetCollection = 'system_admins';
+  } else {
+    alert('Please select a valid role.');
+    return;
+  }
+
+  try {
+    // 3. Query corresponding Firestore pre-approved collection to verify entered details
+    const preApprovedRef = collection(db, preApprovedCollection);
+    const q = query(
+      preApprovedRef,
+      where('email', '==', email),
+      where('initials', '==', initials),
+      where('firstname', '==', firstname),
+      where('surname', '==', surname),
+      where('phone', '==', phone),
+      where('role', '==', role),
+      where('temppass', '==', tempPass)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      alert('Activation failed: The details entered do not match our pre-approved records in the database. Please verify your information.');
+      return;
+    }
+
+    // 4. Create user in Firebase Authentication
+    const userCredential = await createUserWithEmailAndPassword(auth, email, newPass);
+    const user = userCredential.user;
+
+    // 5. Save user profile details to designated Firestore collection
+    await setDoc(doc(db, targetCollection, user.uid), {
+      uid: user.uid,
+      initials,
+      firstname,
+      surname,
+      email,
+      phone,
+      role,
+      createdAt: new Date().toISOString()
+    });
+
+    alert('Your MyAtlas account has been successfully activated! You can now sign in.');
+    
+    // Switch to Sign-In view automatically
+    window.history.pushState({ view: 'signin' }, '', '#sign-in');
+    showSigninView();
+
+  } catch (error) {
+    console.error('Activation Error:', error);
+    alert('Error during activation: ' + error.message);
+  }
+});
