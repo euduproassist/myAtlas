@@ -12,11 +12,6 @@ service cloud.firestore {
       allow read, write: if request.auth != null;
     }
 
-    // Pre-approved admin records used for validation during activation
-    match /pre_approved_admins/{adminId} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
 
     // Admin profiles collection created upon successful activation
     match /admins/{adminId} {
