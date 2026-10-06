@@ -1,0 +1,306 @@
+Yes. I checked the current public information, and there are **more competitors than just the three we discussed**. But they don't all compete with Atlas in the same way.
+
+The important distinction is:
+
+* **Direct-ish competitors:** admissions/college-management systems that a private college could choose instead of Atlas.
+* **Broader competitors:** full college/SIS/ERP platforms that include admissions among many other functions.
+* **Indirect competitors:** basic forms, custom portals, WhatsApp/email, or application marketplaces.
+
+## 1. STRATMIS — probably the most important price benchmark
+
+STRATMIS
+
+STRATMIS markets itself as an **all-in-one college management platform** for South African colleges and training providers.
+
+It covers:
+
+* Online applications and enrolment
+* Student profiles
+* Academic progress
+* Student portals
+* eLearning
+* Email/SMS communication
+* Reporting
+* Website builder
+* SETA reporting
+* Assessments/certification
+* Finance
+* Payments
+* Regulatory integrations
+* WhatsApp
+* HR
+* Custom workflows/integrations at Enterprise level
+
+Its published prices are:
+
+* **Starter: R2,499/month = R29,988/year**
+* **Professional: R4,999/month = R59,988/year**
+* **Enterprise: custom**
+
+The Starter already includes online applications and enrolment; Professional adds financial management, advanced assessment/certification and regulatory integrations. ([StratMis][1])
+
+**Why it matters to Atlas:**
+This is the clearest example we've found of a relatively affordable product that gives a college **more than Atlas does for less than or around Atlas's annual price**.
+
+But it is also a broader system. Atlas isn't trying to replace academic management, finance, HR, etc.
+
+---
+
+## 2. MySpace-Edu — very relevant to private/TVET colleges
+
+MySpace-Edu
+
+MySpace-Edu describes itself as a **system of record for South African TVET colleges and training providers**.
+
+It covers:
+
+* Online applications
+* Document uploads
+* Application review
+* Missing-information requests
+* Offers
+* Automatic conversion of accepted applicants into student records
+* Student registration
+* Student records
+* Fees
+* Results
+* Document requests
+* Assessment
+* Moderation
+* SETA/QCTO compliance
+* Finance
+* Student self-service
+* Multi-campus operations
+
+So its workflow essentially goes:
+
+**Application → Admission → Student record → Registration → Academic/Compliance/Finance**
+
+That's considerably broader than Atlas. ([MySpace Edu][2])
+
+### Price
+
+**Not publicly disclosed.**
+
+They state that pricing is **custom and based on student count**, rather than publishing a fixed amount. ([MySpace Edu][2])
+
+So I would **not invent a price** for them.
+
+**Competitive threat to Atlas:** High for colleges that want one system to run most of their operation.
+
+---
+
+# 3. MyEncore
+
+MyEncore
+
+MyEncore is interesting because it explicitly targets:
+
+* Private colleges
+* TVET colleges
+* FET institutions
+* Tertiary institutions
+* Skills-development providers
+
+For colleges it covers:
+
+* Online applications
+* Registration/enrolment
+* Document verification
+* Student records
+* Re-registration
+* Waiting lists
+* Attendance
+* Fees
+* Payments
+* Communication
+* Campus management
+* NATED/NCV programmes
+* QCTO-related workflows
+* LMS integration
+* CRM
+* WhatsApp Business automation
+* Adult-learner finance
+* Student numbers/cards
+* Employer/SETA workflows
+
+([MyEncore][3])
+
+### Price
+
+This is where you have to be careful.
+
+MyEncore publishes **R50/learner/year** pricing for its **K-12 school product**, but explicitly says **that price does NOT apply to colleges**.
+
+For colleges and QCTO training providers, it uses a **custom quote based on institution size, requirements and modules**. It also says multi-campus discounts are available. ([MyEncore][4])
+
+So:
+
+**College price: unknown/custom.**
+
+Don't use the R50 figure when comparing Atlas against MyEncore's college offering.
+
+---
+
+# 4. eduSYMS
+
+eduSYMS
+
+This is another broader competitor.
+
+It covers things such as:
+
+* Student/staff records
+* Attendance
+* Fees
+* Student/parent portals
+* Messaging
+* WhatsApp Business integration
+* Digital portfolios
+* Assessment/moderation
+* QCTO/NLRD exports
+* Mobile apps
+* Multi-campus operations
+* Compliance
+* HEMIS/CHE packaging
+* Group dashboards
+* Custom integrations
+* Offline-first infrastructure
+* POPIA/audit logs
+
+Their current pricing structure is institution-based with learner-count bands:
+
+* **Starter:** quote
+* **Growth:** quote; up to ~2,000 learners
+* **Institution:** quote; up to ~10,000 learners
+* **Enterprise:** custom for 10,000+ learners
+
+They do **not publish the rand amounts**. ([eduSYMS][5])
+
+So again, we can't honestly say whether it's cheaper or more expensive than Atlas without an actual quote.
+
+---
+
+# 5. NOLTEC / CollegePRO-cloud
+
+NOLTEC
+
+This one is interesting because its published pricing is much lower.
+
+NOLTEC advertises **CollegePRO-cloud at R1,000/month**, although the page says this price is typical for **up to 100 students** and that additional modules can be added. It also lists an annual support fee of **R1,200 per system**. ([Noltec][6])
+
+That's roughly:
+
+**R12,000/year software + R1,200 annual support = R13,200/year**
+
+at the stated small-institution example, before additional modules.
+
+But **do not compare R13,200 directly to Atlas's R40k** as though they're equivalent products. The published NOLTEC price is explicitly tied to a very small student count and additional modules can change the cost.
+
+Still, it's evidence that **low-cost college-management software exists in South Africa.**
+
+---
+
+# 6. ITS / iEnabler
+
+Adapt IT / ITS iEnabler is a different class of competitor.
+
+This is the kind of system you're already familiar with from universities.
+
+It is associated with institutional systems covering areas such as:
+
+* Applications
+* Student administration
+* Registration
+* Academic records
+* Finance
+* Student self-service
+* Institutional administration
+
+But I **wouldn't treat ITS/iEnabler as Atlas's primary competitor**.
+
+Why?
+
+Because Atlas isn't trying to become a university/college ERP.
+
+A college choosing between:
+
+> **“Do we want Atlas?”**
+
+and
+
+> **“Do we want a full institutional management system?”**
+
+is making a much bigger technology decision than your intended Atlas sale.
+
+So iEnabler is more of a **benchmark for what mature institutional systems look like**, rather than the competitor you should obsess over.
+
+---
+
+# 7. There's also a completely different competitor: doing it manually
+
+This is actually **very important for Atlas**.
+
+Your competition isn't only software.
+
+For a small private college, the alternative could simply be:
+
+**Website → Google/Microsoft form → email → WhatsApp → Excel → staff folders → manual status updates**
+
+And some institutions still use downloadable forms and email/WhatsApp alongside online forms.
+
+That means your real sales pitch isn't necessarily:
+
+> “Atlas is better than MySpace-Edu.”
+
+It can be:
+
+> **“You don't need to continue running admissions through forms, WhatsApp, email and spreadsheets.”**
+
+That's a different competitive battle.
+
+---
+
+# The landscape looks like this
+
+| Competitor            | Main purpose           | Admissions | Academic |            Finance | Compliance |                   Published college price |
+| --------------------- | ---------------------- | ---------: | -------: | -----------------: | ---------: | ----------------------------------------: |
+| **Atlas**             | Admissions platform    |          ✅ |        ❌ | Limited/admissions |          ❌ |                          **R40k + usage** |
+| **STRATMIS**          | College ERP            |          ✅ |        ✅ |                  ✅ |          ✅ |                    **R29,988–R59,988/yr** |
+| **MySpace-Edu**       | College SIS/ERP        |          ✅ |        ✅ |                  ✅ |          ✅ |                                **Custom** |
+| **MyEncore**          | College management     |          ✅ |        ✅ |                  ✅ |          ✅ |                                **Custom** |
+| **eduSYMS**           | Education/SIS platform |          ✅ |        ✅ |                  ✅ |          ✅ |                                **Custom** |
+| **NOLTEC CollegePRO** | College management     |          ✅ |     Some |            Modules |       Some | **From ~R1k/mo for stated small example** |
+| **ITS/iEnabler**      | Institutional ERP/SIS  |          ✅ |        ✅ |                  ✅ |          ✅ |                     **Custom/enterprise** |
+| Manual processes      | Admissions only        |         ⚠️ |        ❌ |                  ❌ |          ❌ |                                  Variable |
+
+### The biggest thing I learned from this comparison
+
+**Atlas isn't competing in an empty market.**
+
+There are already cheap-ish systems that can do admissions **and much more**.
+
+That doesn't mean Atlas is doomed. It means your positioning has to be extremely precise:
+
+> **Atlas is not the cheapest college-management system.**
+> **Atlas is not an ERP.**
+> **Atlas is a specialised admissions platform for institutions that want to modernise admissions without replacing their existing college-management systems.**
+
+And this actually makes your **standalone/no-ERP-integration boundary** more understandable.
+
+A college that already has its academic/finance/student system can potentially use Atlas purely for:
+
+**Recruitment/application → documents → admissions review → decision → acceptance**
+
+and leave everything after that to its existing system.
+
+That's the market gap I'd investigate rather than trying to beat STRATMIS on feature count.
+
+**One warning:** for MySpace-Edu, MyEncore, eduSYMS and ITS, I cannot give you a credible exact rand price from public information because they don't publish a comparable college price. I would rather tell you **“custom quote”** than make up a number. ([MySpace Edu][2])
+
+[1]: https://www.stratmis.co.za/?utm_source=chatgpt.com "STRATMIS: LMS + MIS + ERP"
+[2]: https://myspace-edu.co.za/?utm_source=chatgpt.com "MySpace-Edu | Student Management System | SETA & QCTO Compliant"
+[3]: https://www-vps.myencore.co.za/colleges.html?utm_source=chatgpt.com "Training Enrolment Software for SA Colleges | MyEncore"
+[4]: https://www-vps.myencore.co.za/pricing.html?utm_source=chatgpt.com "MyEncore Pricing | School Management Software — R50/Learner/Year"
+[5]: https://edusyms.com/pricing/?utm_source=chatgpt.com "Pricing — transparent plans for SA institutions | eduSYMS"
+[6]: https://www.noltec.co.za/?utm_source=chatgpt.com "NOLTEC Home"
