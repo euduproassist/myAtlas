@@ -245,12 +245,6 @@ activationForm.addEventListener('submit', async (e) => {
   }
 });
 
-  } catch (error) {
-    console.error('Activation Error:', error);
-    alert('Error during activation: ' + error.message);
-  }
-});
-
 // --- SIGN-IN & OTP LOGIC ---
 const signinForm = document.getElementById('signin-form');
 const signinEmailInput = document.getElementById('signin-email');
