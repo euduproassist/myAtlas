@@ -1,38 +1,85 @@
-Atlas Payment Summary
+# Atlas Pricing & Payment Structure
 
-1. Implementation, Customisation & Deployment: R20,000 once-off
-2. Annual Atlas Licence & Support: R30,000 per year, paid upfront
-3. Atlas Application Charge: Tiered per successfully paid application, billed annually in arrears
+## Atlas Payment Summary
 
-| Paid applications per year | Fee per application |
-| -------------------------: | ------------------: |
-|                  1 – 1,000 |                 R10 |
-|              1,001 – 3,000 |                  R8 |
-|              3,001 – 7,500 |                  R6 |
-|             7,501 – 15,000 |                  R5 |
-|            15,001 – 30,000 |                  R4 |
-|            30,001 - 45,000 |                  R3 |
-|                    45,000+ |               R2.50 |
+1. **Implementation, Customisation & Deployment:** R20,000 once-off
+2. **Annual Atlas Licence & Support:** R30,000 per year, paid upfront
+3. **Atlas Application Processing Charge:** R5 per qualifying application, billed annually in arrears
+4. **Maximum Billable Application Volume:** 25,000 qualifying applications per annual licence period
+5. **Maximum Annual Atlas Charge:** R155,000 per annual licence period
+6. **Firebase / Google Cloud Infrastructure:** Paid directly by the college
 
-Firebase / Google Cloud infrastructure: Paid directly by the college.
+---
 
+## Implementation, Customisation & Deployment
 
-Implementation, Customisation & Deployment
+| Date                | Payment / Event                                                              |
+| ------------------- | ---------------------------------------------------------------------------- |
+| **Initial go-live** | **R20,000** Implementation, Customisation & Deployment fee is paid once-off. |
 
-| Date                      | Payment / Event                                                          |
-| ------------------------- | ------------------------------------------------------------------------ |
-| When first going live     | R20,000 Implementation, Customisation & Deployment fee paid once-off     |
+This fee applies to the initial implementation, institution-specific configuration, customisation and production deployment of Atlas.
 
-Annual Licence & Application Charges
+---
 
-| Date                        | Payment / Event                                                                                                         |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-|     1 January-30 November   | R30,000(or less depending on which month they went live) Annual Atlas Licence & Support for the current year is paid    |
-|     1 January – 30 November | Application cycle operates and successfully paid applications accumulate                                                |
-|     30 November             | Application cycle and annual application-volume period close                                                            |
-|     1–30 December           | Atlas Application Charge for the current year is paid based on the final number of successfully paid applications       |
-|     1 January               | R30,000 Annual Atlas Licence & Support for the new year is paid                                                         |
-|     1 January – 30 November | New application cycle operates and successfully paid applications accumulate                                            |
-|     30 November             | New application cycle and annual application-volume period close                                                        |
-|     1–30 December           | Atlas Application Charge for the completed year is paid based on the final number of successfully paid applications     |
-|     1 January/next year     | R30,000 Annual Atlas Licence & Support for the new year is paid                                                         |
+## Annual Licence & Application Processing Charges
+
+| Date                        | Payment / Event                                                                                                                       |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **1 January**               | **R30,000** Annual Atlas Licence & Support fee for the new annual licence period is paid upfront.                                     |
+| **1 January – 30 November** | The application cycle operates and qualifying applications accumulate for the annual application-processing period.                   |
+| **30 November**             | The annual application-processing period closes.                                                                                      |
+| **1 – 30 December**         | Atlas calculates the Application Processing Charge at **R5 per qualifying application** processed during the completed annual period. |
+| **1 January – 30 November** | The new annual application-processing period operates and qualifying applications accumulate.                                         |
+| **30 November**             | The new annual application-processing period closes.                                                                                  |
+| **1 – 30 December**         | The Application Processing Charge for the completed period is calculated and invoiced.                                                |
+
+### Annual Application Volume Limit
+
+The Atlas Application Processing Charge applies to a maximum of **25,000 qualifying applications per annual licence period**.
+
+Applications above 25,000 during the same annual period may continue to be processed through Atlas; however, **no additional Atlas Application Processing Charge will apply to applications above the 25,000-application threshold**.
+
+Accordingly:
+
+**25,000 applications × R5 = R125,000 maximum Application Processing Charges**
+
+plus:
+
+**R30,000 Annual Atlas Licence & Support**
+
+= **R155,000 maximum recurring Atlas charge per annual licence period.**
+
+---
+
+## Pricing Structure
+
+| Charge                                         |                                               Amount |
+| ---------------------------------------------- | ---------------------------------------------------: |
+| **Implementation, Customisation & Deployment** |                                 **R20,000 once-off** |
+| **Annual Atlas Licence & Support**             |                   **R30,000 per year, paid upfront** |
+| **Atlas Application Processing Charge**        |                    **R5 per qualifying application** |
+| **Maximum billable application volume**        | **25,000 qualifying applications per annual period** |
+| **Maximum recurring Atlas charge**             |                       **R155,000 per annual period** |
+| **Firebase / Google Cloud infrastructure**     |                     **Paid directly by the college** |
+
+---
+
+## Definition of a Qualifying Application
+
+For billing purposes, a **Qualifying Application** is an application submitted through Atlas that meets the institution's defined application-processing requirements and enters the institution's designated admissions processing workflow.
+
+The Application Processing Charge is separate from any application fee that the college may or may not charge to applicants.
+
+---
+
+## Infrastructure Costs
+
+Atlas does not include the institution's Google Cloud or Firebase infrastructure consumption within the Atlas fees.
+
+The college is responsible for its own **Google Cloud / Firebase infrastructure and associated usage charges**, which are billed directly by Google.
+
+These infrastructure costs are separate from:
+
+* the Implementation, Customisation & Deployment fee;
+* the Annual Atlas Licence & Support fee; and
+* the Atlas Application Processing Charge.
