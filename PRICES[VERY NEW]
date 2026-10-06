@@ -1,0 +1,366 @@
+# Atlas Pricing & Commercial Model
+
+## 1. Pricing Overview
+
+Atlas uses a simple, scalable commercial model designed for private colleges of different sizes.
+
+The model consists of:
+
+1. **Implementation, Customisation & Deployment** — R20,000 once-off
+2. **Annual Atlas Licence & Support** — R40,000 per year
+3. **Atlas Application Charge** — R2 per qualifying application
+4. **Maximum Billable Application Volume** — 30,000 qualifying applications per year
+
+The college pays its **Google Cloud/Firebase infrastructure costs directly**. These infrastructure costs are separate from Atlas's software fees.
+
+---
+
+# 2. Implementation, Customisation & Deployment
+
+### Once-off fee: R20,000
+
+A once-off **R20,000 Implementation, Customisation & Deployment Fee** is payable before Atlas is deployed for the institution.
+
+This covers the initial configuration and preparation of Atlas for the college's admissions environment, including:
+
+* Institutional configuration
+* Application cycle configuration
+* Programme/course configuration
+* Admissions fields and requirements
+* Document requirements
+* Application workflow configuration
+* User and staff-role setup
+* Email and notification configuration
+* Branding and institutional details
+* Production deployment
+* Initial testing and go-live preparation
+
+The purpose of this fee is to cover the work required to take the standard Atlas platform and configure it for the institution's specific admissions operation.
+
+This is a **once-off fee** and is not charged again each year unless the institution requests a separately agreed major implementation or development project outside the standard Atlas platform.
+
+---
+
+# 3. Annual Atlas Licence & Support
+
+### R40,000 per year
+
+The institution pays an **Annual Atlas Licence & Support Fee of R40,000**, payable upfront at the beginning of each annual licence period.
+
+The annual licence provides the institution with continued use of the Atlas platform and standard support.
+
+The licence covers the Atlas software platform, including its core admissions functionality.
+
+Core functionality includes:
+
+* Online applications
+* Application management
+* Applicant profiles
+* Programme/course selection
+* Document submission
+* Document review
+* Application statuses
+* Applicant communications
+* Automated notifications
+* Application decision workflows
+* Acceptance and rejection processes
+* Acceptance letters
+* Applicant portal functionality
+* Administrative dashboards
+* Reporting
+* Standard configuration tools
+* Staff/user management
+* Standard system maintenance and support
+
+Atlas remains a standardised SaaS platform. Institutional administrators can configure supported settings and admissions requirements without requiring Atlas to be rebuilt for every application cycle.
+
+---
+
+# 4. Atlas Application Charge
+
+### R2 per qualifying application
+
+In addition to the annual licence, Atlas charges **R2 for each qualifying application processed through the platform**.
+
+The application charge is:
+
+* Calculated based on qualifying applications during the annual licence period
+* **Billed annually in arrears**
+* Separate from the annual licence fee
+* Not dependent on whether the institution charges applicants an application fee
+
+### Definition of a Qualifying Application
+
+A **Qualifying Application** is an application submitted through Atlas that satisfies the institution's defined submission requirements and enters the institution's designated admissions processing workflow.
+
+A qualifying application does not need to result in:
+
+* Admission
+* Acceptance
+* Registration
+* Enrolment
+
+The charge is based on the application entering the admissions process, not on whether the applicant is ultimately accepted.
+
+---
+
+# 5. Maximum Billable Application Volume
+
+Atlas applies a maximum billable application volume of:
+
+### 30,000 qualifying applications per annual licence period
+
+The R2 application charge applies to the first 30,000 qualifying applications in an annual licence period.
+
+Therefore:
+
+**30,000 × R2 = R60,000 maximum annual application charge**
+
+Combined with the R40,000 annual licence:
+
+### Maximum recurring annual Atlas charge: R100,000
+
+This provides institutions with predictable maximum annual Atlas software costs.
+
+---
+
+# 6. The 30,000 Application Ceiling Is Not a Processing Limit
+
+The 30,000 figure is a **billing ceiling**, not a technical application-processing limit.
+
+Atlas does not automatically stop accepting applications when an institution reaches 30,000 applications.
+
+For example, an institution could process:
+
+* 30,000 applications
+* 40,000 applications
+* 100,000 applications
+
+through Atlas.
+
+The institution simply does not incur additional Atlas application charges after the first 30,000 qualifying applications during that annual licence period.
+
+The purpose of the ceiling is to provide institutions with cost certainty while allowing Atlas to support institutions as their admissions operation grows.
+
+---
+
+# 7. Historical Student and Applicant Records
+
+Atlas does **not charge institutions based on the total number of records stored in the platform**.
+
+An institution may accumulate substantial historical records over multiple years without receiving additional Atlas charges merely because those records remain stored.
+
+For example, an institution could eventually have:
+
+* 100,000 historical records
+* 300,000 historical records
+* 500,000 historical records
+
+without the number of historical records itself changing the Atlas licence price.
+
+The Atlas application charge is based on **qualifying applications processed during the current annual licence period**, not the institution's total historical database size.
+
+The institution remains responsible for the associated Google Cloud/Firebase infrastructure costs generated by its use and retention of data.
+
+---
+
+# 8. Example Annual Costs
+
+### Small institution — 1,000 applications
+
+Annual licence: R40,000
+
+Application charge:
+
+1,000 × R2 = R2,000
+
+**Total annual Atlas charge: R42,000**
+
+---
+
+### Institution — 5,000 applications
+
+Annual licence: R40,000
+
+Application charge:
+
+5,000 × R2 = R10,000
+
+**Total annual Atlas charge: R50,000**
+
+---
+
+### Institution — 10,000 applications
+
+Annual licence: R40,000
+
+Application charge:
+
+10,000 × R2 = R20,000
+
+**Total annual Atlas charge: R60,000**
+
+---
+
+### Institution — 20,000 applications
+
+Annual licence: R40,000
+
+Application charge:
+
+20,000 × R2 = R40,000
+
+**Total annual Atlas charge: R80,000**
+
+---
+
+### Institution — 30,000 applications
+
+Annual licence: R40,000
+
+Application charge:
+
+30,000 × R2 = R60,000
+
+**Total annual Atlas charge: R100,000**
+
+This is the maximum recurring annual Atlas charge under the standard pricing model.
+
+---
+
+### Institution — 50,000 applications
+
+Annual licence: R40,000
+
+Billable applications: 30,000
+
+Application charge:
+
+30,000 × R2 = R60,000
+
+**Total annual Atlas charge: R100,000**
+
+The additional 20,000 applications are not subject to further Atlas application charges.
+
+---
+
+# 9. Payment Structure
+
+Atlas separates its fees into two payment schedules.
+
+### At implementation
+
+The institution pays:
+
+**R20,000 Implementation, Customisation & Deployment**
+
+before production deployment.
+
+### At the beginning of each annual licence period
+
+The institution pays:
+
+**R40,000 Annual Atlas Licence & Support**
+
+upfront.
+
+### At the end of each annual licence period
+
+Atlas calculates the institution's qualifying application volume and invoices the applicable:
+
+**R2 per qualifying application**
+
+subject to the maximum 30,000 billable applications.
+
+This structure provides Atlas with predictable recurring licence revenue while allowing the application component to reflect actual usage.
+
+---
+
+# 10. Google Cloud / Firebase Infrastructure
+
+Atlas's software fees and the institution's infrastructure costs are separate.
+
+The institution is responsible for its own Google Cloud/Firebase usage and associated infrastructure charges.
+
+These may include costs associated with:
+
+* Database usage
+* Storage
+* File/document storage
+* Data transfer
+* Reads and writes
+* Cloud Functions
+* Authentication
+* Other applicable Google Cloud/Firebase services
+
+Atlas does not add these infrastructure charges to its software invoice.
+
+The institution therefore retains direct responsibility for the infrastructure environment supporting its Atlas deployment.
+
+Atlas remains responsible for the technical configuration and operation of the Atlas application within the agreed environment.
+
+---
+
+# 11. What the Annual Atlas Fee Represents
+
+The Annual Atlas Licence & Support is not a hosting or storage fee.
+
+It represents the institution's right to use the Atlas software platform and receive standard Atlas support and maintenance.
+
+The institution's Google Cloud/Firebase bill represents the underlying infrastructure consumed by its deployment.
+
+This separation allows institutions to clearly distinguish between:
+
+**Atlas software costs**
+
+and
+
+**cloud infrastructure costs.**
+
+---
+
+# 12. Pricing Philosophy
+
+Atlas is designed to provide a predictable and scalable admissions platform for small and medium-sized private colleges.
+
+The pricing model intentionally avoids charging institutions according to the total number of historical records stored in Atlas.
+
+Instead, pricing reflects two components:
+
+### Fixed platform value
+
+The **R40,000 annual licence** represents the institution's ongoing use of the Atlas platform.
+
+### Admissions activity
+
+The **R2 application charge** allows the cost of Atlas to scale with the institution's active admissions activity.
+
+The **30,000 application billing ceiling** ensures that an institution's annual Atlas software costs remain predictable even as its admissions volume grows substantially.
+
+---
+
+# 13. Standard Atlas Pricing Summary
+
+| Fee                                        |                           Amount | Payment                   |
+| ------------------------------------------ | -------------------------------: | ------------------------- |
+| Implementation, Customisation & Deployment |                      **R20,000** | Once-off                  |
+| Annual Atlas Licence & Support             |                      **R40,000** | Annually upfront          |
+| Atlas Application Charge                   |               **R2/application** | Annually in arrears       |
+| Maximum billable applications              |                  **30,000/year** | —                         |
+| Maximum application charge                 |                 **R60,000/year** | —                         |
+| Maximum recurring Atlas charge             |                **R100,000/year** | —                         |
+| Google Cloud/Firebase                      | **Paid directly by institution** | According to actual usage |
+
+### Final Standard Pricing
+
+**R20,000 once-off implementation**
+
+**+ R40,000 annual Atlas licence**
+
+**+ R2 per qualifying application**
+
+**with a maximum of 30,000 billable applications per annual licence period.**
+
+**Maximum recurring Atlas charge: R100,000 per year.**
+
+This pricing model applies regardless of the institution's total historical record count.
