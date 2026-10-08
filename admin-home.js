@@ -241,23 +241,6 @@ activationForm.addEventListener('submit', async (e) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, newPass);
     const user = userCredential.user;
 
-    // 5. Save user profile details to designated Firestore collection
-    await setDoc(doc(db, targetCollection, user.uid), {
-      uid: user.uid,
-      initials,
-      firstname,
-      surname,
-      email,
-      phone,
-      role,
-      createdAt: new Date().toISOString()
-    });
-
-    alert('Your MyAtlas account has been successfully activated! You can now sign in.');
-    
-    // Switch to Sign-In view automatically
-    window.history.pushState({ view: 'signin' }, '', '#sign-in');
-    showSigninView();
 
   } catch (error) {
     console.error('Activation Error:', error);
