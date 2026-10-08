@@ -297,8 +297,4 @@ activationForm.addEventListener('submit', async (e) => {
     window.history.pushState({ view: 'signin' }, '', '#sign-in');
     showSigninView();
 
-  } catch (error) {
-    console.error('Activation Error:', error);
-    alert('Error during activation: ' + error.message);
-  }
-});
+ 
