@@ -290,6 +290,8 @@ activationForm.addEventListener('submit', async (e) => {
       }
     });
 
+    alert('Your MyAtlas account has been successfully activated! Please check your email inbox to view your MyAtlas Personnel Number.');
+
     
     // Switch to Sign-In view automatically
     window.history.pushState({ view: 'signin' }, '', '#sign-in');
