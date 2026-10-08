@@ -156,6 +156,41 @@ newPassInput.addEventListener('input', (e) => {
   }
 });
 
+// --- AUTO-CAPITALIZE SPECIFIC INPUT FIELDS ON BLUR ---
+const autoCapitalizeIds = ['initials', 'firstname', 'surname', 'email'];
+
+autoCapitalizeIds.forEach((id) => {
+  const inputElem = document.getElementById(id);
+  if (inputElem) {
+    inputElem.addEventListener('blur', () => {
+      inputElem.value = inputElem.value.toUpperCase();
+    });
+  }
+});
+
+// --- ACTIVATION SUBMISSION LOGIC ---
+const activationForm = document.querySelector('#view-form form');
+
+activationForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // Convert inputs to uppercase before reading values
+  autoCapitalizeIds.forEach((id) => {
+    const inputElem = document.getElementById(id);
+    if (inputElem) {
+      inputElem.value = inputElem.value.toUpperCase();
+    }
+  });
+
+  const initials = document.getElementById('initials').value.trim();
+  const firstname = document.getElementById('firstname').value.trim();
+  const surname = document.getElementById('surname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const role = document.getElementById('role').value;
+  const tempPass = document.getElementById('temppass').value;
+  const newPass = document.getElementById('newpass').value;
+  const confirmPass = document.getElementById('confirmpass').value;
 
   // 1. Validate passwords match
   if (newPass !== confirmPass) {
