@@ -241,6 +241,60 @@ activationForm.addEventListener('submit', async (e) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, newPass);
     const user = userCredential.user;
 
+    // 5. Generate 8-digit MyAtlas Personnel Number (2-digit Year prefix + 6 random digits)
+    const currentYearSuffix = new Date().getFullYear().toString().slice(-2);
+    const randomDigits = Math.floor(100000 + Math.random() * 900000).toString();
+    const personnelNumber = `${currentYearSuffix}${randomDigits}`;
+
+    // 6. Save user profile details with personnelNumber to designated Firestore collection
+    await setDoc(doc(db, targetCollection, user.uid), {
+      uid: user.uid,
+      personnelNumber,
+      initials,
+      firstname,
+      surname,
+      email,
+      phone,
+      role,
+      createdAt: new Date().toISOString()
+    });
+
+    // 7. Queue branded confirmation email via Firebase Trigger Email extension
+    await setDoc(doc(collection(db, "mail")), {
+      to: email,
+      message: {
+        subject: "Welcome to MyAtlas — Your Personnel Number",
+        text: `Hello ${firstname},\n\nYour MyAtlas account has been successfully activated.\n\nYour MyAtlas Personnel Number is: ${personnelNumber}\n\nPlease keep this number safe as you will need it to sign in to the portal.\n\nBest regards,\nAtlas College Admin Team`,
+        html: `
+          <div style="font-family: Inter, Helvetica, Arial, sans-serif; background-color: #f5f9ff; padding: 40px 20px; color: #071947;">
+            <div style="max-width: 550px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #cfe1f4; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+              <div style="background-color: #0b3d91; padding: 25px; text-align: center;">
+                <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 800; letter-spacing: 0.05em;">ATLAS COLLEGE</h1>
+                <p style="color: #55ddf4; margin: 5px 0 0 0; font-size: 12px; font-weight: 700; text-transform: uppercase;">Admin Portal Activation</p>
+              </div>
+              <div style="padding: 30px;">
+                <h2 style="color: #143f88; margin-top: 0; font-size: 20px;">Welcome, ${firstname}!</h2>
+                <p style="color: #557198; font-size: 15px; line-height: 1.5; margin-bottom: 25px;">Your MyAtlas admin account has been successfully activated. Below is your generated personnel number required for signing in:</p>
+                <div style="background-color: #f5f9ff; border: 1px dashed #0878f8; border-radius: 6px; padding: 20px; text-align: center; margin-bottom: 25px;">
+                  <span style="display: block; font-size: 12px; color: #557198; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 6px;">Your MyAtlas Personnel Number</span>
+                  <span style="font-size: 28px; font-weight: 800; color: #0878f8; letter-spacing: 2px;">${personnelNumber}</span>
+                </div>
+                <p style="color: #557198; font-size: 14px; line-height: 1.5; margin-bottom: 0;">Please store this number securely. You will use this alongside your registered email address to sign in to the portal.</p>
+              </div>
+              <div style="background-color: #06325c; padding: 20px; text-align: center; color: rgba(255,255,255,0.8); font-size: 12px;">
+                <p style="margin: 0;">© ${new Date().getFullYear()} Atlas College. All rights reserved.</p>
+              </div>
+            </div>
+          </div>
+        `
+      }
+    });
+
+    alert(`Your MyAtlas account has been successfully activated! Your MyAtlas Personnel Number is ${personnelNumber}. An email has been sent to ${email}.`);
+    
+    // Switch to Sign-In view automatically
+    window.history.pushState({ view: 'signin' }, '', '#sign-in');
+    showSigninView();
 
   } catch (error) {
     console.error('Activation Error:', error);
