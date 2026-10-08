@@ -157,7 +157,7 @@ newPassInput.addEventListener('input', (e) => {
 });
 
 // --- AUTO-CAPITALIZE SPECIFIC INPUT FIELDS ON BLUR ---
-const autoCapitalizeIds = ['initials', 'firstname', 'surname', 'email'];
+const autoCapitalizeIds = ['initials', 'firstname', 'surname', 'email', 'signin-email'];
 
 autoCapitalizeIds.forEach((id) => {
   const inputElem = document.getElementById(id);
