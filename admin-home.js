@@ -290,7 +290,6 @@ activationForm.addEventListener('submit', async (e) => {
       }
     });
 
-    alert(`Your MyAtlas account has been successfully activated! Your MyAtlas Personnel Number is ${personnelNumber}. An email has been sent to ${email}.`);
     
     // Switch to Sign-In view automatically
     window.history.pushState({ view: 'signin' }, '', '#sign-in');
