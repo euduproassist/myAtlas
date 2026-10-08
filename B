@@ -1,253 +1,169 @@
-To enable activation for System Administration and Academic Head while retaining your exact form flow, validation rules, UI, and existing functionality with zero errors, we need to update three files: admin-home.js, Admin-home.html, and Firestore.rules.
-Here is the exact step-by-step breakdown showing the full current code snippets to look for, whether to update or replace them, and the full new code snippets to insert.
-File 1: Firestore.rules
-We need to update the rules to permit reading from the pre-approved collections for the new roles (pre_approved_academic_heads and pre_approved_system_admins) and allow writing the activated user profiles into their corresponding collections (academic_heads and system_admins).
-Change 1: Update security rules for pre-approved collections
- * Current Code in Firestore.rules:
-    // Pre-approved admin records used for validation during activation
-    match /pre_approved_admins/{adminId} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
+I understand exactly what you need.
+In your current code:
+ * Admin-home.html contains an OTP field in the Sign In form, and lacks the MyAtlas Personnel Number field at the top of the form.
+ * The field order needed according to your design and image is:
+   * MyAtlas personnel number
+   * Email Address
+   * Password
+   * Role
+ * We need to remove the OTP input section entirely from the Sign In form.
+ * The activation form, welcome screen, JavaScript logic, and Firestore rules will remain 100% untouched, preserving your exact structure, styles, and logic without breaking anything else.
+Here are the precise line-by-line code changes needed for Admin-home.html.
+Step 1: Open Admin-home.html
+Find VIEW 3: SIGN IN FORM inside Admin-home.html.
+Step 2: Locate Current Code to Replace
+Locate this exact block of code inside Admin-home.html:
+          <!-- VIEW 3: SIGN IN FORM -->
+          <div id="view-signin" class="view-section">
+            <div class="eyebrow">WELCOME BACK TO THE ATLAS COLLEGE</div>
 
- * Action: Replace the block above with the following code:
-    // Pre-approved records used for validation during activation across all roles
-    match /pre_approved_admins/{adminId} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-    match /pre_approved_academic_heads/{headId} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-    match /pre_approved_system_admins/{sysAdminId} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
+            <h1 class="hero-title" style="font-size: clamp(42px, 4.5vw, 68px); margin-bottom: 20px;">
+              Sign In
+            </h1>
 
-Change 2: Update security rules for activated profile collections
- * Current Code in Firestore.rules:
-    // Admin profiles collection created upon successful activation
-    match /admins/{adminId} {
-      allow read, write: if request.auth != null;
-    }
+            <p class="hero-description" style="margin-bottom: 30px;">
+              Sign in to your MyAtlas admin account to manage<br class="desktop-break">
+              student applications and support learners.
+            </p>
 
- * Action: Replace the block above with the following code:
-    // Profile collections created upon successful activation
-    match /admins/{adminId} {
-      allow read, write: if request.auth != null;
-    }
-    match /academic_heads/{headId} {
-      allow read, write: if request.auth != null;
-    }
-    match /system_admins/{sysAdminId} {
-      allow read, write: if request.auth != null;
-    }
+            <form class="form-container" onsubmit="event.preventDefault();">
+              <div class="form-group">
+                <label class="form-label" for="signin-email">Email Address *</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                  </span>
+                  <input type="email" id="signin-email" class="form-input" placeholder="e.g. raymond@example.com" required>
+                </div>
+              </div>
 
-File 2: Admin-home.html
-The option values in the dropdowns must match the exact string identifiers used in your logic. Specifically, in your activation form select dropdown, academic-head and system-administration need to match the key strings used during query mapping (academic_head and system_admin).
-Change 1: Update Activation Role Select Options
- * Current Code in Admin-home.html:
-                  <select id="role" class="form-select" required>
-                    <option value="" disabled selected>Select your role</option>
-                    <option value="admin">Admin</option>
-                    <option value="academic-head">Academic head</option>
-                    <option value="system-administration">System administration</option>
-                  </select>
+              <div class="form-group">
+                <label class="form-label" for="signin-password">Password *</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  </span>
+                  <input type="password" id="signin-password" class="form-input" placeholder="Enter your password" required style="padding-right: 44px;">
+                  <button type="button" class="input-action-icon" aria-label="Toggle password visibility">
+                    <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                  </button>
+                </div>
+              </div>
 
- * Action: Replace the block above with the following code:
-                  <select id="role" class="form-select" required>
-                    <option value="" disabled selected>Select your role</option>
-                    <option value="admin">Admin</option>
-                    <option value="academic_head">Academic head</option>
-                    <option value="system_admin">System administration</option>
-                  </select>
-
-Change 2: Update Sign-In Role Select Options
- * Current Code in Admin-home.html:
-                  <select id="signin-role" class="form-select" required>
-                    <option value="" disabled selected>Select your role</option>
-                    <option value="admin">Admin</option>
-                    <option value="academic-head">Academic head</option>
-                    <option value="system-administration">System Administration</option>
-                  </select>
-
- * Action: Replace the block above with the following code:
+              <div class="form-group">
+                <label class="form-label" for="signin-role">Role *</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                  </span>
                   <select id="signin-role" class="form-select" required>
                     <option value="" disabled selected>Select your role</option>
                     <option value="admin">Admin</option>
                     <option value="academic_head">Academic head</option>
-                    <option value="system_admin">System administration</option>
+                    <option value="system_admin">System Administration</option>
                   </select>
+                </div>
+              </div>
 
-File 3: admin-home.js
-We need to remove the check blocking non-admin roles and dynamically determine which Firestore pre-approved collection to search and which output collection to write the activated profile to based on the selected role (admin, academic_head, or system_admin).
-Change 1: Update Activation Form Submission Handler
- * Current Code in admin-home.js:
-// --- ADMIN ACTIVATION SUBMISSION LOGIC ---
-const activationForm = document.querySelector('#view-form form');
+              <div class="form-group">
+                <label class="form-label" for="signin-otp">OTP *</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                  </span>
+                  <input type="text" id="signin-otp" class="form-input" placeholder="Enter 6-digit OTP" maxlength="6" required style="padding-right: 90px;">
+                  <button type="button" class="input-action-btn">Send OTP</button>
+                </div>
+              </div>
 
-activationForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
+              <div class="cta-area" style="margin-top: 10px;">
+                <button type="submit" class="cta">
+                  <span>Sign In</span>
+                  <span class="cta-arrow">→</span>
+                </button>
 
-  const initials = document.getElementById('initials').value.trim();
-  const firstname = document.getElementById('firstname').value.trim();
-  const surname = document.getElementById('surname').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const role = document.getElementById('role').value;
-  const tempPass = document.getElementById('temppass').value;
-  const newPass = document.getElementById('newpass').value;
-  const confirmPass = document.getElementById('confirmpass').value;
+                <a href="#" class="switch-view-link" style="margin-top: 20px;">Forgot Password?</a>
+                <a href="#" id="goto-activate-btn" class="signin" style="margin-top: 12px;">Don't have an account? Activate MyAtlas</a>
+              </div>
+            </form>
+          </div>
 
-  // 1. Restrict activation strictly to 'admin' role for now
-  if (role !== 'admin') {
-    alert('Activation is currently only available for Admin roles. Academic head and System administration activation will be enabled soon.');
-    return;
-  }
+Step 3: Replace With Updated Code
+Delete the entire block above and replace it with this updated code block:
+          <!-- VIEW 3: SIGN IN FORM -->
+          <div id="view-signin" class="view-section">
+            <div class="eyebrow">WELCOME BACK TO THE ATLAS COLLEGE</div>
 
-  // 2. Validate passwords match
-  if (newPass !== confirmPass) {
-    alert('New password and confirm password do not match.');
-    return;
-  }
+            <h1 class="hero-title" style="font-size: clamp(42px, 4.5vw, 68px); margin-bottom: 20px;">
+              Sign In
+            </h1>
 
-  try {
-    // 3. Query Firestore 'pre_approved_admins' to check if manually entered details match
-    const preApprovedRef = collection(db, 'pre_approved_admins');
-    const q = query(
-      preApprovedRef,
-      where('email', '==', email),
-      where('initials', '==', initials),
-      where('firstname', '==', firstname),
-      where('surname', '==', surname),
-      where('phone', '==', phone),
-      where('role', '==', 'admin'),
-      where('temppass', '==', tempPass)
-    );
+            <p class="hero-description" style="margin-bottom: 30px;">
+              Sign in to your MyAtlas admin account to manage<br class="desktop-break">
+              student applications and support learners.
+            </p>
 
-    const querySnapshot = await getDocs(q);
+            <form class="form-container" onsubmit="event.preventDefault();">
+              <div class="form-group">
+                <label class="form-label" for="signin-personnel">MyAtlas Personnel Number *</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">
+                    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                  </span>
+                  <input type="text" id="signin-personnel" class="form-input" placeholder="Enter your MyAtlas personnel number" required>
+                </div>
+              </div>
 
-    if (querySnapshot.empty) {
-      alert('Activation failed: The details entered do not match our pre-approved records in the database. Please verify your information.');
-      return;
-    }
+              <div class="form-group">
+                <label class="form-label" for="signin-email">Email Address *</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                  </span>
+                  <input type="email" id="signin-email" class="form-input" placeholder="Enter your email address" required>
+                </div>
+              </div>
 
-    // 4. Create user in Firebase Authentication
-    const userCredential = await createUserWithEmailAndPassword(auth, email, newPass);
-    const user = userCredential.user;
+              <div class="form-group">
+                <label class="form-label" for="signin-password">Password *</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  </span>
+                  <input type="password" id="signin-password" class="form-input" placeholder="Enter your password" required style="padding-right: 44px;">
+                  <button type="button" class="input-action-icon" aria-label="Toggle password visibility">
+                    <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                  </button>
+                </div>
+              </div>
 
-    // 5. Save user profile details to Firestore 'admins' collection
-    await setDoc(doc(db, 'admins', user.uid), {
-      uid: user.uid,
-      initials,
-      firstname,
-      surname,
-      email,
-      phone,
-      role,
-      createdAt: new Date().toISOString()
-    });
+              <div class="form-group">
+                <label class="form-label" for="signin-role">Role *</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                  </span>
+                  <select id="signin-role" class="form-select" required>
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="admin">Admin</option>
+                    <option value="academic_head">Academic head</option>
+                    <option value="system_admin">System Administration</option>
+                  </select>
+                </div>
+              </div>
 
-    alert('Your MyAtlas Admin account has been successfully activated! You can now sign in.');
-    
-    // Switch to Sign-In view automatically
-    window.history.pushState({ view: 'signin' }, '', '#sign-in');
-    showSigninView();
+              <div class="cta-area" style="margin-top: 10px;">
+                <button type="submit" class="cta">
+                  <span>Sign In</span>
+                  <span class="cta-arrow">→</span>
+                </button>
 
-  } catch (error) {
-    console.error('Activation Error:', error);
-    alert('Error during activation: ' + error.message);
-  }
-});
+                <a href="#" class="switch-view-link" style="margin-top: 20px;">Forgot Password?</a>
+                <a href="#" id="goto-activate-btn" class="signin" style="margin-top: 12px;">Don't have an account? Activate MyAtlas</a>
+              </div>
+            </form>
+          </div>
 
- * Action: Replace the entire block above with the following code:
-// --- ACTIVATION SUBMISSION LOGIC ---
-const activationForm = document.querySelector('#view-form form');
-
-activationForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const initials = document.getElementById('initials').value.trim();
-  const firstname = document.getElementById('firstname').value.trim();
-  const surname = document.getElementById('surname').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const role = document.getElementById('role').value;
-  const tempPass = document.getElementById('temppass').value;
-  const newPass = document.getElementById('newpass').value;
-  const confirmPass = document.getElementById('confirmpass').value;
-
-  // 1. Validate passwords match
-  if (newPass !== confirmPass) {
-    alert('New password and confirm password do not match.');
-    return;
-  }
-
-  // 2. Map roles to their respective Firestore pre-approved and active profile collections
-  let preApprovedCollection = '';
-  let targetCollection = '';
-
-  if (role === 'admin') {
-    preApprovedCollection = 'pre_approved_admins';
-    targetCollection = 'admins';
-  } else if (role === 'academic_head') {
-    preApprovedCollection = 'pre_approved_academic_heads';
-    targetCollection = 'academic_heads';
-  } else if (role === 'system_admin') {
-    preApprovedCollection = 'pre_approved_system_admins';
-    targetCollection = 'system_admins';
-  } else {
-    alert('Please select a valid role.');
-    return;
-  }
-
-  try {
-    // 3. Query corresponding Firestore pre-approved collection to verify entered details
-    const preApprovedRef = collection(db, preApprovedCollection);
-    const q = query(
-      preApprovedRef,
-      where('email', '==', email),
-      where('initials', '==', initials),
-      where('firstname', '==', firstname),
-      where('surname', '==', surname),
-      where('phone', '==', phone),
-      where('role', '==', role),
-      where('temppass', '==', tempPass)
-    );
-
-    const querySnapshot = await getDocs(q);
-
-    if (querySnapshot.empty) {
-      alert('Activation failed: The details entered do not match our pre-approved records in the database. Please verify your information.');
-      return;
-    }
-
-    // 4. Create user in Firebase Authentication
-    const userCredential = await createUserWithEmailAndPassword(auth, email, newPass);
-    const user = userCredential.user;
-
-    // 5. Save user profile details to designated Firestore collection
-    await setDoc(doc(db, targetCollection, user.uid), {
-      uid: user.uid,
-      initials,
-      firstname,
-      surname,
-      email,
-      phone,
-      role,
-      createdAt: new Date().toISOString()
-    });
-
-    alert('Your MyAtlas account has been successfully activated! You can now sign in.');
-    
-    // Switch to Sign-In view automatically
-    window.history.pushState({ view: 'signin' }, '', '#sign-in');
-    showSigninView();
-
-  } catch (error) {
-    console.error('Activation Error:', error);
-    alert('Error during activation: ' + error.message);
-  }
-});
-
+Step 4: Verification
+ * Admin-home.js: No changes are required. View toggles, event listeners (goto-activate-btn, view switching, password toggle), and activation logic remain fully operational.
+ * Firestore.rules: No changes are required. Security rules for pre_approved_ collections and active role collections remain completely intact.
