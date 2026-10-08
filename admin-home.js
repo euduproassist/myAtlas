@@ -297,4 +297,69 @@ activationForm.addEventListener('submit', async (e) => {
     window.history.pushState({ view: 'signin' }, '', '#sign-in');
     showSigninView();
 
- 
+   } catch (error) {
+    console.error('Activation Error:', error);
+    alert('Error during activation: ' + error.message);
+  }
+});
+
+// --- SIGN IN SUBMISSION LOGIC ---
+const signinForm = document.querySelector('#view-signin form');
+
+signinForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // Convert signin email input to uppercase
+  const signinEmailElem = document.getElementById('signin-email');
+  if (signinEmailElem) {
+    signinEmailElem.value = signinEmailElem.value.toUpperCase();
+  }
+
+  const personnelNumber = document.getElementById('signin-personnel').value.trim();
+  const email = document.getElementById('signin-email').value.trim();
+  const password = document.getElementById('signin-password').value;
+  const role = document.getElementById('signin-role').value;
+
+  // Map selected role to target active profile collection
+  let targetCollection = '';
+  if (role === 'admin') {
+    targetCollection = 'admins';
+  } else if (role === 'academic_head') {
+    targetCollection = 'academic_heads';
+  } else if (role === 'system_admin') {
+    targetCollection = 'system_admins';
+  } else {
+    alert('Please select a valid role.');
+    return;
+  }
+
+  try {
+    // 1. Authenticate user credentials (email & password) with Firebase Authentication
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // 2. Query Firestore collection to verify matching user document details (uid, personnelNumber, email, role)
+    const activeRef = collection(db, targetCollection);
+    const q = query(
+      activeRef,
+      where('uid', '==', user.uid),
+      where('personnelNumber', '==', personnelNumber),
+      where('email', '==', email),
+      where('role', '==', role)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      alert('Sign-In failed: The details entered (Personnel Number, Email, or Role) do not match our active records for this account.');
+      return;
+    }
+
+    // 3. Successful verification — redirect user to admin portal home page
+    window.location.href = 'admin.html';
+
+  } catch (error) {
+    console.error('Sign-In Error:', error);
+    alert('Sign-In failed: ' + error.message);
+  }
+});
