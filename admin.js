@@ -152,45 +152,6 @@ function populateTableFilters() {
   filterCampus.innerHTML = `<option value="">All campuses</option>` + uniqueCampuses.map(cp => `<option value="${cp}">${cp}</option>`).join('');
 }
 
-// Render Courses Table
-function renderCoursesTable(courses) {
-  if (!masterCoursesTableBody) return;
-  masterCoursesTableBody.innerHTML = '';
-
-  if (courses.length === 0) {
-    masterCoursesTableBody.innerHTML = `<tr><td colspan="5" style="padding: 20px; text-align: center; color: var(--muted);">No courses found in database.</td></tr>`;
-    return;
-  }
-
-  const currentYear = new Date().getFullYear();
-
-  courses.forEach(item => {
-    const tr = document.createElement('tr');
-    tr.style.cssText = "border-bottom: 1px solid var(--line); transition: background 0.1s;";
-    const isChecked = selectedCourseIds.has(item.id);
-
-    tr.innerHTML = `
-      <td style="padding: 12px 16px;"><input type="checkbox" class="course-row-checkbox" data-id="${item.id}" ${isChecked ? 'checked' : ''} style="accent-color: var(--blue);"></td>
-      <td style="padding: 12px 16px; font-weight: 650; color: var(--navy);">${item.course || ''}</td>
-      <td style="padding: 12px 16px; color: var(--muted);">${item.studyMode || ''}</td>
-      <td style="padding: 12px 16px; color: var(--muted);">${item.campus || ''}</td>
-      <td style="padding: 12px 16px; color: var(--muted);">${item.academicYear || currentYear}</td>
-    `;
-
-    const checkbox = tr.querySelector('.course-row-checkbox');
-    checkbox.addEventListener('change', (e) => {
-      if (e.target.checked) {
-        selectedCourseIds.add(item.id);
-      } else {
-        selectedCourseIds.delete(item.id);
-      }
-      updateSelectedCount();
-    });
-
-    masterCoursesTableBody.appendChild(tr);
-  });
-  updateSelectedCount();
-}
 
 function updateSelectedCount() {
   if (selectedCourseCountText) {
