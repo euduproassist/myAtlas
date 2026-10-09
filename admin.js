@@ -279,3 +279,88 @@ if (manageFieldsBtn) manageFieldsBtn.addEventListener('click', (e) => { e.preven
 const viewReportsBtn = document.getElementById('viewReportsBtn');
 if (viewReportsBtn) viewReportsBtn.addEventListener('click', (e) => { e.preventDefault(); alert("View Reports clicked"); });
 
+document.querySelectorAll('#guideLink, #supportLink, #privacyLink, #termsLink').forEach(link => {
+  link.addEventListener('click', (e) => { e.preventDefault(); alert(link.textContent + " clicked"); });
+});
+
+// --- AUTHENTICATION & USER PROFILE SECURITY CHECK ---
+const userMenuTrigger = document.getElementById('userMenuTrigger');
+const userDropdownMenu = document.getElementById('userDropdownMenu');
+const userAvatar = document.getElementById('userAvatar');
+const dropdownUserName = document.getElementById('dropdownUserName');
+const dropdownUserEmail = document.getElementById('dropdownUserEmail');
+const dropdownUserRole = document.getElementById('dropdownUserRole');
+const logoutBtn = document.getElementById('logoutBtn');
+
+// Strict Auth Listener
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    // Unauthenticated user -> kick out immediately to sign in
+    window.location.href = 'Admin-home.html#sign-in';
+    return;
+  }
+
+  try {
+    // Search across the three valid activated collections to verify the active profile
+    const activeCollections = ['admins', 'academic_heads', 'system_admins'];
+    let userDocData = null;
+
+    for (const colName of activeCollections) {
+      const docRef = doc(db, colName, user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        userDocData = docSnap.data();
+        break;
+      }
+    }
+
+    // If no valid active record exists in Firestore, kick user out
+    if (!userDocData) {
+      await signOut(auth);
+      window.location.href = 'Admin-home.html#sign-in';
+      return;
+    }
+
+    // Display user initials in the avatar
+    const initials = userDocData.initials || (userDocData.firstname ? userDocData.firstname.charAt(0) : 'A');
+    if (userAvatar) userAvatar.textContent = initials;
+
+    // Populate dropdown info
+    if (dropdownUserName) dropdownUserName.textContent = `${userDocData.firstname || ''} ${userDocData.surname || ''}`.trim();
+    if (dropdownUserEmail) dropdownUserEmail.textContent = userDocData.email || user.email;
+    if (dropdownUserRole) dropdownUserRole.textContent = (userDocData.role || 'Staff').replace('_', ' ');
+
+  } catch (err) {
+    console.error("Profile Verification Error:", err);
+    window.location.href = 'Admin-home.html#sign-in';
+  }
+});
+
+// Toggle User Dropdown Menu
+if (userMenuTrigger) {
+  userMenuTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (userDropdownMenu) userDropdownMenu.classList.toggle('active');
+  });
+}
+
+// Close dropdown when clicking anywhere outside
+window.addEventListener('click', () => {
+  if (userDropdownMenu && userDropdownMenu.classList.contains('active')) {
+    userDropdownMenu.classList.remove('active');
+  }
+});
+
+// Logout Button Action
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+      await signOut(auth);
+      window.location.href = 'Admin-home.html#sign-in';
+    } catch (err) {
+      console.error("Logout Error:", err);
+      alert("Error logging out: " + err.message);
+    }
+  });
+}
