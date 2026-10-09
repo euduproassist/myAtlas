@@ -279,6 +279,3 @@ if (manageFieldsBtn) manageFieldsBtn.addEventListener('click', (e) => { e.preven
 const viewReportsBtn = document.getElementById('viewReportsBtn');
 if (viewReportsBtn) viewReportsBtn.addEventListener('click', (e) => { e.preventDefault(); alert("View Reports clicked"); });
 
-document.querySelectorAll('#guideLink, #supportLink, #privacyLink, #termsLink').forEach(link => {
-  link.addEventListener('click', (e) => { e.preventDefault(); alert(link.textContent + " clicked"); });
-});
