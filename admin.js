@@ -296,7 +296,7 @@ const logoutBtn = document.getElementById('logoutBtn');
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     // Unauthenticated user -> kick out immediately to sign in
-    window.location.href = 'Admin-home.html#sign-in';
+    window.location.href = 'admin-home.html#sign-in';
     return;
   }
 
@@ -317,7 +317,7 @@ onAuthStateChanged(auth, async (user) => {
     // If no valid active record exists in Firestore, kick user out
     if (!userDocData) {
       await signOut(auth);
-      window.location.href = 'Admin-home.html#sign-in';
+      window.location.href = 'admin-home.html#sign-in';
       return;
     }
 
@@ -332,7 +332,7 @@ onAuthStateChanged(auth, async (user) => {
 
   } catch (err) {
     console.error("Profile Verification Error:", err);
-    window.location.href = 'Admin-home.html#sign-in';
+    window.location.href = 'admin-home.html#sign-in';
   }
 });
 
@@ -357,7 +357,7 @@ if (logoutBtn) {
     e.preventDefault();
     try {
       await signOut(auth);
-      window.location.href = 'Admin-home.html#sign-in';
+      window.location.href = 'admin-home.html#sign-in';
     } catch (err) {
       console.error("Logout Error:", err);
       alert("Error logging out: " + err.message);
