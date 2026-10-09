@@ -169,6 +169,195 @@
     flex-shrink: 0;
   }
 
+    /* LAYOUT SHELL */
+  .shell {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 460px minmax(0, 1fr);
+  }
+  .shell.builder-active {
+    grid-template-columns: 1fr;
+  }
+
+  /* CYCLE BUILDER EXACT DESIGNS */
+  .application-card {
+    width: 100%;
+    padding: 15px 15px 17px;
+    border: 1.5px solid #cfe3ff;
+    border-radius: 6px;
+    background: #ffffff;
+  }
+
+  .degree-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 25px;
+  }
+
+  .degree-list {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 12px;
+  }
+
+  .degree-item {
+    display: flex;
+    align-items: center;
+    flex: 1 1 0;
+    position: relative;
+  }
+
+  .degree-icon {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 66px;
+    width: 66px;
+    height: 66px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: -18px;
+    border: 1.5px solid #cfe3ff;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #0866f5;
+  }
+
+  .degree-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex: 1;
+    height: 44px;
+    padding: 0 10px 0 24px;
+    border: 1.5px solid #cfe3ff;
+    border-radius: 0 6px 6px 0;
+    background: #ffffff;
+    color: #071c72;
+  }
+
+  .remove-degree {
+    border: 0;
+    background: transparent;
+    color: #f35c63;
+    font-size: 23px;
+    cursor: pointer;
+  }
+
+  .add-degree-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1.5px solid #0866f5;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #0866f5;
+    font-weight: 600;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid #d8e7fb;
+  }
+
+  .tab {
+    padding: 0 17px 13px;
+    border: 0;
+    background: transparent;
+    color: #6280ad;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  .tab.active {
+    color: #0866f5;
+    font-weight: 600;
+    border-bottom: 3px solid #0866f5;
+  }
+
+  .panel {
+    margin-top: 22px;
+    padding: 19px 20px 22px;
+    border: 1.5px solid #cfe3ff;
+    border-radius: 6px;
+    background: #ffffff;
+  }
+
+  .date-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    margin-top: 21px;
+  }
+
+  .date-field {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 0 11px 0 15px;
+    border: 1.5px solid #cfe3ff;
+    border-radius: 6px;
+    background: #ffffff;
+  }
+
+  .filter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 0.83fr;
+    gap: 20px;
+    align-items: end;
+    margin-bottom: 29px;
+  }
+
+  .filter select {
+    width: 100%;
+    height: 50px;
+    padding: 0 12px;
+    border: 1.5px solid #cfe3ff;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #244b88;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #d9eaff;
+    border-radius: 6px;
+    background: #ffffff;
+  }
+
+  .table-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table-wrapper thead {
+    background: #eaf5ff;
+  }
+
+  .table-wrapper th, .table-wrapper td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #dcecff;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  .course-checkbox {
+    width: 20px;
+    height: 20px;
+    accent-color: #0866f5;
+    cursor: pointer;
+  }
 
   /* LEFT SIDEBAR (Welcome Column) */
   .welcome {
