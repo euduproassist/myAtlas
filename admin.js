@@ -66,14 +66,8 @@ function renderDegreeBadges() {
   container.innerHTML = '';
   cycleConfig.degreeTypes.forEach((deg, index) => {
     const badge = document.createElement('div');
-    badge.style.cssText = "display: inline-flex; align-items: center; gap: 10px; background: #f4f8fe; border: 1px solid #d0e3ff; padding: 6px 14px 6px 8px; border-radius: 30px; font-size: 13.5px; font-weight: 700; color: #0b3275;";
-    badge.innerHTML = `
-      <div style="width: 32px; height: 32px; border-radius: 50%; background: #ffffff; border: 1px solid #d0e3ff; display: grid; place-items: center; color: #087df5; flex-shrink: 0;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
-      </div>
-      <span>${deg}</span>
-      <span style="cursor: pointer; color: #f25555; font-size: 14px; font-weight: 800; margin-left: 6px;" data-index="${index}">✕</span>
-    `;
+    badge.style.cssText = "display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid var(--border-light); padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 650; color: var(--navy);";
+    badge.innerHTML = `<span>🎓</span> ${deg} <span style="cursor: pointer; color: #8fa6c2; margin-left: 4px;" data-index="${index}">✕</span>`;
     
     badge.querySelector('span[data-index]').addEventListener('click', (ev) => {
       const idx = parseInt(ev.target.getAttribute('data-index'));
@@ -158,23 +152,23 @@ function renderCoursesTable(courses) {
   masterCoursesTableBody.innerHTML = '';
 
   if (courses.length === 0) {
-    masterCoursesTableBody.innerHTML = `<tr><td colspan="5" style="padding: 20px; text-align: center; color: #6a86a9;">No courses found in database.</td></tr>`;
+    masterCoursesTableBody.innerHTML = `<tr><td colspan="5" style="padding: 20px; text-align: center; color: var(--muted);">No courses found in database.</td></tr>`;
     return;
   }
 
-  const currentYear = `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`;
+  const currentYear = new Date().getFullYear();
 
   courses.forEach(item => {
     const tr = document.createElement('tr');
-    tr.style.cssText = "border-bottom: 1px solid #e1edfa; background: #ffffff; transition: background 0.1s;";
+    tr.style.cssText = "border-bottom: 1px solid var(--line); transition: background 0.1s;";
     const isChecked = selectedCourseIds.has(item.id);
 
     tr.innerHTML = `
-      <td style="padding: 14px 16px; width: 48px;"><input type="checkbox" class="course-row-checkbox" data-id="${item.id}" ${isChecked ? 'checked' : ''} style="width: 18px; height: 18px; accent-color: #087df5; cursor: pointer;"></td>
-      <td style="padding: 14px 16px; font-weight: 700; color: #0b3275; font-size: 13.5px;">${item.course || ''}</td>
-      <td style="padding: 14px 16px; color: #4b6b94; font-size: 13.5px;">${item.studyMode || ''}</td>
-      <td style="padding: 14px 16px; color: #4b6b94; font-size: 13.5px;">${item.campus || ''}</td>
-      <td style="padding: 14px 16px; color: #4b6b94; font-size: 13.5px;">${item.academicYear || currentYear}</td>
+      <td style="padding: 12px 16px;"><input type="checkbox" class="course-row-checkbox" data-id="${item.id}" ${isChecked ? 'checked' : ''} style="accent-color: var(--blue);"></td>
+      <td style="padding: 12px 16px; font-weight: 650; color: var(--navy);">${item.course || ''}</td>
+      <td style="padding: 12px 16px; color: var(--muted);">${item.studyMode || ''}</td>
+      <td style="padding: 12px 16px; color: var(--muted);">${item.campus || ''}</td>
+      <td style="padding: 12px 16px; color: var(--muted);">${item.academicYear || currentYear}</td>
     `;
 
     const checkbox = tr.querySelector('.course-row-checkbox');
