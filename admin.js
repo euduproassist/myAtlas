@@ -1,5 +1,4 @@
-import { auth, db, storage, analytics } from "./firebase-config.js";
-import { collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
 
 document.documentElement.style.overflowX = "hidden";
 document.body.style.overflowX = "hidden";
