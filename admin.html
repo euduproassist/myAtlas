@@ -80,12 +80,6 @@
     transition: filter 0.2s ease;
   }
 
-  body.modal-open .page {
-    filter: blur(5px);
-    pointer-events: none;
-    user-select: none;
-  }
-
   /* HEADER */
   .topbar {
     width: 100%;
@@ -334,7 +328,6 @@
     margin-bottom: 36px;
   }
 
-  /* Setup Help Card in Sidebar */
   .setup-card {
     display: flex;
     gap: 16px;
@@ -400,7 +393,6 @@
     min-width: 0;
   }
 
-  /* 2x2 Grid for "How it works" */
   .grid-2x2 {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -479,10 +471,7 @@
     margin-top: auto;
   }
 
-  /* =========================================================
-     NEW APPLICATION CYCLE BUILDER STYLES (MATCHES REFERENCE)
-     ========================================================= */
-
+  /* BUILDER VIEW LAYOUT */
   .page-header-builder {
     margin-bottom: 36px;
   }
@@ -595,7 +584,6 @@
     font-size: 22px;
     font-weight: 400;
     line-height: 1;
-    cursor: pointer;
   }
 
   .add-degree-wrap {
@@ -623,41 +611,6 @@
     height: 18px;
   }
 
-  .dropdown-menu {
-    display: none;
-    position: absolute;
-    z-index: 20;
-    top: calc(100% + 6px);
-    right: 0;
-    min-width: 200px;
-    padding: 5px;
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    background: #ffffff;
-    box-shadow: 0 8px 24px rgba(22, 66, 130, 0.12);
-  }
-
-  .dropdown-menu.open {
-    display: block;
-  }
-
-  .dropdown-menu button {
-    display: block;
-    width: 100%;
-    padding: 11px;
-    border: 0;
-    border-radius: 4px;
-    background: #ffffff;
-    color: var(--text);
-    text-align: left;
-    cursor: pointer;
-  }
-
-  .dropdown-menu button:hover {
-    background: var(--pale-blue);
-  }
-
-  /* TABS */
   .tabs {
     display: flex;
     align-items: stretch;
@@ -676,7 +629,6 @@
     color: #6280ad;
     font-size: 15px;
     white-space: nowrap;
-    cursor: pointer;
   }
 
   .tab.active {
@@ -694,7 +646,6 @@
     content: "";
   }
 
-  /* PANELS */
   .panel {
     width: 100%;
     min-width: 0;
@@ -721,7 +672,6 @@
     line-height: 1.5;
   }
 
-  /* DATES GRID */
   .date-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -818,7 +768,6 @@
     font-weight: bold;
   }
 
-  /* COURSE FILTER GRID */
   .course-panel {
     margin-top: 20px;
   }
@@ -880,7 +829,6 @@
     height: 22px;
   }
 
-  /* COURSE TABLE */
   .table-wrapper {
     width: 100%;
     overflow-x: auto;
@@ -999,7 +947,6 @@
     transform: rotate(45deg) translate(-1px, -1px);
   }
 
-  /* FOOTER ACTIONS & BUTTONS */
   .course-footer {
     display: flex;
     align-items: center;
@@ -1080,15 +1027,6 @@
     height: 20px;
   }
 
-  .alternate-panel {
-    min-height: 200px;
-  }
-
-  .alternate-panel p {
-    color: #6886b7;
-    line-height: 1.6;
-  }
-
   /* FOOTER */
   .footer {
     width: 100%;
@@ -1132,7 +1070,6 @@
     .topbar { padding: 0 18px; }
     .footer { padding: 20px 18px; flex-direction: column; gap: 16px; align-items: flex-start; }
     .footer-right { gap: 20px; flex-wrap: wrap; }
-    
     .degree-toolbar { flex-wrap: wrap; }
     .degree-list { flex-basis: 100%; }
     .add-degree-wrap { margin-left: auto; }
@@ -1145,7 +1082,6 @@
     .search { width: 36px; height: 36px; padding: 0; justify-content: center; border: none; background: #f5f9fd; box-shadow: none; }
     .search input { display: none; }
     .search svg { margin: 0; }
-    
     .page-header-builder h1 { font-size: 28px; }
     .application-card { padding: 10px; }
     .degree-list { flex-direction: column; align-items: stretch; gap: 12px; }
@@ -1190,7 +1126,7 @@
       </label>
       <div class="help" aria-label="Help">?</div>
 
-      <!-- User Profile Menu Wrapper -->
+      <!-- User Profile Menu Wrapper (FUNCTION 1: Profile Icon & Authentication) -->
       <div class="user-menu-wrapper" id="userMenuTrigger">
         <div class="avatar" id="userAvatar">--</div>
         <div class="chevron" aria-hidden="true"></div>
@@ -1224,6 +1160,7 @@
       <h1>Welcome to myAtlas Staff Portal</h1>
       <p>You can create application cycles, manage applications, view submitted documents and update their status — all from one place.</p>
       
+      <!-- FUNCTION 2: Create Application Cycle Button -->
       <button class="primary" id="openModalBtn">
         <span class="plus-sign">+</span>Create application cycle
       </button>
@@ -1327,7 +1264,7 @@
         </div>
       </div>
 
-      <!-- VIEW 2: Application Cycle Builder Workspace (Refined Pixel-Perfect Layout) -->
+      <!-- VIEW 2: Application Cycle Builder Workspace -->
       <div id="cycleBuilderView" style="display: none;">
         
         <header class="page-header-builder">
@@ -1337,14 +1274,54 @@
 
         <section class="application-card">
 
-          <!-- DEGREE TYPES TOOLBAR -->
+          <!-- DEGREE TYPES TOOLBAR (Layout strictly preserved, functions permanently removed) -->
           <div class="degree-toolbar">
             <div class="degree-list" id="degreeList">
-              <!-- Rendered dynamically via Admin.js renderDegreeBadges() -->
+              <div class="degree-item">
+                <div class="degree-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 9.5 12 4l10 5.5-10 5.5L2 9.5Z"/>
+                    <path d="M6 12v5.5c3.8 3 8.2 3 12 0V12"/>
+                    <path d="M22 9.5v6"/>
+                  </svg>
+                </div>
+                <div class="degree-chip">
+                  <span class="degree-name">Undergraduate degrees</span>
+                  <button type="button" class="remove-degree" aria-label="Remove Undergraduate degrees">×</button>
+                </div>
+              </div>
+
+              <div class="degree-item">
+                <div class="degree-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 9.5 12 4l10 5.5-10 5.5L2 9.5Z"/>
+                    <path d="M6 12v5.5c3.8 3 8.2 3 12 0V12"/>
+                    <path d="M22 9.5v6"/>
+                  </svg>
+                </div>
+                <div class="degree-chip">
+                  <span class="degree-name">Postgraduate degrees</span>
+                  <button type="button" class="remove-degree" aria-label="Remove Postgraduate degrees">×</button>
+                </div>
+              </div>
+
+              <div class="degree-item">
+                <div class="degree-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 9.5 12 4l10 5.5-10 5.5L2 9.5Z"/>
+                    <path d="M6 12v5.5c3.8 3 8.2 3 12 0V12"/>
+                    <path d="M22 9.5v6"/>
+                  </svg>
+                </div>
+                <div class="degree-chip">
+                  <span class="degree-name">Research degrees</span>
+                  <button type="button" class="remove-degree" aria-label="Remove Research degrees">×</button>
+                </div>
+              </div>
             </div>
 
             <div class="add-degree-wrap">
-              <button type="button" class="add-degree-button" id="addDegreeButton" aria-expanded="false" aria-controls="degreeDropdown">
+              <button type="button" class="add-degree-button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                   <path d="M12 5v14M5 12h14"/>
                 </svg>
@@ -1353,26 +1330,20 @@
                   <path d="m7 10 5 5 5-5"/>
                 </svg>
               </button>
-
-              <div class="dropdown-menu" id="degreeDropdown">
-                <button type="button" data-add-degree="Undergraduate degrees">Undergraduate degrees</button>
-                <button type="button" data-add-degree="Postgraduate degrees">Postgraduate degrees</button>
-                <button type="button" data-add-degree="Research degrees">Research degrees</button>
-              </div>
             </div>
           </div>
 
-          <!-- NAVIGATION TABS -->
+          <!-- NAVIGATION TABS (Layout strictly preserved, function removed) -->
           <nav class="tabs" aria-label="Application cycle sections">
-            <button type="button" class="tab active" data-tab="cycle">Cycle details</button>
-            <button type="button" class="tab" data-tab="form">Application form</button>
-            <button type="button" class="tab" data-tab="documents">Documents</button>
+            <button type="button" class="tab active">Cycle details</button>
+            <button type="button" class="tab">Application form</button>
+            <button type="button" class="tab">Documents</button>
           </nav>
 
           <!-- CYCLE CONTENT -->
           <div id="cycleContent">
 
-            <!-- APPLICATION DATES PANEL -->
+            <!-- APPLICATION DATES PANEL (FUNCTION 3: Calendar Icons & Picker Features) -->
             <section class="panel">
               <h2>Application cycle dates</h2>
 
@@ -1412,7 +1383,7 @@
               </div>
             </section>
 
-            <!-- COURSES PANEL -->
+            <!-- COURSES PANEL (FUNCTION 4: Undergraduate Course Table Features) -->
             <section class="panel course-panel">
               <h2>Undergraduate courses</h2>
               <p class="panel-description">Select the Courses available in this application cycle.</p>
@@ -1488,20 +1459,16 @@
 
           </div>
 
-          <!-- ALTERNATE TAB CONTENT -->
-          <section class="panel alternate-panel" id="alternateContent" hidden>
-            <h2 id="alternateHeading"></h2>
-            <p id="alternateDescription" class="panel-description"></p>
-          </section>
-
         </section>
 
         <!-- BOTTOM ACTIONS -->
         <footer class="bottom-actions">
+          <!-- FUNCTION 5: Cancel Button -->
           <button type="button" class="cancel-button" id="cancelCycleBtn">
             Cancel
           </button>
 
+          <!-- CONTINUE BUTTON (Layout strictly preserved, function permanently removed) -->
           <button type="button" class="continue-button" id="continueCycleBtn">
             Continue
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
