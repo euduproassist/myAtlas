@@ -20,13 +20,13 @@ const selectedCourseCountText = document.getElementById('selectedCourseCountText
 
 let masterCoursesCache = [];
 let selectedCourseIds = new Set();
-// State tracking simulated for cycle creation
+
 let cycleConfig = {
   name: "2026 Academic Year",
-  degreeTypes: ["Undergraduate Degrees", "Postgraduate Degrees"]
+  degreeTypes: ["Undergraduate degrees", "Postgraduate degrees", "Research degrees"]
 };
 
-// Switch from Dashboard View to Builder View (Hiding sidebar, expanding to full screen)
+// Switch from Dashboard View to Builder View
 function showCycleBuilder(e) {
   if (e) e.preventDefault();
   const welcomeSidebar = document.getElementById('welcomeSidebar');
@@ -57,59 +57,108 @@ function cancelCycleCreation(e) {
   }
 }
 
-// Render Header Degree Badges & Manage "Add Degree" button state
+// Render Header Degree Badges in New Overlay Pill Layout
 function renderDegreeBadges() {
-  const container = document.getElementById('degreeBadgesContainer');
-  const addBtn = document.getElementById('addDegreeDropdownBtn');
+  const container = document.getElementById('degreeList');
   if (!container) return;
 
   container.innerHTML = '';
   cycleConfig.degreeTypes.forEach((deg, index) => {
-    const badge = document.createElement('div');
-    badge.style.cssText = "display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid var(--border-light); padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 650; color: var(--navy);";
-    badge.innerHTML = `<span>🎓</span> ${deg} <span style="cursor: pointer; color: #8fa6c2; margin-left: 4px;" data-index="${index}">✕</span>`;
-    
-    badge.querySelector('span[data-index]').addEventListener('click', (ev) => {
+    const item = document.createElement('div');
+    item.className = 'degree-item';
+    item.setAttribute('data-degree', deg);
+
+    item.innerHTML = `
+      <div class="degree-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 9.5 12 4l10 5.5-10 5.5L2 9.5Z"/>
+          <path d="M6 12v5.5c3.8 3 8.2 3 12 0V12"/>
+          <path d="M22 9.5v6"/>
+        </svg>
+      </div>
+      <div class="degree-chip">
+        <span class="degree-name">${deg}</span>
+        <button type="button" class="remove-degree" aria-label="Remove ${deg}" data-index="${index}">×</button>
+      </div>
+    `;
+
+    item.querySelector('.remove-degree').addEventListener('click', (ev) => {
       const idx = parseInt(ev.target.getAttribute('data-index'));
       cycleConfig.degreeTypes.splice(idx, 1);
       renderDegreeBadges();
     });
-    container.appendChild(badge);
+
+    container.appendChild(item);
+  });
+}
+
+// Degree Dropdown Handler
+const addDegreeButton = document.getElementById("addDegreeButton");
+const degreeDropdown = document.getElementById("degreeDropdown");
+
+if (addDegreeButton && degreeDropdown) {
+  addDegreeButton.addEventListener("click", () => {
+    const isOpen = degreeDropdown.classList.toggle("open");
+    addDegreeButton.setAttribute("aria-expanded", String(isOpen));
   });
 
-  // If user selected all 3, disable add degree button as requested
-  if (addBtn) {
-    if (cycleConfig.degreeTypes.length >= 3) {
-      addBtn.disabled = true;
-      addBtn.style.opacity = '0.5';
-      addBtn.style.cursor = 'not-allowed';
-    } else {
-      addBtn.disabled = false;
-      addBtn.style.opacity = '1';
-      addBtn.style.cursor = 'pointer';
+  degreeDropdown.querySelectorAll("[data-add-degree]").forEach(button => {
+    button.addEventListener("click", () => {
+      const degree = button.dataset.addDegree;
+      if (!cycleConfig.degreeTypes.includes(degree)) {
+        cycleConfig.degreeTypes.push(degree);
+        renderDegreeBadges();
+      }
+      degreeDropdown.classList.remove("open");
+      addDegreeButton.setAttribute("aria-expanded", "false");
+    });
+  });
+
+  document.addEventListener("click", event => {
+    if (!event.target.closest(".add-degree-wrap")) {
+      degreeDropdown.classList.remove("open");
+      addDegreeButton.setAttribute("aria-expanded", "false");
     }
+  });
+}
+
+// Date Picker Pickers & Formatters
+document.querySelectorAll(".calendar-button").forEach(button => {
+  button.addEventListener("click", () => {
+    const picker = document.getElementById(button.dataset.dateTarget);
+    if (picker) {
+      if (typeof picker.showPicker === "function") {
+        picker.showPicker();
+      } else {
+        picker.focus();
+        picker.click();
+      }
+    }
+  });
+});
+
+function formatDate(value) {
+  if (!value) return "";
+  const parts = value.split("-");
+  if (parts.length !== 3) return value;
+  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+[
+  ["openingDateInput", "openingDateText"],
+  ["closingDateInput", "closingDateText"]
+].forEach(([nativeId, textId]) => {
+  const nativeInput = document.getElementById(nativeId);
+  const textInput = document.getElementById(textId);
+
+  if (nativeInput && textInput) {
+    nativeInput.addEventListener("change", () => {
+      textInput.value = formatDate(nativeInput.value);
+    });
   }
-}
+});
 
-// Add Degree Dropdown Action
-const addDegreeDropdownBtn = document.getElementById('addDegreeDropdownBtn');
-if (addDegreeDropdownBtn) {
-  addDegreeDropdownBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const available = ["Undergraduate Degrees", "Postgraduate Degrees", "Master & Doctoral Degrees"]
-      .filter(d => !cycleConfig.degreeTypes.includes(d));
-    if (available.length === 0) return;
-    
-    const choice = prompt(`Select degree type to add:\n${available.map((d, i) => `${i + 1}.${d}`).join('\n')}`);
-    const index = parseInt(choice) - 1;
-    if (!isNaN(index) && available[index]) {
-      cycleConfig.degreeTypes.push(available[index]);
-      renderDegreeBadges();
-    }
-  });
-}
-
-// Fetch Courses from Firestore master_courses collection
+// Fetch Master Courses from Firestore
 async function fetchMasterCourses() {
   if (!masterCoursesTableBody) return;
   masterCoursesTableBody.innerHTML = `<tr><td colspan="5" style="padding: 20px; text-align: center; color: var(--muted);">Loading master courses from database...</td></tr>`;
@@ -156,19 +205,20 @@ function renderCoursesTable(courses) {
     return;
   }
 
-  const currentYear = new Date().getFullYear();
+  const currentYear = `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`;
 
   courses.forEach(item => {
     const tr = document.createElement('tr');
-    tr.style.cssText = "border-bottom: 1px solid var(--line); transition: background 0.1s;";
     const isChecked = selectedCourseIds.has(item.id);
 
     tr.innerHTML = `
-      <td style="padding: 12px 16px;"><input type="checkbox" class="course-row-checkbox" data-id="${item.id}" ${isChecked ? 'checked' : ''} style="accent-color: var(--blue);"></td>
-      <td style="padding: 12px 16px; font-weight: 650; color: var(--navy);">${item.course || ''}</td>
-      <td style="padding: 12px 16px; color: var(--muted);">${item.studyMode || ''}</td>
-      <td style="padding: 12px 16px; color: var(--muted);">${item.campus || ''}</td>
-      <td style="padding: 12px 16px; color: var(--muted);">${item.academicYear || currentYear}</td>
+      <td>
+        <input type="checkbox" class="course-checkbox course-row-checkbox" data-id="${item.id}" ${isChecked ? 'checked' : ''} aria-label="Select ${item.course || 'course'}">
+      </td>
+      <td>${item.course || ''}</td>
+      <td>${item.studyMode || ''}</td>
+      <td>${item.campus || ''}</td>
+      <td>${item.academicYear || currentYear}</td>
     `;
 
     const checkbox = tr.querySelector('.course-row-checkbox');
@@ -188,8 +238,35 @@ function renderCoursesTable(courses) {
 
 function updateSelectedCount() {
   if (selectedCourseCountText) {
-    selectedCourseCountText.textContent = `${selectedCourseIds.size} courses selected`;
+    selectedCourseCountText.textContent = `${selectedCourseIds.size} ${selectedCourseIds.size === 1 ? 'course' : 'courses'} selected`;
   }
+
+  const selectAll = document.getElementById("selectAllCourses");
+  if (selectAll && masterCoursesTableBody) {
+    const checkboxes = [...masterCoursesTableBody.querySelectorAll('.course-row-checkbox')];
+    if (checkboxes.length > 0) {
+      selectAll.checked = checkboxes.every(cb => cb.checked);
+      selectAll.indeterminate = checkboxes.some(cb => cb.checked) && !checkboxes.every(cb => cb.checked);
+    }
+  }
+}
+
+// Select All Courses Checkbox
+const selectAllCoursesBtn = document.getElementById("selectAllCourses");
+if (selectAllCoursesBtn) {
+  selectAllCoursesBtn.addEventListener("change", () => {
+    const checkboxes = [...masterCoursesTableBody.querySelectorAll('.course-row-checkbox')];
+    checkboxes.forEach(cb => {
+      cb.checked = selectAllCoursesBtn.checked;
+      const id = cb.getAttribute('data-id');
+      if (selectAllCoursesBtn.checked) {
+        selectedCourseIds.add(id);
+      } else {
+        selectedCourseIds.delete(id);
+      }
+    });
+    updateSelectedCount();
+  });
 }
 
 // Search / Filter Button Handler
@@ -224,6 +301,16 @@ async function handleContinueCycle(e) {
     return;
   }
 
+  if (closingDate < openingDate) {
+    alert("The closing date cannot be earlier than the opening date.");
+    return;
+  }
+
+  if (cycleConfig.degreeTypes.length === 0) {
+    alert("Please add at least one degree type before continuing.");
+    return;
+  }
+
   if (selectedCourseIds.size === 0) {
     alert("Please select at least one course from the table before continuing.");
     return;
@@ -233,10 +320,8 @@ async function handleContinueCycle(e) {
     continueCycleBtn.disabled = true;
     continueCycleBtn.textContent = "Saving...";
 
-    // Gather selected course full objects
     const chosenCourses = masterCoursesCache.filter(c => selectedCourseIds.has(c.id));
 
-    // Save as a single document into application_cycles collection with auto ID
     const cycleData = {
       cycleName: cycleConfig.name,
       degreeTypes: cycleConfig.degreeTypes,
@@ -250,8 +335,13 @@ async function handleContinueCycle(e) {
     
     alert(`Application cycle successfully created and saved!\nDocument ID: ${docRef.id}`);
     
-    // Reset and return to dashboard
     selectedCourseIds.clear();
+    const welcomeSidebar = document.getElementById('welcomeSidebar');
+    const mainShell = document.getElementById('mainShell');
+    
+    if (welcomeSidebar) welcomeSidebar.style.display = 'flex';
+    if (mainShell) mainShell.classList.remove('builder-active');
+
     if (cycleBuilderView) cycleBuilderView.style.display = 'none';
     if (dashboardView) dashboardView.style.display = 'block';
   } catch (err) {
@@ -263,13 +353,58 @@ async function handleContinueCycle(e) {
   }
 }
 
+// Navigation Tabs Switcher
+const cycleContent = document.getElementById("cycleContent");
+const alternateContent = document.getElementById("alternateContent");
+const alternateHeading = document.getElementById("alternateHeading");
+const alternateDescription = document.getElementById("alternateDescription");
+
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(item => {
+      item.classList.toggle("active", item === tab);
+    });
+
+    if (tab.dataset.tab === "cycle") {
+      cycleContent.hidden = false;
+      alternateContent.hidden = true;
+      return;
+    }
+
+    cycleContent.hidden = true;
+    alternateContent.hidden = false;
+
+    if (tab.dataset.tab === "form") {
+      alternateHeading.textContent = "Application form";
+      alternateDescription.textContent = "Configure the application form for this application cycle.";
+    } else {
+      alternateHeading.textContent = "Documents";
+      alternateDescription.textContent = "Configure the documents required for this application cycle.";
+    }
+  });
+});
+
+// Add Selected Courses Prompt
+const addSelectedCoursesBtn = document.getElementById("addSelectedCoursesBtn");
+if (addSelectedCoursesBtn) {
+  addSelectedCoursesBtn.addEventListener("click", () => {
+    if (selectedCourseIds.size === 0) {
+      alert("Please select at least one course.");
+      return;
+    }
+    const chosenCourses = masterCoursesCache.filter(c => selectedCourseIds.has(c.id));
+    const names = chosenCourses.map(c => c.course);
+    alert(`${chosenCourses.length} course(s) selected:\n\n` + names.join("\n"));
+  });
+}
+
 // Event bindings
 if (openModalBtn) openModalBtn.addEventListener('click', showCycleBuilder);
 document.querySelectorAll('.action-step-1').forEach(el => el.addEventListener('click', showCycleBuilder));
 if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', cancelCycleCreation);
 if (continueCycleBtn) continueCycleBtn.addEventListener('click', handleContinueCycle);
 
-// Retain handlers for other untouched UI elements
+// Retain handlers for other UI elements
 const viewAppsBtn = document.getElementById('viewAppsBtn');
 if (viewAppsBtn) viewAppsBtn.addEventListener('click', (e) => { e.preventDefault(); alert("View Applications clicked"); });
 
@@ -283,7 +418,7 @@ document.querySelectorAll('#guideLink, #supportLink, #privacyLink, #termsLink').
   link.addEventListener('click', (e) => { e.preventDefault(); alert(link.textContent + " clicked"); });
 });
 
-// --- AUTHENTICATION & USER PROFILE SECURITY CHECK ---
+// AUTHENTICATION & USER PROFILE SECURITY CHECK
 const userMenuTrigger = document.getElementById('userMenuTrigger');
 const userDropdownMenu = document.getElementById('userDropdownMenu');
 const userAvatar = document.getElementById('userAvatar');
@@ -292,16 +427,13 @@ const dropdownUserEmail = document.getElementById('dropdownUserEmail');
 const dropdownUserRole = document.getElementById('dropdownUserRole');
 const logoutBtn = document.getElementById('logoutBtn');
 
-// Strict Auth Listener
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    // Unauthenticated user -> kick out immediately to sign in
     window.location.href = 'admin-home.html#sign-in';
     return;
   }
 
   try {
-    // Search across the three valid activated collections to verify the active profile
     const activeCollections = ['admins', 'academic_heads', 'system_admins'];
     let userDocData = null;
 
@@ -314,18 +446,15 @@ onAuthStateChanged(auth, async (user) => {
       }
     }
 
-    // If no valid active record exists in Firestore, kick user out
     if (!userDocData) {
       await signOut(auth);
       window.location.href = 'admin-home.html#sign-in';
       return;
     }
 
-    // Display user initials in the avatar
     const initials = userDocData.initials || (userDocData.firstname ? userDocData.firstname.charAt(0) : 'A');
     if (userAvatar) userAvatar.textContent = initials;
 
-    // Populate dropdown info
     if (dropdownUserName) dropdownUserName.textContent = `${userDocData.firstname || ''} ${userDocData.surname || ''}`.trim();
     if (dropdownUserEmail) dropdownUserEmail.textContent = userDocData.email || user.email;
     if (dropdownUserRole) dropdownUserRole.textContent = (userDocData.role || 'Staff').replace('_', ' ');
