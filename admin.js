@@ -152,6 +152,45 @@ function populateTableFilters() {
   filterCampus.innerHTML = `<option value="">All campuses</option>` + uniqueCampuses.map(cp => `<option value="${cp}">${cp}</option>`).join('');
 }
 
+// Render Courses Table
+function renderCoursesTable(courses) {
+  if (!masterCoursesTableBody) return;
+  masterCoursesTableBody.innerHTML = '';
+
+  if (courses.length === 0) {
+    masterCoursesTableBody.innerHTML = `<tr><td colspan="5" style="padding: 20px; text-align: center; color: #6a86a9;">No courses found in database.</td></tr>`;
+    return;
+  }
+
+  const currentYear = `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`;
+
+  courses.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.style.cssText = "border-bottom: 1px solid #e1edfa; background: #ffffff; transition: background 0.1s;";
+    const isChecked = selectedCourseIds.has(item.id);
+
+    tr.innerHTML = `
+      <td style="padding: 14px 16px; width: 48px;"><input type="checkbox" class="course-row-checkbox" data-id="${item.id}" ${isChecked ? 'checked' : ''} style="width: 18px; height: 18px; accent-color: #087df5; cursor: pointer;"></td>
+      <td style="padding: 14px 16px; font-weight: 700; color: #0b3275; font-size: 13.5px;">${item.course || ''}</td>
+      <td style="padding: 14px 16px; color: #4b6b94; font-size: 13.5px;">${item.studyMode || ''}</td>
+      <td style="padding: 14px 16px; color: #4b6b94; font-size: 13.5px;">${item.campus || ''}</td>
+      <td style="padding: 14px 16px; color: #4b6b94; font-size: 13.5px;">${item.academicYear || currentYear}</td>
+    `;
+
+    const checkbox = tr.querySelector('.course-row-checkbox');
+    checkbox.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        selectedCourseIds.add(item.id);
+      } else {
+        selectedCourseIds.delete(item.id);
+      }
+      updateSelectedCount();
+    });
+
+    masterCoursesTableBody.appendChild(tr);
+  });
+  updateSelectedCount();
+}
 
 function updateSelectedCount() {
   if (selectedCourseCountText) {
