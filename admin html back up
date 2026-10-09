@@ -664,6 +664,85 @@
     .modal-body { padding: 18px 20px; }
     .modal-footer { padding: 16px 20px; }
   }
+
+  /* USER MENU DROPDOWN STYLES */
+  .user-menu-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .user-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 240px;
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(23, 60, 105, 0.12);
+    display: none;
+    flex-direction: column;
+    z-index: 100;
+    overflow: hidden;
+  }
+
+  .user-dropdown-menu.active {
+    display: flex;
+  }
+
+  .dropdown-user-info {
+    padding: 16px;
+    border-bottom: 1px solid var(--line);
+    background: #fafcfe;
+  }
+
+  .dropdown-user-name {
+    font-size: 14px;
+    font-weight: 750;
+    color: var(--navy);
+    margin-bottom: 2px;
+  }
+
+  .dropdown-user-email {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    word-break: break-all;
+  }
+
+  .dropdown-user-role {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #eaf5ff;
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .dropdown-logout-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    text-align: left;
+    color: #e53e3e;
+    font-size: 13.5px;
+    font-weight: 650;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .dropdown-logout-btn:hover {
+    background: #fff5f5;
+  }
 </style>
 </head>
 
@@ -686,8 +765,29 @@
         <input type="search" placeholder="Search applications, cycles, students..." />
       </label>
       <div class="help" aria-label="Help">?</div>
-      <div class="avatar" aria-label="Account">RS</div>
-      <div class="chevron" aria-hidden="true"></div>
+
+      <!-- User Profile Menu Wrapper -->
+      <div class="user-menu-wrapper" id="userMenuTrigger">
+        <div class="avatar" id="userAvatar">--</div>
+        <div class="chevron" aria-hidden="true"></div>
+
+        <!-- Dropdown Menu -->
+        <div class="user-dropdown-menu" id="userDropdownMenu">
+          <div class="dropdown-user-info">
+            <div class="dropdown-user-name" id="dropdownUserName">Loading...</div>
+            <div class="dropdown-user-email" id="dropdownUserEmail">---</div>
+            <span class="dropdown-user-role" id="dropdownUserRole">---</span>
+          </div>
+          <button type="button" class="dropdown-logout-btn" id="logoutBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Sign Out
+          </button>
+        </div>
+      </div>
     </div>
   </header>
 
