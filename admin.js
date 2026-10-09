@@ -57,6 +57,45 @@ function cancelCycleCreation(e) {
   }
 }
 
+// Render Header Degree Badges & Manage "Add Degree" button state
+function renderDegreeBadges() {
+  const container = document.getElementById('degreeBadgesContainer');
+  const addBtn = document.getElementById('addDegreeDropdownBtn');
+  if (!container) return;
+
+  container.innerHTML = '';
+  cycleConfig.degreeTypes.forEach((deg, index) => {
+    const badge = document.createElement('div');
+    badge.style.cssText = "display: inline-flex; align-items: center; gap: 10px; background: #f4f8fe; border: 1px solid #d0e3ff; padding: 6px 14px 6px 8px; border-radius: 30px; font-size: 13.5px; font-weight: 700; color: #0b3275;";
+    badge.innerHTML = `
+      <div style="width: 32px; height: 32px; border-radius: 50%; background: #ffffff; border: 1px solid #d0e3ff; display: grid; place-items: center; color: #087df5; flex-shrink: 0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+      </div>
+      <span>${deg}</span>
+      <span style="cursor: pointer; color: #f25555; font-size: 14px; font-weight: 800; margin-left: 6px;" data-index="${index}">✕</span>
+    `;
+    
+    badge.querySelector('span[data-index]').addEventListener('click', (ev) => {
+      const idx = parseInt(ev.target.getAttribute('data-index'));
+      cycleConfig.degreeTypes.splice(idx, 1);
+      renderDegreeBadges();
+    });
+    container.appendChild(badge);
+  });
+
+  // If user selected all 3, disable add degree button as requested
+  if (addBtn) {
+    if (cycleConfig.degreeTypes.length >= 3) {
+      addBtn.disabled = true;
+      addBtn.style.opacity = '0.5';
+      addBtn.style.cursor = 'not-allowed';
+    } else {
+      addBtn.disabled = false;
+      addBtn.style.opacity = '1';
+      addBtn.style.cursor = 'pointer';
+    }
+  }
+}
 
 // Add Degree Dropdown Action
 const addDegreeDropdownBtn = document.getElementById('addDegreeDropdownBtn');
