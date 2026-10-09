@@ -1,0 +1,1455 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Application Cycle</title>
+
+<style>
+:root {
+  --blue: #0866f5;
+  --blue-dark: #0647ad;
+  --navy: #071c72;
+  --text: #244b88;
+  --muted: #7897c5;
+  --border: #cfe3ff;
+  --pale-blue: #eaf5ff;
+  --white: #ffffff;
+  --red: #f35c63;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-height: 100%;
+  background: #ffffff;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid #70aaff;
+  outline-offset: 2px;
+}
+
+/* FULL-WIDTH PAGE */
+
+.page {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 10px 3.5% 35px;
+  background: #ffffff;
+}
+
+.page-header {
+  margin-bottom: 52px;
+}
+
+.page-header h1 {
+  margin: 0 0 14px;
+  color: var(--navy);
+  font-size: clamp(29px, 4.6vw, 50px);
+  font-weight: 750;
+  letter-spacing: -1.5px;
+  line-height: 1.15;
+}
+
+.page-header p {
+  margin: 0;
+  color: #6282b5;
+  font-size: clamp(14px, 1.8vw, 19px);
+  line-height: 1.5;
+}
+
+/* MAIN APPLICATION CARD */
+
+.application-card {
+  width: 100%;
+  min-width: 0;
+  padding: 15px 15px 17px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+/* DEGREE TYPES */
+
+.degree-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 25px;
+}
+
+.degree-list {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  gap: 12px;
+}
+
+.degree-item {
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 0;
+  position: relative;
+}
+
+.degree-icon {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 66px;
+  width: 66px;
+  height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: -18px;
+  border: 1.5px solid var(--border);
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--blue);
+}
+
+.degree-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.degree-chip {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  padding: 0 10px 0 24px;
+  border: 1.5px solid var(--border);
+  border-radius: 0 6px 6px 0;
+  background: #ffffff;
+  color: var(--navy);
+}
+
+.degree-chip .degree-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: clamp(11px, 1.4vw, 16px);
+  font-weight: 600;
+}
+
+.remove-degree {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 19px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--red);
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.add-degree-wrap {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.add-degree-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1.5px solid var(--blue);
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--blue);
+  white-space: nowrap;
+}
+
+.add-degree-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 200px;
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(22, 66, 130, 0.12);
+}
+
+.dropdown-menu.open {
+  display: block;
+}
+
+.dropdown-menu button {
+  display: block;
+  width: 100%;
+  padding: 11px;
+  border: 0;
+  border-radius: 4px;
+  background: #ffffff;
+  color: var(--text);
+  text-align: left;
+}
+
+.dropdown-menu button:hover {
+  background: var(--pale-blue);
+}
+
+/* NAVIGATION TABS */
+
+.tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  min-height: 43px;
+  padding: 0 0 0 0;
+  border-bottom: 1px solid #d8e7fb;
+}
+
+.tab {
+  position: relative;
+  min-width: 0;
+  padding: 0 17px 13px;
+  border: 0;
+  background: #ffffff;
+  color: #6280ad;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.tab.active {
+  color: var(--blue);
+  font-weight: 600;
+}
+
+.tab.active::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 3px;
+  background: var(--blue);
+  content: "";
+}
+
+/* CONTENT PANELS */
+
+.panel {
+  width: 100%;
+  min-width: 0;
+  margin-top: 22px;
+  padding: 19px 20px 22px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.panel h2 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1.3;
+}
+
+.panel-description {
+  margin: 7px 0 23px;
+  color: #6886b7;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* DATE FIELDS */
+
+.date-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 21px;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 10px;
+  color: #244a84;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.date-field {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  padding: 0 11px 0 15px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.date-field input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.date-field input::placeholder {
+  color: #8caddb;
+  opacity: 1;
+}
+
+.date-field button {
+  display: flex;
+  flex: 0 0 27px;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #28518e;
+}
+
+.date-field button svg {
+  width: 22px;
+  height: 22px;
+}
+
+.date-field input[type="date"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.date-hint {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 28px;
+  color: #5477aa;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.info-icon {
+  display: inline-flex;
+  flex: 0 0 22px;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--blue);
+  border-radius: 50%;
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* COURSE SECTION */
+
+.course-panel {
+  margin-top: 20px;
+}
+
+.course-panel .panel-description {
+  margin-bottom: 22px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 0.83fr;
+  gap: 20px;
+  align-items: end;
+  margin-bottom: 29px;
+}
+
+.filter label {
+  display: block;
+  margin-bottom: 10px;
+  color: #315582;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.filter select {
+  display: block;
+  width: 100%;
+  height: 50px;
+  min-width: 0;
+  padding: 0 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  outline-offset: 1px;
+  background-color: #ffffff;
+  color: #84a5d2;
+  font-size: 14px;
+}
+
+.search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  height: 50px;
+  padding: 0 12px;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  background: var(--blue);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.search-button:hover,
+.continue-button:hover {
+  background: #0054d9;
+}
+
+.search-button svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* COURSE TABLE */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #d9eaff;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: #ffffff;
+}
+
+thead {
+  background: #eaf5ff;
+}
+
+th {
+  height: 56px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #dcecff;
+  color: #315582;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+td {
+  height: 61px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #dcecff;
+  color: #6384b6;
+  font-size: 14px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+tbody tr:hover {
+  background: #f8fbff;
+}
+
+th:first-child,
+td:first-child {
+  width: 9%;
+  padding-left: 20px;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 35%;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  width: 17%;
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+  width: 21%;
+}
+
+th:nth-child(5),
+td:nth-child(5) {
+  width: 18%;
+}
+
+.course-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.sort-arrows {
+  color: #3d76c4;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.course-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-grid;
+  place-content: center;
+  width: 26px;
+  height: 26px;
+  margin: 0;
+  border: 1.5px solid #a7c9f5;
+  border-radius: 5px;
+  background: #ffffff;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.course-checkbox:checked {
+  border-color: var(--blue);
+  background: var(--blue);
+}
+
+.course-checkbox:checked::after {
+  width: 7px;
+  height: 12px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  content: "";
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.course-checkbox:focus-visible {
+  outline: 2px solid #70aaff;
+  outline-offset: 3px;
+}
+
+/* TABLE FOOTER */
+
+.course-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 27px;
+}
+
+.selected-count {
+  color: #0864e9;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.add-courses-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 50px;
+  padding: 0 16px;
+  border: 1.5px solid var(--blue);
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--blue);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.add-courses-button:hover,
+.cancel-button:hover,
+.add-degree-button:hover {
+  background: #f4f9ff;
+}
+
+.add-courses-button svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* BOTTOM ACTIONS */
+
+.bottom-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-top: 37px;
+}
+
+.cancel-button,
+.continue-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 135px;
+  min-height: 49px;
+  padding: 0 18px;
+  border: 1.5px solid var(--blue);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cancel-button {
+  background: #ffffff;
+  color: var(--blue);
+}
+
+.continue-button {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.continue-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* OTHER TAB PANELS */
+
+.alternate-panel {
+  min-height: 200px;
+}
+
+.alternate-panel p {
+  color: #6886b7;
+  line-height: 1.6;
+}
+
+/* RESPONSIVE LAYOUT */
+
+@media (min-width: 1500px) {
+  .page {
+    padding-right: 3.5%;
+    padding-left: 3.5%;
+  }
+
+  .page-header {
+    margin-bottom: 52px;
+  }
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: 18px 18px 28px;
+  }
+
+  .page-header {
+    margin-bottom: 30px;
+  }
+
+  .degree-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .degree-list {
+    flex-basis: 100%;
+  }
+
+  .add-degree-wrap {
+    margin-left: auto;
+  }
+
+  .filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 17px;
+  }
+
+  .panel {
+    padding: 18px 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  .page {
+    padding: 15px 10px 25px;
+  }
+
+  .page-header {
+    margin-bottom: 24px;
+  }
+
+  .page-header h1 {
+    font-size: 30px;
+    letter-spacing: -0.8px;
+  }
+
+  .page-header p {
+    font-size: 14px;
+  }
+
+  .application-card {
+    padding: 10px;
+  }
+
+  .degree-list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .degree-item {
+    width: 100%;
+    flex: none;
+  }
+
+  .degree-icon {
+    flex-basis: 52px;
+    width: 52px;
+    height: 52px;
+    margin-right: -12px;
+  }
+
+  .degree-chip {
+    height: 40px;
+    padding-left: 19px;
+  }
+
+  .degree-chip .degree-name {
+    font-size: 13px;
+  }
+
+  .degree-toolbar {
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+
+  .add-degree-button {
+    min-height: 40px;
+  }
+
+  .tabs {
+    gap: 0;
+    overflow-x: auto;
+  }
+
+  .tab {
+    padding-right: 11px;
+    padding-left: 11px;
+    font-size: 13px;
+  }
+
+  .panel {
+    margin-top: 14px;
+    padding: 15px 12px;
+  }
+
+  .panel h2 {
+    font-size: 20px;
+  }
+
+  .panel-description {
+    font-size: 14px;
+  }
+
+  .date-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-top: 18px;
+  }
+
+  .date-hint {
+    gap: 10px;
+    margin-top: 20px;
+    font-size: 12px;
+  }
+
+  .filter-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 10px;
+  }
+
+  .filter select,
+  .search-button {
+    height: 44px;
+    font-size: 12px;
+  }
+
+  .filter label {
+    font-size: 12px;
+  }
+
+  .course-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .add-courses-button {
+    align-self: flex-end;
+    min-height: 44px;
+    font-size: 12px;
+  }
+
+  .bottom-actions {
+    margin-top: 24px;
+  }
+
+  .cancel-button,
+  .continue-button {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+  }
+}
+</style>
+</head>
+
+<body>
+<main class="page">
+
+  <header class="page-header">
+    <h1>Create application cycle</h1>
+    <p>Set up your application cycle and choose the degree types you want to accept.</p>
+  </header>
+
+  <section class="application-card">
+
+    <!-- DEGREE TYPES -->
+    <div class="degree-toolbar">
+      <div class="degree-list" id="degreeList">
+
+        <div class="degree-item" data-degree="Undergraduate degrees">
+          <div class="degree-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 9.5 12 4l10 5.5-10 5.5L2 9.5Z"/>
+              <path d="M6 12v5.5c3.8 3 8.2 3 12 0V12"/>
+              <path d="M22 9.5v6"/>
+            </svg>
+          </div>
+          <div class="degree-chip">
+            <span class="degree-name">Undergraduate degrees</span>
+            <button class="remove-degree" aria-label="Remove undergraduate degrees">×</button>
+          </div>
+        </div>
+
+        <div class="degree-item" data-degree="Postgraduate degrees">
+          <div class="degree-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 9.5 12 4l10 5.5-10 5.5L2 9.5Z"/>
+              <path d="M6 12v5.5c3.8 3 8.2 3 12 0V12"/>
+              <path d="M22 9.5v6"/>
+            </svg>
+          </div>
+          <div class="degree-chip">
+            <span class="degree-name">Postgraduate degrees</span>
+            <button class="remove-degree" aria-label="Remove postgraduate degrees">×</button>
+          </div>
+        </div>
+
+        <div class="degree-item" data-degree="Research degrees">
+          <div class="degree-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 9.5 12 4l10 5.5-10 5.5L2 9.5Z"/>
+              <path d="M6 12v5.5c3.8 3 8.2 3 12 0V12"/>
+              <path d="M22 9.5v6"/>
+            </svg>
+          </div>
+          <div class="degree-chip">
+            <span class="degree-name">Research degrees</span>
+            <button class="remove-degree" aria-label="Remove research degrees">×</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="add-degree-wrap">
+        <button class="add-degree-button" id="addDegreeButton"
+          aria-expanded="false" aria-controls="degreeDropdown">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          <span>Add degree</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m7 10 5 5 5-5"/>
+          </svg>
+        </button>
+
+        <div class="dropdown-menu" id="degreeDropdown">
+          <button type="button" data-add-degree="Undergraduate degrees">Undergraduate degrees</button>
+          <button type="button" data-add-degree="Postgraduate degrees">Postgraduate degrees</button>
+          <button type="button" data-add-degree="Research degrees">Research degrees</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="tabs" aria-label="Application cycle sections">
+      <button class="tab active" data-tab="cycle">Cycle details</button>
+      <button class="tab" data-tab="form">Application form</button>
+      <button class="tab" data-tab="documents">Documents</button>
+    </nav>
+
+    <!-- CYCLE DETAILS -->
+    <div id="cycleContent">
+
+      <!-- APPLICATION DATES -->
+      <section class="panel">
+        <h2>Application cycle dates</h2>
+
+        <div class="date-grid">
+
+          <div>
+            <label class="field-label" for="openingDateText">Opening date</label>
+            <div class="date-field">
+              <input id="openingDateText" type="text"
+                placeholder="Select opening date" readonly>
+              <button type="button" class="calendar-button"
+                data-date-target="openingDateNative"
+                aria-label="Choose opening date">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="5" width="18" height="16" rx="2"/>
+                  <path d="M16 3v4M8 3v4M3 10h18"/>
+                </svg>
+              </button>
+              <input id="openingDateNative" type="date" aria-label="Opening date picker">
+            </div>
+          </div>
+
+          <div>
+            <label class="field-label" for="closingDateText">Closing date</label>
+            <div class="date-field">
+              <input id="closingDateText" type="text"
+                placeholder="Select closing date" readonly>
+              <button type="button" class="calendar-button"
+                data-date-target="closingDateNative"
+                aria-label="Choose closing date">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="5" width="18" height="16" rx="2"/>
+                  <path d="M16 3v4M8 3v4M3 10h18"/>
+                </svg>
+              </button>
+              <input id="closingDateNative" type="date" aria-label="Closing date picker">
+            </div>
+          </div>
+
+        </div>
+
+        <div class="date-hint">
+          <span class="info-icon">i</span>
+          <span>Students can submit applications only during this period.</span>
+        </div>
+      </section>
+
+      <!-- COURSES -->
+      <section class="panel course-panel">
+        <h2>Undergraduate courses</h2>
+        <p class="panel-description">
+          Select the Courses available in this application cycle.
+        </p>
+
+        <!-- FILTERS -->
+        <div class="filter-grid">
+
+          <div class="filter">
+            <label for="courseFilter">Course</label>
+            <select id="courseFilter">
+              <option value="all">All courses</option>
+              <option value="accounting">Bachelor of Commerce in Accounting</option>
+              <option value="computer">Bachelor of Computer Science</option>
+              <option value="education">Bachelor of Education</option>
+              <option value="business">Bachelor of Business Administration</option>
+              <option value="engineering">Bachelor of Engineering</option>
+            </select>
+          </div>
+
+          <div class="filter">
+            <label for="studyFilter">Study mode</label>
+            <select id="studyFilter">
+              <option value="all">All study modes</option>
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+            </select>
+          </div>
+
+          <div class="filter">
+            <label for="campusFilter">Campus</label>
+            <select id="campusFilter">
+              <option value="all">All campuses</option>
+              <option value="Main Campus">Main Campus</option>
+              <option value="North Campus">North Campus</option>
+              <option value="South Campus">South Campus</option>
+            </select>
+          </div>
+
+          <button type="button" class="search-button" id="searchButton">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round">
+              <circle cx="10.8" cy="10.8" r="7.2"/>
+              <path d="m16 16 5 5"/>
+            </svg>
+            Search
+          </button>
+
+        </div>
+
+        <!-- COURSE TABLE -->
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" class="course-checkbox"
+                    id="selectAll" aria-label="Select all visible courses">
+                </th>
+                <th>
+                  <span class="course-sort">
+                    Course <span class="sort-arrows">↕</span>
+                  </span>
+                </th>
+                <th>Study mode</th>
+                <th>Campus</th>
+                <th>Academic year</th>
+              </tr>
+            </thead>
+
+            <tbody id="courseTableBody">
+
+              <tr data-course="accounting" data-study="Full-time"
+                data-campus="Main Campus">
+                <td>
+                  <input type="checkbox" class="course-checkbox course-row-check"
+                    checked aria-label="Select Bachelor of Commerce in Accounting">
+                </td>
+                <td>Bachelor of Commerce in Accounting</td>
+                <td>Full-time</td>
+                <td>Main Campus</td>
+                <td>2025/2026</td>
+              </tr>
+
+              <tr data-course="computer" data-study="Full-time"
+                data-campus="Main Campus">
+                <td>
+                  <input type="checkbox" class="course-checkbox course-row-check"
+                    checked aria-label="Select Bachelor of Computer Science">
+                </td>
+                <td>Bachelor of Computer Science</td>
+                <td>Full-time</td>
+                <td>Main Campus</td>
+                <td>2025/2026</td>
+              </tr>
+
+              <tr data-course="education" data-study="Full-time"
+                data-campus="North Campus">
+                <td>
+                  <input type="checkbox" class="course-checkbox course-row-check"
+                    aria-label="Select Bachelor of Education">
+                </td>
+                <td>Bachelor of Education</td>
+                <td>Full-time</td>
+                <td>North Campus</td>
+                <td>2025/2026</td>
+              </tr>
+
+              <tr data-course="business" data-study="Part-time"
+                data-campus="Main Campus">
+                <td>
+                  <input type="checkbox" class="course-checkbox course-row-check"
+                    aria-label="Select Bachelor of Business Administration">
+                </td>
+                <td>Bachelor of Business Administration</td>
+                <td>Part-time</td>
+                <td>Main Campus</td>
+                <td>2025/2026</td>
+              </tr>
+
+              <tr data-course="engineering" data-study="Full-time"
+                data-campus="South Campus">
+                <td>
+                  <input type="checkbox" class="course-checkbox course-row-check"
+                    aria-label="Select Bachelor of Engineering">
+                </td>
+                <td>Bachelor of Engineering</td>
+                <td>Full-time</td>
+                <td>South Campus</td>
+                <td>2025/2026</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- SELECTION FOOTER -->
+        <div class="course-footer">
+          <span class="selected-count" id="selectedCount" aria-live="polite">
+            2 courses selected
+          </span>
+
+          <button type="button" class="add-courses-button" id="addCoursesButton">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            Add selected courses
+          </button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ALTERNATE TAB CONTENT -->
+    <section class="panel alternate-panel" id="alternateContent" hidden>
+      <h2 id="alternateHeading"></h2>
+      <p id="alternateDescription"></p>
+    </section>
+
+  </section>
+
+  <!-- BOTTOM ACTIONS -->
+  <footer class="bottom-actions">
+    <button type="button" class="cancel-button" id="cancelButton">
+      Cancel
+    </button>
+
+    <button type="button" class="continue-button" id="continueButton">
+      Continue
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14M13 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </footer>
+
+</main>
+
+<script>
+/* DATE PICKERS */
+
+document.querySelectorAll(".calendar-button").forEach(button => {
+  button.addEventListener("click", () => {
+    const picker = document.getElementById(button.dataset.dateTarget);
+
+    if (typeof picker.showPicker === "function") {
+      picker.showPicker();
+    } else {
+      picker.focus();
+      picker.click();
+    }
+  });
+});
+
+function formatDate(value) {
+  if (!value) return "";
+
+  const parts = value.split("-");
+  if (parts.length !== 3) return value;
+
+  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+[
+  ["openingDateNative", "openingDateText"],
+  ["closingDateNative", "closingDateText"]
+].forEach(([nativeId, textId]) => {
+  const nativeInput = document.getElementById(nativeId);
+  const textInput = document.getElementById(textId);
+
+  nativeInput.addEventListener("change", () => {
+    textInput.value = formatDate(nativeInput.value);
+  });
+});
+
+/* DEGREE DROPDOWN */
+
+const addDegreeButton = document.getElementById("addDegreeButton");
+const degreeDropdown = document.getElementById("degreeDropdown");
+const degreeList = document.getElementById("degreeList");
+
+addDegreeButton.addEventListener("click", () => {
+  const isOpen = degreeDropdown.classList.toggle("open");
+  addDegreeButton.setAttribute("aria-expanded", String(isOpen));
+});
+
+degreeDropdown.querySelectorAll("[data-add-degree]").forEach(button => {
+  button.addEventListener("click", () => {
+    const degree = button.dataset.addDegree;
+
+    const exists = [...degreeList.querySelectorAll(".degree-item")]
+      .some(item => item.dataset.degree === degree);
+
+    if (!exists) {
+      const item = document.createElement("div");
+      item.className = "degree-item";
+      item.dataset.degree = degree;
+
+      item.innerHTML = `
+        <div class="degree-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 9.5 12 4l10 5.5-10 5.5L2 9.5Z"/>
+            <path d="M6 12v5.5c3.8 3 8.2 3 12 0V12"/>
+            <path d="M22 9.5v6"/>
+          </svg>
+        </div>
+        <div class="degree-chip">
+          <span class="degree-name"></span>
+          <button class="remove-degree" aria-label="Remove degree">×</button>
+        </div>
+      `;
+
+      item.querySelector(".degree-name").textContent = degree;
+
+      item.querySelector(".remove-degree").addEventListener("click", () => {
+        item.remove();
+      });
+
+      degreeList.appendChild(item);
+    }
+
+    degreeDropdown.classList.remove("open");
+    addDegreeButton.setAttribute("aria-expanded", "false");
+  });
+});
+
+document.querySelectorAll(".remove-degree").forEach(button => {
+  button.addEventListener("click", () => {
+    button.closest(".degree-item").remove();
+  });
+});
+
+document.addEventListener("click", event => {
+  if (!event.target.closest(".add-degree-wrap")) {
+    degreeDropdown.classList.remove("open");
+    addDegreeButton.setAttribute("aria-expanded", "false");
+  }
+});
+
+/* COURSE SELECTION */
+
+const tableBody = document.getElementById("courseTableBody");
+const selectAll = document.getElementById("selectAll");
+const selectedCount = document.getElementById("selectedCount");
+
+function getVisibleRows() {
+  return [...tableBody.querySelectorAll("tr")]
+    .filter(row => row.style.display !== "none");
+}
+
+function updateSelection() {
+  const allRows = [...tableBody.querySelectorAll("tr")];
+  const selected = allRows.filter(row =>
+    row.querySelector(".course-row-check").checked
+  ).length;
+
+  selectedCount.textContent =
+    `${selected} ${selected === 1 ? "course" : "courses"} selected`;
+
+  const visibleRows = getVisibleRows();
+  const visibleChecks = visibleRows.map(row =>
+    row.querySelector(".course-row-check")
+  );
+
+  selectAll.checked = visibleChecks.length > 0 &&
+    visibleChecks.every(check => check.checked);
+
+  selectAll.indeterminate = visibleChecks.some(check => check.checked) &&
+    !visibleChecks.every(check => check.checked);
+}
+
+tableBody.addEventListener("change", event => {
+  if (event.target.classList.contains("course-row-check")) {
+    updateSelection();
+  }
+});
+
+selectAll.addEventListener("change", () => {
+  getVisibleRows().forEach(row => {
+    row.querySelector(".course-row-check").checked = selectAll.checked;
+  });
+
+  updateSelection();
+});
+
+/* COURSE FILTERS */
+
+function filterCourses() {
+  const course = document.getElementById("courseFilter").value;
+  const study = document.getElementById("studyFilter").value;
+  const campus = document.getElementById("campusFilter").value;
+
+  [...tableBody.querySelectorAll("tr")].forEach(row => {
+    const matchesCourse = course === "all" || row.dataset.course === course;
+    const matchesStudy = study === "all" || row.dataset.study === study;
+    const matchesCampus = campus === "all" || row.dataset.campus === campus;
+
+    row.style.display =
+      matchesCourse && matchesStudy && matchesCampus ? "" : "none";
+  });
+
+  updateSelection();
+}
+
+document.getElementById("searchButton")
+  .addEventListener("click", filterCourses);
+
+["courseFilter", "studyFilter", "campusFilter"].forEach(id => {
+  document.getElementById(id).addEventListener("change", filterCourses);
+});
+
+/* ADD SELECTED COURSES */
+
+document.getElementById("addCoursesButton").addEventListener("click", () => {
+  const selectedRows = [...tableBody.querySelectorAll("tr")]
+    .filter(row => row.querySelector(".course-row-check").checked);
+
+  if (selectedRows.length === 0) {
+    alert("Please select at least one course.");
+    return;
+  }
+
+  const names = selectedRows.map(row => row.cells[1].textContent.trim());
+
+  alert(
+    `${selectedRows.length} course(s) selected:\n\n` +
+    names.join("\n")
+  );
+});
+
+/* NAVIGATION TABS */
+
+const cycleContent = document.getElementById("cycleContent");
+const alternateContent = document.getElementById("alternateContent");
+const alternateHeading = document.getElementById("alternateHeading");
+const alternateDescription = document.getElementById("alternateDescription");
+
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(item => {
+      item.classList.toggle("active", item === tab);
+    });
+
+    if (tab.dataset.tab === "cycle") {
+      cycleContent.hidden = false;
+      alternateContent.hidden = true;
+      return;
+    }
+
+    cycleContent.hidden = true;
+    alternateContent.hidden = false;
+
+    if (tab.dataset.tab === "form") {
+      alternateHeading.textContent = "Application form";
+      alternateDescription.textContent =
+        "Configure the application form for this application cycle.";
+    } else {
+      alternateHeading.textContent = "Documents";
+      alternateDescription.textContent =
+        "Configure the documents required for this application cycle.";
+    }
+  });
+});
+
+/* CANCEL AND CONTINUE */
+
+document.getElementById("cancelButton").addEventListener("click", () => {
+  const confirmed = confirm(
+    "Cancel creating this application cycle? Unsaved changes may be lost."
+  );
+
+  if (confirmed) {
+    window.location.reload();
+  }
+});
+
+document.getElementById("continueButton").addEventListener("click", () => {
+  const openingDate = document.getElementById("openingDateNative").value;
+  const closingDate = document.getElementById("closingDateNative").value;
+
+  if (openingDate && closingDate && closingDate < openingDate) {
+    alert("The closing date cannot be earlier than the opening date.");
+    return;
+  }
+
+  const selectedDegrees =
+    degreeList.querySelectorAll(".degree-item").length;
+
+  if (selectedDegrees === 0) {
+    alert("Please add at least one degree type before continuing.");
+    return;
+  }
+
+  alert("Your application cycle details are ready to continue.");
+});
+
+/* INITIAL STATE */
+
+updateSelection();
+</script>
+
+</body>
+</html>
