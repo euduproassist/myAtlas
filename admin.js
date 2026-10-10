@@ -18,6 +18,108 @@ const selectedCourseCountText = document.getElementById('selectedCourseCountText
 let masterCoursesCache = [];
 let selectedCourseIds = new Set();
 
+// DEGREE CARDS STATE MANAGEMENT (Strict fixed order & 3-slot layout)
+const ALL_DEGREES = ["Undergraduate degrees", "Postgraduate degrees", "Research degrees"];
+let activeDegrees = [...ALL_DEGREES];
+
+function renderDegreeSlots() {
+  const container = document.getElementById('degreeList');
+  if (!container) return;
+  container.innerHTML = '';
+
+  // Always render exactly 3 slot items to maintain exact grid width, sizing, and position
+  for (let i = 0; i < 3; i++) {
+    const degName = activeDegrees[i];
+    const slotDiv = document.createElement('div');
+
+    if (degName) {
+      slotDiv.className = 'degree-item';
+      slotDiv.innerHTML = `
+        <div class="degree-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 9.5 12 4l10 5.5-10 5.5L2 9.5Z"/>
+            <path d="M6 12v5.5c3.8 3 8.2 3 12 0V12"/>
+            <path d="M22 9.5v6"/>
+          </svg>
+        </div>
+        <div class="degree-chip">
+          <span class="degree-name">${degName}</span>
+          <button type="button" class="remove-degree" data-degree="${degName}" aria-label="Remove ${degName}">×</button>
+        </div>
+      `;
+
+      slotDiv.querySelector('.remove-degree').addEventListener('click', () => {
+        if (activeDegrees.length <= 1) {
+          alert("At least one degree card must remain.");
+          return;
+        }
+        activeDegrees = activeDegrees.filter(d => d !== degName);
+        renderDegreeSlots();
+      });
+    } else {
+      // Empty placeholder slot keeping exact width/position
+      slotDiv.className = 'degree-item empty-slot';
+      slotDiv.innerHTML = `
+        <div class="degree-icon"></div>
+        <div class="degree-chip"></div>
+      `;
+    }
+
+    container.appendChild(slotDiv);
+  }
+
+  updateAddDegreeDropdown();
+}
+
+function updateAddDegreeDropdown() {
+  const dropdown = document.getElementById('addDegreeDropdown');
+  const addBtn = document.getElementById('addDegreeTrigger');
+  if (!dropdown || !addBtn) return;
+
+  dropdown.innerHTML = '';
+  const missingDegrees = ALL_DEGREES.filter(d => !activeDegrees.includes(d));
+
+  if (missingDegrees.length === 0) {
+    addBtn.style.opacity = '0.5';
+    addBtn.style.pointerEvents = 'none';
+  } else {
+    addBtn.style.opacity = '1';
+    addBtn.style.pointerEvents = 'auto';
+
+    missingDegrees.forEach(deg => {
+      const opt = document.createElement('button');
+      opt.type = 'button';
+      opt.className = 'add-degree-option';
+      opt.textContent = deg;
+      opt.addEventListener('click', () => {
+        activeDegrees.push(deg);
+        // Sort back to standard order: Undergraduate -> Postgraduate -> Research
+        activeDegrees.sort((a, b) => ALL_DEGREES.indexOf(a) - ALL_DEGREES.indexOf(b));
+        renderDegreeSlots();
+        dropdown.classList.remove('active');
+      });
+      dropdown.appendChild(opt);
+    });
+  }
+}
+
+// Add Degree Dropdown Trigger
+const addDegreeTrigger = document.getElementById('addDegreeTrigger');
+const addDegreeDropdown = document.getElementById('addDegreeDropdown');
+
+if (addDegreeTrigger && addDegreeDropdown) {
+  addDegreeTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    addDegreeDropdown.classList.toggle('active');
+  });
+
+  window.addEventListener('click', () => {
+    if (addDegreeDropdown.classList.contains('active')) {
+      addDegreeDropdown.classList.remove('active');
+    }
+  });
+}
+
 // FUNCTION 2: Create Application Cycle Button Action
 function showCycleBuilder(e) {
   if (e) e.preventDefault();
