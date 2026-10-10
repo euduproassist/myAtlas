@@ -526,7 +526,6 @@
     position: relative;
   }
 
-  /* Empty placeholder slot styling to preserve exact widths/positions */
   .degree-item.empty-slot {
     visibility: hidden;
     pointer-events: none;
@@ -590,6 +589,7 @@
     font-size: 22px;
     font-weight: 400;
     line-height: 1;
+    cursor: pointer;
   }
 
   .add-degree-wrap {
@@ -610,6 +610,7 @@
     color: var(--blue);
     white-space: nowrap;
     font-weight: 600;
+    cursor: pointer;
   }
 
   .add-degree-button svg {
@@ -617,7 +618,6 @@
     height: 18px;
   }
 
-    /* DROPDOWN MENU FOR ADD DEGREE */
   .add-degree-dropdown {
     position: absolute;
     top: calc(100% + 6px);
@@ -1165,7 +1165,7 @@
       </label>
       <div class="help" aria-label="Help">?</div>
 
-      <!-- User Profile Menu Wrapper (FUNCTION 1: Profile Icon & Authentication) -->
+      <!-- User Profile Menu Wrapper -->
       <div class="user-menu-wrapper" id="userMenuTrigger">
         <div class="avatar" id="userAvatar">--</div>
         <div class="chevron" aria-hidden="true"></div>
@@ -1199,7 +1199,6 @@
       <h1>Welcome to myAtlas Staff Portal</h1>
       <p>You can create application cycles, manage applications, view submitted documents and update their status — all from one place.</p>
       
-      <!-- FUNCTION 2: Create Application Cycle Button -->
       <button class="primary" id="openModalBtn">
         <span class="plus-sign">+</span>Create application cycle
       </button>
@@ -1313,7 +1312,7 @@
 
         <section class="application-card">
 
-      <!-- DEGREE TYPES TOOLBAR -->
+          <!-- DEGREE TYPES TOOLBAR -->
           <div class="degree-toolbar">
             <div class="degree-list" id="degreeList">
               <!-- Dynamically rendered via Admin.js preserving fixed slots -->
@@ -1336,7 +1335,7 @@
             </div>
           </div>
 
-          <!-- NAVIGATION TABS (Layout strictly preserved, function removed) -->
+          <!-- NAVIGATION TABS -->
           <nav class="tabs" aria-label="Application cycle sections">
             <button type="button" class="tab active">Cycle details</button>
             <button type="button" class="tab">Application form</button>
@@ -1346,7 +1345,7 @@
           <!-- CYCLE CONTENT -->
           <div id="cycleContent">
 
-            <!-- APPLICATION DATES PANEL (FUNCTION 3: Calendar Icons & Picker Features) -->
+            <!-- APPLICATION DATES PANEL -->
             <section class="panel">
               <h2>Application cycle dates</h2>
 
@@ -1386,7 +1385,7 @@
               </div>
             </section>
 
-            <!-- COURSES PANEL (FUNCTION 4: Undergraduate Course Table Features) -->
+            <!-- COURSES PANEL -->
             <section class="panel course-panel">
               <h2>Undergraduate courses</h2>
               <p class="panel-description">Select the Courses available in this application cycle.</p>
@@ -1466,12 +1465,10 @@
 
         <!-- BOTTOM ACTIONS -->
         <footer class="bottom-actions">
-          <!-- FUNCTION 5: Cancel Button -->
           <button type="button" class="cancel-button" id="cancelCycleBtn">
             Cancel
           </button>
 
-          <!-- CONTINUE BUTTON (Layout strictly preserved, function permanently removed) -->
           <button type="button" class="continue-button" id="continueCycleBtn">
             Continue
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
