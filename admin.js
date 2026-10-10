@@ -120,6 +120,22 @@ if (addDegreeTrigger && addDegreeDropdown) {
   });
 }
 
+// Cancel Button Action
+function cancelCycleCreation(e) {
+  if (e) e.preventDefault();
+  if (confirm("Are you sure you want to cancel? All progress for this cycle will be discarded.")) {
+    selectedCourseIds.clear();
+    activeDegrees = [...ALL_DEGREES];
+    const welcomeSidebar = document.getElementById('welcomeSidebar');
+    const mainShell = document.getElementById('mainShell');
+    
+    if (welcomeSidebar) welcomeSidebar.style.display = 'flex';
+    if (mainShell) mainShell.classList.remove('builder-active');
+
+    if (cycleBuilderView) cycleBuilderView.style.display = 'none';
+    if (dashboardView) dashboardView.style.display = 'block';
+  }
+}
 
 // FUNCTION 3: Calendar Icons & Picker Features
 document.querySelectorAll(".calendar-button").forEach(button => {
