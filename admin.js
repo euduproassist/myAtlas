@@ -121,19 +121,7 @@ if (addDegreeTrigger && addDegreeDropdown) {
 }
 
 // FUNCTION 2: Create Application Cycle Button Action
-function showCycleBuilder(e) {
-  if (e) e.preventDefault();
-  const welcomeSidebar = document.getElementById('welcomeSidebar');
-  const mainShell = document.getElementById('mainShell');
-  
-  if (welcomeSidebar) welcomeSidebar.style.display = 'none';
-  if (mainShell) mainShell.classList.add('builder-active');
-  
-  if (dashboardView) dashboardView.style.display = 'none';
-  if (cycleBuilderView) cycleBuilderView.style.display = 'block';
-  
-  fetchMasterCourses();
-}
+
 
 // FUNCTION 5: Cancel Button Action
 function cancelCycleCreation(e) {
