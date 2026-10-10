@@ -27,7 +27,6 @@ function renderDegreeSlots() {
   if (!container) return;
   container.innerHTML = '';
 
-  // Always render exactly 3 slot items to maintain exact grid width, sizing, and position
   for (let i = 0; i < 3; i++) {
     const degName = activeDegrees[i];
     const slotDiv = document.createElement('div');
@@ -57,7 +56,6 @@ function renderDegreeSlots() {
         renderDegreeSlots();
       });
     } else {
-      // Empty placeholder slot keeping exact width/position
       slotDiv.className = 'degree-item empty-slot';
       slotDiv.innerHTML = `
         <div class="degree-icon"></div>
@@ -93,7 +91,6 @@ function updateAddDegreeDropdown() {
       opt.textContent = deg;
       opt.addEventListener('click', () => {
         activeDegrees.push(deg);
-        // Sort back to standard order: Undergraduate -> Postgraduate -> Research
         activeDegrees.sort((a, b) => ALL_DEGREES.indexOf(a) - ALL_DEGREES.indexOf(b));
         renderDegreeSlots();
         dropdown.classList.remove('active');
@@ -120,6 +117,22 @@ if (addDegreeTrigger && addDegreeDropdown) {
   });
 }
 
+// Create Application Cycle Button Action
+function showCycleBuilder(e) {
+  if (e) e.preventDefault();
+  const welcomeSidebar = document.getElementById('welcomeSidebar');
+  const mainShell = document.getElementById('mainShell');
+  
+  if (welcomeSidebar) welcomeSidebar.style.display = 'none';
+  if (mainShell) mainShell.classList.add('builder-active');
+  
+  if (dashboardView) dashboardView.style.display = 'none';
+  if (cycleBuilderView) cycleBuilderView.style.display = 'block';
+  
+  renderDegreeSlots();
+  fetchMasterCourses();
+}
+
 // Cancel Button Action
 function cancelCycleCreation(e) {
   if (e) e.preventDefault();
@@ -137,7 +150,7 @@ function cancelCycleCreation(e) {
   }
 }
 
-// FUNCTION 3: Calendar Icons & Picker Features
+// Calendar Icons & Picker Features
 document.querySelectorAll(".calendar-button").forEach(button => {
   button.addEventListener("click", () => {
     const picker = document.getElementById(button.dataset.dateTarget);
@@ -173,7 +186,7 @@ function formatDate(value) {
   }
 });
 
-// FUNCTION 4: Undergraduate Course Table Features
+// Undergraduate Course Table Features
 async function fetchMasterCourses() {
   if (!masterCoursesTableBody) return;
   masterCoursesTableBody.innerHTML = `<tr><td colspan="5" style="padding: 20px; text-align: center; color: var(--muted);">Loading master courses from database...</td></tr>`;
@@ -305,7 +318,7 @@ if (openModalBtn) openModalBtn.addEventListener('click', showCycleBuilder);
 document.querySelectorAll('.action-step-1').forEach(el => el.addEventListener('click', showCycleBuilder));
 if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', cancelCycleCreation);
 
-// FUNCTION 1: PROFILE ICON & AUTHENTICATION FEATURES
+// PROFILE ICON & AUTHENTICATION FEATURES
 const userMenuTrigger = document.getElementById('userMenuTrigger');
 const userDropdownMenu = document.getElementById('userDropdownMenu');
 const userAvatar = document.getElementById('userAvatar');
