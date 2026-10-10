@@ -1,1 +1,4 @@
-Uncaught SyntaxError: The requested module 'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js' does not provide an export named 'setTimestamp' (at admin-home.js:3:50)
+admin.js:304
+ Uncaught ReferenceError: showCycleBuilder is not defined
+    at admin.js:304:58
+(anonymous)	@	admin.js:304
