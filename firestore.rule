@@ -1,17 +1,6 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow public read for master courses catalog, write restricted
-    match /master_courses/{document=**} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-    
-    // Allow authenticated staff to create and manage application cycles
-    match /application_cycles/{document=**} {
-      allow read, write: if request.auth != null;
-    }
-
     // Pre-approved records used for validation during activation across all roles
     match /pre_approved_admins/{adminId} {
       allow read: if true;
