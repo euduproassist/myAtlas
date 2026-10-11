@@ -44,7 +44,7 @@ onAuthStateChanged(auth, async (user) => {
 
     if (dropdownUserName) dropdownUserName.textContent = `${userDocData.firstname || ''} ${userDocData.surname || ''}`.trim();
     if (dropdownUserEmail) dropdownUserEmail.textContent = userDocData.email || user.email;
-    if (dropdownUserRole) dropdownUserRole.textContent = (userDocData.role || 'Staff').replace('_', ' ');
+    if (dropdownUserRole) dropdownUserRole.textContent = (userDocData.role || 'Admin').replace('_', ' ');
 
   } catch (err) {
     console.error("Profile Verification Error:", err);
