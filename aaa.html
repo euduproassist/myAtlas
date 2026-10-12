@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Application Cycle</title>
+
+<style>
+:root {
+  --blue: #087cff;
+  --blue-dark: #003b99;
+  --blue-light: #dceeff;
+  --border: #c5e0ff;
+  --text: #073783;
+  --muted: #4e91e7;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: #fff;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #fff;
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+button, input, select {
+  font: inherit;
+}
+
+.page {
+  width: 100%;
+  padding: 24px 2.3% 32px;
+}
+
+/* PAGE HEADING */
+
+.page-heading {
+  margin-bottom: 20px;
+}
+
+.page-heading h1 {
+  margin: 0 0 7px;
+  color: var(--blue-dark);
+  font-size: clamp(25px, 2.1vw, 32px);
+  font-weight: 750;
+  letter-spacing: -0.5px;
+}
+
+.page-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* FIVE-STEP PROGRESS BAR */
+
+.steps {
+  display: flex;
+  width: 100%;
+  min-height: 59px;
+  margin-bottom: 17px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  scrollbar-width: thin;
+  scrollbar-color: #c5e0ff #fff;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  flex: 1 0 170px;
+  min-width: 170px;
+  min-height: 58px;
+  padding: 10px 15px;
+  color: #006dff;
+  white-space: nowrap;
+}
+
+.step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  right: 0;
+  width: 1px;
+  height: 25px;
+  background: #d3e8ff;
+}
+
+.step.active {
+  font-weight: 700;
+}
+
+.step.active::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 12px;
+  height: 3px;
+  background: var(--blue);
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 31px;
+  width: 31px;
+  height: 31px;
+  border: 1px solid #91c5ff;
+  border-radius: 50%;
+  color: var(--blue-dark);
+  background: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.step.active .step-number {
+  border-color: var(--blue);
+  color: #fff;
+  background: var(--blue);
+}
+
+/* MAIN APPLICATION DETAILS CARD */
+
+.details-card {
+  width: 100%;
+  padding: 20px 17px 24px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.card-heading {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 0 0 35px;
+  padding: 0 1px;
+}
+
+.heading-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 55px;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  color: var(--blue);
+  background: #eaf5ff;
+}
+
+.heading-icon svg,
+.folder-icon svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.card-heading h2 {
+  margin: 0 0 9px;
+  color: var(--blue-dark);
+  font-size: 17px;
+  font-weight: 750;
+}
+
+.card-heading p {
+  margin: 0;
+  color: #2688f5;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* INPUT FIELDS */
+
+.fields-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 28px;
+  row-gap: 40px;
+  padding: 0 9px;
+}
+
+.field {
+  min-width: 0;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 12px;
+  color: #087cff;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.required {
+  color: #e53b4d;
+}
+
+.control {
+  display: block;
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #b8d9ff;
+  border-radius: 6px;
+  outline: none;
+  color: var(--text);
+  background: #fff;
+  font-size: 14px;
+}
+
+.control:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 2px #e6f2ff;
+}
+
+.control::placeholder {
+  color: #76b2f7;
+  opacity: 1;
+}
+
+select.control {
+  cursor: pointer;
+}
+
+/* AUTOMATIC FOLDER AND CYCLE NAMES */
+
+.automatic-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr);
+  align-items: end;
+  gap: 0;
+  margin-top: 31px;
+  padding: 0 9px 0;
+}
+
+.automatic-field {
+  min-width: 0;
+}
+
+.automatic-field label {
+  display: block;
+  margin-bottom: 12px;
+  color: #087cff;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.automatic-label {
+  color: #388cf0;
+  font-weight: 400;
+}
+
+.automatic-input {
+  display: block;
+  width: 100%;
+  height: 43px;
+  padding: 0 13px;
+  border: 1px solid #b8d9ff;
+  border-radius: 6px;
+  color: #5797e5;
+  background: #edf6ff;
+  font-size: 14px;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  padding-top: 22px;
+  color: #087cff;
+  font-size: 23px;
+  font-weight: 400;
+}
+
+/* ACTION BUTTONS OUTSIDE THE CARD */
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  width: 100%;
+  margin-top: 26px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 24px;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  cursor: default;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.btn-cancel {
+  min-width: 112px;
+  color: #006dff;
+  background: #fff;
+}
+
+.btn-next {
+  min-width: 194px;
+  color: #fff;
+  background: var(--blue);
+  box-shadow: 0 2px 5px rgba(0, 100, 255, 0.12);
+}
+
+.btn-next span {
+  margin-left: 7px;
+  font-size: 17px;
+}
+
+/* MEDIUM SCREENS */
+
+@media (max-width: 800px) {
+  .page {
+    padding: 23px 18px 28px;
+  }
+
+  .details-card {
+    padding: 19px 15px 23px;
+  }
+
+  .card-heading {
+    gap: 13px;
+    margin-bottom: 30px;
+  }
+
+  .fields-grid {
+    column-gap: 18px;
+    row-gap: 32px;
+    padding: 0 3px;
+  }
+
+  .automatic-section {
+    grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr);
+    padding: 0 3px;
+  }
+
+  .field label,
+  .automatic-field label {
+    font-size: 14px;
+  }
+}
+
+/* SMALL SCREENS: STACK THE AUTOMATIC FIELDS */
+
+@media (max-width: 560px) {
+  .page {
+    padding: 20px 13px 25px;
+  }
+
+  .page-heading {
+    margin-bottom: 18px;
+  }
+
+  .page-heading h1 {
+    font-size: 25px;
+    line-height: 1.25;
+  }
+
+  .page-heading p {
+    font-size: 13px;
+  }
+
+  .steps {
+    margin-bottom: 14px;
+  }
+
+  .step {
+    flex-basis: 155px;
+    min-width: 155px;
+    gap: 10px;
+    padding: 9px 12px;
+    font-size: 12px;
+  }
+
+  .step-number {
+    flex-basis: 29px;
+    width: 29px;
+    height: 29px;
+  }
+
+  .details-card {
+    padding: 17px 13px 21px;
+  }
+
+  .card-heading {
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 27px;
+  }
+
+  .heading-icon {
+    flex-basis: 43px;
+    width: 43px;
+    height: 43px;
+  }
+
+  .heading-icon svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .card-heading h2 {
+    margin-top: 3px;
+    font-size: 16px;
+  }
+
+  .card-heading p {
+    font-size: 12px;
+  }
+
+  .fields-grid {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 23px;
+    padding: 0;
+  }
+
+  .field label,
+  .automatic-field label {
+    margin-bottom: 9px;
+    font-size: 14px;
+  }
+
+  .control {
+    height: 43px;
+  }
+
+  .automatic-section {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    margin-top: 28px;
+    padding: 22px 0 0;
+    border-top: 1px solid #d5e9ff;
+  }
+
+  .separator {
+    display: none;
+  }
+
+  .automatic-input {
+    height: 43px;
+  }
+
+  .actions {
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .btn {
+    min-height: 43px;
+    padding: 0 14px;
+    font-size: 12px;
+  }
+
+  .btn-cancel {
+    min-width: 83px;
+  }
+
+  .btn-next {
+    min-width: 0;
+    flex: 1;
+  }
+}
+
+@media (max-width: 360px) {
+  .actions {
+    gap: 8px;
+  }
+
+  .btn {
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  .btn-cancel {
+    min-width: 73px;
+  }
+}
+</style>
+</head>
+
+<body>
+<main class="page">
+
+  <!-- PAGE TITLE -->
+  <header class="page-heading">
+    <h1>Create Application Cycle</h1>
+    <p>
+      Set up the basic information for your application cycle.
+      You can complete the other sections later.
+    </p>
+  </header>
+
+  <!-- HORIZONTAL FIVE-STEP PROGRESS -->
+  <nav class="steps" aria-label="Application cycle steps">
+    <div class="step active">
+      <span class="step-number">1</span>
+      <span>Basic Info</span>
+    </div>
+
+    <div class="step">
+      <span class="step-number">2</span>
+      <span>Application Form</span>
+    </div>
+
+    <div class="step">
+      <span class="step-number">3</span>
+      <span>Courses</span>
+    </div>
+
+    <div class="step">
+      <span class="step-number">4</span>
+      <span>Documents</span>
+    </div>
+
+    <div class="step">
+      <span class="step-number">5</span>
+      <span>Review &amp; Publish</span>
+    </div>
+  </nav>
+
+  <!-- APPLICATION DETAILS CARD -->
+  <section class="details-card">
+
+    <div class="card-heading">
+      <div class="heading-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M7 3.5h7l5 5V21H7z"></path>
+          <path d="M14 3.5V9h5"></path>
+          <path d="M10 13h6"></path>
+          <path d="M10 17h6"></path>
+        </svg>
+      </div>
+
+      <div>
+        <h2>Application Details</h2>
+        <p>
+          Enter the key details for your application cycle.
+          The system will automatically create the folder and
+          cycle name based on the information you provide.
+        </p>
+      </div>
+    </div>
+
+    <!-- FOUR REQUIRED FIELDS -->
+    <div class="fields-grid">
+
+      <div class="field">
+        <label for="qualification">
+          Qualification Type <span class="required">*</span>
+        </label>
+
+        <select id="qualification" class="control">
+          <option value="" selected disabled>
+            Select qualification type
+          </option>
+          <option>Undergraduate Degree</option>
+          <option>Postgraduate Degree</option>
+          <option>Honours Degree</option>
+          <option>Diploma</option>
+          <option>Higher Certificate</option>
+          <option>Short Course</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="academic-year">
+          Academic Year <span class="required">*</span>
+        </label>
+
+        <select id="academic-year" class="control">
+          <option value="" selected disabled>
+            Select academic year
+          </option>
+          <option>2026</option>
+          <option>2027</option>
+          <option>2028</option>
+          <option>2029</option>
+          <option>2030</option>
+          <option>2031</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="opening-date">
+          Opening Date <span class="required">*</span>
+        </label>
+
+        <input
+          id="opening-date"
+          class="control"
+          type="date"
+          aria-label="Opening date"
+        >
+      </div>
+
+      <div class="field">
+        <label for="closing-date">
+          Closing Date <span class="required">*</span>
+        </label>
+
+        <input
+          id="closing-date"
+          class="control"
+          type="date"
+          aria-label="Closing date"
+        >
+      </div>
+
+    </div>
+
+    <!-- AUTOMATIC NAMES -->
+    <div class="automatic-section">
+
+      <div class="automatic-field">
+        <label for="folder-name">
+          Folder Name <span class="automatic-label">(automatic)</span>
+        </label>
+
+        <input
+          id="folder-name"
+          class="automatic-input"
+          type="text"
+          placeholder="Year - Application Cycles"
+          readonly
+        >
+      </div>
+
+      <div class="separator" aria-hidden="true">/</div>
+
+      <div class="automatic-field">
+        <label for="cycle-name">
+          Application Cycle Name
+          <span class="automatic-label">(automatic)</span>
+        </label>
+
+        <input
+          id="cycle-name"
+          class="automatic-input"
+          type="text"
+          placeholder="{Qualification Type} Applications - {Year}"
+          readonly
+        >
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- BUTTONS ARE OUTSIDE THE RECTANGULAR CARD -->
+  <div class="actions">
+    <button type="button" class="btn btn-cancel">
+      Cancel
+    </button>
+
+    <button type="button" class="btn btn-next">
+      Next: Application Form <span aria-hidden="true">→</span>
+    </button>
+  </div>
+
+</main>
+</body>
+</html>
