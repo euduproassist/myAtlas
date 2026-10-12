@@ -5,6 +5,66 @@ import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-
 document.documentElement.style.overflowX = "hidden";
 document.body.style.overflowX = "hidden";
 
+// UI View Elements
+const dashboardView = document.getElementById('dashboardView');
+const cycleBuilderView = document.getElementById('cycleBuilderView');
+const welcomeSidebar = document.getElementById('welcomeSidebar');
+const mainShell = document.getElementById('mainShell');
+const openModalBtn = document.getElementById('openModalBtn');
+const cancelCycleBtn = document.getElementById('cancelCycleBtn');
+
+// Auto-naming Fields
+const qualificationSelect = document.getElementById('qualification');
+const academicYearSelect = document.getElementById('academic-year');
+const folderNameInput = document.getElementById('folder-name');
+const cycleNameInput = document.getElementById('cycle-name');
+
+function updateAutoNaming() {
+  const currentCreationYear = new Date().getFullYear();
+  const nextYear = currentCreationYear + 1;
+  if (folderNameInput) {
+    folderNameInput.value = `${currentCreationYear}/${nextYear} Application Cycles`;
+  }
+
+  if (qualificationSelect && academicYearSelect && cycleNameInput) {
+    const qual = qualificationSelect.value;
+    const yr = academicYearSelect.value;
+    if (qual && yr) {
+      cycleNameInput.value = `${qual} - ${yr}`;
+    } else if (qual) {
+      cycleNameInput.value = `${qual} - [Select Year]`;
+    } else if (yr) {
+      cycleNameInput.value = `[Select Qualification] - ${yr}`;
+    } else {
+      cycleNameInput.value = '';
+    }
+  }
+}
+
+function showCycleBuilder(e) {
+  if (e) e.preventDefault();
+  if (welcomeSidebar) welcomeSidebar.style.display = 'none';
+  if (mainShell) mainShell.classList.add('builder-active');
+  if (dashboardView) dashboardView.style.display = 'none';
+  if (cycleBuilderView) cycleBuilderView.style.display = 'block';
+  updateAutoNaming();
+}
+
+function hideCycleBuilder(e) {
+  if (e) e.preventDefault();
+  if (welcomeSidebar) welcomeSidebar.style.display = 'flex';
+  if (mainShell) mainShell.classList.remove('builder-active');
+  if (cycleBuilderView) cycleBuilderView.style.display = 'none';
+  if (dashboardView) dashboardView.style.display = 'block';
+}
+
+if (openModalBtn) openModalBtn.addEventListener('click', showCycleBuilder);
+document.querySelectorAll('.action-step-1').forEach(el => el.addEventListener('click', showCycleBuilder));
+if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', hideCycleBuilder);
+
+if (qualificationSelect) qualificationSelect.addEventListener('change', updateAutoNaming);
+if (academicYearSelect) academicYearSelect.addEventListener('change', updateAutoNaming);
+
 // PROFILE ICON & AUTHENTICATION FEATURES
 const userMenuTrigger = document.getElementById('userMenuTrigger');
 const userDropdownMenu = document.getElementById('userDropdownMenu');
