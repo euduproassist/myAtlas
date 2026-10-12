@@ -19,22 +19,39 @@ const academicYearSelect = document.getElementById('academic-year');
 const folderNameInput = document.getElementById('folder-name');
 const cycleNameInput = document.getElementById('cycle-name');
 
+// Populate Academic Year options automatically (Previous, Current, Following Year)
+function populateAcademicYears() {
+  if (!academicYearSelect) return;
+  const currentYear = new Date().getFullYear();
+  const prevYear = currentYear - 1;
+  const nextYear = currentYear + 1;
+
+  const years = [prevYear, currentYear, nextYear];
+  
+  // Clear existing options except default disabled option
+  academicYearSelect.innerHTML = '<option value="" selected disabled>Select academic year</option>';
+  
+  years.forEach(yr => {
+    const opt = document.createElement('option');
+    opt.value = yr;
+    opt.textContent = yr;
+    academicYearSelect.appendChild(opt);
+  });
+}
+
 function updateAutoNaming() {
   const currentCreationYear = new Date().getFullYear();
-  const nextYear = currentCreationYear + 1;
+  
   if (folderNameInput) {
-    folderNameInput.value = `${currentCreationYear}/${nextYear} Application Cycles`;
+    folderNameInput.value = `${currentCreationYear} - Application Cycle`;
   }
 
   if (qualificationSelect && academicYearSelect && cycleNameInput) {
     const qual = qualificationSelect.value;
     const yr = academicYearSelect.value;
     if (qual && yr) {
-      cycleNameInput.value = `${qual} - ${yr}`;
-    } else if (qual) {
-      cycleNameInput.value = `${qual} - [Select Year]`;
-    } else if (yr) {
-      cycleNameInput.value = `[Select Qualification] - ${yr}`;
+      // Format as requested: lowercased qualification name + " - " + year
+      cycleNameInput.value = `${qual.toLowerCase()} -${yr}`;
     } else {
       cycleNameInput.value = '';
     }
@@ -43,6 +60,7 @@ function updateAutoNaming() {
 
 function showCycleBuilder(e) {
   if (e) e.preventDefault();
+  populateAcademicYears();
   if (welcomeSidebar) welcomeSidebar.style.display = 'none';
   if (mainShell) mainShell.classList.add('builder-active');
   if (dashboardView) dashboardView.style.display = 'none';
