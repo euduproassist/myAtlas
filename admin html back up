@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>myAtlas — Staff Portal</title>
+<title>myAtlas — Admin Portal</title>
 
 <style>
   :root {
@@ -77,7 +77,6 @@
     display: flex;
     flex-direction: column;
     flex: 1;
-    transition: filter 0.2s ease;
   }
 
   /* HEADER */
@@ -167,7 +166,7 @@
     border-right: 2px solid #536d8d;
     border-bottom: 2px solid #536d8d;
     transform: rotate(45deg);
-    margin-left: -10px;
+    margin-left: 8px;
     flex-shrink: 0;
   }
 
@@ -176,7 +175,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0px;
     cursor: pointer;
   }
 
@@ -259,9 +258,6 @@
     display: grid;
     grid-template-columns: 460px minmax(0, 1fr);
   }
-  .shell.builder-active {
-    grid-template-columns: 1fr;
-  }
 
   /* LEFT SIDEBAR (Welcome Column) */
   .welcome {
@@ -316,9 +312,9 @@
     width: 100%;
     max-width: 100%;
     margin-bottom: 40px;
-    transition: background .15s ease;
+    pointer-events: none;
+    opacity: 0.9;
   }
-  .primary:hover { background: #076fd9; }
   .plus-sign { font-size: 20px; margin-right: 8px; font-weight: 400; line-height: 1; }
 
   .divider-line {
@@ -367,6 +363,7 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    pointer-events: none;
   }
 
   /* MAIN CONTENT AREA */
@@ -413,11 +410,6 @@
     min-height: 220px;
     min-width: 0;
     position: relative;
-    transition: border-color .15s ease, box-shadow .15s ease;
-  }
-  .step-card:hover {
-    border-color: #b3d7ff;
-    box-shadow: 0 4px 12px rgba(8,125,245,.06);
   }
 
   .card-top-row {
@@ -469,562 +461,7 @@
     align-items: center;
     gap: 6px;
     margin-top: auto;
-  }
-
-  /* BUILDER VIEW LAYOUT */
-  .page-header-builder {
-    margin-bottom: 36px;
-  }
-
-  .page-header-builder h1 {
-    margin: 0 0 10px;
-    color: var(--navy);
-    font-size: clamp(28px, 4vw, 44px);
-    font-weight: 750;
-    letter-spacing: -1.2px;
-    line-height: 1.15;
-  }
-
-  .page-header-builder p {
-    margin: 0;
-    color: #6282b5;
-    font-size: clamp(14px, 1.8vw, 18px);
-    line-height: 1.5;
-  }
-
-  .application-card {
-    width: 100%;
-    min-width: 0;
-    padding: 16px;
-    border: 1.5px solid var(--border);
-    border-radius: 6px;
-    background: #ffffff;
-  }
-
-  .degree-toolbar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    min-width: 0;
-    margin-bottom: 25px;
-  }
-
-  .degree-list {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    min-width: 0;
-    gap: 12px;
-  }
-
-  .degree-item {
-    display: flex;
-    align-items: center;
-    flex: 1 1 0;
-    min-width: 0;
-    position: relative;
-  }
-
-  .degree-icon {
-    position: relative;
-    z-index: 1;
-    flex: 0 0 62px;
-    width: 62px;
-    height: 62px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: -18px;
-    border: 1.5px solid var(--border);
-    border-radius: 50%;
-    background: #ffffff;
-    color: var(--blue);
-  }
-
-  .degree-icon svg {
-    width: 28px;
-    height: 28px;
-  }
-
-  .degree-chip {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 8px;
-    flex: 1;
-    min-width: 0;
-    height: 44px;
-    padding: 0 10px 0 24px;
-    border: 1.5px solid var(--border);
-    border-radius: 0 6px 6px 0;
-    background: #ffffff;
-    color: var(--navy);
-  }
-
-  .degree-chip .degree-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: clamp(11px, 1.4vw, 15px);
-    font-weight: 600;
-  }
-
-  .remove-degree {
-    display: flex;
-    flex: 0 0 auto;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 24px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--red);
-    font-size: 22px;
-    font-weight: 400;
-    line-height: 1;
-  }
-
-  .add-degree-wrap {
-    position: relative;
-    flex: 0 0 auto;
-  }
-
-  .add-degree-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 44px;
-    padding: 0 12px;
-    border: 1.5px solid var(--blue);
-    border-radius: 6px;
-    background: #ffffff;
-    color: var(--blue);
-    white-space: nowrap;
-    font-weight: 600;
-  }
-
-  .add-degree-button svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .tabs {
-    display: flex;
-    align-items: stretch;
-    gap: 8px;
-    min-height: 43px;
-    padding: 0;
-    border-bottom: 1px solid #d8e7fb;
-  }
-
-  .tab {
-    position: relative;
-    min-width: 0;
-    padding: 0 17px 13px;
-    border: 0;
-    background: #ffffff;
-    color: #6280ad;
-    font-size: 15px;
-    white-space: nowrap;
-  }
-
-  .tab.active {
-    color: var(--blue);
-    font-weight: 600;
-  }
-
-  .tab.active::after {
-    position: absolute;
-    right: 0;
-    bottom: -1px;
-    left: 0;
-    height: 3px;
-    background: var(--blue);
-    content: "";
-  }
-
-  .panel {
-    width: 100%;
-    min-width: 0;
-    margin-top: 22px;
-    padding: 19px 20px 22px;
-    border: 1.5px solid var(--border);
-    border-radius: 6px;
-    background: #ffffff;
-  }
-
-  .panel h2 {
-    margin: 0;
-    color: var(--navy);
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    line-height: 1.3;
-  }
-
-  .panel-description {
-    margin: 7px 0 23px;
-    color: #6886b7;
-    font-size: 15px;
-    line-height: 1.5;
-  }
-
-  .date-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
-    margin-top: 21px;
-  }
-
-  .field-label {
-    display: block;
-    margin-bottom: 10px;
-    color: #244a84;
-    font-size: 15px;
-    font-weight: 600;
-  }
-
-  .date-field {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 50px;
-    padding: 0 11px 0 15px;
-    border: 1.5px solid var(--border);
-    border-radius: 6px;
-    background: #ffffff;
-  }
-
-  .date-field input[type="text"] {
-    flex: 1;
-    min-width: 0;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: 0;
-    outline: 0;
-    background: transparent;
-    color: var(--text);
-    font-size: 14px;
-  }
-
-  .date-field input::placeholder {
-    color: #8caddb;
-    opacity: 1;
-  }
-
-  .date-field button {
-    display: flex;
-    flex: 0 0 27px;
-    align-items: center;
-    justify-content: center;
-    width: 27px;
-    height: 32px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: #28518e;
-    cursor: pointer;
-  }
-
-  .date-field button svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  .date-field input[type="date"] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
     pointer-events: none;
-  }
-
-  .date-hint {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-top: 28px;
-    color: #5477aa;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  .info-icon {
-    display: inline-flex;
-    flex: 0 0 22px;
-    align-items: center;
-    justify-content: center;
-    width: 22px;
-    height: 22px;
-    border: 2px solid var(--blue);
-    border-radius: 50%;
-    color: var(--blue);
-    font-size: 13px;
-    font-weight: bold;
-  }
-
-  .course-panel {
-    margin-top: 20px;
-  }
-
-  .filter-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 0.83fr;
-    gap: 20px;
-    align-items: end;
-    margin-bottom: 29px;
-  }
-
-  .filter label {
-    display: block;
-    margin-bottom: 10px;
-    color: #315582;
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  .filter select {
-    display: block;
-    width: 100%;
-    height: 50px;
-    min-width: 0;
-    padding: 0 12px;
-    border: 1.5px solid var(--border);
-    border-radius: 6px;
-    background-color: #ffffff;
-    color: var(--navy);
-    font-size: 14px;
-    outline: none;
-  }
-
-  .search-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    width: 100%;
-    height: 50px;
-    padding: 0 12px;
-    border: 1px solid var(--blue);
-    border-radius: 6px;
-    background: var(--blue);
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 600;
-    transition: background 0.15s ease;
-  }
-
-  .search-button:hover,
-  .continue-button:hover {
-    background: #0054d9;
-  }
-
-  .search-button svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  .table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    border: 1px solid #d9eaff;
-    border-radius: 6px;
-    background: #ffffff;
-  }
-
-  table {
-    width: 100%;
-    min-width: 640px;
-    border-collapse: collapse;
-    table-layout: fixed;
-    background: #ffffff;
-  }
-
-  thead {
-    background: #eaf5ff;
-  }
-
-  th {
-    height: 56px;
-    padding: 10px 12px;
-    border-bottom: 1px solid #dcecff;
-    color: #315582;
-    font-size: 14px;
-    font-weight: 600;
-    text-align: left;
-    white-space: nowrap;
-  }
-
-  td {
-    height: 61px;
-    padding: 10px 12px;
-    border-bottom: 1px solid #dcecff;
-    color: #6384b6;
-    font-size: 14px;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  tbody tr:last-child td {
-    border-bottom: 0;
-  }
-
-  tbody tr:hover {
-    background: #f8fbff;
-  }
-
-  th:first-child,
-  td:first-child {
-    width: 9%;
-    padding-left: 20px;
-  }
-
-  th:nth-child(2),
-  td:nth-child(2) {
-    width: 35%;
-  }
-
-  th:nth-child(3),
-  td:nth-child(3) {
-    width: 17%;
-  }
-
-  th:nth-child(4),
-  td:nth-child(4) {
-    width: 21%;
-  }
-
-  th:nth-child(5),
-  td:nth-child(5) {
-    width: 18%;
-  }
-
-  .course-sort {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-  }
-
-  .sort-arrows {
-    color: #3d76c4;
-    font-size: 15px;
-    line-height: 1;
-  }
-
-  .course-checkbox {
-    appearance: none;
-    -webkit-appearance: none;
-    display: inline-grid;
-    place-content: center;
-    width: 26px;
-    height: 26px;
-    margin: 0;
-    border: 1.5px solid #a7c9f5;
-    border-radius: 5px;
-    background: #ffffff;
-    vertical-align: middle;
-    cursor: pointer;
-  }
-
-  .course-checkbox:checked {
-    border-color: var(--blue);
-    background: var(--blue);
-  }
-
-  .course-checkbox:checked::after {
-    width: 7px;
-    height: 12px;
-    border: solid #ffffff;
-    border-width: 0 2px 2px 0;
-    content: "";
-    transform: rotate(45deg) translate(-1px, -1px);
-  }
-
-  .course-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: 27px;
-  }
-
-  .selected-count {
-    color: #0864e9;
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  .add-courses-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    min-height: 50px;
-    padding: 0 16px;
-    border: 1.5px solid var(--blue);
-    border-radius: 6px;
-    background: #ffffff;
-    color: var(--blue);
-    font-weight: 600;
-    white-space: nowrap;
-    transition: background 0.15s ease;
-  }
-
-  .add-courses-button:hover,
-  .cancel-button:hover,
-  .add-degree-button:hover {
-    background: #f4f9ff;
-  }
-
-  .add-courses-button svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  .bottom-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 14px;
-    margin-top: 37px;
-  }
-
-  .cancel-button,
-  .continue-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    min-width: 135px;
-    min-height: 49px;
-    padding: 0 18px;
-    border: 1.5px solid var(--blue);
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  .cancel-button {
-    background: #ffffff;
-    color: var(--blue);
-  }
-
-  .continue-button {
-    background: var(--blue);
-    color: #ffffff;
-    transition: background 0.15s ease;
-  }
-
-  .continue-button svg {
-    width: 20px;
-    height: 20px;
   }
 
   /* FOOTER */
@@ -1044,10 +481,9 @@
     align-items: center;
     gap: 16px;
     flex: 0 0 auto;
-  }
-  .footer-logo {
-    width: 110px;
-    height: auto;
+    font-size: 13px;
+    color: #708aa8;
+    font-weight: 500;
   }
   .footer-right {
     display: flex;
@@ -1058,9 +494,8 @@
     font-size: 13px;
     color: #708aa8;
     font-weight: 500;
-    transition: color .15s ease;
+    pointer-events: none;
   }
-  .footer-right a:hover { color: var(--blue); }
 
   /* RESPONSIVE LAYOUT */
   @media (max-width: 900px) {
@@ -1070,11 +505,6 @@
     .topbar { padding: 0 18px; }
     .footer { padding: 20px 18px; flex-direction: column; gap: 16px; align-items: flex-start; }
     .footer-right { gap: 20px; flex-wrap: wrap; }
-    .degree-toolbar { flex-wrap: wrap; }
-    .degree-list { flex-basis: 100%; }
-    .add-degree-wrap { margin-left: auto; }
-    .filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px; }
-    .panel { padding: 18px 16px; }
   }
 
   @media (max-width: 560px) {
@@ -1082,26 +512,6 @@
     .search { width: 36px; height: 36px; padding: 0; justify-content: center; border: none; background: #f5f9fd; box-shadow: none; }
     .search input { display: none; }
     .search svg { margin: 0; }
-    .page-header-builder h1 { font-size: 28px; }
-    .application-card { padding: 10px; }
-    .degree-list { flex-direction: column; align-items: stretch; gap: 12px; }
-    .degree-item { width: 100%; flex: none; }
-    .degree-icon { flex-basis: 52px; width: 52px; height: 52px; margin-right: -12px; }
-    .degree-chip { height: 40px; padding-left: 19px; }
-    .degree-chip .degree-name { font-size: 13px; }
-    .degree-toolbar { gap: 12px; margin-bottom: 22px; }
-    .add-degree-button { min-height: 40px; }
-    .tabs { gap: 0; overflow-x: auto; }
-    .tab { padding-right: 11px; padding-left: 11px; font-size: 13px; }
-    .panel { margin-top: 14px; padding: 15px 12px; }
-    .panel h2 { font-size: 20px; }
-    .date-grid { grid-template-columns: 1fr; gap: 18px; margin-top: 18px; }
-    .filter-grid { grid-template-columns: 1fr 1fr; gap: 14px 10px; }
-    .filter select, .search-button { height: 44px; font-size: 12px; }
-    .course-footer { align-items: flex-start; flex-direction: column; }
-    .add-courses-button { align-self: flex-end; min-height: 44px; font-size: 12px; }
-    .bottom-actions { margin-top: 24px; }
-    .cancel-button, .continue-button { flex: 1; min-width: 0; min-height: 44px; }
   }
 </style>
 </head>
@@ -1111,7 +521,7 @@
   <!-- TOP BAR -->
   <header class="topbar">
     <div class="brand">
-      <a href="#" aria-label="myAtlas home" class="logo-link">
+      <a href="#" aria-label="myAtlas home" class="logo-link" onclick="return false;">
         <img class="brand-logo" src="assets/logos.png" alt="myAtlas College">
       </a>
     </div>
@@ -1126,7 +536,7 @@
       </label>
       <div class="help" aria-label="Help">?</div>
 
-      <!-- User Profile Menu Wrapper (FUNCTION 1: Profile Icon & Authentication) -->
+      <!-- User Profile Menu Wrapper -->
       <div class="user-menu-wrapper" id="userMenuTrigger">
         <div class="avatar" id="userAvatar">--</div>
         <div class="chevron" aria-hidden="true"></div>
@@ -1157,11 +567,10 @@
     <!-- LEFT WELCOME SECTION -->
     <aside class="welcome" id="welcomeSidebar">
       <span class="welcome-back">Welcome back</span>
-      <h1>Welcome to myAtlas Staff Portal</h1>
+      <h1>Welcome to myAtlas Admin Portal</h1>
       <p>You can create application cycles, manage applications, view submitted documents and update their status — all from one place.</p>
       
-      <!-- FUNCTION 2: Create Application Cycle Button -->
-      <button class="primary" id="openModalBtn">
+      <button class="primary" id="openModalBtn" onclick="return false;">
         <span class="plus-sign">+</span>Create application cycle
       </button>
 
@@ -1177,7 +586,7 @@
         <div class="setup-content">
           <h3>Need help getting started?</h3>
           <p>Check out our quick guide to set up your first application cycle and manage your admissions process.</p>
-          <a class="setup-link" href="#" id="guideLink">View setup guide →</a>
+          <a class="setup-link" href="#" onclick="return false;" id="guideLink">View setup guide →</a>
         </div>
       </div>
     </aside>
@@ -1205,7 +614,7 @@
               <h3>Create Application Cycle</h3>
               <p>Set opening/closing dates, select degree types and key details for your cycle.</p>
             </div>
-            <a class="see-more action-step-1" href="#">See more →</a>
+            <a class="see-more action-step-1" href="#" onclick="return false;">See more →</a>
           </div>
 
           <!-- Step 2 -->
@@ -1223,7 +632,7 @@
               <h3>View Applications</h3>
               <p>Review and manage incoming applications.</p>
             </div>
-            <a class="see-more" id="viewAppsBtn" href="#">See more →</a>
+            <a class="see-more" id="viewAppsBtn" href="#" onclick="return false;">See more →</a>
           </div>
 
           <!-- Step 3 -->
@@ -1242,7 +651,7 @@
               <h3>Manage Fields</h3>
               <p>Configure the information you want to collect from applicants.</p>
             </div>
-            <a class="see-more" id="manageFieldsBtn" href="#">See more →</a>
+            <a class="see-more" id="manageFieldsBtn" href="#" onclick="return false;">See more →</a>
           </div>
 
           <!-- Step 4 -->
@@ -1259,224 +668,9 @@
               <h3>View Reports</h3>
               <p>Track progress and download reports.</p>
             </div>
-            <a class="see-more" id="viewReportsBtn" href="#">See more →</a>
+            <a class="see-more" id="viewReportsBtn" href="#" onclick="return false;">See more →</a>
           </div>
         </div>
-      </div>
-
-      <!-- VIEW 2: Application Cycle Builder Workspace -->
-      <div id="cycleBuilderView" style="display: none;">
-        
-        <header class="page-header-builder">
-          <h1>Create application cycle</h1>
-          <p>Set up your application cycle and choose the degree types you want to accept.</p>
-        </header>
-
-        <section class="application-card">
-
-          <!-- DEGREE TYPES TOOLBAR (Layout strictly preserved, functions permanently removed) -->
-          <div class="degree-toolbar">
-            <div class="degree-list" id="degreeList">
-              <div class="degree-item">
-                <div class="degree-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 9.5 12 4l10 5.5-10 5.5L2 9.5Z"/>
-                    <path d="M6 12v5.5c3.8 3 8.2 3 12 0V12"/>
-                    <path d="M22 9.5v6"/>
-                  </svg>
-                </div>
-                <div class="degree-chip">
-                  <span class="degree-name">Undergraduate degrees</span>
-                  <button type="button" class="remove-degree" aria-label="Remove Undergraduate degrees">×</button>
-                </div>
-              </div>
-
-              <div class="degree-item">
-                <div class="degree-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 9.5 12 4l10 5.5-10 5.5L2 9.5Z"/>
-                    <path d="M6 12v5.5c3.8 3 8.2 3 12 0V12"/>
-                    <path d="M22 9.5v6"/>
-                  </svg>
-                </div>
-                <div class="degree-chip">
-                  <span class="degree-name">Postgraduate degrees</span>
-                  <button type="button" class="remove-degree" aria-label="Remove Postgraduate degrees">×</button>
-                </div>
-              </div>
-
-              <div class="degree-item">
-                <div class="degree-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 9.5 12 4l10 5.5-10 5.5L2 9.5Z"/>
-                    <path d="M6 12v5.5c3.8 3 8.2 3 12 0V12"/>
-                    <path d="M22 9.5v6"/>
-                  </svg>
-                </div>
-                <div class="degree-chip">
-                  <span class="degree-name">Research degrees</span>
-                  <button type="button" class="remove-degree" aria-label="Remove Research degrees">×</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="add-degree-wrap">
-              <button type="button" class="add-degree-button">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                  <path d="M12 5v14M5 12h14"/>
-                </svg>
-                <span>Add degree</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="m7 10 5 5 5-5"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- NAVIGATION TABS (Layout strictly preserved, function removed) -->
-          <nav class="tabs" aria-label="Application cycle sections">
-            <button type="button" class="tab active">Cycle details</button>
-            <button type="button" class="tab">Application form</button>
-            <button type="button" class="tab">Documents</button>
-          </nav>
-
-          <!-- CYCLE CONTENT -->
-          <div id="cycleContent">
-
-            <!-- APPLICATION DATES PANEL (FUNCTION 3: Calendar Icons & Picker Features) -->
-            <section class="panel">
-              <h2>Application cycle dates</h2>
-
-              <div class="date-grid">
-                <div>
-                  <label class="field-label" for="openingDateText">Opening date</label>
-                  <div class="date-field">
-                    <input id="openingDateText" type="text" placeholder="Select opening date" readonly>
-                    <button type="button" class="calendar-button" data-date-target="openingDateInput" aria-label="Choose opening date">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="5" width="18" height="16" rx="2"/>
-                        <path d="M16 3v4M8 3v4M3 10h18"/>
-                      </svg>
-                    </button>
-                    <input id="openingDateInput" type="date" aria-label="Opening date picker">
-                  </div>
-                </div>
-
-                <div>
-                  <label class="field-label" for="closingDateText">Closing date</label>
-                  <div class="date-field">
-                    <input id="closingDateText" type="text" placeholder="Select closing date" readonly>
-                    <button type="button" class="calendar-button" data-date-target="closingDateInput" aria-label="Choose closing date">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="5" width="18" height="16" rx="2"/>
-                        <path d="M16 3v4M8 3v4M3 10h18"/>
-                      </svg>
-                    </button>
-                    <input id="closingDateInput" type="date" aria-label="Closing date picker">
-                  </div>
-                </div>
-              </div>
-
-              <div class="date-hint">
-                <span class="info-icon">i</span>
-                <span>Students can submit applications only during this period.</span>
-              </div>
-            </section>
-
-            <!-- COURSES PANEL (FUNCTION 4: Undergraduate Course Table Features) -->
-            <section class="panel course-panel">
-              <h2>Undergraduate courses</h2>
-              <p class="panel-description">Select the Courses available in this application cycle.</p>
-
-              <!-- FILTERS -->
-              <div class="filter-grid">
-                <div class="filter">
-                  <label for="filterCourse">Course</label>
-                  <select id="filterCourse">
-                    <option value="">All courses</option>
-                  </select>
-                </div>
-
-                <div class="filter">
-                  <label for="filterStudyMode">Study mode</label>
-                  <select id="filterStudyMode">
-                    <option value="">All study modes</option>
-                  </select>
-                </div>
-
-                <div class="filter">
-                  <label for="filterCampus">Campus</label>
-                  <select id="filterCampus">
-                    <option value="">All campuses</option>
-                  </select>
-                </div>
-
-                <button type="button" class="search-button" id="searchCoursesBtn">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <circle cx="10.8" cy="10.8" r="7.2"/>
-                    <path d="m16 16 5 5"/>
-                  </svg>
-                  Search
-                </button>
-              </div>
-
-              <!-- COURSE TABLE -->
-              <div class="table-wrapper">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>
-                        <input type="checkbox" class="course-checkbox" id="selectAllCourses" aria-label="Select all visible courses">
-                      </th>
-                      <th>
-                        <span class="course-sort">
-                          Course <span class="sort-arrows">↕</span>
-                        </span>
-                      </th>
-                      <th>Study mode</th>
-                      <th>Campus</th>
-                      <th>Academic year</th>
-                    </tr>
-                  </thead>
-                  <tbody id="masterCoursesTableBody">
-                    <!-- Populated dynamically from Firestore master_courses -->
-                  </tbody>
-                </table>
-              </div>
-
-              <!-- SELECTION FOOTER -->
-              <div class="course-footer">
-                <span class="selected-count" id="selectedCourseCountText" aria-live="polite">0 courses selected</span>
-
-                <button type="button" class="add-courses-button" id="addSelectedCoursesBtn">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <path d="M12 5v14M5 12h14"/>
-                  </svg>
-                  Add selected courses
-                </button>
-              </div>
-            </section>
-
-          </div>
-
-        </section>
-
-        <!-- BOTTOM ACTIONS -->
-        <footer class="bottom-actions">
-          <!-- FUNCTION 5: Cancel Button -->
-          <button type="button" class="cancel-button" id="cancelCycleBtn">
-            Cancel
-          </button>
-
-          <!-- CONTINUE BUTTON (Layout strictly preserved, function permanently removed) -->
-          <button type="button" class="continue-button" id="continueCycleBtn">
-            Continue
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M13 5l7 7-7 7"/>
-            </svg>
-          </button>
-        </footer>
-
       </div>
     </main>
 
@@ -1485,12 +679,12 @@
   <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-left">
-      <img class="footer-logo" src="assets/logos.png" alt="Atlas College">
+      &copy; 2026 Atlas College. All rights reserved.
     </div>
     <div class="footer-right">
-      <a href="#" id="privacyLink">Privacy Policy</a>
-      <a href="#" id="termsLink">Terms &amp; Conditions</a>
-      <a href="#" id="supportLink">Help &amp; Support</a>
+      <a href="#" onclick="return false;" id="privacyLink">Privacy Policy</a>
+      <a href="#" onclick="return false;" id="termsLink">Terms &amp; Conditions</a>
+      <a href="#" onclick="return false;" id="supportLink">Help</a>
     </div>
   </footer>
 </div>
