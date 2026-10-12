@@ -19,16 +19,15 @@ const academicYearSelect = document.getElementById('academic-year');
 const folderNameInput = document.getElementById('folder-name');
 const cycleNameInput = document.getElementById('cycle-name');
 
-// Populate Academic Year options automatically (Previous, Current, Following Year)
+// Automatically populate Academic Year with Current Year and Next Year only
 function populateAcademicYears() {
   if (!academicYearSelect) return;
   const currentYear = new Date().getFullYear();
-  const prevYear = currentYear - 1;
   const nextYear = currentYear + 1;
 
-  const years = [prevYear, currentYear, nextYear];
+  const years = [currentYear, nextYear];
   
-  // Clear existing options except default disabled option
+  // Clear existing options except default disabled placeholder
   academicYearSelect.innerHTML = '<option value="" selected disabled>Select academic year</option>';
   
   years.forEach(yr => {
@@ -50,8 +49,9 @@ function updateAutoNaming() {
     const qual = qualificationSelect.value;
     const yr = academicYearSelect.value;
     if (qual && yr) {
-      // Format as requested: lowercased qualification name + " - " + year
-      cycleNameInput.value = `${qual.toLowerCase()} -${yr}`;
+      // Formats "Undergraduate Degree" -> "Undergraduate Applications 2026"
+      const categoryName = qual.replace(/\s+Degree$/i, '');
+      cycleNameInput.value = `${categoryName} Applications ${yr}`;
     } else {
       cycleNameInput.value = '';
     }
