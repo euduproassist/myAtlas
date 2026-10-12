@@ -468,7 +468,7 @@
     pointer-events: none;
   }
 
-  /* BUILDER VIEW STYLES (MATCHING PROVIDED SNIPPET) */
+  /* BUILDER VIEW STYLES */
   .page-heading {
     margin-bottom: 20px;
   }
@@ -672,6 +672,7 @@
     color: #5797e5;
     background: #edf6ff;
     font-size: 14px;
+    cursor: not-allowed;
   }
   .separator {
     display: flex;
@@ -1008,12 +1009,9 @@
                 <option value="" selected disabled>
                   Select qualification type
                 </option>
-                <option>Undergraduate Degree</option>
-                <option>Postgraduate Degree</option>
-                <option>Honours Degree</option>
-                <option>Diploma</option>
-                <option>Higher Certificate</option>
-                <option>Short Course</option>
+                <option value="Undergraduate Degree">Undergraduate Degree</option>
+                <option value="Postgraduate Degree">Postgraduate Degree</option>
+                <option value="Research Degree">Research Degree</option>
               </select>
             </div>
 
@@ -1026,12 +1024,7 @@
                 <option value="" selected disabled>
                   Select academic year
                 </option>
-                <option>2026</option>
-                <option>2027</option>
-                <option>2028</option>
-                <option>2029</option>
-                <option>2030</option>
-                <option>2031</option>
+                <!-- Populated dynamically via JavaScript: Previous, Current, Following Year -->
               </select>
             </div>
 
@@ -1075,9 +1068,10 @@
                 id="folder-name"
                 class="automatic-input"
                 type="text"
-                placeholder="Year - Application Cycles"
+                placeholder="Year - Application Cycle"
                 readonly
-              >
+                tabindex="-1"
+              />
             </div>
 
             <div class="separator" aria-hidden="true">/</div>
@@ -1092,9 +1086,10 @@
                 id="cycle-name"
                 class="automatic-input"
                 type="text"
-                placeholder="{Qualification Type} Applications - {Year}"
+                placeholder="{Qualification Type} - {Academic Year}"
                 readonly
-              >
+                tabindex="-1"
+              />
             </div>
 
           </div>
