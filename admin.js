@@ -116,7 +116,7 @@ function validateBasicInfoFields() {
   return true;
 }
 
-// Fetch form fields from Firestore and populate table
+// Fetch form fields from Firestore and populate table with strict validation
 async function loadFormFieldsFromFirestore() {
   const tbody = document.getElementById('formFieldsTableBody');
   if (!tbody) return;
@@ -125,20 +125,42 @@ async function loadFormFieldsFromFirestore() {
   try {
     const querySnapshot = await getDocs(collection(db, "application_form_fields"));
     let fields = [];
+
     querySnapshot.forEach((docSnap) => {
-      fields.push({ id: docSnap.id, ...docSnap.data() });
+      const data = docSnap.data();
+      
+      // Strict check: must have all five fields explicitly defined
+      const hasAllFields = 
+        data.fieldName !== undefined && data.fieldName !== null && data.fieldName !== '' &&
+        data.requirement !== undefined && data.requirement !== null &&
+        data.fieldBehaviour !== undefined && data.fieldBehaviour !== null &&
+        data.isSelected !== undefined && data.isSelected !== null &&
+        data.order !== undefined && data.order !== null;
+
+      if (!hasAllFields) return; // Skip if missing any of the 5 fields
+
+      // Strict check: requirement must be either "Required" or "Optional"
+      if (data.requirement !== "Required" && data.requirement !== "Optional") return;
+
+      // Strict check: fieldBehaviour must be either "Standard" or "Conditional"
+      if (data.fieldBehaviour !== "Standard" && data.fieldBehaviour !== "Conditional") return;
+
+      // Strict check: isSelected must be a boolean (true or false)
+      if (typeof data.isSelected !== "boolean") return;
+
+      fields.push({ id: docSnap.id, ...data });
     });
 
-    // Sort by order property if available
+    // Sort by order property
     fields.sort((a, b) => (a.order || 0) - (b.order || 0));
 
     tbody.innerHTML = '';
     if (fields.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">No fields found in Firestore.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">No valid fields found matching criteria in Firestore.</td></tr>';
       return;
     }
 
-    fields.forEach((field, index) => {
+    fields.forEach((field) => {
       const tr = document.createElement('tr');
       
       const isCheckedAttr = field.isSelected ? 'checked' : '';
@@ -152,8 +174,6 @@ async function loadFormFieldsFromFirestore() {
             <span class="behaviour conditional">Conditional</span>
             <span class="behaviour-arrow" aria-hidden="true">⌄</span>
           </span>`;
-      } else if (field.fieldBehaviour === 'Not Conditional') {
-        behaviourHtml = `<span class="behaviour not-conditional">Not Conditional</span>`;
       }
 
       tr.innerHTML = `
