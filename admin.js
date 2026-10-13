@@ -66,6 +66,7 @@ function showCycleBuilder(e) {
   if (dashboardView) dashboardView.style.display = 'none';
   if (cycleBuilderView) cycleBuilderView.style.display = 'block';
   updateAutoNaming();
+  window.location.hash = 'builder';
 }
 
 function hideCycleBuilder(e) {
@@ -74,7 +75,20 @@ function hideCycleBuilder(e) {
   if (mainShell) mainShell.classList.remove('builder-active');
   if (cycleBuilderView) cycleBuilderView.style.display = 'none';
   if (dashboardView) dashboardView.style.display = 'block';
+  window.location.hash = 'dashboard';
 }
+
+// Handle initial state restoration & browser back/forward/refresh persistence based on hash
+function handleInitialRoute() {
+  if (window.location.hash === '#builder') {
+    showCycleBuilder();
+  } else {
+    hideCycleBuilder();
+  }
+}
+
+window.addEventListener('DOMContentLoaded', handleInitialRoute);
+window.addEventListener('hashchange', handleInitialRoute);
 
 if (openModalBtn) openModalBtn.addEventListener('click', showCycleBuilder);
 document.querySelectorAll('.action-step-1').forEach(el => el.addEventListener('click', showCycleBuilder));
