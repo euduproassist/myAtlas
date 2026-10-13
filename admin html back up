@@ -258,6 +258,9 @@
     display: grid;
     grid-template-columns: 460px minmax(0, 1fr);
   }
+  .shell.builder-active {
+    grid-template-columns: 1fr;
+  }
 
   /* LEFT SIDEBAR (Welcome Column) */
   .welcome {
@@ -312,9 +315,10 @@
     width: 100%;
     max-width: 100%;
     margin-bottom: 40px;
-    pointer-events: none;
-    opacity: 0.9;
+    cursor: pointer;
+    transition: background 0.15s ease;
   }
+  .primary:hover { background: #076fd9; }
   .plus-sign { font-size: 20px; margin-right: 8px; font-weight: 400; line-height: 1; }
 
   .divider-line {
@@ -464,6 +468,260 @@
     pointer-events: none;
   }
 
+  /* BUILDER VIEW STYLES */
+  .page-heading {
+    margin-bottom: 20px;
+  }
+  .page-heading h1 {
+    margin: 0 0 7px;
+    color: #003b99;
+    font-size: clamp(25px, 2.1vw, 32px);
+    font-weight: 750;
+    letter-spacing: -0.5px;
+  }
+  .page-heading p {
+    margin: 0;
+    color: #4e91e7;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .steps {
+    display: flex;
+    width: 100%;
+    min-height: 59px;
+    margin-bottom: 17px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border: 1px solid #c5e0ff;
+    border-radius: 6px;
+    background: #fff;
+    scrollbar-width: thin;
+    scrollbar-color: #c5e0ff #fff;
+  }
+  .step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+    flex: 1 0 170px;
+    min-width: 170px;
+    min-height: 58px;
+    padding: 10px 15px;
+    color: #006dff;
+    white-space: nowrap;
+  }
+  .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 16px;
+    right: 0;
+    width: 1px;
+    height: 25px;
+    background: #d3e8ff;
+  }
+  .step.active {
+    font-weight: 700;
+  }
+  .step.active::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 12px;
+    height: 3px;
+    background: #087cff;
+  }
+  .step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 31px;
+    width: 31px;
+    height: 31px;
+    border: 1px solid #91c5ff;
+    border-radius: 50%;
+    color: #003b99;
+    background: #fff;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .step.active .step-number {
+    border-color: #087cff;
+    color: #fff;
+    background: #087cff;
+  }
+
+  .details-card {
+    width: 100%;
+    padding: 20px 17px 24px;
+    border: 1px solid #c5e0ff;
+    border-radius: 6px;
+    background: #fff;
+  }
+  .card-heading {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin: 0 0 35px;
+    padding: 0 1px;
+  }
+  .heading-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 55px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    color: #087cff;
+    background: #eaf5ff;
+  }
+  .heading-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .card-heading h2 {
+    margin: 0 0 9px;
+    color: #003b99;
+    font-size: 17px;
+    font-weight: 750;
+  }
+  .card-heading p {
+    margin: 0;
+    color: #2688f5;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .fields-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 28px;
+    row-gap: 40px;
+    padding: 0 9px;
+  }
+  .field {
+    min-width: 0;
+  }
+  .field label {
+    display: block;
+    margin-bottom: 12px;
+    color: #087cff;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .required {
+    color: #e53b4d;
+  }
+  .control {
+    display: block;
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border: 1px solid #b8d9ff;
+    border-radius: 6px;
+    outline: none;
+    color: #073783;
+    background: #fff;
+    font-size: 14px;
+  }
+  .control:focus {
+    border-color: #087cff;
+    box-shadow: 0 0 0 2px #e6f2ff;
+  }
+  select.control {
+    cursor: pointer;
+  }
+
+  .automatic-section {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr);
+    align-items: end;
+    gap: 0;
+    margin-top: 31px;
+    padding: 0 9px 0;
+  }
+  .automatic-field {
+    min-width: 0;
+  }
+  .automatic-field label {
+    display: block;
+    margin-bottom: 12px;
+    color: #087cff;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .automatic-label {
+    color: #388cf0;
+    font-weight: 400;
+  }
+  .automatic-input {
+    display: block;
+    width: 100%;
+    height: 43px;
+    padding: 0 13px;
+    border: 1px solid #b8d9ff;
+    border-radius: 6px;
+    color: #5797e5;
+    background: #edf6ff;
+    font-size: 14px;
+    cursor: not-allowed;
+  }
+  .separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    padding-top: 22px;
+    color: #087cff;
+    font-size: 23px;
+    font-weight: 400;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    width: 100%;
+    margin-top: 26px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 24px;
+    border: 1px solid #087cff;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .btn-cancel {
+    min-width: 112px;
+    color: #006dff;
+    background: #fff;
+  }
+  .btn-next {
+    min-width: 194px;
+    color: #fff;
+    background: #087cff;
+    box-shadow: 0 2px 5px rgba(0, 100, 255, 0.12);
+  }
+  .btn-next span {
+    margin-left: 7px;
+    font-size: 17px;
+  }
+
   /* FOOTER */
   .footer {
     width: 100%;
@@ -505,6 +763,9 @@
     .topbar { padding: 0 18px; }
     .footer { padding: 20px 18px; flex-direction: column; gap: 16px; align-items: flex-start; }
     .footer-right { gap: 20px; flex-wrap: wrap; }
+    .fields-grid { grid-template-columns: minmax(0, 1fr); column-gap: 18px; row-gap: 32px; padding: 0 3px; }
+    .automatic-section { grid-template-columns: minmax(0, 1fr); gap: 22px; margin-top: 28px; padding: 22px 0 0; border-top: 1px solid #d5e9ff; }
+    .separator { display: none; }
   }
 
   @media (max-width: 560px) {
@@ -570,7 +831,7 @@
       <h1>Welcome to myAtlas Admin Portal</h1>
       <p>You can create application cycles, manage applications, view submitted documents and update their status — all from one place.</p>
       
-      <button class="primary" id="openModalBtn" onclick="return false;">
+      <button class="primary" id="openModalBtn">
         <span class="plus-sign">+</span>Create application cycle
       </button>
 
@@ -671,6 +932,181 @@
             <a class="see-more" id="viewReportsBtn" href="#" onclick="return false;">See more →</a>
           </div>
         </div>
+      </div>
+
+      <!-- VIEW 2: Application Cycle Builder Workspace -->
+      <div id="cycleBuilderView" style="display: none;">
+        
+        <!-- PAGE TITLE -->
+        <header class="page-heading">
+          <h1>Create Application Cycle</h1>
+          <p>
+            Set up the basic information for your application cycle.
+            You can complete the other sections later.
+          </p>
+        </header>
+
+        <!-- HORIZONTAL FIVE-STEP PROGRESS -->
+        <nav class="steps" aria-label="Application cycle steps">
+          <div class="step active">
+            <span class="step-number">1</span>
+            <span>Basic Info</span>
+          </div>
+
+          <div class="step">
+            <span class="step-number">2</span>
+            <span>Application Form</span>
+          </div>
+
+          <div class="step">
+            <span class="step-number">3</span>
+            <span>Courses</span>
+          </div>
+
+          <div class="step">
+            <span class="step-number">4</span>
+            <span>Documents</span>
+          </div>
+
+          <div class="step">
+            <span class="step-number">5</span>
+            <span>Review &amp; Publish</span>
+          </div>
+        </nav>
+
+        <!-- APPLICATION DETAILS CARD -->
+        <section class="details-card">
+
+          <div class="card-heading">
+            <div class="heading-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>              
+
+            <div>
+              <h2>Application Details</h2>
+              <p>
+                Enter the key details for your application cycle.
+                The system will automatically create the folder and
+                cycle name based on the information you provide.
+              </p>
+            </div>
+          </div>
+
+          <!-- FOUR REQUIRED FIELDS -->
+          <div class="fields-grid">
+
+            <div class="field">
+              <label for="qualification">
+                Qualification Type <span class="required">*</span>
+              </label>
+
+              <select id="qualification" class="control">
+                <option value="" selected disabled>
+                  Select qualification type
+                </option>
+                <option value="Undergraduate Degree">Undergraduate Degree</option>
+                <option value="Postgraduate Degree">Postgraduate Degree</option>
+                <option value="Research Degree">Research Degree</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="academic-year">
+                Academic Year <span class="required">*</span>
+              </label>
+
+              <select id="academic-year" class="control">
+                <option value="" selected disabled>
+                  Select academic year
+                </option>
+                <!-- Populated dynamically via JavaScript: Current Year & Next Year -->
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="opening-date">
+                Opening Date <span class="required">*</span>
+              </label>
+
+              <input
+                id="opening-date"
+                class="control"
+                type="date"
+                aria-label="Opening date"
+              >
+            </div>
+
+            <div class="field">
+              <label for="closing-date">
+                Closing Date <span class="required">*</span>
+              </label>
+
+              <input
+                id="closing-date"
+                class="control"
+                type="date"
+                aria-label="Closing date"
+              >
+            </div>
+
+          </div>
+
+          <!-- AUTOMATIC NAMES -->
+          <div class="automatic-section">
+
+            <div class="automatic-field">
+              <label for="folder-name">
+                Folder Name <span class="automatic-label">(automatic)</span>
+              </label>
+
+              <input
+                id="folder-name"
+                class="automatic-input"
+                type="text"
+                placeholder="Year - Application Cycle"
+                readonly
+                tabindex="-1"
+              />
+            </div>
+
+            <div class="separator" aria-hidden="true">/</div>
+
+            <div class="automatic-field">
+              <label for="cycle-name">
+                Application Cycle Name
+                <span class="automatic-label">(automatic)</span>
+              </label>
+
+              <input
+                id="cycle-name"
+                class="automatic-input"
+                type="text"
+                placeholder="{Qualification Type} Applications {Year}"
+                readonly
+                tabindex="-1"
+              />
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- BUTTONS ARE OUTSIDE THE RECTANGULAR CARD -->
+        <div class="actions">
+          <button type="button" class="btn btn-cancel" id="cancelCycleBtn">
+            Cancel
+          </button>
+
+          <button type="button" class="btn btn-next" id="nextStepBtn">
+            Next: Application Form <span aria-hidden="true">→</span>
+          </button>
+        </div>
+
       </div>
     </main>
 
