@@ -129,10 +129,9 @@ async function loadFormFieldsFromFirestore() {
     querySnapshot.forEach((docSnap) => {
       const data = docSnap.data();
       
-      // Filter out contact and guardian section documents
-      if (data.section === "contact" || data.section === "guardian") return;
+      // Filter out other sections
+      if (data.section === "contact" || data.section === "guardian" || data.section === "education_courses") return;
 
-      // Strict check: must have all five fields explicitly defined
       const hasAllFields = 
         data.fieldName !== undefined && data.fieldName !== null && data.fieldName !== '' &&
         data.requirement !== undefined && data.requirement !== null &&
@@ -141,20 +140,13 @@ async function loadFormFieldsFromFirestore() {
         data.order !== undefined && data.order !== null;
 
       if (!hasAllFields) return;
-
-      // Strict check: requirement must be either "Required" or "Optional"
       if (data.requirement !== "Required" && data.requirement !== "Optional") return;
-
-      // Strict check: fieldBehaviour must be either "Standard" or "Conditional"
       if (data.fieldBehaviour !== "Standard" && data.fieldBehaviour !== "Conditional") return;
-
-      // Strict check: isSelected must be a boolean (true or false)
       if (typeof data.isSelected !== "boolean") return;
 
       fields.push({ id: docSnap.id, ...data });
     });
 
-    // Sort by order property
     fields.sort((a, b) => (a.order || 0) - (b.order || 0));
 
     tbody.innerHTML = '';
@@ -165,7 +157,6 @@ async function loadFormFieldsFromFirestore() {
 
     fields.forEach((field) => {
       const tr = document.createElement('tr');
-      
       const isCheckedAttr = field.isSelected ? 'checked' : '';
       const reqSelected = field.requirement === 'Required' ? 'selected' : '';
       const optSelected = field.requirement === 'Optional' ? 'selected' : '';
@@ -200,7 +191,7 @@ async function loadFormFieldsFromFirestore() {
   }
 }
 
-// Fetch contact fields from Firestore (within application_form_fields) and populate contact table
+// Fetch contact fields from Firestore
 async function loadContactFieldsFromFirestore() {
   const tbody = document.getElementById('contactFieldsTableBody');
   if (!tbody) return;
@@ -212,7 +203,6 @@ async function loadContactFieldsFromFirestore() {
 
     querySnapshot.forEach((docSnap) => {
       const data = docSnap.data();
-      
       if (data.section !== "contact") return;
 
       const hasAllFields = 
@@ -240,7 +230,6 @@ async function loadContactFieldsFromFirestore() {
 
     fields.forEach((field) => {
       const tr = document.createElement('tr');
-      
       const isCheckedAttr = field.isSelected ? 'checked' : '';
       const reqSelected = field.requirement === 'Required' ? 'selected' : '';
       const optSelected = field.requirement === 'Optional' ? 'selected' : '';
@@ -275,7 +264,7 @@ async function loadContactFieldsFromFirestore() {
   }
 }
 
-// Fetch guardian fields from Firestore (within application_form_fields) and populate guardian table
+// Fetch guardian fields from Firestore
 async function loadGuardianFieldsFromFirestore() {
   const tbody = document.getElementById('guardianFieldsTableBody');
   if (!tbody) return;
@@ -287,7 +276,6 @@ async function loadGuardianFieldsFromFirestore() {
 
     querySnapshot.forEach((docSnap) => {
       const data = docSnap.data();
-      
       if (data.section !== "guardian") return;
 
       const hasAllFields = 
@@ -315,7 +303,6 @@ async function loadGuardianFieldsFromFirestore() {
 
     fields.forEach((field) => {
       const tr = document.createElement('tr');
-      
       const isCheckedAttr = field.isSelected ? 'checked' : '';
       const reqSelected = field.requirement === 'Required' ? 'selected' : '';
       const optSelected = field.requirement === 'Optional' ? 'selected' : '';
@@ -350,12 +337,83 @@ async function loadGuardianFieldsFromFirestore() {
   }
 }
 
+// Fetch educational background & course selection fields from Firestore
+async function loadEducCoursesFieldsFromFirestore() {
+  const tbody = document.getElementById('educCoursesFieldsTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Loading fields...</td></tr>';
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "application_form_fields"));
+    let fields = [];
+
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (data.section !== "education_courses") return;
+
+      const hasAllFields = 
+        data.fieldName !== undefined && data.fieldName !== null && data.fieldName !== '' &&
+        data.requirement !== undefined && data.requirement !== null &&
+        data.fieldBehaviour !== undefined && data.fieldBehaviour !== null &&
+        data.isSelected !== undefined && data.isSelected !== null &&
+        data.order !== undefined && data.order !== null;
+
+      if (!hasAllFields) return;
+      if (data.requirement !== "Required" && data.requirement !== "Optional") return;
+      if (data.fieldBehaviour !== "Standard" && data.fieldBehaviour !== "Conditional") return;
+      if (typeof data.isSelected !== "boolean") return;
+
+      fields.push({ id: docSnap.id, ...data });
+    });
+
+    fields.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    tbody.innerHTML = '';
+    if (fields.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">No valid fields found matching criteria in Firestore.</td></tr>';
+      return;
+    }
+
+    fields.forEach((field) => {
+      const tr = document.createElement('tr');
+      const isCheckedAttr = field.isSelected ? 'checked' : '';
+      const reqSelected = field.requirement === 'Required' ? 'selected' : '';
+      const optSelected = field.requirement === 'Optional' ? 'selected' : '';
+
+      let behaviourHtml = `<span class="behaviour">Standard</span>`;
+      if (field.fieldBehaviour === 'Conditional') {
+        behaviourHtml = `
+          <span class="behaviour-group">
+            <span class="behaviour conditional">Conditional</span>
+            <span class="behaviour-arrow" aria-hidden="true">⌄</span>
+          </span>`;
+      }
+
+      tr.innerHTML = `
+        <td><input type="checkbox" class="check educ-courses-field-checkbox" ${isCheckedAttr} aria-label="Include ${field.fieldName}"></td>
+        <td>${field.fieldName}</td>
+        <td>
+          <select class="requirement-select" aria-label="${field.fieldName} requirement">
+            <option ${reqSelected}>Required</option>
+            <option ${optSelected}>Optional</option>
+          </select>
+        </td>
+        <td>${behaviourHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    updateEducCoursesSelectedCount();
+  } catch (err) {
+    console.error("Error loading educational background & course fields:", err);
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:red;">Failed to load fields from database.</td></tr>';
+  }
+}
+
 function updateSelectedCount() {
   const checkboxes = document.querySelectorAll('.field-checkbox');
   let count = 0;
-  checkboxes.forEach(cb => {
-    if (cb.checked) count++;
-  });
+  checkboxes.forEach(cb => { if (cb.checked) count++; });
   const badge = document.getElementById('selectedCountBadge');
   if (badge) badge.textContent = `${count} selected`;
 }
@@ -363,9 +421,7 @@ function updateSelectedCount() {
 function updateContactSelectedCount() {
   const checkboxes = document.querySelectorAll('.contact-field-checkbox');
   let count = 0;
-  checkboxes.forEach(cb => {
-    if (cb.checked) count++;
-  });
+  checkboxes.forEach(cb => { if (cb.checked) count++; });
   const badge = document.getElementById('contactSelectedCountBadge');
   if (badge) badge.textContent = `${count} selected`;
 }
@@ -373,10 +429,16 @@ function updateContactSelectedCount() {
 function updateGuardianSelectedCount() {
   const checkboxes = document.querySelectorAll('.guardian-field-checkbox');
   let count = 0;
-  checkboxes.forEach(cb => {
-    if (cb.checked) count++;
-  });
+  checkboxes.forEach(cb => { if (cb.checked) count++; });
   const badge = document.getElementById('guardianSelectedCountBadge');
+  if (badge) badge.textContent = `${count} selected`;
+}
+
+function updateEducCoursesSelectedCount() {
+  const checkboxes = document.querySelectorAll('.educ-courses-field-checkbox');
+  let count = 0;
+  checkboxes.forEach(cb => { if (cb.checked) count++; });
+  const badge = document.getElementById('educCoursesSelectedCountBadge');
   if (badge) badge.textContent = `${count} selected`;
 }
 
@@ -387,6 +449,8 @@ document.addEventListener('change', (e) => {
     updateContactSelectedCount();
   } else if (e.target.classList.contains('guardian-field-checkbox')) {
     updateGuardianSelectedCount();
+  } else if (e.target.classList.contains('educ-courses-field-checkbox')) {
+    updateEducCoursesSelectedCount();
   }
 });
 
@@ -406,6 +470,7 @@ function showBuilderStep(stepNum) {
     loadFormFieldsFromFirestore();
     loadContactFieldsFromFirestore();
     loadGuardianFieldsFromFirestore();
+    loadEducCoursesFieldsFromFirestore();
     window.location.hash = 'builder-form';
   }
 }
@@ -436,7 +501,6 @@ function hideCycleBuilder(e) {
   window.location.hash = 'dashboard';
 }
 
-// Next button validation and local storage commit
 if (nextStepBtn) {
   nextStepBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -454,7 +518,6 @@ if (prevStepBtn) {
   });
 }
 
-// Handle initial route persistence based on hash
 function handleInitialRoute() {
   if (window.location.hash.startsWith('#builder')) {
     showCycleBuilder();
@@ -521,7 +584,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// Toggle User Dropdown Menu
 if (userMenuTrigger) {
   userMenuTrigger.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -529,14 +591,12 @@ if (userMenuTrigger) {
   });
 }
 
-// Close dropdown when clicking anywhere outside
 window.addEventListener('click', () => {
   if (userDropdownMenu && userDropdownMenu.classList.contains('active')) {
     userDropdownMenu.classList.remove('active');
   }
 });
 
-// Logout Button Action
 if (logoutBtn) {
   logoutBtn.addEventListener('click', async (e) => {
     e.preventDefault();
