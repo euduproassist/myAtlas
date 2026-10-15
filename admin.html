@@ -1494,6 +1494,56 @@
                 </table>
               </div>
             </section>
+
+            <!-- EDUCATIONAL BACKGROUND & COURSE SELECTION -->
+            <section class="information-panel">
+              <header class="panel-heading">
+                <div class="person-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                  </svg>
+                </div>
+                <div class="panel-title">
+                  <h3>Educational Background &amp; Course selection</h3>
+                  <p>Educational history, current academic status and course choices.</p>
+                </div>
+                <div class="panel-meta">
+                  <span class="selected-count" id="educCoursesSelectedCountBadge">0 selected</span>
+                  <span class="chevron" aria-hidden="true"></span>
+                </div>
+              </header>
+
+              <!-- SCROLLABLE TABLE -->
+              <div class="table-scroll">
+                <table>
+                  <colgroup>
+                    <col class="checkbox-col">
+                    <col class="name-col">
+                    <col class="requirement-col">
+                    <col class="behaviour-col">
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>
+                        <input
+                          type="checkbox"
+                          class="check"
+                          id="selectEducCoursesAllCheck"
+                          aria-label="Select all educational and course fields"
+                        >
+                      </th>
+                      <th>Field Name</th>
+                      <th>Requirement</th>
+                      <th>Field Behaviour</th>
+                    </tr>
+                  </thead>
+                  <tbody id="educCoursesFieldsTableBody">
+                    <!-- Dynamically populated from Firestore -->
+                  </tbody>
+                </table>
+              </div>
+            </section>
           </section>
 
           <!-- BUTTONS -->
