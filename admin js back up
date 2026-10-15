@@ -116,7 +116,7 @@ function validateBasicInfoFields() {
   return true;
 }
 
-// Fetch form fields from Firestore and populate table with strict validation
+// Fetch personal form fields from Firestore and populate table with strict validation
 async function loadFormFieldsFromFirestore() {
   const tbody = document.getElementById('formFieldsTableBody');
   if (!tbody) return;
@@ -129,6 +129,9 @@ async function loadFormFieldsFromFirestore() {
     querySnapshot.forEach((docSnap) => {
       const data = docSnap.data();
       
+      // Filter out contact section documents so they don't appear in personal info table
+      if (data.section === "contact") return;
+
       // Strict check: must have all five fields explicitly defined
       const hasAllFields = 
         data.fieldName !== undefined && data.fieldName !== null && data.fieldName !== '' &&
@@ -137,7 +140,7 @@ async function loadFormFieldsFromFirestore() {
         data.isSelected !== undefined && data.isSelected !== null &&
         data.order !== undefined && data.order !== null;
 
-      if (!hasAllFields) return; // Skip if missing any of the 5 fields
+      if (!hasAllFields) return;
 
       // Strict check: requirement must be either "Required" or "Optional"
       if (data.requirement !== "Required" && data.requirement !== "Optional") return;
@@ -197,6 +200,82 @@ async function loadFormFieldsFromFirestore() {
   }
 }
 
+// Fetch contact fields from Firestore (within application_form_fields) and populate contact table
+async function loadContactFieldsFromFirestore() {
+  const tbody = document.getElementById('contactFieldsTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Loading fields...</td></tr>';
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "application_form_fields"));
+    let fields = [];
+
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      
+      // Only include documents where section is strictly "contact"
+      if (data.section !== "contact") return;
+
+      const hasAllFields = 
+        data.fieldName !== undefined && data.fieldName !== null && data.fieldName !== '' &&
+        data.requirement !== undefined && data.requirement !== null &&
+        data.fieldBehaviour !== undefined && data.fieldBehaviour !== null &&
+        data.isSelected !== undefined && data.isSelected !== null &&
+        data.order !== undefined && data.order !== null;
+
+      if (!hasAllFields) return;
+      if (data.requirement !== "Required" && data.requirement !== "Optional") return;
+      if (data.fieldBehaviour !== "Standard" && data.fieldBehaviour !== "Conditional") return;
+      if (typeof data.isSelected !== "boolean") return;
+
+      fields.push({ id: docSnap.id, ...data });
+    });
+
+    fields.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    tbody.innerHTML = '';
+    if (fields.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">No valid contact fields found matching criteria in Firestore.</td></tr>';
+      return;
+    }
+
+    fields.forEach((field) => {
+      const tr = document.createElement('tr');
+      
+      const isCheckedAttr = field.isSelected ? 'checked' : '';
+      const reqSelected = field.requirement === 'Required' ? 'selected' : '';
+      const optSelected = field.requirement === 'Optional' ? 'selected' : '';
+
+      let behaviourHtml = `<span class="behaviour">Standard</span>`;
+      if (field.fieldBehaviour === 'Conditional') {
+        behaviourHtml = `
+          <span class="behaviour-group">
+            <span class="behaviour conditional">Conditional</span>
+            <span class="behaviour-arrow" aria-hidden="true">⌄</span>
+          </span>`;
+      }
+
+      tr.innerHTML = `
+        <td><input type="checkbox" class="check contact-field-checkbox" ${isCheckedAttr} aria-label="Include ${field.fieldName}"></td>
+        <td>${field.fieldName}</td>
+        <td>
+          <select class="requirement-select" aria-label="${field.fieldName} requirement">
+            <option ${reqSelected}>Required</option>
+            <option ${optSelected}>Optional</option>
+          </select>
+        </td>
+        <td>${behaviourHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    updateContactSelectedCount();
+  } catch (err) {
+    console.error("Error loading application contact fields:", err);
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:red;">Failed to load fields from database.</td></tr>';
+  }
+}
+
 function updateSelectedCount() {
   const checkboxes = document.querySelectorAll('.field-checkbox');
   let count = 0;
@@ -207,9 +286,21 @@ function updateSelectedCount() {
   if (badge) badge.textContent = `${count} selected`;
 }
 
+function updateContactSelectedCount() {
+  const checkboxes = document.querySelectorAll('.contact-field-checkbox');
+  let count = 0;
+  checkboxes.forEach(cb => {
+    if (cb.checked) count++;
+  });
+  const badge = document.getElementById('contactSelectedCountBadge');
+  if (badge) badge.textContent = `${count} selected`;
+}
+
 document.addEventListener('change', (e) => {
   if (e.target.classList.contains('field-checkbox')) {
     updateSelectedCount();
+  } else if (e.target.classList.contains('contact-field-checkbox')) {
+    updateContactSelectedCount();
   }
 });
 
@@ -227,6 +318,7 @@ function showBuilderStep(stepNum) {
     if (navStep1) { navStep1.classList.remove('active'); navStep1.classList.add('completed'); }
     if (navStep2) { navStep2.classList.add('active'); navStep2.classList.remove('completed'); }
     loadFormFieldsFromFirestore();
+    loadContactFieldsFromFirestore();
     window.location.hash = 'builder-form';
   }
 }
