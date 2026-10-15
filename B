@@ -1,1 +1,2239 @@
+My apologies for misunderstanding! You want a single, combined table titled Educational Background & Course selection that houses all four items together under one section panel.
+Here are the step-by-step instructions for Firebase Firestore and the fully updated code for Admin.html and Admin.js.
+Part 1: Step-by-Step Instructions for Firebase Firestore Console
+To keep everything clean and grouped under this single table, we will add these 4 documents to your existing application_form_fields collection, setting the section field to education_courses for all of them.
+Step 1: Open Firebase Console
+ * Go to console.firebase.google.com.
+ * Open your project card for myAtlas.
+ * In the left sidebar, click on Firestore Database.
+ * Select your collection named application_form_fields.
+Step 2: Add the 4 Documents Manually
+Click Add document for each of the entries below (use Auto ID for each document ID):
+ * Document 1 (Current Educational Status):
+   * section (string): education_courses
+   * fieldName (string): Current Educational Status
+   * requirement (string): Required
+   * fieldBehaviour (string): Conditional
+   * isSelected (boolean): false
+   * order (number): 1
+ * Document 2 (High School Education History):
+   * section (string): education_courses
+   * fieldName (string): High School Education History
+   * requirement (string): Required
+   * fieldBehaviour (string): Standard
+   * isSelected (boolean): false
+   * order (number): 2
+ * Document 3 (Tertiary Education History):
+   * section (string): education_courses
+   * fieldName (string): Tertiary Education History
+   * requirement (string): Optional
+   * fieldBehaviour (string): Standard
+   * isSelected (boolean): false
+   * order (number): 3
+ * Document 4 (Course selection):
+   * section (string): education_courses
+   * fieldName (string): Course selection
+   * requirement (string): Required
+   * fieldBehaviour (string): Conditional
+   * isSelected (boolean): false
+   * order (number): 4
+Part 2: Fully Updated Code Files
+Admin.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>myAtlas — Admin Portal</title>
+
+<style>
+  :root {
+    --blue: #0866f5;
+    --blue-dark: #0647ad;
+    --navy: #071c72;
+    --text: #244b88;
+    --muted: #7897c5;
+    --border: #cfe3ff;
+    --pale-blue: #eaf5ff;
+    --white: #ffffff;
+    --red: #f35c63;
+    --line: #d8e8f8;
+    --border-light: #cfe3f7;
+    --shadow: 0 1px 4px rgba(24,76,125,.05);
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    width: 100%;
+    min-width: 0;
+    min-height: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    background: #ffffff;
+  }
+
+  body {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: #ffffff;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  button, input, select { font: inherit; }
+  button { cursor: pointer; }
+  a { text-decoration: none; color: inherit; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  img, svg, video, canvas { display: block; max-width: 100%; }
+  p, h1, h2, h3, a, span { overflow-wrap: break-word; }
+
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible {
+    outline: 2px solid #70aaff;
+    outline-offset: 2px;
+  }
+
+  /* PAGE WRAPPER */
+  .page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  /* HEADER */
+  .topbar {
+    width: 100%;
+    max-width: 100%;
+    height: 72px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    background: #ffffff;
+    flex-shrink: 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 0 0 auto;
+  }
+  .brand-logo {
+    width: 132px;
+    height: auto;
+    display: block;
+  }
+
+  .top-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .search {
+    width: 320px;
+    height: 40px;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    color: #7b96b6;
+    background: #ffffff;
+    box-shadow: var(--shadow);
+    min-width: 0;
+  }
+  .search svg { width: 16px; height: 16px; flex: 0 0 auto; margin-right: 10px; color: #8fa6c2; }
+  .search input {
+    border: 0;
+    outline: 0;
+    width: 100%;
+    color: var(--text);
+    background: transparent;
+    font-size: 13px;
+    min-width: 0;
+  }
+  .search input::placeholder { color: #8fa6c2; }
+
+  .help {
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid #8fa6c2;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #536d8d;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #ffffff;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .chevron {
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid #536d8d;
+    border-bottom: 2px solid #536d8d;
+    transform: rotate(45deg);
+    margin-left: 8px;
+    flex-shrink: 0;
+  }
+
+  /* USER MENU DROPDOWN STYLES */
+  .user-menu-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0px;
+    cursor: pointer;
+  }
+
+  .user-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 240px;
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(23, 60, 105, 0.12);
+    display: none;
+    flex-direction: column;
+    z-index: 100;
+    overflow: hidden;
+  }
+
+  .user-dropdown-menu.active {
+    display: flex;
+  }
+
+  .dropdown-user-info {
+    padding: 16px;
+    border-bottom: 1px solid var(--line);
+    background: #fafcfe;
+  }
+
+  .dropdown-user-name {
+    font-size: 14px;
+    font-weight: 750;
+    color: var(--navy);
+    margin-bottom: 2px;
+  }
+
+  .dropdown-user-email {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    word-break: break-all;
+  }
+
+  .dropdown-user-role {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #eaf5ff;
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  .dropdown-logout-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    text-align: left;
+    color: #e53e3e;
+    font-size: 13.5px;
+    font-weight: 650;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .dropdown-logout-btn:hover {
+    background: #fff5f5;
+  }
+
+  /* LAYOUT SHELL */
+  .shell {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 460px minmax(0, 1fr);
+  }
+  .shell.builder-active {
+    grid-template-columns: 1fr;
+  }
+
+  /* LEFT SIDEBAR (Welcome Column) */
+  .welcome {
+    border-right: 1px solid var(--line);
+    padding: clamp(40px, 6vw, 56px) clamp(25px, 4vw, 48px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-width: 0;
+  }
+
+  .welcome-back {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: var(--blue);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .welcome h1 {
+    margin: 0 0 20px;
+    font-size: clamp(32px, 3.5vw, 38px);
+    line-height: 1.15;
+    letter-spacing: -0.8px;
+    color: var(--navy);
+    font-weight: 800;
+    min-width: 0;
+  }
+
+  .welcome p {
+    margin: 0 0 28px;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+    min-width: 0;
+  }
+
+  .primary {
+    border: 0;
+    background: var(--blue);
+    color: #ffffff;
+    border-radius: 6px;
+    height: 48px;
+    padding: 0 22px;
+    font-weight: 650;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(8,125,245,.2);
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 40px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .primary:hover { background: #076fd9; }
+  .plus-sign { font-size: 20px; margin-right: 8px; font-weight: 400; line-height: 1; }
+
+  .divider-line {
+    width: 100%;
+    height: 1px;
+    background: var(--line);
+    margin-bottom: 36px;
+  }
+
+  .setup-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    min-width: 0;
+  }
+  .setup-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #eaf5ff;
+    display: grid;
+    place-items: center;
+    color: var(--blue);
+    flex-shrink: 0;
+  }
+  .setup-icon-wrap svg { width: 22px; height: 22px; }
+  .setup-content {
+    min-width: 0;
+  }
+  .setup-content h3 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .setup-content p {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .setup-link {
+    color: var(--blue);
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    pointer-events: none;
+  }
+
+  /* MAIN CONTENT AREA */
+  .main {
+    padding: clamp(24px, 4vw, 40px) clamp(20px, 4vw, 48px);
+    background: #ffffff;
+    min-width: 0;
+  }
+
+  .main h2.section-heading {
+    margin: 0 0 8px;
+    font-size: clamp(26px, 3vw, 32px);
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+    min-width: 0;
+  }
+
+  .main > p.section-sub {
+    margin: 0 0 32px;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.5;
+    min-width: 0;
+  }
+
+  .grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .step-card {
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 32px;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 220px;
+    min-width: 0;
+    position: relative;
+  }
+
+  .card-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .step-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #eaf5ff;
+    display: grid;
+    place-items: center;
+    color: var(--blue);
+    flex-shrink: 0;
+  }
+  .step-icon svg { width: 22px; height: 22px; }
+  .step-number {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blue);
+  }
+
+  .step-body {
+    min-width: 0;
+  }
+  .step-body h3 {
+    margin: 0 0 8px;
+    font-size: 17px;
+    font-weight: 750;
+    color: var(--navy);
+    min-width: 0;
+  }
+  .step-body p {
+    margin: 0 0 20px;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.55;
+    min-width: 0;
+  }
+
+  .see-more {
+    color: var(--blue);
+    font-size: 13.5px;
+    font-weight: 650;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+    pointer-events: none;
+  }
+
+  /* BUILDER VIEW STYLES */
+  .page-heading {
+    margin-bottom: 20px;
+  }
+  .page-heading h1 {
+    margin: 0 0 7px;
+    color: #003b99;
+    font-size: clamp(25px, 2.1vw, 32px);
+    font-weight: 750;
+    letter-spacing: -0.5px;
+  }
+  .page-heading p {
+    margin: 0;
+    color: #4e91e7;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .steps {
+    display: flex;
+    width: 100%;
+    min-height: 59px;
+    margin-bottom: 17px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border: 1px solid #c5e0ff;
+    border-radius: 6px;
+    background: #fff;
+    scrollbar-width: thin;
+    scrollbar-color: #c5e0ff #fff;
+  }
+  .step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+    flex: 1 0 170px;
+    min-width: 170px;
+    min-height: 58px;
+    padding: 10px 15px;
+    color: #006dff;
+    white-space: nowrap;
+  }
+  .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 16px;
+    right: 0;
+    width: 1px;
+    height: 25px;
+    background: #d3e8ff;
+  }
+  .step.active {
+    font-weight: 700;
+  }
+  .step.active::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 12px;
+    height: 3px;
+    background: #087cff;
+  }
+  .step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 31px;
+    width: 31px;
+    height: 31px;
+    border: 1px solid #91c5ff;
+    border-radius: 50%;
+    color: #003b99;
+    background: #fff;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .step.active .step-number {
+    border-color: #087cff;
+    color: #fff;
+    background: #087cff;
+  }
+
+  .step.completed .step-number {
+    color: #fff;
+    background: #087cff;
+    border-color: #087cff;
+    font-size: 0;
+  }
+  .step.completed .step-number::after {
+    content: "✓";
+    font-size: 15px;
+  }
+
+  .details-card {
+    width: 100%;
+    padding: 20px 17px 24px;
+    border: 1px solid #c5e0ff;
+    border-radius: 6px;
+    background: #fff;
+  }
+  .card-heading {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin: 0 0 35px;
+    padding: 0 1px;
+  }
+  .heading-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 55px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    color: #087cff;
+    background: #eaf5ff;
+  }
+  .heading-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .card-heading h2 {
+    margin: 0 0 9px;
+    color: #003b99;
+    font-size: 17px;
+    font-weight: 750;
+  }
+  .card-heading p {
+    margin: 0;
+    color: #2688f5;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .fields-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 28px;
+    row-gap: 40px;
+    padding: 0 9px;
+  }
+  .field {
+    min-width: 0;
+  }
+  .field label {
+    display: block;
+    margin-bottom: 12px;
+    color: #087cff;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .required {
+    color: #e53b4d;
+  }
+  .control {
+    display: block;
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border: 1px solid #b8d9ff;
+    border-radius: 6px;
+    outline: none;
+    color: #073783;
+    background: #fff;
+    font-size: 14px;
+  }
+  .control:focus {
+    border-color: #087cff;
+    box-shadow: 0 0 0 2px #e6f2ff;
+  }
+  select.control {
+    cursor: pointer;
+  }
+
+  .automatic-section {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr);
+    align-items: end;
+    gap: 0;
+    margin-top: 31px;
+    padding: 0 9px 0;
+  }
+  .automatic-field {
+    min-width: 0;
+  }
+  .automatic-field label {
+    display: block;
+    margin-bottom: 12px;
+    color: #087cff;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .automatic-label {
+    color: #388cf0;
+    font-weight: 400;
+  }
+  .automatic-input {
+    display: block;
+    width: 100%;
+    height: 43px;
+    padding: 0 13px;
+    border: 1px solid #b8d9ff;
+    border-radius: 6px;
+    color: #5797e5;
+    background: #edf6ff;
+    font-size: 14px;
+    cursor: not-allowed;
+  }
+  .separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    padding-top: 22px;
+    color: #087cff;
+    font-size: 23px;
+    font-weight: 400;
+  }
+
+  /* FORM TAB STYLES */
+  .form-card {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 17px 24px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .form-intro {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+  .intro-icon {
+    flex: 0 0 50px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--blue);
+    background: #eaf5ff;
+    border-radius: 50%;
+  }
+  .form-intro h2 {
+    margin: 0 0 9px;
+    color: var(--navy);
+    font-size: 17px;
+    font-weight: 750;
+  }
+  .form-intro p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .information-panel {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .panel-heading {
+    display: flex;
+    align-items: center;
+    min-height: 64px;
+    padding: 10px 22px;
+    gap: 22px;
+    background: #fff;
+  }
+  .person-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 19px;
+    color: var(--blue);
+  }
+  .person-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .panel-title h3 {
+    margin: 0 0 7px;
+    color: var(--navy);
+    font-size: 15px;
+    font-weight: 750;
+  }
+  .panel-title p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .panel-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .selected-count {
+    padding: 5px 12px;
+    border-radius: 18px;
+    background: #e4f3ff;
+    color: #0074f5;
+    font-size: 11px;
+  }
+  .table-scroll {
+    width: 100%;
+    max-height: 468px;
+    overflow: auto;
+  }
+  table {
+    width: 100%;
+    min-width: 760px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  col.checkbox-col { width: 7.5%; }
+  col.name-col { width: 41%; }
+  col.requirement-col { width: 23.5%; }
+  col.behaviour-col { width: 28%; }
+  thead th {
+    height: 39px;
+    padding: 8px 10px;
+    background: #edf6ff;
+    color: #2783df;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: left;
+    border-bottom: 1px solid #e1efff;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  thead th:first-child { padding-left: 21px; }
+  tbody tr {
+    height: 39px;
+    border-bottom: 1px solid #e0edfc;
+  }
+  tbody td {
+    height: 39px;
+    padding: 4px 10px;
+    vertical-align: middle;
+    background: #fff;
+    color: var(--text);
+  }
+  tbody td:first-child { padding-left: 21px; }
+  .check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    vertical-align: middle;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid #80baff;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+  }
+  .check:checked {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+  .check:checked::after {
+    content: "";
+    width: 8px;
+    height: 4px;
+    margin-top: -2px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(-45deg);
+  }
+  .requirement-select {
+    width: 100%;
+    max-width: 269px;
+    height: 28px;
+    padding: 0 9px;
+    border: 1px solid #c8e2ff;
+    border-radius: 5px;
+    background: #fff;
+    color: var(--text);
+    outline: none;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .behaviour {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 21px;
+    padding: 3px 12px;
+    border-radius: 14px;
+    background: #e8f4ff;
+    color: #3185e0;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .behaviour.conditional {
+    background: #d7f8f3;
+    color: #00a6b4;
+  }
+  .behaviour-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .behaviour-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border: 0;
+    border-radius: 50%;
+    background: #d7f8f3;
+    color: #00a5b7;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+    width: 100%;
+    margin-top: 26px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 24px;
+    border: 1px solid #087cff;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .btn-cancel {
+    min-width: 112px;
+    color: #006dff;
+    background: #fff;
+  }
+  .btn-next {
+    min-width: 194px;
+    color: #fff;
+    background: #087cff;
+    box-shadow: 0 2px 5px rgba(0, 100, 255, 0.12);
+  }
+  .btn-previous {
+    color: #006dff;
+    background: #fff;
+    min-width: 140px;
+  }
+  .btn span {
+    margin-left: 7px;
+    font-size: 17px;
+  }
+
+  /* FOOTER */
+  .footer {
+    width: 100%;
+    max-width: 100%;
+    border-top: 1px solid var(--line);
+    background: #ffffff;
+    padding: 24px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 0 0 auto;
+    font-size: 13px;
+    color: #708aa8;
+    font-weight: 500;
+  }
+  .footer-right {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  .footer-right a {
+    font-size: 13px;
+    color: #708aa8;
+    font-weight: 500;
+    pointer-events: none;
+  }
+
+  @media (max-width: 900px) {
+    .shell { display: flex; flex-direction: column; }
+    .welcome { border-right: none; border-bottom: 1px solid var(--line); }
+    .grid-2x2 { grid-template-columns: 1fr; }
+    .topbar { padding: 0 18px; }
+    .footer { padding: 20px 18px; flex-direction: column; gap: 16px; align-items: flex-start; }
+    .footer-right { gap: 20px; flex-wrap: wrap; }
+    .fields-grid { grid-template-columns: minmax(0, 1fr); column-gap: 18px; row-gap: 32px; padding: 0 3px; }
+    .automatic-section { grid-template-columns: minmax(0, 1fr); gap: 22px; margin-top: 28px; padding: 22px 0 0; border-top: 1px solid #d5e9ff; }
+    .separator { display: none; }
+  }
+
+  @media (max-width: 560px) {
+    .topbar { padding: 0 14px; height: 64px; }
+    .search { width: 36px; height: 36px; padding: 0; justify-content: center; border: none; background: #f5f9fd; box-shadow: none; }
+    .search input { display: none; }
+    .search svg { margin: 0; }
+  }
+</style>
+</head>
+
+<body>
+<div class="page">
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="brand">
+      <a href="#" aria-label="myAtlas home" class="logo-link" onclick="return false;">
+        <img class="brand-logo" src="assets/logos.png" alt="myAtlas College">
+      </a>
+    </div>
+
+    <div class="top-right">
+      <label class="search" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="10.7" cy="10.7" r="6.7"></circle>
+          <path d="M16 16l5 5"></path>
+        </svg>
+        <input type="search" placeholder="Search applications, cycles, students..." />
+      </label>
+      <div class="help" aria-label="Help">?</div>
+
+      <!-- User Profile Menu Wrapper -->
+      <div class="user-menu-wrapper" id="userMenuTrigger">
+        <div class="avatar" id="userAvatar">--</div>
+        <div class="chevron" aria-hidden="true"></div>
+
+        <!-- Dropdown Menu -->
+        <div class="user-dropdown-menu" id="userDropdownMenu">
+          <div class="dropdown-user-info">
+            <div class="dropdown-user-name" id="dropdownUserName">Loading...</div>
+            <div class="dropdown-user-email" id="dropdownUserEmail">---</div>
+            <span class="dropdown-user-role" id="dropdownUserRole">---</span>
+          </div>
+          <button type="button" class="dropdown-logout-btn" id="logoutBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN SHELL -->
+  <div class="shell" id="mainShell">
+
+    <!-- LEFT WELCOME SECTION -->
+    <aside class="welcome" id="welcomeSidebar">
+      <span class="welcome-back">Welcome back</span>
+      <h1>Welcome to myAtlas Admin Portal</h1>
+      <p>You can create application cycles, manage applications, view submitted documents and update their status — all from one place.</p>
+      
+      <button class="primary" id="openModalBtn">
+        <span class="plus-sign">+</span>Create application cycle
+      </button>
+
+      <div class="divider-line" aria-hidden="true"></div>
+
+      <div class="setup-card">
+        <div class="setup-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 3a7 7 0 0 0-4 12.75V19h8v-3.25A7 7 0 0 0 12 3z"></path>
+            <path d="M9 22h6M9 19h6"></path>
+          </svg>
+        </div>
+        <div class="setup-content">
+          <h3>Need help getting started?</h3>
+          <p>Check out our quick guide to set up your first application cycle and manage your admissions process.</p>
+          <a class="setup-link" href="#" onclick="return false;" id="guideLink">View setup guide →</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT CONTENT SECTION -->
+    <main class="main" id="mainContentArea">
+      <!-- VIEW 1: Default Dashboard -->
+      <div id="dashboardView">
+        <h2 class="section-heading">How it works</h2>
+        <p class="section-sub">Follow these simple steps to set up your first application cycle and start receiving applications from students.</p>
+
+        <div class="grid-2x2">
+          <!-- Step 1 -->
+          <div class="step-card">
+            <div class="card-top-row">
+              <div class="step-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+                  <path d="M8 3v4M16 3v4M4 10h16"></path>
+                </svg>
+              </div>
+              <span class="step-number">1</span>
+            </div>
+            <div class="step-body">
+              <h3>Create Application Cycle</h3>
+              <p>Set opening/closing dates, select degree types and key details for your cycle.</p>
+            </div>
+            <a class="see-more action-step-1" href="#" onclick="return false;">See more →</a>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-card">
+            <div class="card-top-row">
+              <div class="step-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"></path>
+                </svg>
+              </div>
+              <span class="step-number">2</span>
+            </div>
+            <div class="step-body">
+              <h3>View Applications</h3>
+              <p>Review and manage incoming applications.</p>
+            </div>
+            <a class="see-more" id="viewAppsBtn" href="#" onclick="return false;">See more →</a>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-card">
+            <div class="card-top-row">
+              <div class="step-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <span class="step-number">3</span>
+            </div>
+            <div class="step-body">
+              <h3>Manage Fields</h3>
+              <p>Configure the information you want to collect from applicants.</p>
+            </div>
+            <a class="see-more" id="manageFieldsBtn" href="#" onclick="return false;">See more →</a>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="step-card">
+            <div class="card-top-row">
+              <div class="step-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M18 20V10M12 20V4M6 20v-6"></path>
+                </svg>
+              </div>
+              <span class="step-number">4</span>
+            </div>
+            <div class="step-body">
+              <h3>View Reports</h3>
+              <p>Track progress and download reports.</p>
+            </div>
+            <a class="see-more" id="viewReportsBtn" href="#" onclick="return false;">See more →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 2: Application Cycle Builder Workspace (Step 1: Basic Info) -->
+      <div id="cycleBuilderView" style="display: none;">
+        
+        <!-- PAGE TITLE -->
+        <header class="page-heading">
+          <h1>Create Application Cycle</h1>
+          <p>
+            Set up the basic information for your application cycle.
+            You can complete the other sections later.
+          </p>
+        </header>
+
+        <!-- HORIZONTAL FIVE-STEP PROGRESS -->
+        <nav class="steps" aria-label="Application cycle steps">
+          <div class="step active" id="navStep1">
+            <span class="step-number">1</span>
+            <span>Basic Info</span>
+          </div>
+
+          <div class="step" id="navStep2">
+            <span class="step-number">2</span>
+            <span>Application Form</span>
+          </div>
+
+          <div class="step" id="navStep3">
+            <span class="step-number">3</span>
+            <span>Courses</span>
+          </div>
+
+          <div class="step" id="navStep4">
+            <span class="step-number">4</span>
+            <span>Documents</span>
+          </div>
+
+          <div class="step" id="navStep5">
+            <span class="step-number">5</span>
+            <span>Review &amp; Publish</span>
+          </div>
+        </nav>
+
+        <!-- SUB-VIEW 1: BASIC INFO -->
+        <div id="builderStep1">
+          <section class="details-card">
+            <div class="card-heading">
+              <div class="heading-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>              
+              <div>
+                <h2>Application Details</h2>
+                <p>
+                  Enter the key details for your application cycle.
+                  The system will automatically create the folder and
+                  cycle name based on the information you provide.
+                </p>
+              </div>
+            </div>
+
+            <!-- FOUR REQUIRED FIELDS -->
+            <div class="fields-grid">
+              <div class="field">
+                <label for="qualification">
+                  Qualification Type <span class="required">*</span>
+                </label>
+                <select id="qualification" class="control">
+                  <option value="" selected disabled>
+                    Select qualification type
+                  </option>
+                  <option value="Undergraduate Degree">Undergraduate Degree</option>
+                  <option value="Postgraduate Degree">Postgraduate Degree</option>
+                  <option value="Research Degree">Research Degree</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="academic-year">
+                  Academic Year <span class="required">*</span>
+                </label>
+                <select id="academic-year" class="control">
+                  <option value="" selected disabled>
+                    Select academic year
+                  </option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="opening-date">
+                  Opening Date <span class="required">*</span>
+                </label>
+                <input
+                  id="opening-date"
+                  class="control"
+                  type="date"
+                  aria-label="Opening date"
+                >
+              </div>
+
+              <div class="field">
+                <label for="closing-date">
+                  Closing Date <span class="required">*</span>
+                </label>
+                <input
+                  id="closing-date"
+                  class="control"
+                  type="date"
+                  aria-label="Closing date"
+                >
+              </div>
+            </div>
+
+            <!-- AUTOMATIC NAMES -->
+            <div class="automatic-section">
+              <div class="automatic-field">
+                <label for="folder-name">
+                  Folder Name <span class="automatic-label">(automatic)</span>
+                </label>
+                <input
+                  id="folder-name"
+                  class="automatic-input"
+                  type="text"
+                  placeholder="Year - Application Cycle"
+                  readonly
+                  tabindex="-1"
+                />
+              </div>
+
+              <div class="separator" aria-hidden="true">/</div>
+
+              <div class="automatic-field">
+                <label for="cycle-name">
+                  Application Cycle Name
+                  <span class="automatic-label">(automatic)</span>
+                </label>
+                <input
+                  id="cycle-name"
+                  class="automatic-input"
+                  type="text"
+                  placeholder="{Qualification Type} Applications {Year}"
+                  readonly
+                  tabindex="-1"
+                />
+              </div>
+            </div>
+          </section>
+
+          <!-- BUTTONS -->
+          <div class="actions">
+            <button type="button" class="btn btn-cancel" id="cancelCycleBtn">
+              Cancel
+            </button>
+            <button type="button" class="btn btn-next" id="nextStepBtn">
+              Next: Application Form <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SUB-VIEW 2: APPLICATION FORM -->
+        <div id="builderStep2" style="display: none;">
+          <section class="form-card" style="display: flex; flex-direction: column; gap: 24px;">
+            <div class="form-intro">
+              <div class="intro-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 3.5h7l5 5V21H7z"></path>
+                  <path d="M14 3.5V9h5"></path>
+                  <path d="M10 13h6"></path>
+                  <path d="M10 17h6"></path>
+                </svg>
+              </div>
+              <div>
+                <h2>Application Form</h2>
+                <p>
+                  Select the information applicants must provide
+                  when completing their applications. For each selected field,
+                  choose whether it is required or optional.
+                </p>
+              </div>
+            </div>
+
+            <!-- PERSONAL INFORMATION -->
+            <section class="information-panel">
+              <header class="panel-heading">
+                <div class="person-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="7.5" r="3.5"></circle>
+                    <path d="M5 20v-2a7 7 0 0 1 14 0v2"></path>
+                  </svg>
+                </div>
+                <div class="panel-title">
+                  <h3>Personal Information</h3>
+                  <p>Basic details about the applicant.</p>
+                </div>
+                <div class="panel-meta">
+                  <span class="selected-count" id="selectedCountBadge">0 selected</span>
+                  <span class="chevron" aria-hidden="true"></span>
+                </div>
+              </header>
+
+              <!-- SCROLLABLE INFORMATION TABLE -->
+              <div class="table-scroll">
+                <table>
+                  <colgroup>
+                    <col class="checkbox-col">
+                    <col class="name-col">
+                    <col class="requirement-col">
+                    <col class="behaviour-col">
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>
+                        <input
+                          type="checkbox"
+                          class="check"
+                          id="selectAllCheck"
+                          aria-label="Select all fields"
+                        >
+                      </th>
+                      <th>Field Name</th>
+                      <th>Requirement</th>
+                      <th>Field Behaviour</th>
+                    </tr>
+                  </thead>
+                  <tbody id="formFieldsTableBody">
+                    <!-- Dynamically populated from Firestore -->
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- CONTACT INFORMATION -->
+            <section class="information-panel">
+              <header class="panel-heading">
+                <div class="person-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                </div>
+                <div class="panel-title">
+                  <h3>Contact Information</h3>
+                  <p>Contact details for the applicant.</p>
+                </div>
+                <div class="panel-meta">
+                  <span class="selected-count" id="contactSelectedCountBadge">0 selected</span>
+                  <span class="chevron" aria-hidden="true"></span>
+                </div>
+              </header>
+
+              <!-- SCROLLABLE CONTACT INFORMATION TABLE -->
+              <div class="table-scroll">
+                <table>
+                  <colgroup>
+                    <col class="checkbox-col">
+                    <col class="name-col">
+                    <col class="requirement-col">
+                    <col class="behaviour-col">
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>
+                        <input
+                          type="checkbox"
+                          class="check"
+                          id="selectContactAllCheck"
+                          aria-label="Select all contact fields"
+                        >
+                      </th>
+                      <th>Field Name</th>
+                      <th>Requirement</th>
+                      <th>Field Behaviour</th>
+                    </tr>
+                  </thead>
+                  <tbody id="contactFieldsTableBody">
+                    <!-- Dynamically populated from Firestore -->
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- PARENT OR GUARDIAN INFORMATION -->
+            <section class="information-panel">
+              <header class="panel-heading">
+                <div class="person-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </div>
+                <div class="panel-title">
+                  <h3>Parent or Guardian Information</h3>
+                  <p>Provide the contact details for your parent or guardian. This information helps us keep in touch with you during the application process.</p>
+                </div>
+                <div class="panel-meta">
+                  <span class="selected-count" id="guardianSelectedCountBadge">0 selected</span>
+                  <span class="chevron" aria-hidden="true"></span>
+                </div>
+              </header>
+
+              <!-- SCROLLABLE GUARDIAN INFORMATION TABLE -->
+              <div class="table-scroll">
+                <table>
+                  <colgroup>
+                    <col class="checkbox-col">
+                    <col class="name-col">
+                    <col class="requirement-col">
+                    <col class="behaviour-col">
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>
+                        <input
+                          type="checkbox"
+                          class="check"
+                          id="selectGuardianAllCheck"
+                          aria-label="Select all guardian fields"
+                        >
+                      </th>
+                      <th>Field Name</th>
+                      <th>Requirement</th>
+                      <th>Field Behaviour</th>
+                    </tr>
+                  </thead>
+                  <tbody id="guardianFieldsTableBody">
+                    <!-- Dynamically populated from Firestore -->
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- EDUCATIONAL BACKGROUND & COURSE SELECTION -->
+            <section class="information-panel">
+              <header class="panel-heading">
+                <div class="person-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                  </svg>
+                </div>
+                <div class="panel-title">
+                  <h3>Educational Background &amp; Course selection</h3>
+                  <p>Educational history, current academic status and course choices.</p>
+                </div>
+                <div class="panel-meta">
+                  <span class="selected-count" id="educCoursesSelectedCountBadge">0 selected</span>
+                  <span class="chevron" aria-hidden="true"></span>
+                </div>
+              </header>
+
+              <!-- SCROLLABLE TABLE -->
+              <div class="table-scroll">
+                <table>
+                  <colgroup>
+                    <col class="checkbox-col">
+                    <col class="name-col">
+                    <col class="requirement-col">
+                    <col class="behaviour-col">
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>
+                        <input
+                          type="checkbox"
+                          class="check"
+                          id="selectEducCoursesAllCheck"
+                          aria-label="Select all educational and course fields"
+                        >
+                      </th>
+                      <th>Field Name</th>
+                      <th>Requirement</th>
+                      <th>Field Behaviour</th>
+                    </tr>
+                  </thead>
+                  <tbody id="educCoursesFieldsTableBody">
+                    <!-- Dynamically populated from Firestore -->
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+
+          <!-- BUTTONS -->
+          <div class="actions">
+            <button type="button" class="btn btn-cancel" id="cancelFormBtn">
+              Cancel
+            </button>
+            <button type="button" class="btn btn-previous" id="prevStepBtn">
+              <span style="margin-left:0; margin-right:7px; font-size:17px;">←</span> Previous: Basic Info
+            </button>
+            <button type="button" class="btn btn-next" id="toCoursesBtn">
+              Next: Courses <span>→</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-left">
+      &copy; 2026 Atlas College. All rights reserved.
+    </div>
+    <div class="footer-right">
+      <a href="#" onclick="return false;" id="privacyLink">Privacy Policy</a>
+      <a href="#" onclick="return false;" id="termsLink">Terms &amp; Conditions</a>
+      <a href="#" onclick="return false;" id="supportLink">Help</a>
+    </div>
+  </footer>
+</div>
+
+<script type="module" src="admin.js"></script>
+
+</body>
+</html>
+
+Admin.js
+import { auth, db } from "./firebase-config.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+document.documentElement.style.overflowX = "hidden";
+document.body.style.overflowX = "hidden";
+
+// UI View Elements
+const dashboardView = document.getElementById('dashboardView');
+const cycleBuilderView = document.getElementById('cycleBuilderView');
+const welcomeSidebar = document.getElementById('welcomeSidebar');
+const mainShell = document.getElementById('mainShell');
+const openModalBtn = document.getElementById('openModalBtn');
+const cancelCycleBtn = document.getElementById('cancelCycleBtn');
+const cancelFormBtn = document.getElementById('cancelFormBtn');
+
+// Builder Step Sub-views & Navigation
+const builderStep1 = document.getElementById('builderStep1');
+const builderStep2 = document.getElementById('builderStep2');
+const navStep1 = document.getElementById('navStep1');
+const navStep2 = document.getElementById('navStep2');
+const nextStepBtn = document.getElementById('nextStepBtn');
+const prevStepBtn = document.getElementById('prevStepBtn');
+const toCoursesBtn = document.getElementById('toCoursesBtn');
+
+// Auto-naming Fields
+const qualificationSelect = document.getElementById('qualification');
+const academicYearSelect = document.getElementById('academic-year');
+const openingDateInput = document.getElementById('opening-date');
+const closingDateInput = document.getElementById('closing-date');
+const folderNameInput = document.getElementById('folder-name');
+const cycleNameInput = document.getElementById('cycle-name');
+
+// Automatically populate Academic Year with Current Year and Next Year only
+function populateAcademicYears() {
+  if (!academicYearSelect) return;
+  const currentYear = new Date().getFullYear();
+  const nextYear = currentYear + 1;
+  const years = [currentYear, nextYear];
+  
+  academicYearSelect.innerHTML = '<option value="" selected disabled>Select academic year</option>';
+  years.forEach(yr => {
+    const opt = document.createElement('option');
+    opt.value = yr;
+    opt.textContent = yr;
+    academicYearSelect.appendChild(opt);
+  });
+}
+
+function updateAutoNaming() {
+  const currentCreationYear = new Date().getFullYear();
+  if (folderNameInput) {
+    folderNameInput.value = `${currentCreationYear} - Application Cycle`;
+  }
+
+  if (qualificationSelect && academicYearSelect && cycleNameInput) {
+    const qual = qualificationSelect.value;
+    const yr = academicYearSelect.value;
+    if (qual && yr) {
+      const categoryName = qual.replace(/\s+Degree$/i, '');
+      cycleNameInput.value = `${categoryName} Applications ${yr}`;
+    } else {
+      cycleNameInput.value = '';
+    }
+  }
+}
+
+// Local Storage Helper with 24-hour expiration check
+const STORAGE_KEY = 'myAtlas_basicInfo';
+const EXPIRY_HOURS = 24;
+
+function saveBasicInfoToLocalStorage() {
+  const data = {
+    qualification: qualificationSelect.value,
+    academicYear: academicYearSelect.value,
+    openingDate: openingDateInput.value,
+    closingDate: closingDateInput.value,
+    folderName: folderNameInput.value,
+    cycleName: cycleNameInput.value,
+    timestamp: new Date().getTime()
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadBasicInfoFromLocalStorage() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+  try {
+    const parsed = JSON.parse(raw);
+    const now = new Date().getTime();
+    const hoursElapsed = (now - parsed.timestamp) / (1000 * 60 * 60);
+    
+    if (hoursElapsed > EXPIRY_HOURS) {
+      localStorage.removeItem(STORAGE_KEY);
+      return;
+    }
+
+    if (qualificationSelect) qualificationSelect.value = parsed.qualification || '';
+    if (academicYearSelect) {
+      populateAcademicYears();
+      academicYearSelect.value = parsed.academicYear || '';
+    }
+    if (openingDateInput) openingDateInput.value = parsed.openingDate || '';
+    if (closingDateInput) closingDateInput.value = parsed.closingDate || '';
+    updateAutoNaming();
+  } catch (err) {
+    console.error("Error loading local storage data:", err);
+  }
+}
+
+function validateBasicInfoFields() {
+  if (!qualificationSelect.value || !academicYearSelect.value || !openingDateInput.value || !closingDateInput.value) {
+    alert("Please fill in all required fields in Basic Info before proceeding.");
+    return false;
+  }
+  return true;
+}
+
+// Fetch personal form fields from Firestore and populate table with strict validation
+async function loadFormFieldsFromFirestore() {
+  const tbody = document.getElementById('formFieldsTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Loading fields...</td></tr>';
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "application_form_fields"));
+    let fields = [];
+
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      
+      // Filter out other sections
+      if (data.section === "contact" || data.section === "guardian" || data.section === "education_courses") return;
+
+      const hasAllFields = 
+        data.fieldName !== undefined && data.fieldName !== null && data.fieldName !== '' &&
+        data.requirement !== undefined && data.requirement !== null &&
+        data.fieldBehaviour !== undefined && data.fieldBehaviour !== null &&
+        data.isSelected !== undefined && data.isSelected !== null &&
+        data.order !== undefined && data.order !== null;
+
+      if (!hasAllFields) return;
+      if (data.requirement !== "Required" && data.requirement !== "Optional") return;
+      if (data.fieldBehaviour !== "Standard" && data.fieldBehaviour !== "Conditional") return;
+      if (typeof data.isSelected !== "boolean") return;
+
+      fields.push({ id: docSnap.id, ...data });
+    });
+
+    fields.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    tbody.innerHTML = '';
+    if (fields.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">No valid fields found matching criteria in Firestore.</td></tr>';
+      return;
+    }
+
+    fields.forEach((field) => {
+      const tr = document.createElement('tr');
+      const isCheckedAttr = field.isSelected ? 'checked' : '';
+      const reqSelected = field.requirement === 'Required' ? 'selected' : '';
+      const optSelected = field.requirement === 'Optional' ? 'selected' : '';
+
+      let behaviourHtml = `<span class="behaviour">Standard</span>`;
+      if (field.fieldBehaviour === 'Conditional') {
+        behaviourHtml = `
+          <span class="behaviour-group">
+            <span class="behaviour conditional">Conditional</span>
+            <span class="behaviour-arrow" aria-hidden="true">⌄</span>
+          </span>`;
+      }
+
+      tr.innerHTML = `
+        <td><input type="checkbox" class="check field-checkbox" ${isCheckedAttr} aria-label="Include ${field.fieldName}"></td>
+        <td>${field.fieldName}</td>
+        <td>
+          <select class="requirement-select" aria-label="${field.fieldName} requirement">
+            <option ${reqSelected}>Required</option>
+            <option ${optSelected}>Optional</option>
+          </select>
+        </td>
+        <td>${behaviourHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    updateSelectedCount();
+  } catch (err) {
+    console.error("Error loading application form fields:", err);
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:red;">Failed to load fields from database.</td></tr>';
+  }
+}
+
+// Fetch contact fields from Firestore
+async function loadContactFieldsFromFirestore() {
+  const tbody = document.getElementById('contactFieldsTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Loading fields...</td></tr>';
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "application_form_fields"));
+    let fields = [];
+
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (data.section !== "contact") return;
+
+      const hasAllFields = 
+        data.fieldName !== undefined && data.fieldName !== null && data.fieldName !== '' &&
+        data.requirement !== undefined && data.requirement !== null &&
+        data.fieldBehaviour !== undefined && data.fieldBehaviour !== null &&
+        data.isSelected !== undefined && data.isSelected !== null &&
+        data.order !== undefined && data.order !== null;
+
+      if (!hasAllFields) return;
+      if (data.requirement !== "Required" && data.requirement !== "Optional") return;
+      if (data.fieldBehaviour !== "Standard" && data.fieldBehaviour !== "Conditional") return;
+      if (typeof data.isSelected !== "boolean") return;
+
+      fields.push({ id: docSnap.id, ...data });
+    });
+
+    fields.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    tbody.innerHTML = '';
+    if (fields.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">No valid contact fields found matching criteria in Firestore.</td></tr>';
+      return;
+    }
+
+    fields.forEach((field) => {
+      const tr = document.createElement('tr');
+      const isCheckedAttr = field.isSelected ? 'checked' : '';
+      const reqSelected = field.requirement === 'Required' ? 'selected' : '';
+      const optSelected = field.requirement === 'Optional' ? 'selected' : '';
+
+      let behaviourHtml = `<span class="behaviour">Standard</span>`;
+      if (field.fieldBehaviour === 'Conditional') {
+        behaviourHtml = `
+          <span class="behaviour-group">
+            <span class="behaviour conditional">Conditional</span>
+            <span class="behaviour-arrow" aria-hidden="true">⌄</span>
+          </span>`;
+      }
+
+      tr.innerHTML = `
+        <td><input type="checkbox" class="check contact-field-checkbox" ${isCheckedAttr} aria-label="Include ${field.fieldName}"></td>
+        <td>${field.fieldName}</td>
+        <td>
+          <select class="requirement-select" aria-label="${field.fieldName} requirement">
+            <option ${reqSelected}>Required</option>
+            <option ${optSelected}>Optional</option>
+          </select>
+        </td>
+        <td>${behaviourHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    updateContactSelectedCount();
+  } catch (err) {
+    console.error("Error loading application contact fields:", err);
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:red;">Failed to load fields from database.</td></tr>';
+  }
+}
+
+// Fetch guardian fields from Firestore
+async function loadGuardianFieldsFromFirestore() {
+  const tbody = document.getElementById('guardianFieldsTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Loading fields...</td></tr>';
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "application_form_fields"));
+    let fields = [];
+
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (data.section !== "guardian") return;
+
+      const hasAllFields = 
+        data.fieldName !== undefined && data.fieldName !== null && data.fieldName !== '' &&
+        data.requirement !== undefined && data.requirement !== null &&
+        data.fieldBehaviour !== undefined && data.fieldBehaviour !== null &&
+        data.isSelected !== undefined && data.isSelected !== null &&
+        data.order !== undefined && data.order !== null;
+
+      if (!hasAllFields) return;
+      if (data.requirement !== "Required" && data.requirement !== "Optional") return;
+      if (data.fieldBehaviour !== "Standard" && data.fieldBehaviour !== "Conditional") return;
+      if (typeof data.isSelected !== "boolean") return;
+
+      fields.push({ id: docSnap.id, ...data });
+    });
+
+    fields.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    tbody.innerHTML = '';
+    if (fields.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">No valid guardian fields found matching criteria in Firestore.</td></tr>';
+      return;
+    }
+
+    fields.forEach((field) => {
+      const tr = document.createElement('tr');
+      const isCheckedAttr = field.isSelected ? 'checked' : '';
+      const reqSelected = field.requirement === 'Required' ? 'selected' : '';
+      const optSelected = field.requirement === 'Optional' ? 'selected' : '';
+
+      let behaviourHtml = `<span class="behaviour">Standard</span>`;
+      if (field.fieldBehaviour === 'Conditional') {
+        behaviourHtml = `
+          <span class="behaviour-group">
+            <span class="behaviour conditional">Conditional</span>
+            <span class="behaviour-arrow" aria-hidden="true">⌄</span>
+          </span>`;
+      }
+
+      tr.innerHTML = `
+        <td><input type="checkbox" class="check guardian-field-checkbox" ${isCheckedAttr} aria-label="Include ${field.fieldName}"></td>
+        <td>${field.fieldName}</td>
+        <td>
+          <select class="requirement-select" aria-label="${field.fieldName} requirement">
+            <option ${reqSelected}>Required</option>
+            <option ${optSelected}>Optional</option>
+          </select>
+        </td>
+        <td>${behaviourHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    updateGuardianSelectedCount();
+  } catch (err) {
+    console.error("Error loading application guardian fields:", err);
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:red;">Failed to load fields from database.</td></tr>';
+  }
+}
+
+// Fetch educational background & course selection fields from Firestore
+async function loadEducCoursesFieldsFromFirestore() {
+  const tbody = document.getElementById('educCoursesFieldsTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Loading fields...</td></tr>';
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "application_form_fields"));
+    let fields = [];
+
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (data.section !== "education_courses") return;
+
+      const hasAllFields = 
+        data.fieldName !== undefined && data.fieldName !== null && data.fieldName !== '' &&
+        data.requirement !== undefined && data.requirement !== null &&
+        data.fieldBehaviour !== undefined && data.fieldBehaviour !== null &&
+        data.isSelected !== undefined && data.isSelected !== null &&
+        data.order !== undefined && data.order !== null;
+
+      if (!hasAllFields) return;
+      if (data.requirement !== "Required" && data.requirement !== "Optional") return;
+      if (data.fieldBehaviour !== "Standard" && data.fieldBehaviour !== "Conditional") return;
+      if (typeof data.isSelected !== "boolean") return;
+
+      fields.push({ id: docSnap.id, ...data });
+    });
+
+    fields.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    tbody.innerHTML = '';
+    if (fields.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">No valid fields found matching criteria in Firestore.</td></tr>';
+      return;
+    }
+
+    fields.forEach((field) => {
+      const tr = document.createElement('tr');
+      const isCheckedAttr = field.isSelected ? 'checked' : '';
+      const reqSelected = field.requirement === 'Required' ? 'selected' : '';
+      const optSelected = field.requirement === 'Optional' ? 'selected' : '';
+
+      let behaviourHtml = `<span class="behaviour">Standard</span>`;
+      if (field.fieldBehaviour === 'Conditional') {
+        behaviourHtml = `
+          <span class="behaviour-group">
+            <span class="behaviour conditional">Conditional</span>
+            <span class="behaviour-arrow" aria-hidden="true">⌄</span>
+          </span>`;
+      }
+
+      tr.innerHTML = `
+        <td><input type="checkbox" class="check educ-courses-field-checkbox" ${isCheckedAttr} aria-label="Include ${field.fieldName}"></td>
+        <td>${field.fieldName}</td>
+        <td>
+          <select class="requirement-select" aria-label="${field.fieldName} requirement">
+            <option ${reqSelected}>Required</option>
+            <option ${optSelected}>Optional</option>
+          </select>
+        </td>
+        <td>${behaviourHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    updateEducCoursesSelectedCount();
+  } catch (err) {
+    console.error("Error loading educational background & course fields:", err);
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:red;">Failed to load fields from database.</td></tr>';
+  }
+}
+
+function updateSelectedCount() {
+  const checkboxes = document.querySelectorAll('.field-checkbox');
+  let count = 0;
+  checkboxes.forEach(cb => { if (cb.checked) count++; });
+  const badge = document.getElementById('selectedCountBadge');
+  if (badge) badge.textContent = `${count} selected`;
+}
+
+function updateContactSelectedCount() {
+  const checkboxes = document.querySelectorAll('.contact-field-checkbox');
+  let count = 0;
+  checkboxes.forEach(cb => { if (cb.checked) count++; });
+  const badge = document.getElementById('contactSelectedCountBadge');
+  if (badge) badge.textContent = `${count} selected`;
+}
+
+function updateGuardianSelectedCount() {
+  const checkboxes = document.querySelectorAll('.guardian-field-checkbox');
+  let count = 0;
+  checkboxes.forEach(cb => { if (cb.checked) count++; });
+  const badge = document.getElementById('guardianSelectedCountBadge');
+  if (badge) badge.textContent = `${count} selected`;
+}
+
+function updateEducCoursesSelectedCount() {
+  const checkboxes = document.querySelectorAll('.educ-courses-field-checkbox');
+  let count = 0;
+  checkboxes.forEach(cb => { if (cb.checked) count++; });
+  const badge = document.getElementById('educCoursesSelectedCountBadge');
+  if (badge) badge.textContent = `${count} selected`;
+}
+
+document.addEventListener('change', (e) => {
+  if (e.target.classList.contains('field-checkbox')) {
+    updateSelectedCount();
+  } else if (e.target.classList.contains('contact-field-checkbox')) {
+    updateContactSelectedCount();
+  } else if (e.target.classList.contains('guardian-field-checkbox')) {
+    updateGuardianSelectedCount();
+  } else if (e.target.classList.contains('educ-courses-field-checkbox')) {
+    updateEducCoursesSelectedCount();
+  }
+});
+
+// View Navigation Handler
+function showBuilderStep(stepNum) {
+  if (stepNum === 1) {
+    if (builderStep1) builderStep1.style.display = 'block';
+    if (builderStep2) builderStep2.style.display = 'none';
+    if (navStep1) { navStep1.classList.add('active'); navStep1.classList.remove('completed'); }
+    if (navStep2) { navStep2.classList.remove('active', 'completed'); }
+    window.location.hash = 'builder';
+  } else if (stepNum === 2) {
+    if (builderStep1) builderStep1.style.display = 'none';
+    if (builderStep2) builderStep2.style.display = 'block';
+    if (navStep1) { navStep1.classList.remove('active'); navStep1.classList.add('completed'); }
+    if (navStep2) { navStep2.classList.add('active'); navStep2.classList.remove('completed'); }
+    loadFormFieldsFromFirestore();
+    loadContactFieldsFromFirestore();
+    loadGuardianFieldsFromFirestore();
+    loadEducCoursesFieldsFromFirestore();
+    window.location.hash = 'builder-form';
+  }
+}
+
+function showCycleBuilder(e) {
+  if (e) e.preventDefault();
+  populateAcademicYears();
+  loadBasicInfoFromLocalStorage();
+  if (welcomeSidebar) welcomeSidebar.style.display = 'none';
+  if (mainShell) mainShell.classList.add('builder-active');
+  if (dashboardView) dashboardView.style.display = 'none';
+  if (cycleBuilderView) cycleBuilderView.style.display = 'block';
+  
+  if (window.location.hash === '#builder-form') {
+    showBuilderStep(2);
+  } else {
+    showBuilderStep(1);
+    updateAutoNaming();
+  }
+}
+
+function hideCycleBuilder(e) {
+  if (e) e.preventDefault();
+  if (welcomeSidebar) welcomeSidebar.style.display = 'flex';
+  if (mainShell) mainShell.classList.remove('builder-active');
+  if (cycleBuilderView) cycleBuilderView.style.display = 'none';
+  if (dashboardView) dashboardView.style.display = 'block';
+  window.location.hash = 'dashboard';
+}
+
+if (nextStepBtn) {
+  nextStepBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (validateBasicInfoFields()) {
+      saveBasicInfoToLocalStorage();
+      showBuilderStep(2);
+    }
+  });
+}
+
+if (prevStepBtn) {
+  prevStepBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showBuilderStep(1);
+  });
+}
+
+function handleInitialRoute() {
+  if (window.location.hash.startsWith('#builder')) {
+    showCycleBuilder();
+  } else {
+    hideCycleBuilder();
+  }
+}
+
+window.addEventListener('DOMContentLoaded', handleInitialRoute);
+window.addEventListener('hashchange', handleInitialRoute);
+
+if (openModalBtn) openModalBtn.addEventListener('click', showCycleBuilder);
+document.querySelectorAll('.action-step-1').forEach(el => el.addEventListener('click', showCycleBuilder));
+if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', hideCycleBuilder);
+if (cancelFormBtn) cancelFormBtn.addEventListener('click', hideCycleBuilder);
+
+if (qualificationSelect) qualificationSelect.addEventListener('change', updateAutoNaming);
+if (academicYearSelect) academicYearSelect.addEventListener('change', updateAutoNaming);
+
+// PROFILE ICON & AUTHENTICATION FEATURES
+const userMenuTrigger = document.getElementById('userMenuTrigger');
+const userDropdownMenu = document.getElementById('userDropdownMenu');
+const userAvatar = document.getElementById('userAvatar');
+const dropdownUserName = document.getElementById('dropdownUserName');
+const dropdownUserEmail = document.getElementById('dropdownUserEmail');
+const dropdownUserRole = document.getElementById('dropdownUserRole');
+const logoutBtn = document.getElementById('logoutBtn');
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = 'admin-home.html#sign-in';
+    return;
+  }
+
+  try {
+    const activeCollections = ['admins', 'academic_heads', 'system_admins'];
+    let userDocData = null;
+
+    for (const colName of activeCollections) {
+      const docRef = doc(db, colName, user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        userDocData = docSnap.data();
+        break;
+      }
+    }
+
+    if (!userDocData) {
+      await signOut(auth);
+      window.location.href = 'admin-home.html#sign-in';
+      return;
+    }
+
+    const initials = userDocData.initials || (userDocData.firstname ? userDocData.firstname.charAt(0) : 'A');
+    if (userAvatar) userAvatar.textContent = initials;
+
+    if (dropdownUserName) dropdownUserName.textContent = `${userDocData.firstname || ''} ${userDocData.surname || ''}`.trim();
+    if (dropdownUserEmail) dropdownUserEmail.textContent = userDocData.email || user.email;
+    if (dropdownUserRole) dropdownUserRole.textContent = (userDocData.role || 'Admin').replace('_', ' ');
+
+  } catch (err) {
+    console.error("Profile Verification Error:", err);
+    window.location.href = 'admin-home.html#sign-in';
+  }
+});
+
+if (userMenuTrigger) {
+  userMenuTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (userDropdownMenu) userDropdownMenu.classList.toggle('active');
+  });
+}
+
+window.addEventListener('click', () => {
+  if (userDropdownMenu && userDropdownMenu.classList.contains('active')) {
+    userDropdownMenu.classList.remove('active');
+  }
+});
+
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+      await signOut(auth);
+      window.location.href = 'admin-home.html#sign-in';
+    } catch (err) {
+      console.error("Logout Error:", err);
+    }
+  });
+}
+
 
