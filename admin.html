@@ -1174,7 +1174,7 @@
           </p>
         </header>
 
-        <!-- HORIZONTAL FIVE-STEP PROGRESS -->
+        <!-- HORIZONTAL FOUR-STEP PROGRESS -->
         <nav class="steps" aria-label="Application cycle steps">
           <div class="step active" id="navStep1">
             <span class="step-number">1</span>
@@ -1193,11 +1193,6 @@
 
           <div class="step" id="navStep4">
             <span class="step-number">4</span>
-            <span>Documents</span>
-          </div>
-
-          <div class="step" id="navStep5">
-            <span class="step-number">5</span>
             <span>Review &amp; Publish</span>
           </div>
         </nav>
@@ -1554,7 +1549,6 @@
                     <polyline points="14 2 14 8 20 8"></polyline>
                     <line x1="16" y1="13" x2="8" y2="13"></line>
                     <line x1="16" y1="17" x2="8" y2="17"></line>
-                    polyline points="10 9 9 9 8 9"></polyline>
                   </svg>
                 </div>
                 <div class="panel-title">
@@ -1592,6 +1586,55 @@
                     </tr>
                   </thead>
                   <tbody id="additionalInfoFieldsTableBody">
+                    <!-- Dynamically populated from Firestore -->
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- DOCUMENTS -->
+            <section class="information-panel">
+              <header class="panel-heading">
+                <div class="person-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </div>
+                <div class="panel-title">
+                  <h3>Documents</h3>
+                  <p>Required identity certificates, academic transcripts and supporting files.</p>
+                </div>
+                <div class="panel-meta">
+                  <span class="selected-count" id="documentsSelectedCountBadge">0 selected</span>
+                  <span class="chevron" aria-hidden="true"></span>
+                </div>
+              </header>
+
+              <!-- SCROLLABLE TABLE -->
+              <div class="table-scroll">
+                <table>
+                  <colgroup>
+                    <col class="checkbox-col">
+                    <col class="name-col">
+                    <col class="requirement-col">
+                    <col class="behaviour-col">
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th>
+                        <input
+                          type="checkbox"
+                          class="check"
+                          id="selectDocumentsAllCheck"
+                          aria-label="Select all document fields"
+                        >
+                      </th>
+                      <th>Document Name</th>
+                      <th>Requirement</th>
+                      <th>Document Behaviour</th>
+                    </tr>
+                  </thead>
+                  <tbody id="documentsFieldsTableBody">
                     <!-- Dynamically populated from Firestore -->
                   </tbody>
                 </table>
@@ -1635,4 +1678,3 @@
 
 </body>
 </html>
-
