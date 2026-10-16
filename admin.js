@@ -130,7 +130,7 @@ async function loadFormFieldsFromFirestore() {
       const data = docSnap.data();
       
       // Filter out other sections
-      if (data.section === "contact" || data.section === "guardian" || data.section === "education_courses" || data.section === "additional_info") return;
+      if (data.section === "contact" || data.section === "guardian" || data.section === "education_courses" || data.section === "additional_info" || data.section === "documents") return;
 
       const hasAllFields = 
         data.fieldName !== undefined && data.fieldName !== null && data.fieldName !== '' &&
@@ -483,6 +483,79 @@ async function loadAdditionalInfoFieldsFromFirestore() {
   }
 }
 
+// Fetch documents fields from Firestore
+async function loadDocumentsFieldsFromFirestore() {
+  const tbody = document.getElementById('documentsFieldsTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Loading fields...</td></tr>';
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "application_form_fields"));
+    let fields = [];
+
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (data.section !== "documents") return;
+
+      const hasAllFields = 
+        data.fieldName !== undefined && data.fieldName !== null && data.fieldName !== '' &&
+        data.requirement !== undefined && data.requirement !== null &&
+        data.fieldBehaviour !== undefined && data.fieldBehaviour !== null &&
+        data.isSelected !== undefined && data.isSelected !== null &&
+        data.order !== undefined && data.order !== null;
+
+      if (!hasAllFields) return;
+      if (data.requirement !== "Required" && data.requirement !== "Optional") return;
+      if (data.fieldBehaviour !== "Standard" && data.fieldBehaviour !== "Conditional") return;
+      if (typeof data.isSelected !== "boolean") return;
+
+      fields.push({ id: docSnap.id, ...data });
+    });
+
+    fields.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    tbody.innerHTML = '';
+    if (fields.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">No valid fields found matching criteria in Firestore.</td></tr>';
+      return;
+    }
+
+    fields.forEach((field) => {
+      const tr = document.createElement('tr');
+      const isCheckedAttr = field.isSelected ? 'checked' : '';
+      const reqSelected = field.requirement === 'Required' ? 'selected' : '';
+      const optSelected = field.requirement === 'Optional' ? 'selected' : '';
+
+      let behaviourHtml = `<span class="behaviour">Standard</span>`;
+      if (field.fieldBehaviour === 'Conditional') {
+        behaviourHtml = `
+          <span class="behaviour-group">
+            <span class="behaviour conditional">Conditional</span>
+            <span class="behaviour-arrow" aria-hidden="true">⌄</span>
+          </span>`;
+      }
+
+      tr.innerHTML = `
+        <td><input type="checkbox" class="check documents-field-checkbox" ${isCheckedAttr} aria-label="Include ${field.fieldName}"></td>
+        <td>${field.fieldName}</td>
+        <td>
+          <select class="requirement-select" aria-label="${field.fieldName} requirement">
+            <option ${reqSelected}>Required</option>
+            <option ${optSelected}>Optional</option>
+          </select>
+        </td>
+        <td>${behaviourHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    updateDocumentsSelectedCount();
+  } catch (err) {
+    console.error("Error loading document fields:", err);
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:red;">Failed to load fields from database.</td></tr>';
+  }
+}
+
 function updateSelectedCount() {
   const checkboxes = document.querySelectorAll('.field-checkbox');
   let count = 0;
@@ -523,6 +596,14 @@ function updateAdditionalInfoSelectedCount() {
   if (badge) badge.textContent = `${count} selected`;
 }
 
+function updateDocumentsSelectedCount() {
+  const checkboxes = document.querySelectorAll('.documents-field-checkbox');
+  let count = 0;
+  checkboxes.forEach(cb => { if (cb.checked) count++; });
+  const badge = document.getElementById('documentsSelectedCountBadge');
+  if (badge) badge.textContent = `${count} selected`;
+}
+
 document.addEventListener('change', (e) => {
   if (e.target.classList.contains('field-checkbox')) {
     updateSelectedCount();
@@ -534,6 +615,8 @@ document.addEventListener('change', (e) => {
     updateEducCoursesSelectedCount();
   } else if (e.target.classList.contains('additional-info-field-checkbox')) {
     updateAdditionalInfoSelectedCount();
+  } else if (e.target.classList.contains('documents-field-checkbox')) {
+    updateDocumentsSelectedCount();
   }
 });
 
@@ -555,6 +638,7 @@ function showBuilderStep(stepNum) {
     loadGuardianFieldsFromFirestore();
     loadEducCoursesFieldsFromFirestore();
     loadAdditionalInfoFieldsFromFirestore();
+    loadDocumentsFieldsFromFirestore();
     window.location.hash = 'builder-form';
   }
 }
@@ -692,4 +776,3 @@ if (logoutBtn) {
     }
   });
 }
-
