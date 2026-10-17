@@ -1,1 +1,16 @@
+Lets move to (3) Course tab...heading should be "{Qualification Type} Courses" based on which qualification type user selected inside (1) Basic info tab e.g if user selected qualification type as undergraduate degree the heading inside (3) Course tab will be "Undergraduate Courses" if user chose Postgraduate degree the heading inside (3) Course tab will be "Postgraduate Courses" same goes for if user selected research degree user chose Postgraduate degree the heading inside (3) Course tab will be "Research Courses"
 
+Now the table should be 
+1. Checkbox
+2. Course
+3. Study mode
+4. Campus
+5. Academic year
+
+The 5. Academic year will be based on wat they user selected inside the (1) Basic info tab please 
+
+Above the table it be filter lined horizontally in one line the filters are 
+
+Course, study mode, campus, search
+
+These filter will be a default of all courses, all study mode, all campus from the beginning then user will dropdown to filter, the list of both the filters and the table wil be data read from Firestore database under collection of "master_courses" document id of each master course is auto, the fields are "academicYear, campus, course, studyMode" i already manually created them inside Firestore database
