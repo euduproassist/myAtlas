@@ -858,38 +858,7 @@ function hideCycleBuilder(e) {
   window.location.hash = 'dashboard';
 }
 
-if (nextStepBtn) {
-  nextStepBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (validateBasicInfoFields()) {
-      saveBasicInfoToLocalStorage();
-      showBuilderStep(2);
-    }
-  });
-}
 
-if (prevStepBtn) {
-  prevStepBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    showBuilderStep(1);
-  });
-}
-
-function handleInitialRoute() {
-  if (window.location.hash.startsWith('#builder')) {
-    showCycleBuilder();
-  } else {
-    hideCycleBuilder();
-  }
-}
-
-window.addEventListener('DOMContentLoaded', handleInitialRoute);
-window.addEventListener('hashchange', handleInitialRoute);
-
-if (openModalBtn) openModalBtn.addEventListener('click', showCycleBuilder);
-document.querySelectorAll('.action-step-1').forEach(el => el.addEventListener('click', showCycleBuilder));
-if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', hideCycleBuilder);
-if (cancelFormBtn) cancelFormBtn.addEventListener('click', hideCycleBuilder);
 
 if (qualificationSelect) qualificationSelect.addEventListener('change', updateAutoNaming);
 if (academicYearSelect) academicYearSelect.addEventListener('change', updateAutoNaming);
