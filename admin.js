@@ -784,28 +784,7 @@ document.addEventListener('change', (e) => {
   }
 });
 
-// View Navigation Handler
-function showBuilderStep(stepNum) {
-  if (stepNum === 1) {
-    if (builderStep1) builderStep1.style.display = 'block';
-    if (builderStep2) builderStep2.style.display = 'none';
-    if (navStep1) { navStep1.classList.add('active'); navStep1.classList.remove('completed'); }
-    if (navStep2) { navStep2.classList.remove('active', 'completed'); }
-    window.location.hash = 'builder';
-  } else if (stepNum === 2) {
-    if (builderStep1) builderStep1.style.display = 'none';
-    if (builderStep2) builderStep2.style.display = 'block';
-    if (navStep1) { navStep1.classList.remove('active'); navStep1.classList.add('completed'); }
-    if (navStep2) { navStep2.classList.add('active'); navStep2.classList.remove('completed'); }
-    loadFormFieldsFromFirestore();
-    loadContactFieldsFromFirestore();
-    loadGuardianFieldsFromFirestore();
-    loadEducCoursesFieldsFromFirestore();
-    loadAdditionalInfoFieldsFromFirestore();
-    loadDocumentsFieldsFromFirestore();
-    window.location.hash = 'builder-form';
-  }
-}
+
 
 function showCycleBuilder(e) {
   if (e) e.preventDefault();
