@@ -491,12 +491,7 @@ async function loadAdditionalInfoFieldsFromFirestore() {
       tbody.appendChild(tr);
     });
 
-    updateAdditionalInfoSelectedCount();
-  } catch (err) {
-    console.error("Error loading additional info fields:", err);
-    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:red;">Failed to load fields from database.</td></tr>';
-  }
-}
+
 
 // Fetch documents fields from Firestore
 async function loadDocumentsFieldsFromFirestore() {
