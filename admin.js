@@ -14,14 +14,6 @@ const openModalBtn = document.getElementById('openModalBtn');
 const cancelCycleBtn = document.getElementById('cancelCycleBtn');
 const cancelFormBtn = document.getElementById('cancelFormBtn');
 
-// Builder Step Sub-views & Navigation
-const builderStep1 = document.getElementById('builderStep1');
-const builderStep2 = document.getElementById('builderStep2');
-const navStep1 = document.getElementById('navStep1');
-const navStep2 = document.getElementById('navStep2');
-const nextStepBtn = document.getElementById('nextStepBtn');
-const prevStepBtn = document.getElementById('prevStepBtn');
-const toCoursesBtn = document.getElementById('toCoursesBtn');
 
 // Auto-naming Fields
 const qualificationSelect = document.getElementById('qualification');
