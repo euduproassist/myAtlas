@@ -1,1 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pre-approved records used for validation during activation across all roles
+    match /pre_approved_admins/{adminId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /pre_approved_academic_heads/{headId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /pre_approved_system_admins/{sysAdminId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Profile collections created upon successful activation
+    match /admins/{adminId} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /academic_heads/{headId} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /system_admins/{sysAdminId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Mail queue collection for Firebase Trigger Email extension
+    match /mail/{mailId} {
+      allow create: if true;
+    }
+
+    // Collection for dynamic application form fields configuration
+    match /application_form_fields/{fieldId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Collection for master courses configuration
+    match /master_courses/{courseId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}
 
