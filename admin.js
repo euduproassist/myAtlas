@@ -491,7 +491,161 @@ async function loadAdditionalInfoFieldsFromFirestore() {
       tbody.appendChild(tr);
     });
 
+  updateAdditionalInfoSelectedCount();
+  } catch (err) {
+    console.error("Error loading additional info fields:", err);
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:red;">Failed to load fields from database.</td></tr>';
+  }
+}
 
+// Fetch master courses from Firestore, remove duplicates permanently, and render table
+let masterCoursesCache = [];
+
+async function loadMasterCoursesFromFirestore() {
+  if (!masterCoursesTableBody) return;
+  masterCoursesTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">Loading courses...</td></tr>';
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "master_courses"));
+    let rawCourses = [];
+
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (data.course) {
+        rawCourses.push({
+          id: docSnap.id,
+          course: data.course || '',
+          studyMode: data.studyMode || data.study_mode || '',
+          campus: data.campus || '',
+          academicYear: data.academicYear || data.academic_year || (academicYearSelect ? academicYearSelect.value : new Date().getFullYear())
+        });
+      }
+    });
+
+    // Permanently remove duplicates based on unique combination of course, studyMode, and campus
+    const uniqueMap = new Map();
+    rawCourses.forEach(item => {
+      const key = `${item.course.trim().toLowerCase()}_${item.studyMode.trim().toLowerCase()}_${item.campus.trim().toLowerCase()}`;
+      if (!uniqueMap.has(key)) {
+        uniqueMap.set(key, item);
+      }
+    });
+
+    masterCoursesCache = Array.from(uniqueMap.values());
+    populateCourseFilters(masterCoursesCache);
+    renderFilteredMasterCourses();
+  } catch (err) {
+    console.error("Error loading master courses:", err);
+    masterCoursesTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:red;">Failed to load master courses from database.</td></tr>';
+  }
+}
+
+function populateCourseFilters(courses) {
+  if (!filterCourse || !filterStudyMode || !filterCampus) return;
+
+  const coursesSet = new Set();
+  const studyModesSet = new Set();
+  const campusesSet = new Set();
+
+  courses.forEach(c => {
+    if (c.course) coursesSet.add(c.course);
+    if (c.studyMode) studyModesSet.add(c.studyMode);
+    if (c.campus) campusesSet.add(c.campus);
+  });
+
+  filterCourse.innerHTML = '<option value="">All Courses</option>';
+  Array.from(coursesSet).sort().forEach(val => {
+    const opt = document.createElement('option');
+    opt.value = val;
+    opt.textContent = val;
+    filterCourse.appendChild(opt);
+  });
+
+  filterStudyMode.innerHTML = '<option value="">All Study Modes</option>';
+  Array.from(studyModesSet).sort().forEach(val => {
+    const opt = document.createElement('option');
+    opt.value = val;
+    opt.textContent = val;
+    filterStudyMode.appendChild(opt);
+  });
+
+  filterCampus.innerHTML = '<option value="">All Campuses</option>';
+  Array.from(campusesSet).sort().forEach(val => {
+    const opt = document.createElement('option');
+    opt.value = val;
+    opt.textContent = val;
+    filterCampus.appendChild(opt);
+  });
+}
+
+function renderFilteredMasterCourses() {
+  if (!masterCoursesTableBody) return;
+
+  const selectedCourseFilter = filterCourse ? filterCourse.value.toLowerCase() : '';
+  const selectedStudyModeFilter = filterStudyMode ? filterStudyMode.value.toLowerCase() : '';
+  const selectedCampusFilter = filterCampus ? filterCampus.value.toLowerCase() : '';
+  const searchQuery = filterSearch ? filterSearch.value.toLowerCase().trim() : '';
+  const chosenYear = academicYearSelect && academicYearSelect.value ? academicYearSelect.value : new Date().getFullYear();
+
+  const filtered = masterCoursesCache.filter(item => {
+    const matchCourse = !selectedCourseFilter || item.course.toLowerCase() === selectedCourseFilter;
+    const matchStudyMode = !selectedStudyModeFilter || item.studyMode.toLowerCase() === selectedStudyModeFilter;
+    const matchCampus = !selectedCampusFilter || item.campus.toLowerCase() === selectedCampusFilter;
+    const matchSearch = !searchQuery || 
+      item.course.toLowerCase().includes(searchQuery) ||
+      item.studyMode.toLowerCase().includes(searchQuery) ||
+      item.campus.toLowerCase().includes(searchQuery);
+
+    return matchCourse && matchStudyMode && matchCampus && matchSearch;
+  });
+
+  masterCoursesTableBody.innerHTML = '';
+  if (filtered.length === 0) {
+    masterCoursesTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">No matching courses found.</td></tr>';
+    updateCoursesSelectedCount();
+    return;
+  }
+
+  filtered.forEach((item) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="padding-left: 21px;"><input type="checkbox" class="check course-row-checkbox" aria-label="Select ${item.course}"></td>
+      <td>${item.course}</td>
+      <td><span class="behaviour">${item.studyMode || 'Full-time'}</span></td>
+      <td>${item.campus || 'Main Campus'}</td>
+      <td>${chosenYear}</td>
+    `;
+    masterCoursesTableBody.appendChild(tr);
+  });
+
+  updateCoursesSelectedCount();
+}
+
+function updateCoursesSelectedCount() {
+  const checkboxes = document.querySelectorAll('.course-row-checkbox');
+  let count = 0;
+  checkboxes.forEach(cb => { if (cb.checked) count++; });
+  if (coursesSelectedCountBadge) coursesSelectedCountBadge.textContent = `${count} selected`;
+}
+
+if (filterCourse) filterCourse.addEventListener('change', renderFilteredMasterCourses);
+if (filterStudyMode) filterStudyMode.addEventListener('change', renderFilteredMasterCourses);
+if (filterCampus) filterCampus.addEventListener('change', renderFilteredMasterCourses);
+if (filterSearch) filterSearch.addEventListener('input', renderFilteredMasterCourses);
+
+if (selectAllCoursesCheck) {
+  selectAllCoursesCheck.addEventListener('change', (e) => {
+    const checkboxes = document.querySelectorAll('.course-row-checkbox');
+    checkboxes.forEach(cb => { cb.checked = e.target.checked; });
+    updateCoursesSelectedCount();
+  });
+}
+
+document.addEventListener('change', (e) => {
+  if (e.target.classList.contains('course-row-checkbox')) {
+    updateCoursesSelectedCount();
+  }
+});
 
 // Fetch documents fields from Firestore
 async function loadDocumentsFieldsFromFirestore() {
