@@ -827,7 +827,6 @@ function showBuilderStep(stepNum) {
       }
     }
 
-    masterCoursesCache = [];
     loadMasterCoursesFromFirestore();
     window.location.hash = 'builder-courses';
   }
