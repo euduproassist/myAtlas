@@ -930,6 +930,55 @@ if (prevToFormBtn) {
   });
 }
 
+if (toReviewBtn) {
+  toReviewBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showBuilderStep(4);
+  });
+}
+
+if (prevToCoursesBtn) {
+  prevToCoursesBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showBuilderStep(3);
+  });
+}
+
+if (cancelReviewBtn) {
+  cancelReviewBtn.addEventListener('click', hideCycleBuilder);
+}
+
+if (publishCycleBtn) {
+  publishCycleBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    // Publish functionality is currently disabled per configuration instructions
+    alert("Publish feature is not active yet.");
+  });
+}
+
+function handleInitialRoute() {
+  if (window.location.hash === '#builder-review') {
+    showCycleBuilder();
+    showBuilderStep(4);
+  } else if (window.location.hash === '#builder-courses') {
+    showCycleBuilder();
+    showBuilderStep(3);
+  } else if (window.location.hash.startsWith('#builder')) {
+    showCycleBuilder();
+  } else {
+    hideCycleBuilder();
+  }
+}
+
+window.addEventListener('DOMContentLoaded', handleInitialRoute);
+window.addEventListener('hashchange', handleInitialRoute);
+
+if (openModalBtn) openModalBtn.addEventListener('click', showCycleBuilder);
+document.querySelectorAll('.action-step-1').forEach(el => el.addEventListener('click', showCycleBuilder));
+if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', hideCycleBuilder);
+if (cancelFormBtn) cancelCycleBtn.addEventListener('click', hideCycleBuilder);
+if (cancelCoursesBtn) cancelCoursesBtn.addEventListener('click', hideCycleBuilder);
+
 
 if (qualificationSelect) qualificationSelect.addEventListener('change', updateAutoNaming);
 if (academicYearSelect) academicYearSelect.addEventListener('change', updateAutoNaming);
