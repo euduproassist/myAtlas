@@ -813,7 +813,65 @@ function showBuilderStep(stepNum) {
     loadAdditionalInfoFieldsFromFirestore();
     loadDocumentsFieldsFromFirestore();
     window.location.hash = 'builder-form';
-  
+  } else if (stepNum === 3) {
+    if (builderStep1) builderStep1.style.display = 'none';
+    if (builderStep2) builderStep2.style.display = 'none';
+    if (builderStep3) builderStep3.style.display = 'block';
+    if (builderStep4) builderStep4.style.display = 'none';
+    if (navStep1) { navStep1.classList.remove('active'); navStep1.classList.add('completed'); }
+    if (navStep2) { navStep2.classList.remove('active'); navStep2.classList.add('completed'); }
+    if (navStep3) { navStep3.classList.add('active'); navStep3.classList.remove('completed'); }
+    if (navStep4) { navStep4.classList.remove('active', 'completed'); }
+
+    // Dynamic Heading based on Qualification Type
+    if (coursesDynamicHeading && qualificationSelect) {
+      const qualVal = qualificationSelect.value;
+      if (qualVal) {
+        const baseName = qualVal.replace(/\s+Degree$/i, '');
+        coursesDynamicHeading.textContent = `${baseName} Courses`;
+      } else {
+        coursesDynamicHeading.textContent = 'Courses';
+      }
+    }
+
+    masterCoursesCache = [];
+    requestAnimationFrame(() => {
+      loadMasterCoursesFromFirestore();
+    });
+    window.location.hash = 'builder-courses';
+  } else if (stepNum === 4) {
+    if (builderStep1) builderStep1.style.display = 'none';
+    if (builderStep2) builderStep2.style.display = 'none';
+    if (builderStep3) builderStep3.style.display = 'none';
+    if (builderStep4) builderStep4.style.display = 'block';
+    if (navStep1) { navStep1.classList.remove('active'); navStep1.classList.add('completed'); }
+    if (navStep2) { navStep2.classList.remove('active'); navStep2.classList.add('completed'); }
+    if (navStep3) { navStep3.classList.remove('active'); navStep3.classList.add('completed'); }
+    if (navStep4) { navStep4.classList.add('active'); navStep4.classList.remove('completed'); }
+
+    // Bind summary details from Step 1 inputs
+    if (document.getElementById('reviewQualification')) document.getElementById('reviewQualification').textContent = qualificationSelect.value || '—';
+    if (document.getElementById('reviewAcademicYear')) document.getElementById('reviewAcademicYear').textContent = academicYearSelect.value || '—';
+    if (document.getElementById('reviewOpeningDate')) document.getElementById('reviewOpeningDate').textContent = openingDateInput.value || '—';
+    if (document.getElementById('reviewClosingDate')) document.getElementById('reviewClosingDate').textContent = closingDateInput.value || '—';
+    if (document.getElementById('reviewCycleName')) document.getElementById('reviewCycleName').textContent = cycleNameInput.value || '—';
+    if (document.getElementById('reviewFolderName')) document.getElementById('reviewFolderName').textContent = folderNameInput.value || '—';
+
+    // Count selected courses
+    const selectedCoursesCount = document.querySelectorAll('.course-row-checkbox:checked').length;
+    if (document.getElementById('reviewCoursesCount')) {
+      document.getElementById('reviewCoursesCount').textContent = `${selectedCoursesCount} selected`;
+    }
+
+    // Count selected form fields across all tables
+    const totalFieldsCount = document.querySelectorAll('.field-checkbox:checked, .contact-field-checkbox:checked, .guardian-field-checkbox:checked, .educ-courses-field-checkbox:checked, .additional-info-field-checkbox:checked, .documents-field-checkbox:checked').length;
+    if (document.getElementById('reviewFieldsCount')) {
+      document.getElementById('reviewFieldsCount').textContent = `${totalFieldsCount} selected`;
+    }
+
+    window.location.hash = 'builder-review';
+  }
+}
 
 function showCycleBuilder(e) {
   if (e) e.preventDefault();
