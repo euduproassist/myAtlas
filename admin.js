@@ -15,7 +15,23 @@ const cancelCycleBtn = document.getElementById('cancelCycleBtn');
 const cancelFormBtn = document.getElementById('cancelFormBtn');
 
 // Builder Step Sub-views & Navigation
-
+const builderStep1 = document.getElementById('builderStep1');
+const builderStep2 = document.getElementById('builderStep2');
+const builderStep3 = document.getElementById('builderStep3');
+const builderStep4 = document.getElementById('builderStep4');
+const navStep1 = document.getElementById('navStep1');
+const navStep2 = document.getElementById('navStep2');
+const navStep3 = document.getElementById('navStep3');
+const navStep4 = document.getElementById('navStep4');
+const nextStepBtn = document.getElementById('nextStepBtn');
+const prevStepBtn = document.getElementById('prevStepBtn');
+const toCoursesBtn = document.getElementById('toCoursesBtn');
+const prevToFormBtn = document.getElementById('prevToFormBtn');
+const toReviewBtn = document.getElementById('toReviewBtn');
+const cancelCoursesBtn = document.getElementById('cancelCoursesBtn');
+const cancelReviewBtn = document.getElementById('cancelReviewBtn');
+const prevToCoursesBtn = document.getElementById('prevToCoursesBtn');
+const publishCycleBtn = document.getElementById('publishCycleBtn');
 
 // Courses step specific elements
 const coursesDynamicHeading = document.getElementById('coursesDynamicHeading');
