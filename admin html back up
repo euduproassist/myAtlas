@@ -791,10 +791,15 @@
     color: #0074f5;
     font-size: 11px;
   }
-  .table-scroll {
+    .table-scroll {
     width: 100%;
     max-height: 468px;
+    min-height: 300px;
     overflow: auto;
+  }
+
+  #builderStep1, #builderStep2, #builderStep3 {
+    contain: layout style;
   }
   table {
     width: 100%;
@@ -1656,8 +1661,112 @@
           </div>
         </div>
 
+        <!-- SUB-VIEW 3: COURSES -->
+        <div id="builderStep3" style="display: none;">
+          <section class="form-card" style="display: flex; flex-direction: column; gap: 24px;">
+            <div class="form-intro">
+              <div class="intro-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+                  <path d="M6 6h10"></path>
+                  <path d="M6 10h10"></path>
+                </svg>
+              </div>
+              <div>
+                <h2 id="coursesDynamicHeading">Courses</h2>
+                <p>
+                  Select the courses available for this application cycle. Use the filters below to find specific courses.
+                </p>
+              </div>
+            </div>
+
+            <!-- HORIZONTAL FILTER BAR -->
+            <div style="display: flex; flex-wrap: wrap; gap: 16px; padding: 12px 16px; background: #f8fbff; border: 1px solid var(--border); border-radius: 6px; align-items: center;">
+              <div style="flex: 1; min-width: 160px;">
+                <label for="filterCourse" style="display: block; font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 4px;">Course</label>
+                <select id="filterCourse" class="control" style="height: 36px; font-size: 13px;">
+                  <option value="">All Courses</option>
+                </select>
+              </div>
+              <div style="flex: 1; min-width: 160px;">
+                <label for="filterStudyMode" style="display: block; font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 4px;">Study mode</label>
+                <select id="filterStudyMode" class="control" style="height: 36px; font-size: 13px;">
+                  <option value="">All Study Modes</option>
+                </select>
+              </div>
+              <div style="flex: 1; min-width: 160px;">
+                <label for="filterCampus" style="display: block; font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 4px;">Campus</label>
+                <select id="filterCampus" class="control" style="height: 36px; font-size: 13px;">
+                  <option value="">All Campuses</option>
+                </select>
+              </div>
+              <div style="flex: 1.2; min-width: 200px;">
+                <label for="filterSearch" style="display: block; font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 4px;">Search</label>
+                <input type="text" id="filterSearch" class="control" placeholder="Search courses..." style="height: 36px; font-size: 13px;" />
+              </div>
+            </div>
+
+            <!-- COURSES INFORMATION PANEL & TABLE -->
+            <section class="information-panel">
+              <header class="panel-heading">
+                <div class="person-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                  </svg>
+                </div>
+                <div class="panel-title">
+                  <h3>Master Courses List</h3>
+                  <p>Available courses pulled from master records.</p>
+                </div>
+                <div class="panel-meta">
+                  <span class="selected-count" id="coursesSelectedCountBadge">0 selected</span>
+                </div>
+              </header>
+
+              <div class="table-scroll">
+                <table>
+                  <colgroup>
+                    <col class="checkbox-col" style="width: 8%;">
+                    <col class="name-col" style="width: 38%;">
+                    <col style="width: 18%;">
+                    <col style="width: 18%;">
+                    <col style="width: 18%;">
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th style="padding-left: 21px;">
+                        <input type="checkbox" class="check" id="selectAllCoursesCheck" aria-label="Select all courses">
+                      </th>
+                      <th>Course</th>
+                      <th>Study mode</th>
+                      <th>Campus</th>
+                      <th>Academic year</th>
+                    </tr>
+                  </thead>
+                  <tbody id="masterCoursesTableBody">
+                    <!-- Dynamically populated from Firestore master_courses -->
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+
+          <!-- BUTTONS FOR STEP 3 -->
+          <div class="actions">
+            <button type="button" class="btn btn-cancel" id="cancelCoursesBtn">Cancel</button>
+            <button type="button" class="btn btn-previous" id="prevToFormBtn">
+              <span style="margin-left:0; margin-right:7px; font-size:17px;">←</span> Previous: Application Form
+            </button>
+            <button type="button" class="btn btn-next" id="toReviewBtn">
+              Next: Review &amp; Publish <span>→</span>
+            </button>
+          </div>
+        </div>
+
       </div>
     </main>
+
 
   </div>
 
