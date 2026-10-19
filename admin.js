@@ -18,20 +18,15 @@ const cancelFormBtn = document.getElementById('cancelFormBtn');
 const builderStep1 = document.getElementById('builderStep1');
 const builderStep2 = document.getElementById('builderStep2');
 const builderStep3 = document.getElementById('builderStep3');
-const builderStep4 = document.getElementById('builderStep4');
 const navStep1 = document.getElementById('navStep1');
 const navStep2 = document.getElementById('navStep2');
 const navStep3 = document.getElementById('navStep3');
-const navStep4 = document.getElementById('navStep4');
 const nextStepBtn = document.getElementById('nextStepBtn');
 const prevStepBtn = document.getElementById('prevStepBtn');
 const toCoursesBtn = document.getElementById('toCoursesBtn');
 const prevToFormBtn = document.getElementById('prevToFormBtn');
 const toReviewBtn = document.getElementById('toReviewBtn');
 const cancelCoursesBtn = document.getElementById('cancelCoursesBtn');
-const cancelReviewBtn = document.getElementById('cancelReviewBtn');
-const prevToCoursesBtn = document.getElementById('prevToCoursesBtn');
-const publishCycleBtn = document.getElementById('publishCycleBtn');
 
 // Courses step specific elements
 const coursesDynamicHeading = document.getElementById('coursesDynamicHeading');
@@ -817,11 +812,9 @@ function showBuilderStep(stepNum) {
     if (builderStep1) builderStep1.style.display = 'none';
     if (builderStep2) builderStep2.style.display = 'none';
     if (builderStep3) builderStep3.style.display = 'block';
-    if (builderStep4) builderStep4.style.display = 'none';
     if (navStep1) { navStep1.classList.remove('active'); navStep1.classList.add('completed'); }
     if (navStep2) { navStep2.classList.remove('active'); navStep2.classList.add('completed'); }
     if (navStep3) { navStep3.classList.add('active'); navStep3.classList.remove('completed'); }
-    if (navStep4) { navStep4.classList.remove('active', 'completed'); }
 
     // Dynamic Heading based on Qualification Type
     if (coursesDynamicHeading && qualificationSelect) {
@@ -839,37 +832,6 @@ function showBuilderStep(stepNum) {
       loadMasterCoursesFromFirestore();
     });
     window.location.hash = 'builder-courses';
-  } else if (stepNum === 4) {
-    if (builderStep1) builderStep1.style.display = 'none';
-    if (builderStep2) builderStep2.style.display = 'none';
-    if (builderStep3) builderStep3.style.display = 'none';
-    if (builderStep4) builderStep4.style.display = 'block';
-    if (navStep1) { navStep1.classList.remove('active'); navStep1.classList.add('completed'); }
-    if (navStep2) { navStep2.classList.remove('active'); navStep2.classList.add('completed'); }
-    if (navStep3) { navStep3.classList.remove('active'); navStep3.classList.add('completed'); }
-    if (navStep4) { navStep4.classList.add('active'); navStep4.classList.remove('completed'); }
-
-    // Bind summary details from Step 1 inputs
-    if (document.getElementById('reviewQualification')) document.getElementById('reviewQualification').textContent = qualificationSelect.value || '—';
-    if (document.getElementById('reviewAcademicYear')) document.getElementById('reviewAcademicYear').textContent = academicYearSelect.value || '—';
-    if (document.getElementById('reviewOpeningDate')) document.getElementById('reviewOpeningDate').textContent = openingDateInput.value || '—';
-    if (document.getElementById('reviewClosingDate')) document.getElementById('reviewClosingDate').textContent = closingDateInput.value || '—';
-    if (document.getElementById('reviewCycleName')) document.getElementById('reviewCycleName').textContent = cycleNameInput.value || '—';
-    if (document.getElementById('reviewFolderName')) document.getElementById('reviewFolderName').textContent = folderNameInput.value || '—';
-
-    // Count selected courses
-    const selectedCoursesCount = document.querySelectorAll('.course-row-checkbox:checked').length;
-    if (document.getElementById('reviewCoursesCount')) {
-      document.getElementById('reviewCoursesCount').textContent = `${selectedCoursesCount} selected`;
-    }
-
-    // Count selected form fields across all tables
-    const totalFieldsCount = document.querySelectorAll('.field-checkbox:checked, .contact-field-checkbox:checked, .guardian-field-checkbox:checked, .educ-courses-field-checkbox:checked, .additional-info-field-checkbox:checked, .documents-field-checkbox:checked').length;
-    if (document.getElementById('reviewFieldsCount')) {
-      document.getElementById('reviewFieldsCount').textContent = `${totalFieldsCount} selected`;
-    }
-
-    window.location.hash = 'builder-review';
   }
 }
 
@@ -933,34 +895,12 @@ if (prevToFormBtn) {
 if (toReviewBtn) {
   toReviewBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    showBuilderStep(4);
-  });
-}
-
-if (prevToCoursesBtn) {
-  prevToCoursesBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    showBuilderStep(3);
-  });
-}
-
-if (cancelReviewBtn) {
-  cancelReviewBtn.addEventListener('click', hideCycleBuilder);
-}
-
-if (publishCycleBtn) {
-  publishCycleBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    // Publish functionality is currently disabled per configuration instructions
-    alert("Publish feature is not active yet.");
+    alert("Proceeding to Review & Publish step.");
   });
 }
 
 function handleInitialRoute() {
-  if (window.location.hash === '#builder-review') {
-    showCycleBuilder();
-    showBuilderStep(4);
-  } else if (window.location.hash === '#builder-courses') {
+  if (window.location.hash === '#builder-courses') {
     showCycleBuilder();
     showBuilderStep(3);
   } else if (window.location.hash.startsWith('#builder')) {
@@ -976,9 +916,8 @@ window.addEventListener('hashchange', handleInitialRoute);
 if (openModalBtn) openModalBtn.addEventListener('click', showCycleBuilder);
 document.querySelectorAll('.action-step-1').forEach(el => el.addEventListener('click', showCycleBuilder));
 if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', hideCycleBuilder);
-if (cancelFormBtn) cancelCycleBtn.addEventListener('click', hideCycleBuilder);
+if (cancelFormBtn) cancelFormBtn.addEventListener('click', hideCycleBuilder);
 if (cancelCoursesBtn) cancelCoursesBtn.addEventListener('click', hideCycleBuilder);
-
 
 if (qualificationSelect) qualificationSelect.addEventListener('change', updateAutoNaming);
 if (academicYearSelect) academicYearSelect.addEventListener('change', updateAutoNaming);
