@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>myAtlas — Admin Portal</title>
 
@@ -498,6 +498,7 @@
     background: #fff;
     scrollbar-width: thin;
     scrollbar-color: #c5e0ff #fff;
+    -webkit-overflow-scrolling: touch;
   }
   .step {
     position: relative;
@@ -791,19 +792,22 @@
     color: #0074f5;
     font-size: 11px;
   }
-    .table-scroll {
+  .table-scroll {
     width: 100%;
+    max-width: 100%;
     max-height: 468px;
-    min-height: 300px;
-    overflow: auto;
+    min-height: 250px;
+    overflow-x: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  #builderStep1, #builderStep2, #builderStep3 {
+  #builderStep1, #builderStep2, #builderStep3, #builderStep4 {
     contain: layout style;
   }
   table {
     width: 100%;
-    min-width: 760px;
+    min-width: 680px;
     table-layout: fixed;
     border-collapse: collapse;
     font-size: 12px;
@@ -842,8 +846,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 17px;
-    height: 17px;
+    width: 18px;
+    height: 18px;
     margin: 0;
     vertical-align: middle;
     appearance: none;
@@ -921,6 +925,7 @@
     gap: 16px;
     width: 100%;
     margin-top: 26px;
+    flex-wrap: wrap;
   }
   .btn {
     display: inline-flex;
@@ -954,6 +959,21 @@
   .btn span {
     margin-left: 7px;
     font-size: 17px;
+  }
+
+  /* REVIEW TWO COLUMN GRID CLASS */
+  .review-grid-2col {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .review-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 16px;
+    column-gap: 32px;
+    font-size: 13.5px;
   }
 
   /* FOOTER */
@@ -993,12 +1013,16 @@
     .shell { display: flex; flex-direction: column; }
     .welcome { border-right: none; border-bottom: 1px solid var(--line); }
     .grid-2x2 { grid-template-columns: 1fr; }
+    .review-grid-2col { grid-template-columns: 1fr; }
+    .review-details-grid { grid-template-columns: 1fr; }
     .topbar { padding: 0 18px; }
     .footer { padding: 20px 18px; flex-direction: column; gap: 16px; align-items: flex-start; }
     .footer-right { gap: 20px; flex-wrap: wrap; }
     .fields-grid { grid-template-columns: minmax(0, 1fr); column-gap: 18px; row-gap: 32px; padding: 0 3px; }
     .automatic-section { grid-template-columns: minmax(0, 1fr); gap: 22px; margin-top: 28px; padding: 22px 0 0; border-top: 1px solid #d5e9ff; }
     .separator { display: none; }
+    .actions { justify-content: stretch; }
+    .actions .btn { flex: 1 1 100%; }
   }
 
   @media (max-width: 560px) {
@@ -1167,7 +1191,7 @@
         </div>
       </div>
 
-      <!-- VIEW 2: Application Cycle Builder Workspace (Step 1: Basic Info) -->
+      <!-- VIEW 2: Application Cycle Builder Workspace -->
       <div id="cycleBuilderView" style="display: none;">
         
         <!-- PAGE TITLE -->
@@ -1324,7 +1348,7 @@
 
         <!-- SUB-VIEW 2: APPLICATION FORM -->
         <div id="builderStep2" style="display: none;">
-          <section class="form-card" style="display: flex; flex-direction: column; gap: 24px;">
+          <section class="form-card">
             <div class="form-intro">
               <div class="intro-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -1663,7 +1687,7 @@
 
         <!-- SUB-VIEW 3: COURSES -->
         <div id="builderStep3" style="display: none;">
-          <section class="form-card" style="display: flex; flex-direction: column; gap: 24px;">
+          <section class="form-card">
             <div class="form-intro">
               <div class="intro-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -1682,25 +1706,25 @@
 
             <!-- HORIZONTAL FILTER BAR -->
             <div style="display: flex; flex-wrap: wrap; gap: 16px; padding: 12px 16px; background: #f8fbff; border: 1px solid var(--border); border-radius: 6px; align-items: center;">
-              <div style="flex: 1; min-width: 160px;">
+              <div style="flex: 1; min-width: 140px;">
                 <label for="filterCourse" style="display: block; font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 4px;">Course</label>
                 <select id="filterCourse" class="control" style="height: 36px; font-size: 13px;">
                   <option value="">All Courses</option>
                 </select>
               </div>
-              <div style="flex: 1; min-width: 160px;">
+              <div style="flex: 1; min-width: 140px;">
                 <label for="filterStudyMode" style="display: block; font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 4px;">Study mode</label>
                 <select id="filterStudyMode" class="control" style="height: 36px; font-size: 13px;">
                   <option value="">All Study Modes</option>
                 </select>
               </div>
-              <div style="flex: 1; min-width: 160px;">
+              <div style="flex: 1; min-width: 140px;">
                 <label for="filterCampus" style="display: block; font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 4px;">Campus</label>
                 <select id="filterCampus" class="control" style="height: 36px; font-size: 13px;">
                   <option value="">All Campuses</option>
                 </select>
               </div>
-              <div style="flex: 1.2; min-width: 200px;">
+              <div style="flex: 1.2; min-width: 160px;">
                 <label for="filterSearch" style="display: block; font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 4px;">Search</label>
                 <input type="text" id="filterSearch" class="control" placeholder="Search courses..." style="height: 36px; font-size: 13px;" />
               </div>
@@ -1764,9 +1788,121 @@
           </div>
         </div>
 
+        <!-- SUB-VIEW 4: REVIEW & PUBLISH -->
+        <div id="builderStep4" style="display: none;">
+          <section class="form-card">
+            <div class="form-intro">
+              <div class="intro-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <div>
+                <h2>Review &amp; Publish Cycle</h2>
+                <p>Please carefully review all configured details before publishing this application cycle.</p>
+              </div>
+            </div>
+
+            <!-- BASIC APPLICATION DETAILS PANEL -->
+            <section class="information-panel">
+              <header class="panel-heading" style="background: #fafcfe; border-bottom: 1px solid var(--line);">
+                <div class="person-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
+                </div>
+                <div class="panel-title">
+                  <h3>Basic Application Details</h3>
+                </div>
+              </header>
+              <div style="padding: 24px; background: #fff;">
+                <div class="review-details-grid">
+                  <div><strong style="color: var(--blue);">Qualification Type :</strong> <span id="reviewQualType" style="color: var(--navy); margin-left: 8px;">---</span></div>
+                  <div><strong style="color: var(--blue);">Academic Year :</strong> <span id="reviewAcademicYear" style="color: var(--navy); margin-left: 8px;">---</span></div>
+                  <div><strong style="color: var(--blue);">Opening Date :</strong> <span id="reviewOpeningDate" style="color: var(--navy); margin-left: 8px;">---</span></div>
+                  <div><strong style="color: var(--blue);">Closing Date :</strong> <span id="reviewClosingDate" style="color: var(--navy); margin-left: 8px;">---</span></div>
+                  <div><strong style="color: var(--blue);">Folder Name :</strong> <span id="reviewFolderName" style="color: var(--navy); margin-left: 8px;">---</span></div>
+                  <div><strong style="color: var(--blue);">Cycle Name :</strong> <span id="reviewCycleName" style="color: var(--navy); margin-left: 8px;">---</span></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- TWO-COLUMN SUMMARY CARDS (FORMS & COURSES) -->
+            <div class="review-grid-2col">
+              
+              <!-- FORM FIELDS CONFIGURED SUMMARY -->
+              <section class="information-panel" style="display: flex; flex-direction: column; height: 100%;">
+                <header class="panel-heading" style="background: #fafcfe; border-bottom: 1px solid var(--line);">
+                  <div class="person-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                  </div>
+                  <div class="panel-title">
+                    <h3>Form Fields Configured</h3>
+                  </div>
+                  <div class="panel-meta">
+                    <span class="selected-count" id="reviewTotalFieldsCount">0 selected</span>
+                  </div>
+                </header>
+                <div style="padding: 20px 24px; background: #fff; flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
+                  <ul id="reviewFormFieldsList" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; font-size: 13.5px; color: var(--navy);">
+                    <!-- Dynamically populated counts per section -->
+                  </ul>
+                </div>
+              </section>
+
+              <!-- COURSES INCLUDED SUMMARY -->
+              <section class="information-panel" style="display: flex; flex-direction: column; height: 100%;">
+                <header class="panel-heading" style="background: #fafcfe; border-bottom: 1px solid var(--line);">
+                  <div class="person-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                      <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                    </svg>
+                  </div>
+                  <div class="panel-title">
+                    <h3>Courses Included</h3>
+                  </div>
+                  <div class="panel-meta">
+                    <span class="selected-count" id="reviewTotalCoursesCount">0 selected</span>
+                  </div>
+                </header>
+                <div style="padding: 20px 24px; background: #fff; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                  <ul id="reviewCoursesList" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; color: var(--navy);">
+                    <!-- Dynamically populated selected courses list -->
+                  </ul>
+                  <div style="font-size: 12px; color: var(--muted); font-style: italic; margin-top: 16px;">
+                    (Bound from Master Courses Records)
+                  </div>
+                </div>
+              </section>
+
+            </div>
+          </section>
+
+          <!-- BUTTONS FOR STEP 4 -->
+          <div class="actions">
+            <button type="button" class="btn btn-cancel" id="cancelReviewBtn">Cancel</button>
+            <button type="button" class="btn btn-previous" id="prevToCoursesBtn">
+              <span style="margin-left:0; margin-right:7px; font-size:17px;">←</span> Previous: Courses
+            </button>
+            <button type="button" class="btn btn-next" id="publishCycleBtn" style="background: #0866f5; min-width: 160px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Publish Cycle
+            </button>
+          </div>
+        </div>
+
       </div>
     </main>
-
 
   </div>
 
@@ -1786,4 +1922,4 @@
 <script type="module" src="admin.js"></script>
 
 </body>
-  </html>
+</html>
