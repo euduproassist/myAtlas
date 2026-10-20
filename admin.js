@@ -854,6 +854,120 @@ function showBuilderStep(stepNum) {
   }
 }
 
+function formatDisplayDate(dateStr) {
+  if (!dateStr) return '---';
+  const parts = dateStr.split('-');
+  if (parts.length !== 3) return dateStr;
+  const year = parts[0];
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = monthNames[parseInt(parts[1], 10) - 1] || parts[1];
+  const day = parts[2];
+  return `${day} ${month} ${year}`;
+}
+
+function populateReviewSummaryData() {
+  // 1. Basic Info
+  const reviewQualType = document.getElementById('reviewQualType');
+  const reviewAcademicYear = document.getElementById('reviewAcademicYear');
+  const reviewOpeningDate = document.getElementById('reviewOpeningDate');
+  const reviewClosingDate = document.getElementById('reviewClosingDate');
+  const reviewFolderName = document.getElementById('reviewFolderName');
+  const reviewCycleName = document.getElementById('reviewCycleName');
+
+  if (reviewQualType) reviewQualType.textContent = qualificationSelect ? qualificationSelect.value || '---' : '---';
+  if (reviewAcademicYear) reviewAcademicYear.textContent = academicYearSelect ? academicYearSelect.value || '---' : '---';
+  if (reviewOpeningDate) reviewOpeningDate.textContent = formatDisplayDate(openingDateInput ? openingDateInput.value : '');
+  if (reviewClosingDate) reviewClosingDate.textContent = formatDisplayDate(closingDateInput ? closingDateInput.value : '');
+  if (reviewFolderName) reviewFolderName.textContent = folderNameInput ? folderNameInput.value || '---' : '---';
+  if (reviewCycleName) reviewCycleName.textContent = cycleNameInput ? cycleNameInput.value || '---' : '---';
+
+  // 2. Form Fields Summary Counts
+  const personalCheckboxes = document.querySelectorAll('.field-checkbox');
+  let personalCount = 0;
+  personalCheckboxes.forEach(cb => { if (cb.checked) personalCount++; });
+
+  const contactCheckboxes = document.querySelectorAll('.contact-field-checkbox');
+  let contactCount = 0;
+  contactCheckboxes.forEach(cb => { if (cb.checked) contactCount++; });
+
+  const guardianCheckboxes = document.querySelectorAll('.guardian-field-checkbox');
+  let guardianCount = 0;
+  guardianCheckboxes.forEach(cb => { if (cb.checked) guardianCount++; });
+
+  const educCheckboxes = document.querySelectorAll('.educ-courses-field-checkbox');
+  let educCount = 0;
+  educCheckboxes.forEach(cb => { if (cb.checked) educCount++; });
+
+  const docCheckboxes = document.querySelectorAll('.documents-field-checkbox');
+  let docCount = 0;
+  docCheckboxes.forEach(cb => { if (cb.checked) docCount++; });
+
+  const totalSelectedFields = personalCount + contactCount + guardianCount + educCount + docCount;
+  const reviewTotalFieldsCount = document.getElementById('reviewTotalFieldsCount');
+  if (reviewTotalFieldsCount) reviewTotalFieldsCount.textContent = `${totalSelectedFields} selected`;
+
+  const reviewFormFieldsList = document.getElementById('reviewFormFieldsList');
+  if (reviewFormFieldsList) {
+    reviewFormFieldsList.innerHTML = `
+      <li>• Personal Info (${personalCount} fields)</li>
+      <li>• Contact Info (${contactCount} fields)</li>
+      <li>• Guardian Details (${guardianCount} fields)</li>
+      <li>• Educational History (${educCount} fields)</li>
+      <li>• Supporting Documents (${docCount} items)</li>
+    `;
+  }
+
+  // 3. Courses Summary
+  const courseCheckboxes = document.querySelectorAll('.course-row-checkbox');
+  let selectedCoursesList = [];
+  courseCheckboxes.forEach((cb) => {
+    if (cb.checked) {
+      const row = cb.closest('tr');
+      if (row && row.cells[1]) {
+        selectedCoursesList.push(row.cells[1].textContent.trim());
+      }
+    }
+  });
+
+  const reviewTotalCoursesCount = document.getElementById('reviewTotalCoursesCount');
+  if (reviewTotalCoursesCount) reviewTotalCoursesCount.textContent = `${selectedCoursesList.length} selected`;
+
+  const reviewCoursesList = document.getElementById('reviewCoursesList');
+  if (reviewCoursesList) {
+    reviewCoursesList.innerHTML = '';
+    if (selectedCoursesList.length === 0) {
+      reviewCoursesList.innerHTML = '<li style="color: var(--muted); font-style: italic;">No courses selected.</li>';
+    } else {
+      selectedCoursesList.forEach(courseName => {
+        const li = document.createElement('li');
+        li.textContent = `• ${courseName}`;
+        reviewCoursesList.appendChild(li);
+      });
+    }
+  }
+}
+
+function showCycleBuilder(e) {
+  if (e) e.preventDefault();
+  populateAcademicYears();
+  loadBasicInfoFromLocalStorage();
+  if (welcomeSidebar) welcomeSidebar.style.display = 'none';
+  if (mainShell) mainShell.classList.add('builder-active');
+  if (dashboardView) dashboardView.style.display = 'none';
+  if (cycleBuilderView) cycleBuilderView.style.display = 'block';
+  
+  if (window.location.hash === '#builder-form') {
+    showBuilderStep(2);
+  } else if (window.location.hash === '#builder-courses') {
+    showBuilderStep(3);
+  } else if (window.location.hash === '#builder-review') {
+    showBuilderStep(4);
+  } else {
+    showBuilderStep(1);
+    updateAutoNaming();
+  }
+}
+
 function hideCycleBuilder(e) {
   if (e) e.preventDefault();
   if (welcomeSidebar) welcomeSidebar.style.display = 'flex';
