@@ -854,23 +854,6 @@ function showBuilderStep(stepNum) {
   }
 }
 
-function showCycleBuilder(e) {
-  if (e) e.preventDefault();
-  populateAcademicYears();
-  loadBasicInfoFromLocalStorage();
-  if (welcomeSidebar) welcomeSidebar.style.display = 'none';
-  if (mainShell) mainShell.classList.add('builder-active');
-  if (dashboardView) dashboardView.style.display = 'none';
-  if (cycleBuilderView) cycleBuilderView.style.display = 'block';
-  
-  if (window.location.hash === '#builder-form') {
-    showBuilderStep(2);
-  } else {
-    showBuilderStep(1);
-    updateAutoNaming();
-  }
-}
-
 function hideCycleBuilder(e) {
   if (e) e.preventDefault();
   if (welcomeSidebar) welcomeSidebar.style.display = 'flex';
