@@ -1034,16 +1034,6 @@ if (publishCycleBtn) {
   });
 }
 
-function handleInitialRoute() {
-  if (window.location.hash === '#builder-courses') {
-    showCycleBuilder();
-    showBuilderStep(3);
-  } else if (window.location.hash.startsWith('#builder')) {
-    showCycleBuilder();
-  } else {
-    hideCycleBuilder();
-  }
-}
 
 window.addEventListener('DOMContentLoaded', handleInitialRoute);
 window.addEventListener('hashchange', handleInitialRoute);
