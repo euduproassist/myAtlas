@@ -27,6 +27,11 @@ const toCoursesBtn = document.getElementById('toCoursesBtn');
 const prevToFormBtn = document.getElementById('prevToFormBtn');
 const toReviewBtn = document.getElementById('toReviewBtn');
 const cancelCoursesBtn = document.getElementById('cancelCoursesBtn');
+const builderStep4 = document.getElementById('builderStep4');
+const navStep4 = document.getElementById('navStep4');
+const prevToCoursesBtn = document.getElementById('prevToCoursesBtn');
+const cancelReviewBtn = document.getElementById('cancelReviewBtn');
+const publishCycleBtn = document.getElementById('publishCycleBtn');
 
 // Courses step specific elements
 const coursesDynamicHeading = document.getElementById('coursesDynamicHeading');
