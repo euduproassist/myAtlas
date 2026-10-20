@@ -1008,12 +1008,6 @@ if (prevToFormBtn) {
   });
 }
 
-if (toReviewBtn) {
-  toReviewBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    alert("Proceeding to Review & Publish step.");
-  });
-}
 
 function handleInitialRoute() {
   if (window.location.hash === '#builder-courses') {
