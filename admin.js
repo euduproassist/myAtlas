@@ -1008,6 +1008,31 @@ if (prevToFormBtn) {
   });
 }
 
+if (toReviewBtn) {
+  toReviewBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showBuilderStep(4);
+  });
+}
+
+if (prevToCoursesBtn) {
+  prevToCoursesBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showBuilderStep(3);
+  });
+}
+
+if (cancelReviewBtn) {
+  cancelReviewBtn.addEventListener('click', hideCycleBuilder);
+}
+
+if (publishCycleBtn) {
+  publishCycleBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    // Per instruction: The publish button should not work at the moment
+    return false;
+  });
+}
 
 function handleInitialRoute() {
   if (window.location.hash === '#builder-courses') {
