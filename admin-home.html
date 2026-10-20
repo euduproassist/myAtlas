@@ -105,6 +105,9 @@
       height: auto;
       object-fit: contain;
     }
+    .main-nav {
+      display: none;
+    }
 
     /* =========================
        MENU TOGGLE & MOBILE DRAWER
@@ -478,6 +481,10 @@
       margin-bottom: 20px;
     }
 
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
     .form-label {
       display: block;
       color: #0b3d91;
@@ -510,6 +517,22 @@
       stroke-width: 2;
       stroke-linecap: round;
       stroke-linejoin: round;
+    }
+
+    .input-action-btn {
+      position: absolute;
+      right: 14px;
+      background: transparent;
+      border: none;
+      color: #0068ed;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .input-action-btn:hover {
+      text-decoration: underline;
     }
 
     .input-action-icon {
@@ -742,23 +765,83 @@
     }
 
     /* =========================
-       TABLETS & MOBILE
+       TABLETS
        ========================= */
     @media (max-width: 1100px) {
-      .hero { min-height: 1040px; }
-      .hero-content { min-height: 1040px; }
-      .hero-left { width: 56%; padding-left: 25px; padding-right: 25px; }
-      .hero-image { left: 44%; }
-      .hero-right-copy { left: 56%; width: 40%; }
-      .footer-grid { grid-template-columns: 1.2fr 1fr 1fr; }
-      .footer-contact { grid-column: 1 / -1; }
+      .hero {
+        min-height: 1040px;
+      }
+
+      .hero-content {
+        min-height: 1040px;
+      }
+
+      .hero-left {
+        width: 56%;
+        padding-left: 25px;
+        padding-right: 25px;
+      }
+
+      .hero-image {
+        left: 44%;
+      }
+
+      .hero-right-copy {
+        left: 56%;
+        width: 40%;
+      }
+
+      .features {
+        gap: 25px;
+      }
+
+      .feature {
+        grid-template-columns: 62px minmax(0, 1fr);
+        gap: 19px;
+      }
+
+      .feature-icon {
+        width: 62px;
+        height: 62px;
+      }
+
+      .feature-icon svg {
+        width: 34px;
+        height: 34px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1.2fr 1fr 1fr;
+      }
+
+      .footer-contact {
+        grid-column: 1 / -1;
+      }
     }
 
+    /* =========================
+       MOBILE
+       ========================= */
     @media (max-width: 760px) {
-      .site-header { height: auto; min-height: 67px; }
-      .header-inner { min-height: 67px; padding: 10px 18px; gap: 14px; }
-      .logo { width: 108px; }
-      .hero { min-height: 0; overflow: hidden; background: #fff; }
+      .site-header {
+        height: auto;
+        min-height: 67px;
+      }
+      .header-inner {
+        min-height: 67px;
+        padding: 10px 18px;
+        gap: 14px;
+      }
+      .logo {
+        width: 108px;
+      }
+
+      .hero {
+        min-height: 0;
+        overflow: hidden;
+        background: #fff;
+      }
+
       .hero-image {
         position: relative;
         inset: auto;
@@ -768,18 +851,189 @@
         background-size: cover;
         background-position: center center;
       }
+
       .hero-image::before {
-        background: linear-gradient(180deg, rgba(7,50,92,.88) 0%, rgba(7,50,92,.45) 27%, rgba(255,255,255,.05) 51%, rgba(255,255,255,.82) 91%, #fff 100%);
+        background:
+          linear-gradient(
+            180deg,
+            rgba(7,50,92,.88) 0%,
+            rgba(7,50,92,.45) 27%,
+            rgba(255,255,255,.05) 51%,
+            rgba(255,255,255,.82) 91%,
+            #fff 100%
+          );
       }
-      .hero-content { min-height: 0; display: block; }
-      .hero-left { width: 100%; padding: 42px 18px 56px; background: #fff; }
-      .hero-title { font-size: clamp(45px, 13vw, 68px); margin-bottom: 24px; }
-      .hero-right-copy { position: absolute; top: 26px; left: 0; width: 100%; padding: 0 18px; z-index: 4; }
-      .right-title { font-size: clamp(34px, 9.8vw, 54px); margin-bottom: 15px; }
-      .form-row-grid { grid-template-columns: 1fr; gap: 0; }
-      .site-footer { padding: 38px 18px 25px; }
-      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
-      .footer-bottom { align-items: flex-start; flex-direction: column; gap: 15px; }
+
+      .hero-image::after {
+        background: linear-gradient(
+          180deg,
+          rgba(0,0,0,.06),
+          transparent 45%,
+          rgba(255,255,255,.15)
+        );
+      }
+
+      .hero-content {
+        min-height: 0;
+        display: block;
+      }
+
+      .hero-left {
+        width: 100%;
+        max-width: none;
+        padding: 42px 18px 56px;
+        background: #fff;
+      }
+
+      .hero-title {
+        font-size: clamp(45px, 13vw, 68px);
+        line-height: 1.15;
+        margin-bottom: 24px;
+      }
+
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: .11em;
+      }
+
+      .hero-description {
+        font-size: 16px;
+        line-height: 1.55;
+        margin-bottom: 35px;
+      }
+
+      .features {
+        gap: 25px;
+      }
+
+      .feature {
+        grid-template-columns: 58px minmax(0, 1fr);
+        gap: 16px;
+        align-items: start;
+      }
+
+      .feature-icon {
+        width: 58px;
+        height: 58px;
+      }
+
+      .feature-icon svg {
+        width: 32px;
+        height: 32px;
+      }
+
+      .feature-title {
+        font-size: 16px;
+        margin-top: 1px;
+      }
+
+      .feature-text {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .cta-area {
+        margin-top: 40px;
+        padding-top: 24px;
+      }
+
+      .cta {
+        min-height: 56px;
+        font-size: 16px;
+      }
+
+      .hero-right-copy {
+        position: absolute;
+        top: 26px;
+        left: 0;
+        width: 100%;
+        padding: 0 18px;
+        z-index: 4;
+      }
+
+      .right-eyebrow {
+        font-size: 10px;
+      }
+
+      .right-title {
+        font-size: clamp(34px, 9.8vw, 54px);
+        line-height: 1.15;
+        margin-bottom: 15px;
+      }
+
+      .right-description {
+        max-width: 600px;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      .form-row-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .site-footer {
+        padding: 38px 18px 25px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .footer-contact {
+        grid-column: auto;
+      }
+
+      .footer-bottom {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .legal {
+        gap: 17px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .header-inner {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+      .logo {
+        width: 92px;
+      }
+
+      .hero-left {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .hero-right-copy {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .feature {
+        grid-template-columns: 52px minmax(0, 1fr);
+        gap: 13px;
+      }
+
+      .feature-icon {
+        width: 52px;
+        height: 52px;
+      }
+
+      .feature-icon svg {
+        width: 29px;
+        height: 29px;
+      }
+
+      .site-footer {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
     }
   </style>
 </head>
@@ -946,13 +1200,13 @@
 
             <form class="form-container" onsubmit="event.preventDefault();">
               <div class="form-row-grid">
-                <div class="form-group">
+                 <div class="form-group">
                   <label class="form-label" for="initials">Initials *</label>
                   <div class="input-wrapper">
                     <span class="input-icon">
                       <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     </span>
-                    <input type="text" id="initials" class="form-input" placeholder="e.g. R. M." required>
+                    <input type="text" id="initials" class="form-input" placeholder="e.g. RM" required>
                   </div>
                 </div>
 
@@ -1079,15 +1333,13 @@
             </p>
 
             <form class="form-container" onsubmit="event.preventDefault();">
-              
-              <!-- Added missing Personnel Number input matching admin-home.js -->
               <div class="form-group">
-                <label class="form-label" for="signin-personnel">Personnel Number *</label>
+                <label class="form-label" for="signin-personnel">MyAtlas Personnel Number *</label>
                 <div class="input-wrapper">
                   <span class="input-icon">
                     <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                   </span>
-                  <input type="text" id="signin-personnel" class="form-input" placeholder="e.g. 26123456" required>
+                  <input type="text" id="signin-personnel" class="form-input" placeholder="Enter your MyAtlas personnel number" required>
                 </div>
               </div>
 
@@ -1097,7 +1349,7 @@
                   <span class="input-icon">
                     <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                   </span>
-                  <input type="email" id="signin-email" class="form-input" placeholder="e.g. raymond@example.com" required>
+                  <input type="email" id="signin-email" class="form-input" placeholder="Enter your email address" required>
                 </div>
               </div>
 
@@ -1135,7 +1387,8 @@
                   <span class="cta-arrow">→</span>
                 </button>
 
-                <a href="#" id="goto-activate-btn" class="signin" style="margin-top: 16px;">Don't have an account? Activate MyAtlas</a>
+                <a href="#" class="switch-view-link" style="margin-top: 20px;">Forgot Password?</a>
+                <a href="#" id="goto-activate-btn" class="signin" style="margin-top: 12px;">Don't have an account? Activate MyAtlas</a>
               </div>
             </form>
           </div>
