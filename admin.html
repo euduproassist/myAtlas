@@ -1752,6 +1752,134 @@
             </section>
           </section>
 
+        <!-- BUTTONS FOR STEP 3 -->
+          <div class="actions">
+            <button type="button" class="btn btn-cancel" id="cancelCoursesBtn">Cancel</button>
+            <button type="button" class="btn btn-previous" id="prevToFormBtn">
+              <span style="margin-left:0; margin-right:7px; font-size:17px;">←</span> Previous: Application Form
+            </button>
+            <button type="button" class="btn btn-next" id="toReviewBtn">
+              Next: Review &amp; Publish <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SUB-VIEW 4: REVIEW & PUBLISH -->
+        <div id="builderStep4" style="display: none;">
+          <section class="form-card" style="display: flex; flex-direction: column; gap: 24px;">
+            <div class="form-intro">
+              <div class="intro-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <div>
+                <h2>Review &amp; Publish Cycle</h2>
+                <p>Please carefully review all configured details before publishing this application cycle.</p>
+              </div>
+            </div>
+
+            <!-- BASIC APPLICATION DETAILS PANEL -->
+            <section class="information-panel">
+              <header class="panel-heading" style="background: #fafcfe; border-bottom: 1px solid var(--line);">
+                <div class="person-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
+                </div>
+                <div class="panel-title">
+                  <h3>Basic Application Details</h3>
+                </div>
+              </header>
+              <div style="padding: 24px; background: #fff;">
+                <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 16px; column-gap: 32px; font-size: 13.5px;">
+                  <div><strong style="color: var(--blue);">Qualification Type :</strong> <span id="reviewQualType" style="color: var(--navy); margin-left: 8px;">---</span></div>
+                  <div><strong style="color: var(--blue);">Academic Year :</strong> <span id="reviewAcademicYear" style="color: var(--navy); margin-left: 8px;">---</span></div>
+                  <div><strong style="color: var(--blue);">Opening Date :</strong> <span id="reviewOpeningDate" style="color: var(--navy); margin-left: 8px;">---</span></div>
+                  <div><strong style="color: var(--blue);">Closing Date :</strong> <span id="reviewClosingDate" style="color: var(--navy); margin-left: 8px;">---</span></div>
+                  <div><strong style="color: var(--blue);">Folder Name :</strong> <span id="reviewFolderName" style="color: var(--navy); margin-left: 8px;">---</span></div>
+                  <div><strong style="color: var(--blue);">Cycle Name :</strong> <span id="reviewCycleName" style="color: var(--navy); margin-left: 8px;">---</span></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- TWO-COLUMN SUMMARY CARDS (FORMS & COURSES) -->
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;">
+              
+              <!-- FORM FIELDS CONFIGURED SUMMARY -->
+              <section class="information-panel" style="display: flex; flex-direction: column; height: 100%;">
+                <header class="panel-heading" style="background: #fafcfe; border-bottom: 1px solid var(--line);">
+                  <div class="person-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                  </div>
+                  <div class="panel-title">
+                    <h3>Form Fields Configured</h3>
+                  </div>
+                  <div class="panel-meta">
+                    <span class="selected-count" id="reviewTotalFieldsCount">0 selected</span>
+                  </div>
+                </header>
+                <div style="padding: 20px 24px; background: #fff; flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
+                  <ul id="reviewFormFieldsList" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; font-size: 13.5px; color: var(--navy);">
+                    <!-- Dynamically populated counts per section -->
+                  </ul>
+                </div>
+              </section>
+
+              <!-- COURSES INCLUDED SUMMARY -->
+              <section class="information-panel" style="display: flex; flex-direction: column; height: 100%;">
+                <header class="panel-heading" style="background: #fafcfe; border-bottom: 1px solid var(--line);">
+                  <div class="person-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                      <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                    </svg>
+                  </div>
+                  <div class="panel-title">
+                    <h3>Courses Included</h3>
+                  </div>
+                  <div class="panel-meta">
+                    <span class="selected-count" id="reviewTotalCoursesCount">0 selected</span>
+                  </div>
+                </header>
+                <div style="padding: 20px 24px; background: #fff; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                  <ul id="reviewCoursesList" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; color: var(--navy);">
+                    <!-- Dynamically populated selected courses list -->
+                  </ul>
+                  <div style="font-size: 12px; color: var(--muted); font-style: italic; margin-top: 16px;">
+                    (Bound from Master Courses Records)
+                  </div>
+                </div>
+              </section>
+
+            </div>
+          </section>
+
+          <!-- BUTTONS FOR STEP 4 -->
+          <div class="actions">
+            <button type="button" class="btn btn-cancel" id="cancelReviewBtn">Cancel</button>
+            <button type="button" class="btn btn-previous" id="prevToCoursesBtn">
+              <span style="margin-left:0; margin-right:7px; font-size:17px;">←</span> Previous: Courses
+            </button>
+            <button type="button" class="btn btn-next" id="publishCycleBtn" style="background: #0866f5; min-width: 160px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Publish Cycle
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
 
   </div>
 
