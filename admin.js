@@ -813,32 +813,7 @@ function showBuilderStep(stepNum) {
     loadAdditionalInfoFieldsFromFirestore();
     loadDocumentsFieldsFromFirestore();
     window.location.hash = 'builder-form';
-  } else if (stepNum === 3) {
-    if (builderStep1) builderStep1.style.display = 'none';
-    if (builderStep2) builderStep2.style.display = 'none';
-    if (builderStep3) builderStep3.style.display = 'block';
-    if (navStep1) { navStep1.classList.remove('active'); navStep1.classList.add('completed'); }
-    if (navStep2) { navStep2.classList.remove('active'); navStep2.classList.add('completed'); }
-    if (navStep3) { navStep3.classList.add('active'); navStep3.classList.remove('completed'); }
 
-    // Dynamic Heading based on Qualification Type
-    if (coursesDynamicHeading && qualificationSelect) {
-      const qualVal = qualificationSelect.value;
-      if (qualVal) {
-        const baseName = qualVal.replace(/\s+Degree$/i, '');
-        coursesDynamicHeading.textContent = `${baseName} Courses`;
-      } else {
-        coursesDynamicHeading.textContent = 'Courses';
-      }
-    }
-
-    masterCoursesCache = [];
-    requestAnimationFrame(() => {
-      loadMasterCoursesFromFirestore();
-    });
-    window.location.hash = 'builder-courses';
-  }
-}
 
 function showCycleBuilder(e) {
   if (e) e.preventDefault();
