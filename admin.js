@@ -1,7 +1,6 @@
 import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-import { SECTION_BLUEPRINTS } from "./form-templates.js";
 
 document.documentElement.style.overflowX = "hidden";
 document.body.style.overflowX = "hidden";
@@ -875,26 +874,6 @@ function populateReviewSummaryData() {
         li.textContent = `• ${courseName}`;
         reviewCoursesList.appendChild(li);
       });
-    }
-  }
-
-  // 4. Render Live Form Preview in Step 4
-  const liveFormPreviewContainer = document.getElementById('liveFormPreviewContainer');
-  if (liveFormPreviewContainer) {
-    liveFormPreviewContainer.innerHTML = '';
-    
-    let htmlToRender = '';
-    if (personalCount > 0) htmlToRender += SECTION_BLUEPRINTS.personal.html;
-    if (contactCount > 0) htmlToRender += SECTION_BLUEPRINTS.contact.html;
-    if (guardianCount > 0) htmlToRender += SECTION_BLUEPRINTS.guardian.html;
-    if (educCount > 0) htmlToRender += SECTION_BLUEPRINTS.education_courses.html;
-    if (personalCount > 0 || contactCount > 0) htmlToRender += SECTION_BLUEPRINTS.additional_info.html;
-    if (docCount > 0) htmlToRender += SECTION_BLUEPRINTS.documents.html;
-
-    if (htmlToRender === '') {
-      liveFormPreviewContainer.innerHTML = '<p style="color: var(--muted); font-style: italic; text-align: center; padding: 20px;">No form fields selected in Step 2.</p>';
-    } else {
-      liveFormPreviewContainer.innerHTML = htmlToRender;
     }
   }
 }
