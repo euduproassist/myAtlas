@@ -4,16 +4,6 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
 import { SECTION_BLUEPRINTS } from "./form-templates.js";
 
 document.documentElement.style.overflowX = "hidden";
-
-
-
-
-
-import { auth, db } from "./firebase-config.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
-document.documentElement.style.overflowX = "hidden";
 document.body.style.overflowX = "hidden";
 
 // UI View Elements
