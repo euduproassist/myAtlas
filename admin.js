@@ -864,7 +864,40 @@ function populateReviewSummaryData() {
   const reviewTotalCoursesCount = document.getElementById('reviewTotalCoursesCount');
   if (reviewTotalCoursesCount) reviewTotalCoursesCount.textContent = `${selectedCoursesList.length} selected`;
 
+  const reviewCoursesList = document.getElementById('reviewCoursesList');
+  if (reviewCoursesList) {
+    reviewCoursesList.innerHTML = '';
+    if (selectedCoursesList.length === 0) {
+      reviewCoursesList.innerHTML = '<li style="color: var(--muted); font-style: italic;">No courses selected.</li>';
+    } else {
+      selectedCoursesList.forEach(courseName => {
+        const li = document.createElement('li');
+        li.textContent = `• ${courseName}`;
+        reviewCoursesList.appendChild(li);
+      });
+    }
+  }
 
+  // 4. Render Live Form Preview in Step 4
+  const liveFormPreviewContainer = document.getElementById('liveFormPreviewContainer');
+  if (liveFormPreviewContainer) {
+    liveFormPreviewContainer.innerHTML = '';
+    
+    let htmlToRender = '';
+    if (personalCount > 0) htmlToRender += SECTION_BLUEPRINTS.personal.html;
+    if (contactCount > 0) htmlToRender += SECTION_BLUEPRINTS.contact.html;
+    if (guardianCount > 0) htmlToRender += SECTION_BLUEPRINTS.guardian.html;
+    if (educCount > 0) htmlToRender += SECTION_BLUEPRINTS.education_courses.html;
+    if (personalCount > 0 || contactCount > 0) htmlToRender += SECTION_BLUEPRINTS.additional_info.html;
+    if (docCount > 0) htmlToRender += SECTION_BLUEPRINTS.documents.html;
+
+    if (htmlToRender === '') {
+      liveFormPreviewContainer.innerHTML = '<p style="color: var(--muted); font-style: italic; text-align: center; padding: 20px;">No form fields selected in Step 2.</p>';
+    } else {
+      liveFormPreviewContainer.innerHTML = htmlToRender;
+    }
+  }
+}
 
 // View Navigation Handler
 function showBuilderStep(stepNum) {
