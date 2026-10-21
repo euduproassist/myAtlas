@@ -864,20 +864,7 @@ function populateReviewSummaryData() {
   const reviewTotalCoursesCount = document.getElementById('reviewTotalCoursesCount');
   if (reviewTotalCoursesCount) reviewTotalCoursesCount.textContent = `${selectedCoursesList.length} selected`;
 
-  const reviewCoursesList = document.getElementById('reviewCoursesList');
-  if (reviewCoursesList) {
-    reviewCoursesList.innerHTML = '';
-    if (selectedCoursesList.length === 0) {
-      reviewCoursesList.innerHTML = '<li style="color: var(--muted); font-style: italic;">No courses selected.</li>';
-    } else {
-      selectedCoursesList.forEach(courseName => {
-        const li = document.createElement('li');
-        li.textContent = `• ${courseName}`;
-        reviewCoursesList.appendChild(li);
-      });
-    }
-  }
-}
+
 
 // View Navigation Handler
 function showBuilderStep(stepNum) {
