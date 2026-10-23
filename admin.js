@@ -21,23 +21,7 @@ function updateActivityTime() {
 // Continuously check inactivity every second so it triggers and redirects automatically without page refresh
 setInterval(() => {
   if (Date.now() - lastActivityTime >= INACTIVITY_LIMIT) {
-    // Clear all builder localStorage data
-    localStorage.removeItem('myAtlas_basicInfo');
-    localStorage.removeItem('myAtlas_formFieldsState');
-    localStorage.removeItem('myAtlas_selectedCourses');
-    
-    // Reset Step 1 input fields visually
-    if (qualificationSelect) qualificationSelect.value = '';
-    if (academicYearSelect) academicYearSelect.value = '';
-    if (openingDateInput) openingDateInput.value = '';
-    if (closingDateInput) closingDateInput.value = '';
-    if (folderNameInput) folderNameInput.value = '';
-    if (cycleNameInput) cycleNameInput.value = '';
-    
-    // Automatically return to dashboard view
-    hideCycleBuilder();
-
-    // Reset timestamp so it doesn't trigger repeatedly in a loop
+    cancelAndResetBuilder();
     lastActivityTime = Date.now();
   }
 }, 1000);
@@ -649,6 +633,30 @@ function hideCycleBuilder(e) {
   window.location.hash = 'dashboard';
 }
 
+// Cancel & Reset Action (Erases all builder localStorage data permanently and returns to dashboard)
+function cancelAndResetBuilder(e) {
+  if (e) e.preventDefault();
+  
+  // Clear all builder localStorage data permanently
+  localStorage.removeItem('myAtlas_basicInfo');
+  localStorage.removeItem('myAtlas_formFieldsState');
+  localStorage.removeItem('myAtlas_selectedCourses');
+  
+  // Reset Step 1 input fields visually
+  if (qualificationSelect) qualificationSelect.value = '';
+  if (academicYearSelect) {
+    populateAcademicYears();
+    academicYearSelect.value = '';
+  }
+  if (openingDateInput) openingDateInput.value = '';
+  if (closingDateInput) closingDateInput.value = '';
+  if (folderNameInput) folderNameInput.value = '';
+  if (cycleNameInput) cycleNameInput.value = '';
+  
+  // Return back to dashboard view
+  hideCycleBuilder();
+}
+
 if (nextStepBtn) {
   nextStepBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -695,7 +703,7 @@ if (prevToCoursesBtn) {
 }
 
 if (cancelReviewBtn) {
-  cancelReviewBtn.addEventListener('click', hideCycleBuilder);
+  cancelReviewBtn.addEventListener('click', cancelAndResetBuilder);
 }
 
 if (publishCycleBtn) {
@@ -724,9 +732,9 @@ window.addEventListener('hashchange', handleInitialRoute);
 
 if (openModalBtn) openModalBtn.addEventListener('click', showCycleBuilder);
 document.querySelectorAll('.action-step-1').forEach(el => el.addEventListener('click', showCycleBuilder));
-if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', hideCycleBuilder);
-if (cancelFormBtn) cancelFormBtn.addEventListener('click', hideCycleBuilder);
-if (cancelCoursesBtn) cancelCoursesBtn.addEventListener('click', hideCycleBuilder);
+if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', cancelAndResetBuilder);
+if (cancelFormBtn) cancelFormBtn.addEventListener('click', cancelAndResetBuilder);
+if (cancelCoursesBtn) cancelCoursesBtn.addEventListener('click', cancelAndResetBuilder);
 
 if (qualificationSelect) qualificationSelect.addEventListener('change', () => {
   updateAutoNaming();
