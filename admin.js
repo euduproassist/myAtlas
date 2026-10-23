@@ -1,6 +1,7 @@
 import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { renderStep4ApplicationPreview } from "./form-template.js";
 
 document.documentElement.style.overflowX = "hidden";
 document.body.style.overflowX = "hidden";
