@@ -5,28 +5,42 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
 document.documentElement.style.overflowX = "hidden";
 document.body.style.overflowX = "hidden";
 
-// 30-MINUTE INACTIVITY TIMER SETUP
+// 30-MINUTE INACTIVITY TIMER SETUP (Robust Interval Check)
 const INACTIVITY_LIMIT = 30 * 60 * 1000; // 30 minutes in milliseconds
-let inactivityTimer;
+let lastActivityTime = Date.now();
 
-function resetInactivityTimer() {
-  clearTimeout(inactivityTimer);
-  inactivityTimer = setTimeout(() => {
+function updateActivityTime() {
+  lastActivityTime = Date.now();
+}
+
+// Any user interaction resets the inactivity countdown
+['mousemove', 'keydown', 'mousedown', 'touchstart', 'scroll', 'click'].forEach(eventType => {
+  window.addEventListener(eventType, updateActivityTime, { passive: true });
+});
+
+// Continuously check inactivity every second so it triggers and redirects automatically without page refresh
+setInterval(() => {
+  if (Date.now() - lastActivityTime >= INACTIVITY_LIMIT) {
     // Clear all builder localStorage data
     localStorage.removeItem('myAtlas_basicInfo');
     localStorage.removeItem('myAtlas_formFieldsState');
     localStorage.removeItem('myAtlas_selectedCourses');
     
-    // Return to dashboard
+    // Reset Step 1 input fields visually
+    if (qualificationSelect) qualificationSelect.value = '';
+    if (academicYearSelect) academicYearSelect.value = '';
+    if (openingDateInput) openingDateInput.value = '';
+    if (closingDateInput) closingDateInput.value = '';
+    if (folderNameInput) folderNameInput.value = '';
+    if (cycleNameInput) cycleNameInput.value = '';
+    
+    // Automatically return to dashboard view
     hideCycleBuilder();
-  }, INACTIVITY_LIMIT);
-}
 
-// Any user interaction resets the inactivity countdown
-['mousemove', 'keydown', 'mousedown', 'touchstart', 'scroll', 'click'].forEach(eventType => {
-  window.addEventListener(eventType, resetInactivityTimer, { passive: true });
-});
-resetInactivityTimer();
+    // Reset timestamp so it doesn't trigger repeatedly in a loop
+    lastActivityTime = Date.now();
+  }
+}, 1000);
 
 // UI View Elements
 const dashboardView = document.getElementById('dashboardView');
