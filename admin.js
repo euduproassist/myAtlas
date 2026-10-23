@@ -590,18 +590,7 @@ function showBuilderStep(stepNum) {
       loadMasterCoursesFromFirestore();
     });
     window.location.hash = 'builder-courses';
-  } else if (stepNum === 4) {
-    if (builderStep1) builderStep1.style.display = 'none';
-    if (builderStep2) builderStep2.style.display = 'none';
-    if (builderStep3) builderStep3.style.display = 'none';
-    if (builderStep4) builderStep4.style.display = 'block';
-    if (navStep1) { navStep1.classList.remove('active'); navStep1.classList.add('completed'); }
-    if (navStep2) { navStep2.classList.remove('active'); navStep2.classList.add('completed'); }
-    if (navStep3) { navStep3.classList.remove('active'); navStep3.classList.add('completed'); }
-    if (navStep4) { navStep4.classList.add('active'); navStep4.classList.remove('completed'); }
 
-    window.location.hash = 'builder-review';
-  }
 }
 
 function showCycleBuilder(e) {
