@@ -247,7 +247,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
     `;
   }
 
-  // 4. MATRIC STANDING & LOGIC (Section 4A)
+  // 4. SECTION A: MATRIC STATUS & HIGHSCHOOL HISTORY (Section 4A corresponding with Step 2 Table)
   if (fname.includes("Matric Status") || fname.includes("Current Standing")) {
     return `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
@@ -258,10 +258,10 @@ function renderIndividualFieldHTML(field, sectionKey) {
           <option value="Currently in Grade 12">Currently in Grade 12</option>
         </select>
 
-        <div id="matricCompletedBlock" style="display: none; margin-top: 14px; display: flex; flex-direction: column; gap: 20px;">
-          <!-- High School History -->
+        <div id="matricCompletedBlock" style="display: none; margin-top: 14px; flex-direction: column; gap: 20px;">
+          <!-- High School Education History -->
           <div style="background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #cfe3ff; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
-            <h4 style="grid-column: 1 / -1; font-size: 14px; font-weight: 750; color: #071c72;">High School Education History</h4>
+            <h4 style="grid-column: 1 / -1; font-size: 14px; font-weight: 750; color: #071c72; margin: 0;">High School Education History</h4>
             <div>
               <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Name of High School ${reqAsterisk}</label>
               <input type="text" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
@@ -280,7 +280,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
             </div>
           </div>
 
-          <!-- Dynamic Subject Results Table -->
+          <!-- Subject Results (Grade 12 Final Year Results) Dynamic Table -->
           <div style="background: #ffffff; border: 1px solid #cfe3ff; border-radius: 6px; overflow: hidden;">
             <div style="padding: 12px 16px; background: #edf6ff; border-bottom: 1px solid #cfe3ff;">
               <h4 style="font-size: 14px; font-weight: 750; color: #071c72; margin:0;">Subject Results (Grade 12 Final Year Results)</h4>
@@ -312,7 +312,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
     `;
   }
 
-  // 5. PREVIOUS TERTIARY INSTITUTION (Section 4A)
+  // 5. PREVIOUS TERTIARY INSTITUTION (Section 4A corresponding with Step 2 Table)
   if (fname.includes("tertiary institution")) {
     return `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
@@ -323,7 +323,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
           <option value="No">No</option>
         </select>
 
-        <div id="tertiaryBlock" style="display: none; margin-top: 10px; display: flex; flex-direction: column; gap: 14px;">
+        <div id="tertiaryBlock" style="display: none; margin-top: 10px; flex-direction: column; gap: 14px;">
           <div id="tertiaryContainer" style="display: flex; flex-direction: column; gap: 14px;">
             <div class="tertiary-card" style="background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #cfe3ff; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
               <div style="grid-column: 1 / -1;">
@@ -491,7 +491,7 @@ function attachFormEventListeners() {
   setupPostalToggle("contactPostalTrigger", "contactPostalBlock");
   setupPostalToggle("guardianPostalTrigger", "guardianPostalBlock");
 
-  // 3. Matric Standing Conditional Toggle
+  // 3. Matric Standing Conditional Toggle (Section 4A Logic)
   const matricTrigger = document.getElementById("matricStandingTrigger");
   const matricBlock = document.getElementById("matricCompletedBlock");
   if (matricTrigger && matricBlock) {
