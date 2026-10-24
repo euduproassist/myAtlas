@@ -13,7 +13,7 @@ const BLUEPRINT_SECTIONS = {
   },
   guardian: {
     title: "3. Parent or Guardian Information",
-    icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 1 0 7.75"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`
+    icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`
   },
   education_courses: {
     title: "4. Educational Background & Course Selection",
@@ -62,6 +62,7 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
       const fieldData = docSnap.data();
       const fieldId = docSnap.id;
       
+      // Check if configured as selected by admin
       const userState = savedFieldsState[fieldId];
       const isSelected = userState ? userState.isSelected : fieldData.isSelected;
       const requirement = userState ? userState.requirement : fieldData.requirement;
@@ -77,7 +78,7 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
 
     activeFields.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-    // Build Preview Form HTML
+    // Build the Preview Form HTML
     let formHtml = `
       <div class="application-form-preview-wrapper" style="background: #ffffff; border: 1px solid var(--border-light, #cfe3f7); border-radius: 8px; padding: 28px;">
         <header style="border-bottom: 2px solid #eaf5ff; padding-bottom: 16px; margin-bottom: 28px;">
@@ -155,7 +156,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
   const reqAsterisk = field.requirement === "Required" ? `<span style="color: #e53b4d;">*</span>` : ``;
   const fname = field.fieldName;
 
-  // 1. DISABILITY INFORMATION (Conditional with Multi-Add Support)
+  // 1. DISABILITY INFORMATION (Conditional)
   if (fname.includes("Disability")) {
     return `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
@@ -165,14 +166,9 @@ function renderIndividualFieldHTML(field, sectionKey) {
           <option value="Yes">Yes</option>
           <option value="No">No</option>
         </select>
-        <div id="disabilityDetailsBlock" style="display: none; margin-top: 10px; flex-direction: column; gap: 14px;">
-          <div id="disabilityContainer" style="display: flex; flex-direction: column; gap: 10px;">
-            <div class="disability-row" style="display: flex; gap: 10px; align-items: center;">
-              <input type="text" placeholder="Describe disability (e.g., Visual Impairment)" style="flex: 1; height: 38px; border: 1px solid #cfe3ff; border-radius: 6px; padding: 0 12px;" />
-              <button type="button" class="remove-disability-btn" style="background: #fff0f0; border: 1px solid #ffd0d0; color: red; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 12px;">✕</button>
-            </div>
-          </div>
-          <button type="button" id="addDisabilityBtn" style="align-self: flex-start; background: #eaf5ff; border: 1px solid #0866f5; color: #0866f5; font-weight: 700; border-radius: 4px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Disability</button>
+        <div id="disabilityDetailsBlock" style="display: none; margin-top: 10px;">
+          <label style="font-size: 13px; font-weight: 700; color: #244b88; margin-bottom: 6px; display: block;">Specify Disability Details ${reqAsterisk}</label>
+          <input type="text" class="control" placeholder="Please describe nature of disability..." style="width: 100%; height: 40px; border: 1px solid #cfe3ff; border-radius: 6px; padding: 0 12px;" />
         </div>
       </div>
     `;
@@ -206,7 +202,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
     `;
   }
 
-  // 3. POSTAL ADDRESS (Conditional Trigger - Hidden by Default)
+  // 3. POSTAL ADDRESS (Conditional Trigger)
   if (fname.includes("Postal Address")) {
     const triggerId = sectionKey === "guardian" ? "guardianPostalTrigger" : "contactPostalTrigger";
     const blockId = sectionKey === "guardian" ? "guardianPostalBlock" : "contactPostalBlock";
@@ -220,7 +216,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
           <option value="No">No</option>
         </select>
 
-        <div id="${blockId}" style="display: none; margin-top: 10px; grid-template-columns: repeat(2, 1fr); gap: 14px; background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #e1efff;">
+        <div id="${blockId}" style="display: none; margin-top: 10px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #e1efff;">
           <div style="grid-column: 1 / -1;">
             <label style="font-size: 13px; font-weight: 700; color: #244b88; display: block; margin-bottom: 6px;">Postal Address Line ${reqAsterisk}</label>
             <input type="text" placeholder="P.O Box / Street Address" style="width:100%; height:40px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
@@ -246,8 +242,8 @@ function renderIndividualFieldHTML(field, sectionKey) {
     `;
   }
 
-  // 4. MATRIC STATUS / CURRENT STANDING LOGIC
-  if (fname.includes("Current Education Status") || fname.includes("Matric Status") || fname.includes("Current Standing")) {
+  // 4. MATRIC STANDING & LOGIC (Section 4A)
+  if (fname.includes("Matric Status") || fname.includes("Current Standing")) {
     return `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
         <label style="font-size: 13px; font-weight: 700; color: #244b88;">Matric Status / Current Standing ${reqAsterisk}</label>
@@ -257,14 +253,62 @@ function renderIndividualFieldHTML(field, sectionKey) {
           <option value="Currently in Grade 12">Currently in Grade 12</option>
         </select>
 
-        <!-- Dynamic Container Revealed Based on Choice -->
-        <div id="matricDynamicContainer" style="display: none; margin-top: 14px; flex-direction: column; gap: 20px;"></div>
+        <div id="matricCompletedBlock" style="display: none; margin-top: 14px; display: flex; flex-direction: column; gap: 20px;">
+          <!-- High School History -->
+          <div style="background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #cfe3ff; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
+            <h4 style="grid-column: 1 / -1; font-size: 14px; font-weight: 750; color: #071c72;">High School Education History</h4>
+            <div>
+              <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Name of High School ${reqAsterisk}</label>
+              <input type="text" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
+            </div>
+            <div>
+              <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Country of High School ${reqAsterisk}</label>
+              <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
+            </div>
+            <div>
+              <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Province / State ${reqAsterisk}</label>
+              <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
+            </div>
+            <div>
+              <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Year Completed / Matriculated ${reqAsterisk}</label>
+              <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
+            </div>
+          </div>
+
+          <!-- Dynamic Subject Results Table -->
+          <div style="background: #ffffff; border: 1px solid #cfe3ff; border-radius: 6px; overflow: hidden;">
+            <div style="padding: 12px 16px; background: #edf6ff; border-bottom: 1px solid #cfe3ff;">
+              <h4 style="font-size: 14px; font-weight: 750; color: #071c72; margin:0;">Subject Results (Grade 12 Final Year Results)</h4>
+            </div>
+            <table style="width: 100%; border-collapse: collapse; font-size: 12px;" id="subjectsTable">
+              <thead>
+                <tr style="background: #fafcfe; border-bottom: 1px solid #e1efff; text-align: left; color: #0866f5;">
+                  <th style="padding: 10px 14px;">Subject Name</th>
+                  <th style="padding: 10px 14px; width: 25%;">Results / %</th>
+                  <th style="padding: 10px 14px; width: 25%;">Level</th>
+                  <th style="padding: 10px 14px; width: 80px; text-align: center;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="subjectsTableBody">
+                <tr style="border-bottom: 1px solid #edf6ff;">
+                  <td style="padding: 8px 14px;"><input type="text" placeholder="e.g. Mathematics" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
+                  <td style="padding: 8px 14px;"><input type="number" placeholder="75" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
+                  <td style="padding: 8px 14px;"><input type="text" placeholder="Level 6" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
+                  <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-row-btn" style="background:#fff0f0; border:1px solid #ffd0d0; color:red; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="padding: 10px 16px; background: #fafcfe; border-top: 1px solid #e1efff;">
+              <button type="button" id="addSubjectRowBtn" style="background: #eaf5ff; border: 1px solid #0866f5; color: #0866f5; font-weight: 700; border-radius: 4px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Subject</button>
+            </div>
+          </div>
+        </div>
       </div>
     `;
   }
 
-  // 5. TERTIARY EDUCATION HISTORY LOGIC
-  if (fname.includes("Tertiary Education History") || fname.includes("tertiary institution")) {
+  // 5. PREVIOUS TERTIARY INSTITUTION (Section 4A)
+  if (fname.includes("tertiary institution")) {
     return `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
         <label style="font-size: 13px; font-weight: 700; color: #244b88;">Have you previously attended a tertiary institution? ${reqAsterisk}</label>
@@ -274,9 +318,9 @@ function renderIndividualFieldHTML(field, sectionKey) {
           <option value="No">No</option>
         </select>
 
-        <div id="tertiaryBlock" style="display: none; margin-top: 10px; flex-direction: column; gap: 14px;">
+        <div id="tertiaryBlock" style="display: none; margin-top: 10px; display: flex; flex-direction: column; gap: 14px;">
           <div id="tertiaryContainer" style="display: flex; flex-direction: column; gap: 14px;">
-            <div class="tertiary-card" style="background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #cfe3ff; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; position: relative;">
+            <div class="tertiary-card" style="background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #cfe3ff; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
               <div style="grid-column: 1 / -1;">
                 <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Institution Name ${reqAsterisk}</label>
                 <input type="text" placeholder="University / College Name" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
@@ -385,44 +429,14 @@ function renderCourseSelectionBlock(selectedCoursesKeys) {
  * Attach dynamic event listeners for conditional logic and dynamic tables
  */
 function attachFormEventListeners() {
-  // 1. Disability Conditional Toggle & Multi-Add Logic
+  // 1. Disability Conditional Toggle
   const disabilityTrigger = document.getElementById("disabilityTrigger");
   const disabilityDetailsBlock = document.getElementById("disabilityDetailsBlock");
-  const disabilityContainer = document.getElementById("disabilityContainer");
-  const addDisabilityBtn = document.getElementById("addDisabilityBtn");
-
   if (disabilityTrigger && disabilityDetailsBlock) {
     disabilityTrigger.addEventListener("change", (e) => {
-      disabilityDetailsBlock.style.display = e.target.value === "Yes" ? "flex" : "none";
+      disabilityDetailsBlock.style.display = e.target.value === "Yes" ? "block" : "none";
     });
   }
-
-  if (addDisabilityBtn && disabilityContainer) {
-    addDisabilityBtn.addEventListener("click", () => {
-      const row = document.createElement("div");
-      row.className = "disability-row";
-      row.style.cssText = "display: flex; gap: 10px; align-items: center;";
-      row.innerHTML = `
-        <input type="text" placeholder="Describe disability..." style="flex: 1; height: 38px; border: 1px solid #cfe3ff; border-radius: 6px; padding: 0 12px;" />
-        <button type="button" class="remove-disability-btn" style="background: #fff0f0; border: 1px solid #ffd0d0; color: red; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 12px;">✕</button>
-      `;
-      disabilityContainer.appendChild(row);
-
-      row.querySelector(".remove-disability-btn").addEventListener("click", () => row.remove());
-    });
-  }
-
-  document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("remove-disability-btn")) {
-      const row = e.target.closest(".disability-row");
-      if (disabilityContainer && disabilityContainer.querySelectorAll(".disability-row").length > 1) {
-        row.remove();
-      } else if (row) {
-        const input = row.querySelector("input");
-        if (input) input.value = "";
-      }
-    }
-  });
 
   // 2. Postal Address Conditional Toggles
   const setupPostalToggle = (triggerId, blockId) => {
@@ -437,137 +451,37 @@ function attachFormEventListeners() {
   setupPostalToggle("contactPostalTrigger", "contactPostalBlock");
   setupPostalToggle("guardianPostalTrigger", "guardianPostalBlock");
 
-  // 3. MATRIC STANDING & CURRENT EDUCATION LOGIC SWITCHER
+  // 3. Matric Standing Conditional Toggle
   const matricTrigger = document.getElementById("matricStandingTrigger");
-  const matricDynamicContainer = document.getElementById("matricDynamicContainer");
-
-  if (matricTrigger && matricDynamicContainer) {
+  const matricBlock = document.getElementById("matricCompletedBlock");
+  if (matricTrigger && matricBlock) {
     matricTrigger.addEventListener("change", (e) => {
-      const selectedVal = e.target.value;
-      matricDynamicContainer.style.display = "flex";
-
-      if (selectedVal === "Completed Matric") {
-        matricDynamicContainer.innerHTML = `
-          <!-- High School Education History (Completed Matric) -->
-          <div style="background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #cfe3ff; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
-            <h4 style="grid-column: 1 / -1; font-size: 14px; font-weight: 750; color: #071c72;">High School Education History</h4>
-            <div>
-              <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Name of School <span style="color: #e53b4d;">*</span></label>
-              <input type="text" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
-            </div>
-            <div>
-              <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Country of High School <span style="color: #e53b4d;">*</span></label>
-              <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
-            </div>
-            <div>
-              <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Province / State <span style="color: #e53b4d;">*</span></label>
-              <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
-            </div>
-            <div>
-              <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Year Completed / Matriculated <span style="color: #e53b4d;">*</span></label>
-              <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
-            </div>
-          </div>
-
-          <!-- Grade 12 Dynamic Subject Results Table -->
-          <div style="background: #ffffff; border: 1px solid #cfe3ff; border-radius: 6px; overflow: hidden;">
-            <div style="padding: 12px 16px; background: #edf6ff; border-bottom: 1px solid #cfe3ff;">
-              <h4 style="font-size: 14px; font-weight: 750; color: #071c72; margin:0;">Subject Results (Grade 12 Final Year Results)</h4>
-            </div>
-            <table style="width: 100%; border-collapse: collapse; font-size: 12px;" id="subjectsTable">
-              <thead>
-                <tr style="background: #fafcfe; border-bottom: 1px solid #e1efff; text-align: left; color: #0866f5;">
-                  <th style="padding: 10px 14px;">Subject Name</th>
-                  <th style="padding: 10px 14px; width: 25%;">Results / %</th>
-                  <th style="padding: 10px 14px; width: 25%;">Level</th>
-                  <th style="padding: 10px 14px; width: 80px; text-align: center;">Action</th>
-                </tr>
-              </thead>
-              <tbody id="subjectsTableBody">
-                <tr style="border-bottom: 1px solid #edf6ff;">
-                  <td style="padding: 8px 14px;"><input type="text" placeholder="e.g. Mathematics" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
-                  <td style="padding: 8px 14px;"><input type="number" placeholder="75" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
-                  <td style="padding: 8px 14px;"><input type="text" placeholder="Level 6" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
-                  <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-row-btn" style="background:#fff0f0; border:1px solid #ffd0d0; color:red; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
-                </tr>
-              </tbody>
-            </table>
-            <div style="padding: 10px 16px; background: #fafcfe; border-top: 1px solid #e1efff;">
-              <button type="button" class="add-subject-row-btn" style="background: #eaf5ff; border: 1px solid #0866f5; color: #0866f5; font-weight: 700; border-radius: 4px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Subject</button>
-            </div>
-          </div>
-        `;
-      } else if (selectedVal === "Currently in Grade 12") {
-        matricDynamicContainer.innerHTML = `
-          <!-- High School Education History (Currently in Grade 12) -->
-          <div style="background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #cfe3ff; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
-            <h4 style="grid-column: 1 / -1; font-size: 14px; font-weight: 750; color: #071c72;">High School Education History</h4>
-            <div style="grid-column: 1 / -1;">
-              <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Name of School <span style="color: #e53b4d;">*</span></label>
-              <input type="text" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
-            </div>
-            <div>
-              <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Country of High School <span style="color: #e53b4d;">*</span></label>
-              <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
-            </div>
-            <div>
-              <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Province / State <span style="color: #e53b4d;">*</span></label>
-              <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
-            </div>
-          </div>
-
-          <!-- Grade 11 Dynamic Subject Results Table -->
-          <div style="background: #ffffff; border: 1px solid #cfe3ff; border-radius: 6px; overflow: hidden;">
-            <div style="padding: 12px 16px; background: #edf6ff; border-bottom: 1px solid #cfe3ff;">
-              <h4 style="font-size: 14px; font-weight: 750; color: #071c72; margin:0;">Subject Results (Grade 11 Final Year Results)</h4>
-            </div>
-            <table style="width: 100%; border-collapse: collapse; font-size: 12px;" id="subjectsTable">
-              <thead>
-                <tr style="background: #fafcfe; border-bottom: 1px solid #e1efff; text-align: left; color: #0866f5;">
-                  <th style="padding: 10px 14px;">Subject Name</th>
-                  <th style="padding: 10px 14px; width: 25%;">Results / %</th>
-                  <th style="padding: 10px 14px; width: 25%;">Level</th>
-                  <th style="padding: 10px 14px; width: 80px; text-align: center;">Action</th>
-                </tr>
-              </thead>
-              <tbody id="subjectsTableBody">
-                <tr style="border-bottom: 1px solid #edf6ff;">
-                  <td style="padding: 8px 14px;"><input type="text" placeholder="e.g. Mathematics" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
-                  <td style="padding: 8px 14px;"><input type="number" placeholder="70" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
-                  <td style="padding: 8px 14px;"><input type="text" placeholder="Level 5" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
-                  <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-row-btn" style="background:#fff0f0; border:1px solid #ffd0d0; color:red; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
-                </tr>
-              </tbody>
-            </table>
-            <div style="padding: 10px 16px; background: #fafcfe; border-top: 1px solid #e1efff;">
-              <button type="button" class="add-subject-row-btn" style="background: #eaf5ff; border: 1px solid #0866f5; color: #0866f5; font-weight: 700; border-radius: 4px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Subject</button>
-            </div>
-          </div>
-        `;
-      }
+      matricBlock.style.display = e.target.value === "Completed Matric" ? "flex" : "none";
     });
   }
 
-  // Dynamic Add / Remove handlers for Grade 11 & Grade 12 Subject Tables
-  document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("add-subject-row-btn")) {
-      const tbody = e.target.closest("div.form-preview-section, #matricDynamicContainer").querySelector("#subjectsTableBody");
-      if (tbody) {
-        const tr = document.createElement("tr");
-        tr.style.borderBottom = "1px solid #edf6ff";
-        tr.innerHTML = `
-          <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
-          <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
-          <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
-          <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-row-btn" style="background:#fff0f0; border:1px solid #ffd0d0; color:red; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
-        `;
-        tbody.appendChild(tr);
+  // 4. Dynamic Grade 12 Subject Rows
+  const addSubjectRowBtn = document.getElementById("addSubjectRowBtn");
+  const subjectsTableBody = document.getElementById("subjectsTableBody");
+  if (addSubjectRowBtn && subjectsTableBody) {
+    addSubjectRowBtn.addEventListener("click", () => {
+      const tr = document.createElement("tr");
+      tr.style.borderBottom = "1px solid #edf6ff";
+      tr.innerHTML = `
+        <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
+        <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
+        <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cfe3ff; border-radius:4px; padding:0 8px;" /></td>
+        <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-row-btn" style="background:#fff0f0; border:1px solid #ffd0d0; color:red; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
+      `;
+      subjectsTableBody.appendChild(tr);
+    });
+
+    subjectsTableBody.addEventListener("click", (e) => {
+      if (e.target.classList.contains("remove-row-btn")) {
+        e.target.closest("tr").remove();
       }
-    } else if (e.target.classList.contains("remove-row-btn")) {
-      const tr = e.target.closest("tr");
-      if (tr) tr.remove();
-    }
-  });
+    });
+  }
 
   // 5. Tertiary Institution Conditional Toggle & Dynamic Cards
   const tertiaryTrigger = document.getElementById("tertiaryTrigger");
