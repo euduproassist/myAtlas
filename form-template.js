@@ -62,7 +62,7 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
       const fieldData = docSnap.data();
       const fieldId = docSnap.id;
       
-      // Check if configured as selected by admin
+      // Check if configured as selected by admin in Step 2 table configurations
       const userState = savedFieldsState[fieldId];
       const isSelected = userState ? userState.isSelected : fieldData.isSelected;
       const requirement = userState ? userState.requirement : fieldData.requirement;
@@ -124,7 +124,7 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
         });
       }
 
-      // Append Step 3 Selected Courses into Section 4B
+      // Append Step 3 Selected Courses into Section 4B under Educational Background & Course Selection
       if (sectionKey === "education_courses") {
         formHtml += renderCourseSelectionBlock(savedSelectedCourses);
       }
@@ -247,8 +247,8 @@ function renderIndividualFieldHTML(field, sectionKey) {
     `;
   }
 
-  // 4. SECTION A: MATRIC STATUS & HIGHSCHOOL HISTORY (Section 4A corresponding with Step 2 Table)
-  if (fname.includes("Matric Status") || fname.includes("Current Standing")) {
+  // 4. CURRENT EDUCATION STATUS (Maps directly to Matric Status / Current Standing & Section A Logic)
+  if (fname.includes("Current Education Status") || fname.includes("Matric Status") || fname.includes("Current Standing")) {
     return `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
         <label style="font-size: 13px; font-weight: 700; color: #244b88;">Matric Status / Current Standing ${reqAsterisk}</label>
@@ -259,11 +259,11 @@ function renderIndividualFieldHTML(field, sectionKey) {
         </select>
 
         <div id="matricCompletedBlock" style="display: none; margin-top: 14px; flex-direction: column; gap: 20px;">
-          <!-- High School Education History -->
+          <!-- High School Education History Sub-section -->
           <div style="background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #cfe3ff; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
-            <h4 style="grid-column: 1 / -1; font-size: 14px; font-weight: 750; color: #071c72; margin: 0;">High School Education History</h4>
+            <h4 style="grid-column: 1 / -1; font-size: 14px; font-weight: 750; color: #071c72;">High School Education History</h4>
             <div>
-              <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Name of High School ${reqAsterisk}</label>
+              <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Name of School ${reqAsterisk}</label>
               <input type="text" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
             </div>
             <div>
@@ -280,7 +280,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
             </div>
           </div>
 
-          <!-- Subject Results (Grade 12 Final Year Results) Dynamic Table -->
+          <!-- Subject Results (Grade 12 Final Year Results) Table -->
           <div style="background: #ffffff; border: 1px solid #cfe3ff; border-radius: 6px; overflow: hidden;">
             <div style="padding: 12px 16px; background: #edf6ff; border-bottom: 1px solid #cfe3ff;">
               <h4 style="font-size: 14px; font-weight: 750; color: #071c72; margin:0;">Subject Results (Grade 12 Final Year Results)</h4>
@@ -312,8 +312,8 @@ function renderIndividualFieldHTML(field, sectionKey) {
     `;
   }
 
-  // 5. PREVIOUS TERTIARY INSTITUTION (Section 4A corresponding with Step 2 Table)
-  if (fname.includes("tertiary institution")) {
+  // 5. TERTIARY EDUCATION HISTORY (Maps directly to previous tertiary institution attendance logic)
+  if (fname.includes("Tertiary Education History") || fname.includes("tertiary institution")) {
     return `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
         <label style="font-size: 13px; font-weight: 700; color: #244b88;">Have you previously attended a tertiary institution? ${reqAsterisk}</label>
@@ -325,7 +325,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
 
         <div id="tertiaryBlock" style="display: none; margin-top: 10px; flex-direction: column; gap: 14px;">
           <div id="tertiaryContainer" style="display: flex; flex-direction: column; gap: 14px;">
-            <div class="tertiary-card" style="background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #cfe3ff; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
+            <div class="tertiary-card" style="background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #cfe3ff; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; position: relative;">
               <div style="grid-column: 1 / -1;">
                 <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Institution Name ${reqAsterisk}</label>
                 <input type="text" placeholder="University / College Name" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
@@ -491,7 +491,7 @@ function attachFormEventListeners() {
   setupPostalToggle("contactPostalTrigger", "contactPostalBlock");
   setupPostalToggle("guardianPostalTrigger", "guardianPostalBlock");
 
-  // 3. Matric Standing Conditional Toggle (Section 4A Logic)
+  // 3. Matric Standing Conditional Toggle
   const matricTrigger = document.getElementById("matricStandingTrigger");
   const matricBlock = document.getElementById("matricCompletedBlock");
   if (matricTrigger && matricBlock) {
