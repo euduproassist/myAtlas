@@ -156,7 +156,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
   const reqAsterisk = field.requirement === "Required" ? `<span style="color: #e53b4d;">*</span>` : ``;
   const fname = field.fieldName;
 
-  // 1. DISABILITY INFORMATION (Conditional)
+  // 1. DISABILITY INFORMATION (Conditional with Multi-Add Support)
   if (fname.includes("Disability")) {
     return `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
@@ -166,9 +166,14 @@ function renderIndividualFieldHTML(field, sectionKey) {
           <option value="Yes">Yes</option>
           <option value="No">No</option>
         </select>
-        <div id="disabilityDetailsBlock" style="display: none; margin-top: 10px;">
-          <label style="font-size: 13px; font-weight: 700; color: #244b88; margin-bottom: 6px; display: block;">Specify Disability Details ${reqAsterisk}</label>
-          <input type="text" class="control" placeholder="Please describe nature of disability..." style="width: 100%; height: 40px; border: 1px solid #cfe3ff; border-radius: 6px; padding: 0 12px;" />
+        <div id="disabilityDetailsBlock" style="display: none; margin-top: 10px; flex-direction: column; gap: 14px;">
+          <div id="disabilityContainer" style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="disability-row" style="display: flex; gap: 10px; align-items: center;">
+              <input type="text" placeholder="Describe disability (e.g., Visual Impairment)" style="flex: 1; height: 38px; border: 1px solid #cfe3ff; border-radius: 6px; padding: 0 12px;" />
+              <button type="button" class="remove-disability-btn" style="background: #fff0f0; border: 1px solid #ffd0d0; color: red; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 12px;">✕</button>
+            </div>
+          </div>
+          <button type="button" id="addDisabilityBtn" style="align-self: flex-start; background: #eaf5ff; border: 1px solid #0866f5; color: #0866f5; font-weight: 700; border-radius: 4px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Disability</button>
         </div>
       </div>
     `;
@@ -202,7 +207,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
     `;
   }
 
-  // 3. POSTAL ADDRESS (Conditional Trigger)
+  // 3. POSTAL ADDRESS (Conditional Trigger - Hidden by Default)
   if (fname.includes("Postal Address")) {
     const triggerId = sectionKey === "guardian" ? "guardianPostalTrigger" : "contactPostalTrigger";
     const blockId = sectionKey === "guardian" ? "guardianPostalBlock" : "contactPostalBlock";
@@ -216,7 +221,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
           <option value="No">No</option>
         </select>
 
-        <div id="${blockId}" style="display: none; margin-top: 10px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #e1efff;">
+        <div id="${blockId}" style="display: none; margin-top: 10px; grid-template-columns: repeat(2, 1fr); gap: 14px; background: #f8fbff; padding: 16px; border-radius: 6px; border: 1px solid #e1efff;">
           <div style="grid-column: 1 / -1;">
             <label style="font-size: 13px; font-weight: 700; color: #244b88; display: block; margin-bottom: 6px;">Postal Address Line ${reqAsterisk}</label>
             <input type="text" placeholder="P.O Box / Street Address" style="width:100%; height:40px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" />
@@ -429,22 +434,57 @@ function renderCourseSelectionBlock(selectedCoursesKeys) {
  * Attach dynamic event listeners for conditional logic and dynamic tables
  */
 function attachFormEventListeners() {
-  // 1. Disability Conditional Toggle
+  // 1. Disability Conditional Toggle & Multi-Add Logic
   const disabilityTrigger = document.getElementById("disabilityTrigger");
   const disabilityDetailsBlock = document.getElementById("disabilityDetailsBlock");
+  const disabilityContainer = document.getElementById("disabilityContainer");
+  const addDisabilityBtn = document.getElementById("addDisabilityBtn");
+
   if (disabilityTrigger && disabilityDetailsBlock) {
     disabilityTrigger.addEventListener("change", (e) => {
-      disabilityDetailsBlock.style.display = e.target.value === "Yes" ? "block" : "none";
+      disabilityDetailsBlock.style.display = e.target.value === "Yes" ? "flex" : "none";
     });
   }
 
-  // 2. Postal Address Conditional Toggles
+  if (addDisabilityBtn && disabilityContainer) {
+    addDisabilityBtn.addEventListener("click", () => {
+      const row = document.createElement("div");
+      row.className = "disability-row";
+      row.style.cssText = "display: flex; gap: 10px; align-items: center;";
+      row.innerHTML = `
+        <input type="text" placeholder="Describe disability..." style="flex: 1; height: 38px; border: 1px solid #cfe3ff; border-radius: 6px; padding: 0 12px;" />
+        <button type="button" class="remove-disability-btn" style="background: #fff0f0; border: 1px solid #ffd0d0; color: red; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 12px;">✕</button>
+      `;
+      disabilityContainer.appendChild(row);
+
+      row.querySelector(".remove-disability-btn").addEventListener("click", () => row.remove());
+    });
+  }
+
+  // Handle remove for initial disability row
+  document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("remove-disability-btn")) {
+      const row = e.target.closest(".disability-row");
+      if (disabilityContainer && disabilityContainer.querySelectorAll(".disability-row").length > 1) {
+        row.remove();
+      } else if (row) {
+        const input = row.querySelector("input");
+        if (input) input.value = "";
+      }
+    }
+  });
+
+  // 2. Postal Address Conditional Toggles (Hidden by Default, reveals on "No")
   const setupPostalToggle = (triggerId, blockId) => {
     const trigger = document.getElementById(triggerId);
     const block = document.getElementById(blockId);
     if (trigger && block) {
       trigger.addEventListener("change", (e) => {
-        block.style.display = e.target.value === "No" ? "grid" : "none";
+        if (e.target.value === "No") {
+          block.style.display = "grid";
+        } else {
+          block.style.display = "none";
+        }
       });
     }
   };
