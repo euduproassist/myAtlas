@@ -76,7 +76,7 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
 
     activeFields.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-    // Fetch master courses for cascading filters
+    // Fetch master courses from Firestore for course selection dropdowns
     let masterCoursesList = [];
     try {
       const masterSnapshot = await getDocs(collection(db, "master_courses"));
@@ -377,7 +377,7 @@ function renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCourses
     });
   });
 
-  const academicYears = Array.from(new Set(validCourses.map(v => v.academicYear))).sort();
+  const step1AcademicYear = savedBasicInfo.academicYear || "";
 
   return `
     <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fbff; border: 1px solid #cfe3ff; padding: 16px; border-radius: 6px; display: flex; flex-direction: column; gap: 14px;" id="cascadingWrapper" data-courses='${JSON.stringify(validCourses)}'>
@@ -387,14 +387,13 @@ function renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCourses
         <div>
           <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Academic year</label>
           <select id="filterAcademicYear" class="control" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;">
-            <option value="" disabled selected>Select option</option>
-            ${academicYears.map(yr => `<option value="${yr}">${yr}</option>`).join("")}
+            <option value="${step1AcademicYear}" selected>${step1AcademicYear || "Select option"}</option>
           </select>
         </div>
 
         <div>
           <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Study mode</label>
-          <select id="filterStudyMode" class="control" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" disabled>
+          <select id="filterStudyMode" class="control" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;">
             <option value="" disabled selected>Select option</option>
           </select>
         </div>
@@ -545,7 +544,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
 /**
  * Attach dynamic event listeners for conditional logic and dynamic tables
  */
-function attachFormEventListeners() {
+function attachFormEventListeners(savedSelectedCourses, masterCoursesList, savedBasicInfo) {
   // 1. Disability Conditional Toggle & Multi-Add Logic
   const disabilityTrigger = document.getElementById("disabilityTrigger");
   const disabilityDetailsBlock = document.getElementById("disabilityDetailsBlock");
@@ -726,42 +725,33 @@ function attachFormEventListeners() {
     const cpSelect = document.getElementById("filterCampus");
     const crSelect = document.getElementById("filterCourseDropdown");
 
-    if (aySelect && smSelect && cpSelect && crSelect) {
-      aySelect.addEventListener("change", () => {
-        const selectedYear = aySelect.value;
-        
-        // Reset & disable downstream filters
-        smSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
-        smSelect.disabled = false;
-        cpSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
-        cpSelect.disabled = true;
-        crSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
-        crSelect.disabled = true;
+    if (smSelect && cpSelect && crSelect) {
+      // Automatically populate Study Modes for the Step 1 Academic Year on load
+      const currentYear = aySelect ? aySelect.value : (savedBasicInfo.academicYear || "");
+      const matchingStudyModes = Array.from(new Set(
+        validCourses.filter(v => !currentYear || v.academicYear === currentYear).map(v => v.studyMode)
+      )).sort();
 
-        const matchingStudyModes = Array.from(new Set(
-          validCourses.filter(v => v.academicYear === selectedYear).map(v => v.studyMode)
-        )).sort();
-
-        matchingStudyModes.forEach(sm => {
-          const opt = document.createElement("option");
-          opt.value = sm;
-          opt.textContent = sm;
-          smSelect.appendChild(opt);
-        });
+      smSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
+      matchingStudyModes.forEach(sm => {
+        const opt = document.createElement("option");
+        opt.value = sm;
+        opt.textContent = sm;
+        smSelect.appendChild(opt);
       });
 
       smSelect.addEventListener("change", () => {
-        const selectedYear = aySelect.value;
+        const selectedYear = currentYear;
         const selectedSM = smSelect.value;
 
-        // Reset & disable downstream filters
+        // Reset & disable downstream filters (Auto-Reset / Erasing Rule)
         cpSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
         cpSelect.disabled = false;
         crSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
         crSelect.disabled = true;
 
         const matchingCampuses = Array.from(new Set(
-          validCourses.filter(v => v.academicYear === selectedYear && v.studyMode === selectedSM).map(v => v.campus)
+          validCourses.filter(v => (!selectedYear || v.academicYear === selectedYear) && v.studyMode === selectedSM).map(v => v.campus)
         )).sort();
 
         matchingCampuses.forEach(camp => {
@@ -773,16 +763,16 @@ function attachFormEventListeners() {
       });
 
       cpSelect.addEventListener("change", () => {
-        const selectedYear = aySelect.value;
+        const selectedYear = currentYear;
         const selectedSM = smSelect.value;
         const selectedCampus = cpSelect.value;
 
-        // Reset & disable course filter
+        // Reset & disable course filter (Auto-Reset / Erasing Rule)
         crSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
         crSelect.disabled = false;
 
         const matchingCourses = Array.from(new Set(
-          validCourses.filter(v => v.academicYear === selectedYear && v.studyMode === selectedSM && v.campus === selectedCampus).map(v => v.course)
+          validCourses.filter(v => (!selectedYear || v.academicYear === selectedYear) && v.studyMode === selectedSM && v.campus === selectedCampus).map(v => v.course)
         )).sort();
 
         matchingCourses.forEach(crs => {
