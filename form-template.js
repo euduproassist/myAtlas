@@ -60,7 +60,7 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
     fieldsSnapshot.forEach((docSnap) => {
       const fieldData = docSnap.data();
       const fieldId = docSnap.id;
-      
+
       const userState = savedFieldsState[fieldId];
       const isSelected = userState ? userState.isSelected : fieldData.isSelected;
       const requirement = userState ? userState.requirement : fieldData.requirement;
@@ -95,6 +95,45 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
 
     let formHtml = `
       <div class="application-form-preview-wrapper" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);">
+        <style>
+          /* Responsive, white-only styling scoped to the application form preview. */
+          .application-form-preview-wrapper,
+          .application-form-preview-wrapper * { box-sizing: border-box; }
+          .application-form-preview-wrapper {
+            width: 100%; max-width: 100%; min-width: 0;
+            padding: clamp(12px, 3vw, 32px) !important;
+            background: #ffffff !important;
+            color: #0f172a;
+          }
+          .application-form-preview-wrapper * { min-width: 0; }
+          .application-form-preview-wrapper *:not(svg):not(path) { background-color: #ffffff !important; }
+          .application-form-preview-wrapper .form-preview-section > div:last-child,
+          .application-form-preview-wrapper [style*="display: grid"],
+          .application-form-preview-wrapper [style*="display:grid"] {
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)) !important;
+          }
+          .application-form-preview-wrapper input:not([type="checkbox"]):not([type="file"]),
+          .application-form-preview-wrapper select,
+          .application-form-preview-wrapper textarea {
+            width: 100% !important; max-width: 100% !important; min-width: 0 !important;
+            font: inherit;
+          }
+          .application-form-preview-wrapper label,
+          .application-form-preview-wrapper h2,
+          .application-form-preview-wrapper h3,
+          .application-form-preview-wrapper h4,
+          .application-form-preview-wrapper p { overflow-wrap: anywhere; }
+          .application-form-preview-wrapper table { width: 100%; }
+          .application-form-preview-wrapper [style*="display: flex"] { min-width: 0; }
+          .application-form-preview-wrapper .disability-row { flex-wrap: wrap; }
+          .application-form-preview-wrapper button { max-width: 100%; white-space: normal; }
+          @media (max-width: 640px) {
+            .application-form-preview-wrapper { border-radius: 8px !important; }
+            .application-form-preview-wrapper .form-preview-section > div:last-child { padding: 14px !important; }
+            .application-form-preview-wrapper header h2 { font-size: 20px !important; line-height: 1.3; }
+            .application-form-preview-wrapper [style*="min-width: 500px"] { min-width: 500px !important; }
+          }
+        </style>
         <header style="border-bottom: 2px solid #f1f5f9; padding-bottom: 16px; margin-bottom: 28px;">
           <span style="font-size: 11px; font-weight: 700; color: #0866f5; text-transform: uppercase; letter-spacing: 1px;">Live Form Preview</span>
           <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin-top: 4px;">
@@ -229,59 +268,7 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
               </table>
             </div>
             <div style="padding: 12px 16px; background: #f8fafc; border-top: 1px solid #e2e8f0;">
-              <button type="button" id="addGrade11SubjectBtn" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1d4ed8; font-weight: 600; border-radius: 6px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Subject</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sub-section for Completed Matric -->
-        <div id="completedMatricSubSection" style="display: none; margin-top: 14px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; flex-direction: column; gap: 16px;">
-          <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">High school education History</h4>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
-            <div>
-              <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Name of the school/institution ${reqAsterisk}</label>
-              <input type="text" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
-            </div>
-            <div>
-              <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Country ${reqAsterisk}</label>
-              <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
-            </div>
-            <div>
-              <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Province ${reqAsterisk}</label>
-              <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
-            </div>
-            <div>
-              <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Year Completed/Matriculated ${reqAsterisk}</label>
-              <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
-            </div>
-          </div>
-
-          <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; margin-top: 8px;">
-            <div style="padding: 12px 16px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0;">
-              <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin:0;">High school results (grade 12 final yr results)</h4>
-            </div>
-            <div style="overflow-x: auto;">
-              <table style="width: 100%; border-collapse: collapse; font-size: 12px; min-width: 500px;" id="grade12SubjectsTable">
-                <thead>
-                  <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; text-align: left; color: #0866f5;">
-                    <th style="padding: 10px 14px;">Subject Name</th>
-                    <th style="padding: 10px 14px; width: 25%;">Results / %</th>
-                    <th style="padding: 10px 14px; width: 25%;">Level</th>
-                    <th style="padding: 10px 14px; width: 80px; text-align: center;">Action</th>
-                  </tr>
-                </thead>
-                <tbody id="grade12SubjectsBody">
-                  <tr style="border-bottom: 1px solid #f1f5f9;">
-                    <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
-                    <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
-                    <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
-                    <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-subject-row" style="background:#fff5f5; border:1px solid #feb2b2; color:#e53e3e; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div style="padding: 12px 16px; background: #f8fafc; border-top: 1px solid #e2e8f0;">
-              <button type="button" id="addGrade12SubjectBtn" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1d4ed8; font-weight: 600; border-radius: 6px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Subject</button>
+                          <button type="button" id="addGrade12SubjectBtn" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1d4ed8; font-weight: 600; border-radius: 6px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Subject</button>
             </div>
           </div>
         </div>
@@ -376,7 +363,7 @@ function renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCourses
   return `
     <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 16px;" id="previewCascadingWrapper" data-courses='${JSON.stringify(validCourses)}'>
       <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">Course Selection</h4>
-      
+
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Academic year</label>
@@ -497,7 +484,8 @@ function renderIndividualFieldHTML(field, sectionKey) {
           <div>
             <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Country ${reqAsterisk}</label>
             <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
-          </div>
+        </div>
+                  </div>
         </div>
       </div>
     `;
