@@ -76,7 +76,6 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
 
     activeFields.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-    // Fetch master courses from Firestore
     let masterCoursesList = [];
     try {
       const masterSnapshot = await getDocs(collection(db, "master_courses"));
@@ -345,7 +344,7 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
 }
 
 /**
- * Render Progressive Cascading Course Selection Block
+ * Render Progressive Cascading Course Selection Block (with Unique Preview IDs)
  */
 function renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCoursesList, savedBasicInfo) {
   if (!savedSelectedCourses || savedSelectedCourses.length === 0) {
@@ -355,7 +354,6 @@ function renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCourses
       </div>`;
   }
 
-  // Parse Step 3 selected courses directly so we don't depend on Firestore's academicYear field
   const validCourses = savedSelectedCourses.map(key => {
     const parts = key.split("_");
     const cName = parts[0] || key;
@@ -372,32 +370,32 @@ function renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCourses
   const activeAcademicYear = savedBasicInfo.academicYear || new Date().getFullYear().toString();
 
   return `
-    <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fbff; border: 1px solid #cfe3ff; padding: 16px; border-radius: 6px; display: flex; flex-direction: column; gap: 14px;" id="cascadingWrapper" data-courses='${JSON.stringify(validCourses)}'>
+    <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fbff; border: 1px solid #cfe3ff; padding: 16px; border-radius: 6px; display: flex; flex-direction: column; gap: 14px;" id="previewCascadingWrapper" data-courses='${JSON.stringify(validCourses)}'>
       <h4 style="font-size: 14px; font-weight: 750; color: #071c72; margin: 0;">Course Selection</h4>
       
       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
         <div>
           <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Academic year</label>
-          <input type="text" id="displayAcademicYear" class="control" value="${activeAcademicYear}" readonly style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px; background:#edf6ff; color:#5797e5; cursor:not-allowed;" />
+          <input type="text" id="preview_displayAcademicYear" class="control" value="${activeAcademicYear}" readonly style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px; background:#edf6ff; color:#5797e5; cursor:not-allowed;" />
         </div>
 
         <div>
           <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Study mode</label>
-          <select id="filterStudyMode" class="control" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;">
+          <select id="preview_filterStudyMode" class="control" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;">
             <option value="" disabled selected>Select option</option>
           </select>
         </div>
 
         <div>
           <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Campus</label>
-          <select id="filterCampus" class="control" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" disabled>
+          <select id="preview_filterCampus" class="control" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" disabled>
             <option value="" disabled selected>Select option</option>
           </select>
         </div>
 
         <div>
           <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Course</label>
-          <select id="filterCourseDropdown" class="control" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" disabled>
+          <select id="preview_filterCourseDropdown" class="control" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;" disabled>
             <option value="" disabled selected>Select option</option>
           </select>
         </div>
@@ -705,17 +703,16 @@ function attachFormEventListeners() {
     });
   }
 
-  // 7. Progressive Cascading Course Selection Filters & Auto-Reset Rule
-  const cascadingWrapper = document.getElementById("cascadingWrapper");
+  // 7. Progressive Cascading Course Selection Filters (Using Unique Preview IDs)
+  const cascadingWrapper = document.getElementById("previewCascadingWrapper");
   if (cascadingWrapper) {
     const validCourses = JSON.parse(cascadingWrapper.dataset.courses || "[]");
 
-    const smSelect = document.getElementById("filterStudyMode");
-    const cpSelect = document.getElementById("filterCampus");
-    const crSelect = document.getElementById("filterCourseDropdown");
+    const smSelect = document.getElementById("preview_filterStudyMode");
+    const cpSelect = document.getElementById("preview_filterCampus");
+    const crSelect = document.getElementById("preview_filterCourseDropdown");
 
     if (smSelect && cpSelect && crSelect) {
-      // 1. Populate Study Modes based on Step 3 selected courses
       const uniqueStudyModes = Array.from(new Set(validCourses.map(v => v.studyMode))).sort();
 
       smSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
@@ -726,7 +723,6 @@ function attachFormEventListeners() {
         smSelect.appendChild(opt);
       });
 
-      // 2. Study Mode change event -> Populates Campus & Resets Downstream
       smSelect.addEventListener("change", () => {
         const selectedSM = smSelect.value;
 
@@ -747,7 +743,6 @@ function attachFormEventListeners() {
         });
       });
 
-      // 3. Campus change event -> Populates Course
       cpSelect.addEventListener("change", () => {
         const selectedSM = smSelect.value;
         const selectedCampus = cpSelect.value;
