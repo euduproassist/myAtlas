@@ -94,8 +94,8 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
     }
 
     let formHtml = `
-      <div class="application-form-preview-wrapper" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
-        <header style="border-bottom: 1px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 32px;">
+      <div class="application-form-preview-wrapper" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);">
+        <header style="border-bottom: 2px solid #f1f5f9; padding-bottom: 16px; margin-bottom: 28px;">
           <span style="font-size: 11px; font-weight: 700; color: #0866f5; text-transform: uppercase; letter-spacing: 1px;">Live Form Preview</span>
           <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin-top: 4px;">
             ${savedBasicInfo.cycleName || "Student Application Form"}
@@ -128,16 +128,16 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
         <section class="form-preview-section" style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; background: #ffffff;">
           <div style="background: #f8fafc; padding: 14px 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px;">
             <div style="color: #0866f5; display: flex; align-items: center;">${sectionMeta.icon}</div>
-            <h3 style="font-size: 15px; font-weight: 700; color: #1e293b; margin: 0;">${sectionMeta.title}</h3>
+            <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">${sectionMeta.title}</h3>
           </div>
-          <div style="padding: 24px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;">
+          <div style="padding: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
       `;
 
       if (sectionKey === "education_courses") {
         formHtml += renderEducationCoursesSectionHTML(fields, savedSelectedCourses, masterCoursesList, savedBasicInfo);
       } else {
         if (fields.length === 0) {
-          formHtml += `<p style="grid-column: 1 / -1; color: #94a3b8; font-size: 13px; font-style: italic; margin: 0;">No fields enabled for this section.</p>`;
+          formHtml += `<p style="grid-column: 1 / -1; color: #94a3b8; font-size: 13px; font-style: italic;">No fields enabled for this section.</p>`;
         } else {
           fields.forEach(field => {
             formHtml += renderIndividualFieldHTML(field, sectionKey);
@@ -179,105 +179,109 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
 
     html += `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
-        <label style="font-size: 13px; font-weight: 600; color: #334155;">Matric Status/Current Standing ${reqAsterisk}</label>
-        <select id="matricStandingTrigger" class="control" style="max-width: 320px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #1e293b; font-size: 13px;">
+        <label style="font-size: 13px; font-weight: 700; color: #1e293b;">Matric Status/Current Standing ${reqAsterisk}</label>
+        <select id="matricStandingTrigger" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
           <option value="" disabled selected>Select option</option>
           <option value="Currently in Grade 12">Currently in Grade 12</option>
           <option value="Completed Matric">Completed Matric</option>
         </select>
 
         <!-- Sub-section for Currently in Grade 12 -->
-        <div id="grade12SubSection" style="display: none; margin-top: 12px; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; flex-direction: column; gap: 16px;">
-          <h4 style="font-size: 14px; font-weight: 700; color: #1e293b; margin: 0;">High School Education History</h4>
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+        <div id="grade12SubSection" style="display: none; margin-top: 14px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; flex-direction: column; gap: 16px;">
+          <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">High school education History</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
             <div>
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Name of the school/institution ${reqAsterisk}</label>
-              <input type="text" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+              <input type="text" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
             <div>
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Country ${reqAsterisk}</label>
-              <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+              <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
             <div style="grid-column: 1 / -1;">
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Province ${reqAsterisk}</label>
-              <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+              <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
           </div>
 
           <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; margin-top: 8px;">
-            <div style="padding: 12px 16px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-              <h4 style="font-size: 13px; font-weight: 700; color: #1e293b; margin:0;">High school results (grade 11 final yr results/grade 12 june exam results)</h4>
+            <div style="padding: 12px 16px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0;">
+              <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin:0;">High school results (grade 11 final yr results/grade 12 june exam results)</h4>
             </div>
-            <table style="width: 100%; border-collapse: collapse; font-size: 12px;" id="grade11SubjectsTable">
-              <thead>
-                <tr style="background: #ffffff; border-bottom: 1px solid #e2e8f0; text-align: left; color: #475569;">
-                  <th style="padding: 10px 14px;">Subject Name</th>
-                  <th style="padding: 10px 14px; width: 25%;">Results / %</th>
-                  <th style="padding: 10px 14px; width: 25%;">Level</th>
-                  <th style="padding: 10px 14px; width: 80px; text-align: center;">Action</th>
-                </tr>
-              </thead>
-              <tbody id="grade11SubjectsBody">
-                <tr style="border-bottom: 1px solid #f1f5f9;">
-                  <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px; font-size: 12px;" /></td>
-                  <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px; font-size: 12px;" /></td>
-                  <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px; font-size: 12px;" /></td>
-                  <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-subject-row" style="background:#fff1f2; border:1px solid #fecdd3; color:#e11d48; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
-                </tr>
-              </tbody>
-            </table>
-            <div style="padding: 10px 16px; background: #f8fafc; border-top: 1px solid #e2e8f0;">
-              <button type="button" id="addGrade11SubjectBtn" style="background: #ffffff; border: 1px solid #cbd5e1; color: #0284c7; font-weight: 600; border-radius: 4px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Subject</button>
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 12px; min-width: 500px;" id="grade11SubjectsTable">
+                <thead>
+                  <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; text-align: left; color: #0866f5;">
+                    <th style="padding: 10px 14px;">Subject Name</th>
+                    <th style="padding: 10px 14px; width: 25%;">Results / %</th>
+                    <th style="padding: 10px 14px; width: 25%;">Level</th>
+                    <th style="padding: 10px 14px; width: 80px; text-align: center;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="grade11SubjectsBody">
+                  <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+                    <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+                    <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+                    <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-subject-row" style="background:#fff5f5; border:1px solid #feb2b2; color:#e53e3e; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="padding: 12px 16px; background: #f8fafc; border-top: 1px solid #e2e8f0;">
+              <button type="button" id="addGrade11SubjectBtn" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1d4ed8; font-weight: 600; border-radius: 6px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Subject</button>
             </div>
           </div>
         </div>
 
         <!-- Sub-section for Completed Matric -->
-        <div id="completedMatricSubSection" style="display: none; margin-top: 12px; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; flex-direction: column; gap: 16px;">
-          <h4 style="font-size: 14px; font-weight: 700; color: #1e293b; margin: 0;">High School Education History</h4>
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+        <div id="completedMatricSubSection" style="display: none; margin-top: 14px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; flex-direction: column; gap: 16px;">
+          <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">High school education History</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
             <div>
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Name of the school/institution ${reqAsterisk}</label>
-              <input type="text" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+              <input type="text" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
             <div>
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Country ${reqAsterisk}</label>
-              <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+              <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
             <div>
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Province ${reqAsterisk}</label>
-              <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+              <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
             <div>
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Year Completed/Matriculated ${reqAsterisk}</label>
-              <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+              <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
           </div>
 
           <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; margin-top: 8px;">
-            <div style="padding: 12px 16px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-              <h4 style="font-size: 13px; font-weight: 700; color: #1e293b; margin:0;">High school results (grade 12 final yr results)</h4>
+            <div style="padding: 12px 16px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0;">
+              <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin:0;">High school results (grade 12 final yr results)</h4>
             </div>
-            <table style="width: 100%; border-collapse: collapse; font-size: 12px;" id="grade12SubjectsTable">
-              <thead>
-                <tr style="background: #ffffff; border-bottom: 1px solid #e2e8f0; text-align: left; color: #475569;">
-                  <th style="padding: 10px 14px;">Subject Name</th>
-                  <th style="padding: 10px 14px; width: 25%;">Results / %</th>
-                  <th style="padding: 10px 14px; width: 25%;">Level</th>
-                  <th style="padding: 10px 14px; width: 80px; text-align: center;">Action</th>
-                </tr>
-              </thead>
-              <tbody id="grade12SubjectsBody">
-                <tr style="border-bottom: 1px solid #f1f5f9;">
-                  <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px; font-size: 12px;" /></td>
-                  <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px; font-size: 12px;" /></td>
-                  <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px; font-size: 12px;" /></td>
-                  <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-subject-row" style="background:#fff1f2; border:1px solid #fecdd3; color:#e11d48; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
-                </tr>
-              </tbody>
-            </table>
-            <div style="padding: 10px 16px; background: #f8fafc; border-top: 1px solid #e2e8f0;">
-              <button type="button" id="addGrade12SubjectBtn" style="background: #ffffff; border: 1px solid #cbd5e1; color: #0284c7; font-weight: 600; border-radius: 4px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Subject</button>
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 12px; min-width: 500px;" id="grade12SubjectsTable">
+                <thead>
+                  <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; text-align: left; color: #0866f5;">
+                    <th style="padding: 10px 14px;">Subject Name</th>
+                    <th style="padding: 10px 14px; width: 25%;">Results / %</th>
+                    <th style="padding: 10px 14px; width: 25%;">Level</th>
+                    <th style="padding: 10px 14px; width: 80px; text-align: center;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="grade12SubjectsBody">
+                  <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+                    <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+                    <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+                    <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-subject-row" style="background:#fff5f5; border:1px solid #feb2b2; color:#e53e3e; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="padding: 12px 16px; background: #f8fafc; border-top: 1px solid #e2e8f0;">
+              <button type="button" id="addGrade12SubjectBtn" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1d4ed8; font-weight: 600; border-radius: 6px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Subject</button>
             </div>
           </div>
         </div>
@@ -291,37 +295,28 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
     const reqAsterisk = fieldObj?.requirement === "Required" ? `<span style="color: #e53b4d;">*</span>` : ``;
 
     html += `
-      <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
-        <label style="font-size: 13px; font-weight: 600; color: #334155;">Have you previously attended a tertiary institution? ${reqAsterisk}</label>
-        <div style="display: flex; gap: 20px; align-items: center; margin-top: 4px;">
-          <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #1e293b; cursor: pointer;">
-            <input type="radio" name="tertiaryAttendance" value="Yes" id="tertiaryTriggerYes" style="accent-color: #0284c7;" /> Yes
-          </label>
-          <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #1e293b; cursor: pointer;">
-            <input type="radio" name="tertiaryAttendance" value="No" id="tertiaryTriggerNo" style="accent-color: #0284c7;" /> No
-          </label>
-        </div>
-        <!-- Hidden select for compatibility with existing script logic -->
-        <select id="tertiaryTrigger" style="display: none;">
-          <option value="" disabled selected></option>
+      <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+        <label style="font-size: 13px; font-weight: 700; color: #1e293b;">Have you previously attended a tertiary institution? ${reqAsterisk}</label>
+        <select id="tertiaryTrigger" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
+          <option value="" disabled selected>Select option</option>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
         </select>
 
-        <div id="tertiaryBlock" style="display: none; margin-top: 12px; flex-direction: column; gap: 14px;">
+        <div id="tertiaryBlock" style="display: none; margin-top: 10px; flex-direction: column; gap: 14px;">
           <div id="tertiaryContainer" style="display: flex; flex-direction: column; gap: 14px;">
-            <div class="tertiary-card" style="background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; position: relative;">
+            <div class="tertiary-card" style="background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; position: relative;">
               <div style="grid-column: 1 / -1;">
                 <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Institution Name ${reqAsterisk}</label>
-                <input type="text" placeholder="University / College Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+                <input type="text" placeholder="University / College Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
               </div>
               <div>
                 <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Qualification / Programme ${reqAsterisk}</label>
-                <input type="text" placeholder="e.g. Diploma in IT" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+                <input type="text" placeholder="e.g. Diploma in IT" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
               </div>
               <div>
                 <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Current / Final Status ${reqAsterisk}</label>
-                <select class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;">
+                <select class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;">
                   <option value="" disabled selected>Select option</option>
                   <option value="Completed">Completed</option>
                   <option value="Discontinued">Discontinued</option>
@@ -330,15 +325,15 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
               </div>
               <div>
                 <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Year Started ${reqAsterisk}</label>
-                <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+                <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
               </div>
               <div>
                 <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Year Completed ${reqAsterisk}</label>
-                <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+                <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
               </div>
             </div>
           </div>
-          <button type="button" id="addTertiaryCardBtn" style="align-self: flex-start; background: #ffffff; border: 1px solid #cbd5e1; color: #0284c7; font-weight: 600; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer;">+ Add Another Tertiary Education</button>
+          <button type="button" id="addTertiaryCardBtn" style="align-self: flex-start; background: #eff6ff; border: 1px solid #93c5fd; color: #1d4ed8; font-weight: 600; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer;">+ Add Another Tertiary Education</button>
         </div>
       </div>
     `;
@@ -358,8 +353,8 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
 function renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCoursesList, savedBasicInfo) {
   if (!savedSelectedCourses || savedSelectedCourses.length === 0) {
     return `
-      <div style="grid-column: 1 / -1; margin-top: 14px; background: #fff5f5; border: 1px solid #fecdd3; padding: 14px; border-radius: 6px; color: #e11d48; font-size: 13px;">
-        No courses were selected in Step 3. Applicants will not see any course selection choices.
+      <div style="grid-column: 1 / -1; margin-top: 14px; background: #fff5f5; border: 1px solid #feb2b2; padding: 14px; border-radius: 6px; color: #c53030; font-size: 13px;">
+        ⚠️ No courses were selected in Step 3. Applicants will not see any course selection choices.
       </div>`;
   }
 
@@ -379,33 +374,33 @@ function renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCourses
   const activeAcademicYear = savedBasicInfo.academicYear || new Date().getFullYear().toString();
 
   return `
-    <div style="grid-column: 1 / -1; margin-top: 10px; background: #ffffff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 14px;" id="previewCascadingWrapper" data-courses='${JSON.stringify(validCourses)}'>
-      <h4 style="font-size: 14px; font-weight: 700; color: #1e293b; margin: 0;">Course Selection</h4>
+    <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 16px;" id="previewCascadingWrapper" data-courses='${JSON.stringify(validCourses)}'>
+      <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">Course Selection</h4>
       
-      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Academic year</label>
-          <input type="text" id="preview_displayAcademicYear" class="control" value="${activeAcademicYear}" readonly style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#f8fafc; color:#64748b; font-size: 13px; cursor:not-allowed;" />
+          <input type="text" id="preview_displayAcademicYear" class="control" value="${activeAcademicYear}" readonly style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#f1f5f9; color:#64748b; cursor:not-allowed;" />
         </div>
 
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Study mode</label>
-          <select id="preview_filterStudyMode" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;">
-            <option value="" disabled selected>Select study mode</option>
+          <select id="preview_filterStudyMode" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;">
+            <option value="" disabled selected>Select option</option>
           </select>
         </div>
 
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Campus</label>
-          <select id="preview_filterCampus" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" disabled>
-            <option value="" disabled selected>Select campus</option>
+          <select id="preview_filterCampus" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" disabled>
+            <option value="" disabled selected>Select option</option>
           </select>
         </div>
 
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Course</label>
-          <select id="preview_filterCourseDropdown" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" disabled>
-            <option value="" disabled selected>Select course</option>
+          <select id="preview_filterCourseDropdown" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" disabled>
+            <option value="" disabled selected>Select option</option>
           </select>
         </div>
       </div>
@@ -423,20 +418,20 @@ function renderIndividualFieldHTML(field, sectionKey) {
   if (fname.includes("Disability")) {
     return `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
-        <label style="font-size: 13px; font-weight: 600; color: #334155;">Do you have any disabilities? ${reqAsterisk}</label>
-        <select id="disabilityTrigger" class="control" style="max-width: 320px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; font-size: 13px;">
+        <label style="font-size: 13px; font-weight: 700; color: #1e293b;">Do you have any disabilities? ${reqAsterisk}</label>
+        <select id="disabilityTrigger" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
           <option value="" disabled selected>Select option</option>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
         </select>
-        <div id="disabilityDetailsBlock" style="display: none; margin-top: 10px; flex-direction: column; gap: 12px;">
+        <div id="disabilityDetailsBlock" style="display: none; margin-top: 10px; flex-direction: column; gap: 14px;">
           <div id="disabilityContainer" style="display: flex; flex-direction: column; gap: 10px;">
             <div class="disability-row" style="display: flex; gap: 10px; align-items: center;">
-              <input type="text" placeholder="Describe disability (e.g., Visual Impairment)" style="flex: 1; height: 38px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; font-size: 13px;" />
-              <button type="button" class="remove-disability-btn" style="background: #fff1f2; border: 1px solid #fecdd3; color: #e11d48; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 12px;">✕</button>
+              <input type="text" placeholder="Describe disability (e.g., Visual Impairment)" style="flex: 1; height: 38px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background:#fff;" />
+              <button type="button" class="remove-disability-btn" style="background: #fff5f5; border: 1px solid #feb2b2; color: #e53e3e; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 12px;">✕</button>
             </div>
           </div>
-          <button type="button" id="addDisabilityBtn" style="align-self: flex-start; background: #ffffff; border: 1px solid #cbd5e1; color: #0284c7; font-weight: 600; border-radius: 6px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Disability</button>
+          <button type="button" id="addDisabilityBtn" style="align-self: flex-start; background: #eff6ff; border: 1px solid #93c5fd; color: #1d4ed8; font-weight: 600; border-radius: 6px; padding: 6px 14px; font-size: 12px; cursor: pointer;">+ Add Disability</button>
         </div>
       </div>
     `;
@@ -444,26 +439,26 @@ function renderIndividualFieldHTML(field, sectionKey) {
 
   if (fname.includes("Residential Address") && !fname.includes("Postal")) {
     return `
-      <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
+      <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
         <div style="grid-column: 1 / -1;">
-          <label style="font-size: 13px; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">Physical Residential Address ${reqAsterisk}</label>
-          <input type="text" placeholder="Street Address, Building, Unit" style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+          <label style="font-size: 13px; font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">Physical Residential Address ${reqAsterisk}</label>
+          <input type="text" placeholder="Street Address, Building, Unit" style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">City / Town ${reqAsterisk}</label>
-          <input type="text" placeholder="City" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+          <input type="text" placeholder="City" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Province / State ${reqAsterisk}</label>
-          <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+          <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Postal Code ${reqAsterisk}</label>
-          <input type="text" placeholder="Code" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+          <input type="text" placeholder="Code" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Country of Residence ${reqAsterisk}</label>
-          <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+          <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
       </div>
     `;
@@ -475,41 +470,33 @@ function renderIndividualFieldHTML(field, sectionKey) {
 
     return `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
-        <label style="font-size: 13px; font-weight: 600; color: #334155;">Postal Address - Same as residential? ${reqAsterisk}</label>
-        <div style="display: flex; gap: 20px; align-items: center; margin-top: 4px;">
-          <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #1e293b; cursor: pointer;">
-            <input type="radio" name="${triggerId}_radio" value="Yes" class="postal-radio-yes" data-trigger="${triggerId}" style="accent-color: #0284c7;" /> Yes
-          </label>
-          <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #1e293b; cursor: pointer;">
-            <input type="radio" name="${triggerId}_radio" value="No" class="postal-radio-no" data-trigger="${triggerId}" style="accent-color: #0284c7;" /> No
-          </label>
-        </div>
-        <select id="${triggerId}" style="display: none;">
-          <option value="" disabled selected></option>
+        <label style="font-size: 13px; font-weight: 700; color: #1e293b;">Is the Postal address the same as residential address? ${reqAsterisk}</label>
+        <select id="${triggerId}" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
+          <option value="" disabled selected>Select option</option>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
         </select>
 
-        <div id="${blockId}" style="display: none; margin-top: 10px; grid-template-columns: repeat(2, 1fr); gap: 16px; background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <div id="${blockId}" style="display: none; margin-top: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
           <div style="grid-column: 1 / -1;">
-            <label style="font-size: 13px; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">Postal Address Line ${reqAsterisk}</label>
-            <input type="text" placeholder="P.O Box / Street Address" style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+            <label style="font-size: 13px; font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">Postal Address Line ${reqAsterisk}</label>
+            <input type="text" placeholder="P.O Box / Street Address" style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
           </div>
           <div>
             <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">City / Town ${reqAsterisk}</label>
-            <input type="text" placeholder="City" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+            <input type="text" placeholder="City" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
           </div>
           <div>
             <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Province / State ${reqAsterisk}</label>
-            <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+            <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
           </div>
           <div>
             <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Postal Code ${reqAsterisk}</label>
-            <input type="text" placeholder="Postal Code" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+            <input type="text" placeholder="Postal Code" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
           </div>
           <div>
             <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Country ${reqAsterisk}</label>
-            <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+            <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
           </div>
         </div>
       </div>
@@ -518,24 +505,19 @@ function renderIndividualFieldHTML(field, sectionKey) {
 
   if (sectionKey === "documents") {
     return `
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px;">
-        <div>
-          <label style="font-size: 13px; font-weight: 600; color: #1e293b; display: block; margin-bottom: 2px;">${fname} ${reqAsterisk}</label>
-          <span style="font-size: 11px; color: #64748b;">PDF, PNG, JPG, JPEG</span>
-        </div>
-        <label style="display: inline-flex; align-items: center; justify-content: center; background: #f8fafc; border: 1px solid #cbd5e1; color: #0284c7; font-weight: 600; border-radius: 6px; padding: 8px 14px; font-size: 12px; cursor: pointer; text-align: center;">
-          Choose File
-          <input type="file" accept=".pdf,.png,.jpg,.jpeg" style="display: none;" />
-        </label>
+      <div style="display: flex; flex-direction: column; gap: 6px; background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <label style="font-size: 13px; font-weight: 700; color: #1e293b;">${fname} ${reqAsterisk}</label>
+        <span style="font-size: 11px; color: #64748b;">PDF, PNG, JPG, JPEG</span>
+        <input type="file" accept=".pdf,.png,.jpg,.jpeg" style="font-size: 12px; border: 1px dashed #93c5fd; border-radius: 6px; padding: 10px; background: #ffffff; cursor: pointer; margin-top: 4px;" />
       </div>
     `;
   }
 
   if (fname.includes("Confirmation") || fname.includes("Consent") || fname.includes("Agreement")) {
     return `
-      <div style="grid-column: 1 / -1; display: flex; align-items: flex-start; gap: 12px; background: #ffffff; padding: 14px; border-radius: 6px; border: 1px solid #e2e8f0;">
-        <input type="checkbox" style="width:18px; height:18px; margin-top:2px; cursor:pointer; accent-color: #0284c7;" />
-        <label style="font-size: 13px; color: #334155; line-height: 1.4;">${fname} ${reqAsterisk}</label>
+      <div style="grid-column: 1 / -1; display: flex; align-items: flex-start; gap: 12px; background: #f8fafc; padding: 14px 16px; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <input type="checkbox" style="width:18px; height:18px; margin-top:2px; cursor:pointer;" />
+        <label style="font-size: 13px; color: #1e293b; line-height: 1.4; font-weight: 500;">${fname} ${reqAsterisk}</label>
       </div>
     `;
   }
@@ -545,9 +527,9 @@ function renderIndividualFieldHTML(field, sectionKey) {
   const inputType = isDate ? "date" : (isEmail ? "email" : "text");
 
   return `
-    <div>
-      <label style="font-size: 13px; font-weight: 600; color: #334155; display: block; margin-bottom: 6px;">${fname} ${reqAsterisk}</label>
-      <input type="${inputType}" placeholder="Enter ${fname.toLowerCase()}" style="width: 100%; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; font-size: 13px; color: #1e293b;" />
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <label style="font-size: 13px; font-weight: 700; color: #1e293b; display: block;">${fname} ${reqAsterisk}</label>
+      <input type="${inputType}" placeholder="Enter ${fname}" style="width: 100%; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;" />
     </div>
   `;
 }
@@ -574,8 +556,8 @@ function attachFormEventListeners() {
       row.className = "disability-row";
       row.style.cssText = "display: flex; gap: 10px; align-items: center;";
       row.innerHTML = `
-        <input type="text" placeholder="Describe disability..." style="flex: 1; height: 38px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; font-size: 13px;" />
-        <button type="button" class="remove-disability-btn" style="background: #fff1f2; border: 1px solid #fecdd3; color: #e11d48; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 12px;">✕</button>
+        <input type="text" placeholder="Describe disability..." style="flex: 1; height: 38px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background:#fff;" />
+        <button type="button" class="remove-disability-btn" style="background: #fff5f5; border: 1px solid #feb2b2; color: #e53e3e; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 12px;">✕</button>
       `;
       disabilityContainer.appendChild(row);
 
@@ -595,18 +577,7 @@ function attachFormEventListeners() {
     }
   });
 
-  // 2. Postal Address Radio & Select Toggles
-  document.querySelectorAll(".postal-radio-yes, .postal-radio-no").forEach(radio => {
-    radio.addEventListener("change", (e) => {
-      const triggerId = e.target.dataset.trigger;
-      const selectEl = document.getElementById(triggerId);
-      if (selectEl) {
-        selectEl.value = e.target.value;
-        selectEl.dispatchEvent(new Event("change"));
-      }
-    });
-  });
-
+  // 2. Postal Address Conditional Toggles
   const setupPostalToggle = (triggerId, blockId) => {
     const trigger = document.getElementById(triggerId);
     const block = document.getElementById(blockId);
@@ -648,10 +619,10 @@ function attachFormEventListeners() {
       const tr = document.createElement("tr");
       tr.style.borderBottom = "1px solid #f1f5f9";
       tr.innerHTML = `
-        <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px; font-size: 12px;" /></td>
-        <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px; font-size: 12px;" /></td>
-        <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px; font-size: 12px;" /></td>
-        <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-subject-row" style="background:#fff1f2; border:1px solid #fecdd3; color:#e11d48; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
+        <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+        <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+        <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+        <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-subject-row" style="background:#fff5f5; border:1px solid #feb2b2; color:#e53e3e; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
       `;
       grade11SubjectsBody.appendChild(tr);
     });
@@ -665,10 +636,10 @@ function attachFormEventListeners() {
       const tr = document.createElement("tr");
       tr.style.borderBottom = "1px solid #f1f5f9";
       tr.innerHTML = `
-        <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px; font-size: 12px;" /></td>
-        <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px; font-size: 12px;" /></td>
-        <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px; font-size: 12px;" /></td>
-        <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-subject-row" style="background:#fff1f2; border:1px solid #fecdd3; color:#e11d48; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
+        <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+        <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+        <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+        <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-subject-row" style="background:#fff5f5; border:1px solid #feb2b2; color:#e53e3e; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
       `;
       grade12SubjectsBody.appendChild(tr);
     });
@@ -686,17 +657,7 @@ function attachFormEventListeners() {
     }
   });
 
-  // 6. Tertiary Institution Radio & Dynamic Cards
-  document.querySelectorAll("#tertiaryTriggerYes, #tertiaryTriggerNo").forEach(radio => {
-    radio.addEventListener("change", (e) => {
-      const selectEl = document.getElementById("tertiaryTrigger");
-      if (selectEl) {
-        selectEl.value = e.target.value;
-        selectEl.dispatchEvent(new Event("change"));
-      }
-    });
-  });
-
+  // 6. Tertiary Institution Conditional Toggle & Dynamic Cards
   const tertiaryTrigger = document.getElementById("tertiaryTrigger");
   const tertiaryBlock = document.getElementById("tertiaryBlock");
   const tertiaryContainer = document.getElementById("tertiaryContainer");
@@ -712,20 +673,20 @@ function attachFormEventListeners() {
     addTertiaryCardBtn.addEventListener("click", () => {
       const card = document.createElement("div");
       card.className = "tertiary-card";
-      card.style.cssText = "background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; position: relative;";
+      card.style.cssText = "background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; position: relative;";
       card.innerHTML = `
-        <button type="button" class="remove-card-btn" style="position: absolute; top: 16px; right: 16px; background: #fff1f2; border: 1px solid #fecdd3; color: #e11d48; border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; font-weight: 600;">Remove</button>
+        <button type="button" class="remove-card-btn" style="position: absolute; top: 14px; right: 14px; background: #fff5f5; border: 1px solid #feb2b2; color: #e53e3e; border-radius: 4px; padding: 4px 10px; font-size: 11px; cursor: pointer; font-weight: 600;">Remove</button>
         <div style="grid-column: 1 / -1;">
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Institution Name</label>
-          <input type="text" placeholder="University / College Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+          <input type="text" placeholder="University / College Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Qualification / Programme</label>
-          <input type="text" placeholder="e.g. Diploma in IT" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+          <input type="text" placeholder="e.g. Diploma in IT" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Current / Final Status</label>
-          <select class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;">
+          <select class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;">
             <option value="" disabled selected>Select option</option>
             <option value="Completed">Completed</option>
             <option value="Discontinued">Discontinued</option>
@@ -734,11 +695,11 @@ function attachFormEventListeners() {
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Year Started</label>
-          <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+          <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Year Completed</label>
-          <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background: #ffffff; font-size: 13px;" />
+          <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
       `;
       tertiaryContainer.appendChild(card);
@@ -759,7 +720,7 @@ function attachFormEventListeners() {
     if (smSelect && cpSelect && crSelect) {
       const uniqueStudyModes = Array.from(new Set(validCourses.map(v => v.studyMode))).sort();
 
-      smSelect.innerHTML = '<option value="" disabled selected>Select study mode</option>';
+      smSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
       uniqueStudyModes.forEach(sm => {
         const opt = document.createElement("option");
         opt.value = sm;
@@ -770,9 +731,9 @@ function attachFormEventListeners() {
       smSelect.addEventListener("change", () => {
         const selectedSM = smSelect.value;
 
-        cpSelect.innerHTML = '<option value="" disabled selected>Select campus</option>';
+        cpSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
         cpSelect.disabled = false;
-        crSelect.innerHTML = '<option value="" disabled selected>Select course</option>';
+        crSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
         crSelect.disabled = true;
 
         const matchingCampuses = Array.from(new Set(
@@ -791,7 +752,7 @@ function attachFormEventListeners() {
         const selectedSM = smSelect.value;
         const selectedCampus = cpSelect.value;
 
-        crSelect.innerHTML = '<option value="" disabled selected>Select course</option>';
+        crSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
         crSelect.disabled = false;
 
         const matchingCourses = Array.from(new Set(
