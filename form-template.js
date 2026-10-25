@@ -76,7 +76,7 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
 
     activeFields.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-    // Fetch master courses from Firestore for course selection dropdowns
+    // Fetch master courses from Firestore for cascading filters
     let masterCoursesList = [];
     try {
       const masterSnapshot = await getDocs(collection(db, "master_courses"));
@@ -337,7 +337,7 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
     `;
   }
 
-  // 3. Course selection with Progressive Cascading Filters
+  // 3. Course selection with Progressive Cascading Filters (Academic Year locked from Step 1)
   if (fieldNamesSet.has("Course selection")) {
     html += renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCoursesList, savedBasicInfo);
   }
@@ -346,7 +346,7 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
 }
 
 /**
- * Render Progressive Cascading Course Selection Block
+ * Render Progressive Cascading Course Selection Block (Academic Year from Step 1)
  */
 function renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCoursesList, savedBasicInfo) {
   if (!savedSelectedCourses || savedSelectedCourses.length === 0) {
@@ -377,18 +377,16 @@ function renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCourses
     });
   });
 
-  const step1AcademicYear = savedBasicInfo.academicYear || "";
+  const activeAcademicYear = savedBasicInfo.academicYear || new Date().getFullYear().toString();
 
   return `
-    <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fbff; border: 1px solid #cfe3ff; padding: 16px; border-radius: 6px; display: flex; flex-direction: column; gap: 14px;" id="cascadingWrapper" data-courses='${JSON.stringify(validCourses)}'>
+    <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fbff; border: 1px solid #cfe3ff; padding: 16px; border-radius: 6px; display: flex; flex-direction: column; gap: 14px;" id="cascadingWrapper" data-courses='${JSON.stringify(validCourses)}' data-academicyear='${activeAcademicYear}'>
       <h4 style="font-size: 14px; font-weight: 750; color: #071c72; margin: 0;">Course Selection</h4>
       
       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
         <div>
           <label style="font-size: 12px; font-weight: 700; color: #244b88; display: block; margin-bottom: 4px;">Academic year</label>
-          <select id="filterAcademicYear" class="control" style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px;">
-            <option value="${step1AcademicYear}" selected>${step1AcademicYear || "Select option"}</option>
-          </select>
+          <input type="text" id="displayAcademicYear" class="control" value="${activeAcademicYear}" readonly style="width:100%; height:38px; border:1px solid #cfe3ff; border-radius:6px; padding:0 12px; background:#edf6ff; color:#5797e5; cursor:not-allowed;" />
         </div>
 
         <div>
@@ -544,7 +542,7 @@ function renderIndividualFieldHTML(field, sectionKey) {
 /**
  * Attach dynamic event listeners for conditional logic and dynamic tables
  */
-function attachFormEventListeners(savedSelectedCourses, masterCoursesList, savedBasicInfo) {
+function attachFormEventListeners() {
   // 1. Disability Conditional Toggle & Multi-Add Logic
   const disabilityTrigger = document.getElementById("disabilityTrigger");
   const disabilityDetailsBlock = document.getElementById("disabilityDetailsBlock");
@@ -715,24 +713,22 @@ function attachFormEventListeners(savedSelectedCourses, masterCoursesList, saved
     });
   }
 
-  // 7. Progressive Cascading Course Selection Filters & Auto-Reset Rule
+  // 7. Progressive Cascading Course Selection Filters (Academic Year from Step 1) & Auto-Reset Rule
   const cascadingWrapper = document.getElementById("cascadingWrapper");
   if (cascadingWrapper) {
     const validCourses = JSON.parse(cascadingWrapper.dataset.courses || "[]");
+    const activeYear = cascadingWrapper.dataset.academicyear;
 
-    const aySelect = document.getElementById("filterAcademicYear");
     const smSelect = document.getElementById("filterStudyMode");
     const cpSelect = document.getElementById("filterCampus");
     const crSelect = document.getElementById("filterCourseDropdown");
 
     if (smSelect && cpSelect && crSelect) {
-      // Automatically populate Study Modes for the Step 1 Academic Year on load
-      const currentYear = aySelect ? aySelect.value : (savedBasicInfo.academicYear || "");
+      // Automatically populate Study Modes for the active Academic Year from Step 1 on load
       const matchingStudyModes = Array.from(new Set(
-        validCourses.filter(v => !currentYear || v.academicYear === currentYear).map(v => v.studyMode)
+        validCourses.filter(v => v.academicYear.toString() === activeYear.toString()).map(v => v.studyMode)
       )).sort();
 
-      smSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
       matchingStudyModes.forEach(sm => {
         const opt = document.createElement("option");
         opt.value = sm;
@@ -740,18 +736,18 @@ function attachFormEventListeners(savedSelectedCourses, masterCoursesList, saved
         smSelect.appendChild(opt);
       });
 
+      // Study Mode change event -> Populates Campus & Resets Downstream
       smSelect.addEventListener("change", () => {
-        const selectedYear = currentYear;
         const selectedSM = smSelect.value;
 
-        // Reset & disable downstream filters (Auto-Reset / Erasing Rule)
+        // Reset & disable downstream filters
         cpSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
         cpSelect.disabled = false;
         crSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
         crSelect.disabled = true;
 
         const matchingCampuses = Array.from(new Set(
-          validCourses.filter(v => (!selectedYear || v.academicYear === selectedYear) && v.studyMode === selectedSM).map(v => v.campus)
+          validCourses.filter(v => v.academicYear.toString() === activeYear.toString() && v.studyMode === selectedSM).map(v => v.campus)
         )).sort();
 
         matchingCampuses.forEach(camp => {
@@ -762,17 +758,17 @@ function attachFormEventListeners(savedSelectedCourses, masterCoursesList, saved
         });
       });
 
+      // Campus change event -> Populates Course & Resets Downstream
       cpSelect.addEventListener("change", () => {
-        const selectedYear = currentYear;
         const selectedSM = smSelect.value;
         const selectedCampus = cpSelect.value;
 
-        // Reset & disable course filter (Auto-Reset / Erasing Rule)
+        // Reset & disable course filter
         crSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
         crSelect.disabled = false;
 
         const matchingCourses = Array.from(new Set(
-          validCourses.filter(v => (!selectedYear || v.academicYear === selectedYear) && v.studyMode === selectedSM && v.campus === selectedCampus).map(v => v.course)
+          validCourses.filter(v => v.academicYear.toString() === activeYear.toString() && v.studyMode === selectedSM && v.campus === selectedCampus).map(v => v.course)
         )).sort();
 
         matchingCourses.forEach(crs => {
