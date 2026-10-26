@@ -1,32 +1,31 @@
 import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { renderStep4ApplicationPreview } from "./form-template.js";
 
 document.documentElement.style.overflowX = "hidden";
 document.body.style.overflowX = "hidden";
 
-// 30-MINUTE INACTIVITY TIMER SETUP
+// 30-MINUTE INACTIVITY TIMER SETUP (Robust Interval Check)
 const INACTIVITY_LIMIT = 30 * 60 * 1000; // 30 minutes in milliseconds
-let inactivityTimer;
+let lastActivityTime = Date.now();
 
-function resetInactivityTimer() {
-  clearTimeout(inactivityTimer);
-  inactivityTimer = setTimeout(() => {
-    // Clear all builder localStorage data
-    localStorage.removeItem('myAtlas_basicInfo');
-    localStorage.removeItem('myAtlas_formFieldsState');
-    localStorage.removeItem('myAtlas_selectedCourses');
-    
-    // Return to dashboard
-    hideCycleBuilder();
-  }, INACTIVITY_LIMIT);
+function updateActivityTime() {
+  lastActivityTime = Date.now();
 }
 
 // Any user interaction resets the inactivity countdown
 ['mousemove', 'keydown', 'mousedown', 'touchstart', 'scroll', 'click'].forEach(eventType => {
-  window.addEventListener(eventType, resetInactivityTimer, { passive: true });
+  window.addEventListener(eventType, updateActivityTime, { passive: true });
 });
-resetInactivityTimer();
+
+// Continuously check inactivity every second so it triggers and redirects automatically without page refresh
+setInterval(() => {
+  if (Date.now() - lastActivityTime >= INACTIVITY_LIMIT) {
+    cancelAndResetBuilder();
+    lastActivityTime = Date.now();
+  }
+}, 1000);
 
 // UI View Elements
 const dashboardView = document.getElementById('dashboardView');
@@ -601,6 +600,9 @@ function showBuilderStep(stepNum) {
     if (navStep3) { navStep3.classList.remove('active'); navStep3.classList.add('completed'); }
     if (navStep4) { navStep4.classList.add('active'); navStep4.classList.remove('completed'); }
 
+    // Generate and render the dynamic live preview form using Step 2 & Step 3 choices
+    renderStep4ApplicationPreview("builderStep4Preview");
+
     window.location.hash = 'builder-review';
   }
 }
@@ -633,6 +635,30 @@ function hideCycleBuilder(e) {
   if (cycleBuilderView) cycleBuilderView.style.display = 'none';
   if (dashboardView) dashboardView.style.display = 'block';
   window.location.hash = 'dashboard';
+}
+
+// Cancel & Reset Action (Erases all builder localStorage data permanently and returns to dashboard)
+function cancelAndResetBuilder(e) {
+  if (e) e.preventDefault();
+  
+  // Clear all builder localStorage data permanently
+  localStorage.removeItem('myAtlas_basicInfo');
+  localStorage.removeItem('myAtlas_formFieldsState');
+  localStorage.removeItem('myAtlas_selectedCourses');
+  
+  // Reset Step 1 input fields visually
+  if (qualificationSelect) qualificationSelect.value = '';
+  if (academicYearSelect) {
+    populateAcademicYears();
+    academicYearSelect.value = '';
+  }
+  if (openingDateInput) openingDateInput.value = '';
+  if (closingDateInput) closingDateInput.value = '';
+  if (folderNameInput) folderNameInput.value = '';
+  if (cycleNameInput) cycleNameInput.value = '';
+  
+  // Return back to dashboard view
+  hideCycleBuilder();
 }
 
 if (nextStepBtn) {
@@ -681,7 +707,7 @@ if (prevToCoursesBtn) {
 }
 
 if (cancelReviewBtn) {
-  cancelReviewBtn.addEventListener('click', hideCycleBuilder);
+  cancelReviewBtn.addEventListener('click', cancelAndResetBuilder);
 }
 
 if (publishCycleBtn) {
@@ -710,9 +736,9 @@ window.addEventListener('hashchange', handleInitialRoute);
 
 if (openModalBtn) openModalBtn.addEventListener('click', showCycleBuilder);
 document.querySelectorAll('.action-step-1').forEach(el => el.addEventListener('click', showCycleBuilder));
-if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', hideCycleBuilder);
-if (cancelFormBtn) cancelFormBtn.addEventListener('click', hideCycleBuilder);
-if (cancelCoursesBtn) cancelCoursesBtn.addEventListener('click', hideCycleBuilder);
+if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', cancelAndResetBuilder);
+if (cancelFormBtn) cancelFormBtn.addEventListener('click', cancelAndResetBuilder);
+if (cancelCoursesBtn) cancelCoursesBtn.addEventListener('click', cancelAndResetBuilder);
 
 if (qualificationSelect) qualificationSelect.addEventListener('change', () => {
   updateAutoNaming();
