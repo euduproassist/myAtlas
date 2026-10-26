@@ -1,6 +1,6 @@
 import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { doc, getDoc, collection, getDocs, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 import { renderStep4ApplicationPreview } from "./form-template.js";
 
 document.documentElement.style.overflowX = "hidden";
@@ -710,10 +710,109 @@ if (cancelReviewBtn) {
   cancelReviewBtn.addEventListener('click', cancelAndResetBuilder);
 }
 
+// PUBLISH CYCLE ACTION (Writes snapshot to Firestore, then resets and returns to dashboard)
 if (publishCycleBtn) {
-  publishCycleBtn.addEventListener('click', (e) => {
+  publishCycleBtn.addEventListener('click', async (e) => {
     e.preventDefault();
-    return false;
+
+    if (!validateBasicInfoFields()) {
+      showBuilderStep(1);
+      return;
+    }
+
+    const savedFieldsState = getFormFieldsState();
+    const savedSelectedCourses = JSON.parse(localStorage.getItem('myAtlas_selectedCourses') || '[]');
+
+    if (savedSelectedCourses.length === 0) {
+      alert("Please select at least one course in Step 3 before publishing.");
+      showBuilderStep(3);
+      return;
+    }
+
+    publishCycleBtn.disabled = true;
+    publishCycleBtn.textContent = "Publishing...";
+
+    try {
+      // 1. Gather active form fields snapshot
+      const querySnapshot = await getDocs(collection(db, "application_form_fields"));
+      const formFieldsSnapshot = [];
+
+      querySnapshot.forEach((docSnap) => {
+        const fieldData = docSnap.data();
+        const fieldId = docSnap.id;
+        const userState = savedFieldsState[fieldId];
+        const isSelected = userState ? userState.isSelected : fieldData.isSelected;
+        const requirement = userState ? userState.requirement : fieldData.requirement;
+
+        if (isSelected) {
+          formFieldsSnapshot.push({
+            fieldId: fieldId,
+            fieldName: fieldData.fieldName || '',
+            section: fieldData.section || 'personal',
+            requirement: requirement || 'Required',
+            fieldBehaviour: fieldData.fieldBehaviour || 'Standard',
+            order: fieldData.order || 0
+          });
+        }
+      });
+
+      formFieldsSnapshot.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+      // 2. Gather selected courses snapshot
+      const selectedCoursesSnapshot = savedSelectedCourses.map(key => {
+        const parts = key.split("_");
+        return {
+          course: parts[0] || key,
+          studyMode: parts[1] || 'Full-time',
+          campus: parts[2] || 'Main Campus',
+          academicYear: academicYearSelect.value
+        };
+      });
+
+      // 3. Determine Collection Name and Document ID slug
+      const qualVal = qualificationSelect.value.trim();
+      const yearVal = academicYearSelect.value.trim();
+      
+      const qualSlug = qualVal.toLowerCase().replace(/\s+degree$/i, '').replace(/\s+/g, '_');
+      const collectionName = `${yearVal}_${qualSlug}_admissions`;
+
+      const prefix = qualVal.toLowerCase().includes('post') ? 'postgrad' : (qualVal.toLowerCase().includes('research') ? 'research' : 'undergrad');
+      const cycleId = `${prefix}-${yearVal}-intake-1`;
+
+      // 4. Construct payload
+      const cyclePayload = {
+        cycleId: cycleId,
+        folderName: folderNameInput.value,
+        cycleName: cycleNameInput.value,
+        academicYear: yearVal,
+        qualificationType: qualVal,
+        status: "published",
+        openingDate: openingDateInput.value,
+        closingDate: closingDateInput.value,
+        isManuallyClosed: false,
+        publishedAt: serverTimestamp(),
+        formFieldsSnapshot: formFieldsSnapshot,
+        selectedCoursesSnapshot: selectedCoursesSnapshot
+      };
+
+      // 5. Save to Firestore
+      await setDoc(doc(db, collectionName, cycleId), cyclePayload);
+
+      alert("Application cycle published successfully!");
+
+      // 6. Reset builder completely and return to dashboard to allow creating more cycles
+      cancelAndResetBuilder();
+
+    } catch (err) {
+      console.error("Error publishing cycle:", err);
+      alert("Failed to publish application cycle. Please check your connection and try again.");
+    } finally {
+      publishCycleBtn.disabled = false;
+      publishCycleBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        Publish Cycle
+      `;
+    }
   });
 }
 
