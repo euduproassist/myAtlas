@@ -356,6 +356,28 @@ function saveSelectedCoursesSet(setObj) {
   localStorage.setItem('myAtlas_selectedCourses', JSON.stringify(Array.from(setObj)));
 }
 
+// Helper: Filter master courses based on Step 1 Qualification Type keyword rules
+function getQualificationFilteredCourses() {
+  const qualVal = qualificationSelect ? qualificationSelect.value.trim() : '';
+  if (!qualVal) return masterCoursesCache;
+
+  return masterCoursesCache.filter(item => {
+    const lowerCourseName = (item.course || '').trim().toLowerCase();
+    if (qualVal === 'Undergraduate Degree') {
+      return lowerCourseName.startsWith('higher certificate') ||
+             lowerCourseName.startsWith('diploma') ||
+             lowerCourseName.startsWith('bachelor');
+    } else if (qualVal === 'Postgraduate Degree') {
+      return lowerCourseName.startsWith('postgraduate');
+    } else if (qualVal === 'Research Degree') {
+      return lowerCourseName.startsWith('masters') ||
+             lowerCourseName.startsWith('phd') ||
+             lowerCourseName.startsWith('doctorate');
+    }
+    return true;
+  });
+}
+
 async function loadMasterCoursesFromFirestore() {
   if (!masterCoursesTableBody) return;
   masterCoursesTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">Loading courses...</td></tr>';
@@ -397,11 +419,13 @@ async function loadMasterCoursesFromFirestore() {
 function populateCourseFilters(courses) {
   if (!filterCourse || !filterStudyMode || !filterCampus) return;
 
+  const qualFiltered = getQualificationFilteredCourses();
+
   const coursesSet = new Set();
   const studyModesSet = new Set();
   const campusesSet = new Set();
 
-  courses.forEach(c => {
+  qualFiltered.forEach(c => {
     if (c.course) coursesSet.add(c.course);
     if (c.studyMode) studyModesSet.add(c.studyMode);
     if (c.campus) campusesSet.add(c.campus);
@@ -442,7 +466,9 @@ function renderFilteredMasterCourses() {
   const chosenYear = academicYearSelect && academicYearSelect.value ? academicYearSelect.value : new Date().getFullYear();
   const savedCoursesSet = getSelectedCoursesSet();
 
-  const filtered = masterCoursesCache.filter(item => {
+  const qualFiltered = getQualificationFilteredCourses();
+
+  const filtered = qualFiltered.filter(item => {
     const matchCourse = !selectedCourseFilter || item.course.toLowerCase() === selectedCourseFilter;
     const matchStudyMode = !selectedStudyModeFilter || item.studyMode.toLowerCase() === selectedStudyModeFilter;
     const matchCampus = !selectedCampusFilter || item.campus.toLowerCase() === selectedCampusFilter;
