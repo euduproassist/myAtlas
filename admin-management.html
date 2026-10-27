@@ -563,7 +563,7 @@
       align-items: flex-start;
       gap: 13px;
       padding: 18px 15px;
-      background: #f3f8ff;
+      background: #ffffff; /* Pure white background as requested */
     }
 
     .info-icon {
@@ -833,7 +833,7 @@
         </button>
       </section>
 
-      <!-- RIGHT: QUICK ACTIONS AND HELP -->
+      <!-- RIGHT: QUICK ACTIONS AND ACTIVITY LOG -->
       <aside class="right-sidebar">
         <section class="side-card">
           <h2 class="side-card-heading">Quick Actions</h2>
@@ -901,22 +901,21 @@
           </button>
         </section>
 
+        <!-- ACTIVITY LOG CARD -->
         <section class="side-card info-card">
           <svg class="info-icon" viewBox="0 0 24 24"
                fill="none" stroke="currentColor"
                stroke-width="1.8" stroke-linecap="round"
                stroke-linejoin="round" aria-hidden="true">
-            <path d="M9 18h6M10 21h4"></path>
-            <path d="M8.5 15.5C7 14.3 6 12.5 6 10.5a6 6 0 1 1 12 0c0 2-1 3.8-2.5 5l-.5 2h-6z"></path>
+            <circle cx="12" cy="12" r="9"></circle>
+            <polyline points="12 7 12 12 15 15"></polyline>
           </svg>
 
           <div class="info-content">
-            <h2 class="info-title">Getting Started</h2>
+            <h2 class="info-title">Activity Log</h2>
 
             <p class="info-description">
-              Create your first application cycle to set up your
-              application process and start receiving applications
-              from students.
+              No recent administrative activities recorded yet. System actions and updates will appear here once initiated.
             </p>
           </div>
         </section>
