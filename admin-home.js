@@ -356,7 +356,7 @@ signinForm.addEventListener('submit', async (e) => {
     }
 
     // 3. Successful verification — redirect user to admin portal home page
-    window.location.href = 'admin-management.html';
+    window.location.href = 'admin.html';
 
   } catch (error) {
     console.error('Sign-In Error:', error);
