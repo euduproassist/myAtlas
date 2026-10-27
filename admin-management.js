@@ -166,7 +166,7 @@ function renderSidebarFolders(cycles, searchQuery = "") {
 
   folderMap.forEach((cycleList, folderName) => {
     const folderDiv = document.createElement('div');
-    folderDiv.className = 'folder-item open'; // Default open or closed
+    folderDiv.className = 'folder-item open';
 
     const header = document.createElement('div');
     header.className = 'folder-header';
