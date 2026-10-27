@@ -5,7 +5,7 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
 document.documentElement.style.overflowX = "hidden";
 document.body.style.overflowX = "hidden";
 
-// 30-MINUTE INACTIVITY TIMER SETUP (Robust Interval Check)
+// 30-MINUTE INACTIVITY TIMER SETUP (Kicks unauthorized/inactive users to admin-home.html)
 const INACTIVITY_LIMIT = 30 * 60 * 1000; // 30 minutes in milliseconds
 let lastActivityTime = Date.now();
 
@@ -20,13 +20,15 @@ function updateActivityTime() {
 setInterval(() => {
   if (Date.now() - lastActivityTime >= INACTIVITY_LIMIT) {
     signOut(auth).then(() => {
-      window.location.href = 'admin-home.html#sign-in';
+      window.location.href = 'admin-home.html';
+    }).catch(() => {
+      window.location.href = 'admin-home.html';
     });
     lastActivityTime = Date.now();
   }
 }, 1000);
 
-// PROFILE ICON & AUTHENTICATION / AUTHORIZATION LOCK
+// PROFILE ICON & AUTHENTICATION FEATURES WITH STRICT ACCESS KICKOUT
 const userMenuTrigger = document.getElementById('userMenuTrigger');
 const userDropdownMenu = document.getElementById('userDropdownMenu');
 const userAvatar = document.getElementById('userAvatar');
@@ -34,11 +36,10 @@ const dropdownUserName = document.getElementById('dropdownUserName');
 const dropdownUserEmail = document.getElementById('dropdownUserEmail');
 const dropdownUserRole = document.getElementById('dropdownUserRole');
 const logoutBtn = document.getElementById('logoutBtn');
-const appRoot = document.getElementById('appRoot');
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    window.location.href = 'admin-home.html#sign-in';
+    window.location.href = 'admin-home.html';
     return;
   }
 
@@ -55,10 +56,9 @@ onAuthStateChanged(auth, async (user) => {
       }
     }
 
-    // If authenticated in Firebase Auth but missing a valid authorized role record in Firestore, kick them out
     if (!userDocData) {
       await signOut(auth);
-      window.location.href = 'admin-home.html#sign-in';
+      window.location.href = 'admin-home.html';
       return;
     }
 
@@ -69,16 +69,10 @@ onAuthStateChanged(auth, async (user) => {
     if (dropdownUserEmail) dropdownUserEmail.textContent = userDocData.email || user.email;
     if (dropdownUserRole) dropdownUserRole.textContent = (userDocData.role || 'Admin').replace('_', ' ');
 
-    // Reveal portal layout only after authorization check passes completely
-    if (appRoot) appRoot.style.display = 'flex';
-
-    // Load cycles once verified
-    fetchAndRenderApplicationCycles();
-
   } catch (err) {
-    console.error("Profile Verification & Authorization Error:", err);
-    await signOut(auth);
-    window.location.href = 'admin-home.html#sign-in';
+    console.error("Profile Verification Error:", err);
+    await signOut(auth).catch(() => {});
+    window.location.href = 'admin-home.html';
   }
 });
 
@@ -100,9 +94,10 @@ if (logoutBtn) {
     e.preventDefault();
     try {
       await signOut(auth);
-      window.location.href = 'admin-home.html#sign-in';
+      window.location.href = 'admin-home.html';
     } catch (err) {
       console.error("Logout Error:", err);
+      window.location.href = 'admin-home.html';
     }
   });
 }
@@ -272,3 +267,8 @@ function goToAdminBuilder(e) {
 if (newCycleNavBtn) newCycleNavBtn.addEventListener('click', goToAdminBuilder);
 if (createCycleWelcomeBtn) createCycleWelcomeBtn.addEventListener('click', goToAdminBuilder);
 if (quickActionCreateCycle) quickActionCreateCycle.addEventListener('click', goToAdminBuilder);
+
+// Load cycles on DOMContentLoaded
+window.addEventListener('DOMContentLoaded', () => {
+  fetchAndRenderApplicationCycles();
+});
