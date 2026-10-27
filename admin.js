@@ -99,7 +99,25 @@ function populateAcademicYears() {
   });
 }
 
-function updateAutoNaming() {
+// Helper: Fetch existing cycles from Firestore for a specific qualification and year
+async function fetchExistingCyclesForQualification(qualVal, yearVal) {
+  if (!qualVal || !yearVal) return [];
+  try {
+    const qualSlug = qualVal.toLowerCase().replace(/\s+degree$/i, '').replace(/\s+/g, '_');
+    const collectionName = `${yearVal}_${qualSlug}_admissions`;
+    const snapshot = await getDocs(collection(db, collectionName));
+    let cycles = [];
+    snapshot.forEach(docSnap => {
+      cycles.push({ id: docSnap.id, ...docSnap.data() });
+    });
+    return cycles;
+  } catch (err) {
+    console.error("Error fetching existing cycles:", err);
+    return [];
+  }
+}
+
+async function updateAutoNaming() {
   const currentCreationYear = new Date().getFullYear();
   if (folderNameInput) {
     folderNameInput.value = `${currentCreationYear} - Application Cycle`;
@@ -110,7 +128,9 @@ function updateAutoNaming() {
     const yr = academicYearSelect.value;
     if (qual && yr) {
       const categoryName = qual.replace(/\s+Degree$/i, '');
-      cycleNameInput.value = `${categoryName} Applications ${yr}`;
+      const existingCycles = await fetchExistingCyclesForQualification(qual, yr);
+      const cycleNumber = existingCycles.length + 1;
+      cycleNameInput.value = `${categoryName} Applications ${yr}-Cycle ${cycleNumber}`;
     } else {
       cycleNameInput.value = '';
     }
@@ -150,11 +170,47 @@ function loadBasicInfoFromLocalStorage() {
   }
 }
 
-function validateBasicInfoFields() {
-  if (!qualificationSelect.value || !academicYearSelect.value || !openingDateInput.value || !closingDateInput.value) {
+// Step 1 Validation including Date Overlap and Sequence Checks
+async function validateBasicInfoFields() {
+  const qual = qualificationSelect.value;
+  const yr = academicYearSelect.value;
+  const opening = openingDateInput.value;
+  const closing = closingDateInput.value;
+
+  if (!qual || !yr || !opening || !closing) {
     alert("Please fill in all required fields in Basic Info before proceeding.");
     return false;
   }
+
+  const openDateObj = new Date(opening);
+  const closeDateObj = new Date(closing);
+
+  if (closeDateObj <= openDateObj) {
+    alert("The closing date must be strictly after the opening date.");
+    return false;
+  }
+
+  // Fetch existing cycles for this specific degree and year
+  const existingCycles = await fetchExistingCyclesForQualification(qual, yr);
+
+  if (existingCycles.length > 0) {
+    let latestClosingDate = null;
+    existingCycles.forEach(c => {
+      if (c.closingDate) {
+        const cDate = new Date(c.closingDate);
+        if (!latestClosingDate || cDate > latestClosingDate) {
+          latestClosingDate = cDate;
+        }
+      }
+    });
+
+    if (latestClosingDate && openDateObj <= latestClosingDate) {
+      const formattedLatest = latestClosingDate.toISOString().split('T')[0];
+      alert(`Overlap Error: For ${qual} (${yr}), the opening date (${opening}) must be strictly after the closing date of the previous cycle (${formattedLatest}).`);
+      return false;
+    }
+  }
+
   return true;
 }
 
@@ -202,7 +258,6 @@ async function loadTableFieldsFromFirestore(sectionName, tbodyId, checkboxClass,
 
       if (!hasAllFields) return;
 
-      // Apply saved localStorage state if available
       let isSelected = data.isSelected;
       let requirement = data.requirement;
       if (savedState[docSnap.id]) {
@@ -662,9 +717,10 @@ function cancelAndResetBuilder(e) {
 }
 
 if (nextStepBtn) {
-  nextStepBtn.addEventListener('click', (e) => {
+  nextStepBtn.addEventListener('click', async (e) => {
     e.preventDefault();
-    if (validateBasicInfoFields()) {
+    const isValid = await validateBasicInfoFields();
+    if (isValid) {
       saveBasicInfoToLocalStorage();
       showBuilderStep(2);
     }
@@ -710,12 +766,13 @@ if (cancelReviewBtn) {
   cancelReviewBtn.addEventListener('click', cancelAndResetBuilder);
 }
 
-// PUBLISH CYCLE ACTION (Writes snapshot to Firestore, then resets and returns to dashboard)
+// PUBLISH CYCLE ACTION (Writes snapshot to Firestore with dynamic cycle naming and sequence)
 if (publishCycleBtn) {
   publishCycleBtn.addEventListener('click', async (e) => {
     e.preventDefault();
 
-    if (!validateBasicInfoFields()) {
+    const isValid = await validateBasicInfoFields();
+    if (!isValid) {
       showBuilderStep(1);
       return;
     }
@@ -733,7 +790,21 @@ if (publishCycleBtn) {
     publishCycleBtn.textContent = "Publishing...";
 
     try {
-      // 1. Gather active form fields snapshot
+      // 1. Determine Collection Name, Cycle Number, and Document ID slug
+      const qualVal = qualificationSelect.value.trim();
+      const yearVal = academicYearSelect.value.trim();
+      
+      const existingCycles = await fetchExistingCyclesForQualification(qualVal, yearVal);
+      const cycleNumber = existingCycles.length + 1;
+
+      const qualSlug = qualVal.toLowerCase().replace(/\s+degree$/i, '').replace(/\s+/g, '_');
+      const collectionName = `${yearVal}_${qualSlug}_admissions`;
+
+      const prefix = qualVal.toLowerCase().includes('post') ? 'postgrad' : (qualVal.toLowerCase().includes('research') ? 'research' : 'undergrad');
+      const cycleId = `${prefix}-${yearVal}-cycle-${cycleNumber}`;
+      const finalCycleName = `${qualVal.replace(/\s+Degree$/i, '')} Applications ${yearVal}-Cycle ${cycleNumber}`;
+
+      // 2. Gather active form fields snapshot
       const querySnapshot = await getDocs(collection(db, "application_form_fields"));
       const formFieldsSnapshot = [];
 
@@ -758,32 +829,22 @@ if (publishCycleBtn) {
 
       formFieldsSnapshot.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-      // 2. Gather selected courses snapshot
+      // 3. Gather selected courses snapshot
       const selectedCoursesSnapshot = savedSelectedCourses.map(key => {
         const parts = key.split("_");
         return {
           course: parts[0] || key,
           studyMode: parts[1] || 'Full-time',
           campus: parts[2] || 'Main Campus',
-          academicYear: academicYearSelect.value
+          academicYear: yearVal
         };
       });
-
-      // 3. Determine Collection Name and Document ID slug
-      const qualVal = qualificationSelect.value.trim();
-      const yearVal = academicYearSelect.value.trim();
-      
-      const qualSlug = qualVal.toLowerCase().replace(/\s+degree$/i, '').replace(/\s+/g, '_');
-      const collectionName = `${yearVal}_${qualSlug}_admissions`;
-
-      const prefix = qualVal.toLowerCase().includes('post') ? 'postgrad' : (qualVal.toLowerCase().includes('research') ? 'research' : 'undergrad');
-      const cycleId = `${prefix}-${yearVal}-intake-1`;
 
       // 4. Construct payload
       const cyclePayload = {
         cycleId: cycleId,
         folderName: folderNameInput.value,
-        cycleName: cycleNameInput.value,
+        cycleName: finalCycleName,
         academicYear: yearVal,
         qualificationType: qualVal,
         status: "published",
@@ -839,12 +900,12 @@ if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', cancelAndResetBuild
 if (cancelFormBtn) cancelFormBtn.addEventListener('click', cancelAndResetBuilder);
 if (cancelCoursesBtn) cancelCoursesBtn.addEventListener('click', cancelAndResetBuilder);
 
-if (qualificationSelect) qualificationSelect.addEventListener('change', () => {
-  updateAutoNaming();
+if (qualificationSelect) qualificationSelect.addEventListener('change', async () => {
+  await updateAutoNaming();
   saveBasicInfoToLocalStorage();
 });
-if (academicYearSelect) academicYearSelect.addEventListener('change', () => {
-  updateAutoNaming();
+if (academicYearSelect) academicYearSelect.addEventListener('change', async () => {
+  await updateAutoNaming();
   saveBasicInfoToLocalStorage();
 });
 if (openingDateInput) openingDateInput.addEventListener('change', saveBasicInfoToLocalStorage);
