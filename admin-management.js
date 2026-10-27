@@ -26,7 +26,7 @@ setInterval(() => {
   }
 }, 1000);
 
-// PROFILE ICON & AUTHENTICATION FEATURES
+// PROFILE ICON & AUTHENTICATION FEATURES WITH STRICT ACCESS CONTROL
 const userMenuTrigger = document.getElementById('userMenuTrigger');
 const userDropdownMenu = document.getElementById('userDropdownMenu');
 const userAvatar = document.getElementById('userAvatar');
@@ -37,6 +37,7 @@ const logoutBtn = document.getElementById('logoutBtn');
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
+    // Unauthenticated user -> kick out immediately
     window.location.href = 'admin-home.html#sign-in';
     return;
   }
@@ -55,11 +56,13 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     if (!userDocData) {
+      // Authenticated with Firebase Auth, but unauthorized in admin Firestore collections -> kick out
       await signOut(auth);
       window.location.href = 'admin-home.html#sign-in';
       return;
     }
 
+    // Successfully verified authorized admin user -> render profile and reveal page
     const initials = userDocData.initials || (userDocData.firstname ? userDocData.firstname.charAt(0) : 'A');
     if (userAvatar) userAvatar.textContent = initials;
 
@@ -67,8 +70,15 @@ onAuthStateChanged(auth, async (user) => {
     if (dropdownUserEmail) dropdownUserEmail.textContent = userDocData.email || user.email;
     if (dropdownUserRole) dropdownUserRole.textContent = (userDocData.role || 'Admin').replace('_', ' ');
 
+    // Reveal portal content safely now that authorization is fully confirmed
+    document.body.style.visibility = 'visible';
+
+    // Fetch cycles after authorization confirmed
+    fetchAndRenderApplicationCycles();
+
   } catch (err) {
     console.error("Profile Verification Error:", err);
+    await signOut(auth);
     window.location.href = 'admin-home.html#sign-in';
   }
 });
@@ -263,8 +273,3 @@ function goToAdminBuilder(e) {
 if (newCycleNavBtn) newCycleNavBtn.addEventListener('click', goToAdminBuilder);
 if (createCycleWelcomeBtn) createCycleWelcomeBtn.addEventListener('click', goToAdminBuilder);
 if (quickActionCreateCycle) quickActionCreateCycle.addEventListener('click', goToAdminBuilder);
-
-// Load cycles on DOMContentLoaded
-window.addEventListener('DOMContentLoaded', () => {
-  fetchAndRenderApplicationCycles();
-});
