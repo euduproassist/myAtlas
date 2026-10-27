@@ -50,6 +50,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      visibility: hidden; /* Hidden by default until auth check passes */
     }
 
     button, input, select { font: inherit; }
@@ -754,7 +755,7 @@
       align-items: flex-start;
       gap: 13px;
       padding: 18px 15px;
-      background: #ffffff; /* Pure white background as requested */
+      background: #ffffff;
     }
 
     .info-icon {
