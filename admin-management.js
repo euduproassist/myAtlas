@@ -26,7 +26,7 @@ setInterval(() => {
   }
 }, 1000);
 
-// PROFILE ICON & AUTHENTICATION FEATURES WITH STRICT ACCESS CONTROL
+// PROFILE ICON & AUTHENTICATION / AUTHORIZATION LOCK
 const userMenuTrigger = document.getElementById('userMenuTrigger');
 const userDropdownMenu = document.getElementById('userDropdownMenu');
 const userAvatar = document.getElementById('userAvatar');
@@ -34,10 +34,10 @@ const dropdownUserName = document.getElementById('dropdownUserName');
 const dropdownUserEmail = document.getElementById('dropdownUserEmail');
 const dropdownUserRole = document.getElementById('dropdownUserRole');
 const logoutBtn = document.getElementById('logoutBtn');
+const appRoot = document.getElementById('appRoot');
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    // Unauthenticated user -> kick out immediately
     window.location.href = 'admin-home.html#sign-in';
     return;
   }
@@ -55,14 +55,13 @@ onAuthStateChanged(auth, async (user) => {
       }
     }
 
+    // If authenticated in Firebase Auth but missing a valid authorized role record in Firestore, kick them out
     if (!userDocData) {
-      // Authenticated with Firebase Auth, but unauthorized in admin Firestore collections -> kick out
       await signOut(auth);
       window.location.href = 'admin-home.html#sign-in';
       return;
     }
 
-    // Successfully verified authorized admin user -> render profile and reveal page
     const initials = userDocData.initials || (userDocData.firstname ? userDocData.firstname.charAt(0) : 'A');
     if (userAvatar) userAvatar.textContent = initials;
 
@@ -70,14 +69,14 @@ onAuthStateChanged(auth, async (user) => {
     if (dropdownUserEmail) dropdownUserEmail.textContent = userDocData.email || user.email;
     if (dropdownUserRole) dropdownUserRole.textContent = (userDocData.role || 'Admin').replace('_', ' ');
 
-    // Reveal portal content safely now that authorization is fully confirmed
-    document.body.style.visibility = 'visible';
+    // Reveal portal layout only after authorization check passes completely
+    if (appRoot) appRoot.style.display = 'flex';
 
-    // Fetch cycles after authorization confirmed
+    // Load cycles once verified
     fetchAndRenderApplicationCycles();
 
   } catch (err) {
-    console.error("Profile Verification Error:", err);
+    console.error("Profile Verification & Authorization Error:", err);
     await signOut(auth);
     window.location.href = 'admin-home.html#sign-in';
   }
