@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>myAtlas | Admin Portal</title>
+
+  <style>
+    :root {
+      --blue: #2479e8;
+      --blue-dark: #175db8;
+      --blue-light: #edf5ff;
+      --blue-pale: #f6f9fe;
+      --navy: #172b4d;
+      --text: #26364d;
+      --muted: #718096;
+      --border: #e1e8f0;
+      --white: #ffffff;
+      --page: #ffffff;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      min-height: 100%;
+      width: 100%;
+      background: var(--page);
+    }
+
+    body {
+      min-height: 100vh;
+      width: 100%;
+      font-family: Inter, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: var(--page);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: default;
+    }
+
+    /* Overall page layout */
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      width: 100%;
+      max-width: none;
+      background: #fff;
+    }
+
+    /* Top navigation */
+
+    .topbar {
+      width: 100%;
+      min-height: 72px;
+      display: grid;
+      grid-template-columns: minmax(210px, 1fr) minmax(240px, 480px) auto;
+      align-items: center;
+      gap: clamp(16px, 2vw, 32px);
+      padding: 12px clamp(16px, 2.2vw, 36px);
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 43px;
+      height: 43px;
+      flex: 0 0 43px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      background: var(--blue);
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 23px;
+      letter-spacing: -2px;
+    }
+
+    .brand-copy {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.12;
+    }
+
+    .brand-name {
+      color: var(--blue);
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      white-space: nowrap;
+    }
+
+    .brand-subtitle {
+      color: #7c8da5;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2.2px;
+      margin-top: 3px;
+    }
+
+    .portal-label {
+      color: #4c5c73;
+      font-size: 13px;
+      font-weight: 600;
+      margin-left: 7px;
+      padding-left: 16px;
+      border-left: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .top-search {
+      position: relative;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .top-search .search-icon {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 17px;
+      height: 17px;
+      color: #8a9ab0;
+      pointer-events: none;
+    }
+
+    .top-search input {
+      width: 100%;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      outline: none;
+      padding: 0 14px 0 40px;
+      color: var(--text);
+      background: #fff;
+      font-size: 13px;
+    }
+
+    .top-search input::placeholder {
+      color: #8b98aa;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 17px;
+      min-width: 0;
+    }
+
+    .icon-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 39px;
+      height: 39px;
+      flex: 0 0 39px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      color: #526781;
+      background: #fff;
+    }
+
+    .icon-button svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .avatar {
+      width: 39px;
+      height: 39px;
+      flex: 0 0 39px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      background: var(--blue);
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      line-height: 1.35;
+    }
+
+    .profile-name {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .profile-role {
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .dropdown-icon {
+      width: 15px;
+      height: 15px;
+      color: #74859b;
+      flex: 0 0 auto;
+    }
+
+    /* Main three-column workspace */
+
+    .workspace {
+      flex: 1;
+      display: grid;
+      grid-template-columns:
+        minmax(220px, 22%)
+        minmax(0, 1fr)
+        minmax(240px, 22%);
+      width: 100%;
+      min-height: 0;
+      align-items: stretch;
+      background: #fff;
+    }
+
+    /* Left application cycles panel */
+
+    .cycles-sidebar {
+      min-width: 0;
+      padding: 22px 18px;
+      border-right: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .sidebar-heading-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .sidebar-heading {
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 750;
+    }
+
+    .new-cycle-button {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 12px;
+      color: #fff;
+      background: var(--blue);
+      border: 1px solid var(--blue);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .new-cycle-button svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .cycle-search {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .cycle-search svg {
+      position: absolute;
+      top: 50%;
+      left: 11px;
+      width: 15px;
+      height: 15px;
+      color: #8797ad;
+      transform: translateY(-50%);
+    }
+
+    .cycle-search input {
+      display: block;
+      width: 100%;
+      height: 39px;
+      padding: 0 12px 0 34px;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      outline: none;
+      font-size: 12px;
+    }
+
+    .cycle-search input::placeholder {
+      color: #8997aa;
+    }
+
+    .cycle-filter {
+      min-height: 41px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      color: #425875;
+      background: var(--blue-light);
+      border-left: 3px solid var(--blue);
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .cycle-filter svg {
+      width: 17px;
+      height: 17px;
+      color: #55769f;
+      flex: 0 0 auto;
+    }
+
+    .count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 21px;
+      height: 21px;
+      margin-left: auto;
+      color: #6481a7;
+      background: #e2edfb;
+      border-radius: 20px;
+      font-size: 11px;
+    }
+
+    .empty-cycles {
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      padding: 48px 8px 24px;
+    }
+
+    .empty-icon {
+      width: 48px;
+      height: 48px;
+      color: #7188a6;
+      margin-bottom: 18px;
+    }
+
+    .empty-title {
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .empty-description {
+      max-width: 230px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    /* Centre welcome area */
+
+    .main-content {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: clamp(35px, 7vh, 90px) clamp(20px, 4vw, 64px) 50px;
+      background: #fff;
+      text-align: center;
+    }
+
+    .welcome-illustration {
+      position: relative;
+      width: 152px;
+      height: 125px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .illustration-cloud {
+      position: absolute;
+      width: 118px;
+      height: 58px;
+      left: 17px;
+      bottom: 18px;
+      background: #f0f6ff;
+      border-radius: 50%;
+    }
+
+    .calendar-illustration {
+      position: relative;
+      z-index: 1;
+      width: 76px;
+      height: 76px;
+      color: #557da9;
+    }
+
+    .illustration-plus {
+      position: absolute;
+      z-index: 2;
+      right: 19px;
+      bottom: 11px;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      background: #4b9aee;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .welcome-title {
+      max-width: 100%;
+      color: var(--navy);
+      font-size: clamp(23px, 2.2vw, 34px);
+      font-weight: 780;
+      letter-spacing: -0.8px;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+      margin-bottom: 12px;
+    }
+
+    .welcome-description {
+      max-width: 540px;
+      color: #6e7e95;
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 26px;
+    }
+
+    .primary-button {
+      min-height: 47px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 22px;
+      color: #fff;
+      background: var(--blue);
+      border: 1px solid var(--blue);
+      border-radius: 7px;
+      font-size: 14px;
+      font-weight: 650;
+      box-shadow: 0 2px 5px rgba(36, 121, 232, 0.12);
+      white-space: nowrap;
+    }
+
+    .primary-button svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Right-side information panels */
+
+    .right-sidebar {
+      min-width: 0;
+      padding: 22px 18px;
+      border-left: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .side-card {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #fff;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .side-card-heading {
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 750;
+      padding: 16px 15px 10px;
+    }
+
+    .quick-action {
+      width: 100%;
+      min-height: 53px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      color: #344963;
+      background: #fff;
+      border: 0;
+      border-top: 1px solid #f0f3f8;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .quick-action:first-of-type {
+      border-top: 0;
+    }
+
+    .quick-action-icon {
+      width: 31px;
+      height: 31px;
+      flex: 0 0 31px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3e80c8;
+      background: #edf5ff;
+      border-radius: 50%;
+    }
+
+    .quick-action-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .quick-action-label {
+      min-width: 0;
+      flex: 1;
+      font-weight: 550;
+    }
+
+    .quick-chevron {
+      width: 15px;
+      height: 15px;
+      flex: 0 0 auto;
+      color: #8b9bb0;
+    }
+
+    .info-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      padding: 18px 15px;
+      background: #f3f8ff;
+    }
+
+    .info-icon {
+      width: 27px;
+      height: 27px;
+      flex: 0 0 27px;
+      color: #4389d0;
+    }
+
+    .info-content {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .info-title {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 750;
+      margin-bottom: 6px;
+    }
+
+    .info-description {
+      color: #718198;
+      font-size: 12px;
+      line-height: 1.75;
+      overflow-wrap: anywhere;
+    }
+
+    .help-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 11px;
+      color: #276cb8;
+      font-size: 12px;
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .help-link svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* Footer */
+
+    .footer {
+      width: 100%;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px clamp(16px, 2.2vw, 36px);
+      color: #8290a3;
+      background: #fff;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .copyright {
+      min-width: 0;
+      line-height: 1.6;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: clamp(16px, 2vw, 30px);
+    }
+
+    .footer-link {
+      color: #60738d;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    /* Medium screens and laptops */
+
+    @media (min-width: 701px) and (max-width: 1100px) {
+      .topbar {
+        grid-template-columns: minmax(190px, 1fr) minmax(180px, 1.1fr) auto;
+        gap: 15px;
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .brand-name {
+        font-size: 20px;
+      }
+
+      .portal-label {
+        padding-left: 10px;
+        margin-left: 2px;
+        font-size: 12px;
+      }
+
+      .header-actions {
+        gap: 10px;
+      }
+
+      .profile-info {
+        display: none;
+      }
+
+      .workspace {
+        grid-template-columns:
+          minmax(205px, 24%)
+          minmax(0, 1fr)
+          minmax(220px, 25%);
+      }
+
+      .cycles-sidebar,
+      .right-sidebar {
+        padding: 18px 12px;
+      }
+
+      .sidebar-heading-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .new-cycle-button {
+        width: 100%;
+      }
+
+      .main-content {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .welcome-title {
+        font-size: 25px;
+      }
+
+      .quick-action {
+        padding-left: 9px;
+        padding-right: 9px;
+        gap: 8px;
+      }
+
+      .info-card {
+        padding: 14px 10px;
+        gap: 9px;
+      }
+    }
+
+    /* Phones and narrow screens */
+
+    @media (max-width: 700px) {
+      .topbar {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 13px;
+        padding: 13px 15px;
+      }
+
+      .brand {
+        gap: 8px;
+      }
+
+      .brand-mark {
+        width: 37px;
+        height: 37px;
+        flex-basis: 37px;
+        font-size: 20px;
+      }
+
+      .brand-name {
+        font-size: 20px;
+      }
+
+      .brand-subtitle {
+        font-size: 8px;
+      }
+
+      .portal-label {
+        font-size: 11px;
+        padding-left: 9px;
+        margin-left: 1px;
+      }
+
+      .header-actions {
+        gap: 8px;
+      }
+
+      .icon-button {
+        width: 35px;
+        height: 35px;
+        flex-basis: 35px;
+      }
+
+      .avatar {
+        width: 35px;
+        height: 35px;
+        flex-basis: 35px;
+      }
+
+      .profile-info,
+      .dropdown-icon {
+        display: none;
+      }
+
+      .top-search {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+
+      .top-search input {
+        height: 40px;
+      }
+
+      .workspace {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .cycles-sidebar {
+        order: 1;
+        width: 100%;
+        padding: 17px 15px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .sidebar-heading-row {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .new-cycle-button {
+        width: auto;
+      }
+
+      .empty-cycles {
+        min-height: 0;
+        padding: 24px 10px 20px;
+      }
+
+      .empty-icon {
+        width: 38px;
+        height: 38px;
+        margin-bottom: 10px;
+      }
+
+      .empty-description {
+        max-width: 300px;
+      }
+
+      .main-content {
+        order: 2;
+        width: 100%;
+        padding: 34px 18px 38px;
+      }
+
+      .welcome-illustration {
+        width: 125px;
+        height: 105px;
+        margin-bottom: 14px;
+      }
+
+      .calendar-illustration {
+        width: 66px;
+        height: 66px;
+      }
+
+      .illustration-plus {
+        right: 12px;
+        bottom: 8px;
+        width: 31px;
+        height: 31px;
+      }
+
+      .welcome-title {
+        font-size: clamp(23px, 6vw, 29px);
+      }
+
+      .welcome-description {
+        font-size: 13px;
+        line-height: 1.75;
+        margin-bottom: 21px;
+      }
+
+      .primary-button {
+        max-width: 100%;
+        white-space: normal;
+      }
+
+      .right-sidebar {
+        order: 3;
+        width: 100%;
+        padding: 16px 15px 8px;
+        border-left: 0;
+        border-top: 1px solid var(--border);
+      }
+
+      .side-card {
+        margin-bottom: 13px;
+      }
+
+      .quick-action {
+        min-height: 53px;
+      }
+
+      .info-card {
+        padding: 16px;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 17px 15px;
+      }
+
+      .footer-links {
+        justify-content: flex-start;
+        gap: 12px 20px;
+      }
+    }
+
+    /* Very narrow phones */
+
+    @media (max-width: 380px) {
+      .topbar {
+        padding-left: 11px;
+        padding-right: 11px;
+        gap: 9px;
+      }
+
+      .brand-name {
+        font-size: 18px;
+      }
+
+      .brand-mark {
+        width: 33px;
+        height: 33px;
+        flex-basis: 33px;
+      }
+
+      .portal-label {
+        font-size: 10px;
+        padding-left: 7px;
+      }
+
+      .header-actions {
+        gap: 6px;
+      }
+
+      .icon-button,
+      .avatar {
+        width: 32px;
+        height: 32px;
+        flex-basis: 32px;
+      }
+
+      .cycles-sidebar,
+      .right-sidebar {
+        padding-left: 11px;
+        padding-right: 11px;
+      }
+
+      .sidebar-heading {
+        font-size: 14px;
+      }
+
+      .new-cycle-button {
+        padding: 0 9px;
+        font-size: 11px;
+      }
+
+      .main-content {
+        padding-left: 13px;
+        padding-right: 13px;
+      }
+
+      .welcome-title {
+        font-size: 22px;
+      }
+
+      .footer-links {
+        gap: 10px 15px;
+      }
+    }
+
+    /* Wide and enormous screens */
+
+    @media (min-width: 1600px) {
+      .topbar {
+        min-height: 82px;
+      }
+
+      .workspace {
+        grid-template-columns:
+          minmax(280px, 21%)
+          minmax(0, 1fr)
+          minmax(300px, 21%);
+      }
+
+      .cycles-sidebar,
+      .right-sidebar {
+        padding: 28px 24px;
+      }
+
+      .main-content {
+        padding-top: clamp(80px, 10vh, 145px);
+      }
+
+      .welcome-illustration {
+        transform: scale(1.12);
+        margin-bottom: 30px;
+      }
+
+      .welcome-description {
+        max-width: 660px;
+        font-size: 15px;
+      }
+
+      .side-card-heading {
+        font-size: 15px;
+      }
+
+      .quick-action,
+      .info-description {
+        font-size: 13px;
+      }
+
+      .footer {
+        min-height: 72px;
+      }
+    }
+
+    @media (min-width: 2200px) {
+      .topbar {
+        padding-left: 42px;
+        padding-right: 42px;
+      }
+
+      .workspace {
+        grid-template-columns:
+          minmax(340px, 20%)
+          minmax(0, 1fr)
+          minmax(360px, 20%);
+      }
+
+      .cycles-sidebar,
+      .right-sidebar {
+        padding: 34px 30px;
+      }
+
+      .main-content {
+        padding-top: 150px;
+      }
+
+      .welcome-title {
+        font-size: 40px;
+      }
+
+      .welcome-description {
+        font-size: 16px;
+        max-width: 760px;
+      }
+
+      .footer {
+        padding-left: 42px;
+        padding-right: 42px;
+      }
+    }
+
+    /* Keep all elements contained at every viewport size */
+
+    img,
+    svg {
+      max-width: 100%;
+    }
+
+    input,
+    button {
+      min-width: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- TOP HEADER -->
+    <header class="topbar">
+
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">A</div>
+
+        <div class="brand-copy">
+          <span class="brand-name">myAtlas</span>
+          <span class="brand-subtitle">COLLEGE</span>
+        </div>
+
+        <span class="portal-label">Admin Portal</span>
+      </div>
+
+      <div class="top-search">
+        <svg class="search-icon" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" aria-hidden="true">
+          <circle cx="10.8" cy="10.8" r="6.8"></circle>
+          <path d="m16 16 4.5 4.5"></path>
+        </svg>
+
+        <input
+          type="search"
+          placeholder="Search applications, cycles, students..."
+          aria-label="Search applications, cycles and students"
+        >
+      </div>
+
+      <div class="header-actions">
+
+        <!-- Help icon: visual only -->
+        <button class="icon-button" type="button"
+                aria-label="Help">
+          <svg viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M9.7 9a2.4 2.4 0 0 1 4.6.9c0 1.8-2.3 2.1-2.3 3.8"></path>
+            <path d="M12 17.2h.01"></path>
+          </svg>
+        </button>
+
+        <!-- Admin profile: visual only -->
+        <div class="profile">
+          <div class="avatar">AD</div>
+
+          <div class="profile-info">
+            <span class="profile-name">Admin User</span>
+            <span class="profile-role">Administrator</span>
+          </div>
+
+          <svg class="dropdown-icon" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <path d="m7 10 5 5 5-5"></path>
+          </svg>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="workspace">
+
+      <!-- LEFT: APPLICATION CYCLES -->
+      <aside class="cycles-sidebar">
+
+        <div class="sidebar-heading-row">
+          <h2 class="sidebar-heading">Application cycles</h2>
+
+          <button class="new-cycle-button" type="button">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" aria-hidden="true">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            New cycle
+          </button>
+        </div>
+
+        <div class="cycle-search">
+          <svg viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" aria-hidden="true">
+            <circle cx="10.8" cy="10.8" r="6.8"></circle>
+            <path d="m16 16 4.5 4.5"></path>
+          </svg>
+
+          <input
+            type="search"
+            placeholder="Find a cycle..."
+            aria-label="Find an application cycle"
+          >
+        </div>
+
+        <div class="cycle-filter">
+          <svg viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+            <path d="M8 3v4M16 3v4M4 10h16"></path>
+          </svg>
+
+          <span>All cycles</span>
+          <span class="count">0</span>
+        </div>
+
+        <div class="empty-cycles">
+
+          <svg class="empty-icon" viewBox="0 0 48 48"
+               fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <rect x="10" y="11" width="28" height="29" rx="3"></rect>
+            <path d="M17 7v8M31 7v8M10 20h28"></path>
+          </svg>
+
+          <h3 class="empty-title">No application cycles yet</h3>
+
+          <p class="empty-description">
+            Your created cycles will appear here once you add them.
+          </p>
+
+        </div>
+      </aside>
+
+      <!-- CENTRE: WELCOME -->
+      <section class="main-content">
+
+        <div class="welcome-illustration" aria-hidden="true">
+          <div class="illustration-cloud"></div>
+
+          <svg class="calendar-illustration"
+               viewBox="0 0 80 80" fill="none"
+               stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round">
+            <rect x="12" y="16" width="51" height="53" rx="5"></rect>
+            <path d="M12 30h51M24 9v14M51 9v14"></path>
+            <path d="M23 42h12M23 53h20"></path>
+          </svg>
+
+          <div class="illustration-plus">+</div>
+        </div>
+
+        <h1 class="welcome-title">
+          Welcome to myAtlas Admin Portal
+        </h1>
+
+        <p class="welcome-description">
+          Manage your institution's application cycles, forms,
+          documents and student applications from one place.
+        </p>
+
+        <button class="primary-button" type="button">
+          <svg viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14"></path>
+          </svg>
+          Create Application Cycle
+        </button>
+
+      </section>
+
+      <!-- RIGHT: QUICK ACTIONS AND HELP -->
+      <aside class="right-sidebar">
+
+        <section class="side-card">
+          <h2 class="side-card-heading">Quick Actions</h2>
+
+          <button class="quick-action" type="button">
+            <span class="quick-action-icon">
+              <svg viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" aria-hidden="true">
+                <path d="M12 5v14M5 12h14"></path>
+              </svg>
+            </span>
+
+            <span class="quick-action-label">
+              Create Application Cycle
+            </span>
+
+            <svg class="quick-chevron" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </button>
+
+          <button class="quick-action" type="button">
+            <span class="quick-action-icon">
+              <svg viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.8"
+                   stroke-linecap="round" aria-hidden="true">
+                <path d="M4 6h16M4 12h16M4 18h16"></path>
+                <circle cx="2.5" cy="6" r=".5" fill="currentColor"></circle>
+                <circle cx="2.5" cy="12" r=".5" fill="currentColor"></circle>
+                <circle cx="2.5" cy="18" r=".5" fill="currentColor"></circle>
+              </svg>
+            </span>
+
+            <span class="quick-action-label">Manage Fields</span>
+
+            <svg class="quick-chevron" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </button>
+
+          <button class="quick-action" type="button">
+            <span class="quick-action-icon">
+              <svg viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.8"
+                   stroke-linecap="round" stroke-linejoin="round"
+                   aria-hidden="true">
+                <path d="M4 20V10h4v10M10 20V4h4v16M16 20v-7h4v7"></path>
+              </svg>
+            </span>
+
+            <span class="quick-action-label">View Reports</span>
+
+            <svg class="quick-chevron" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </button>
+        </section>
+
+        <section class="side-card info-card">
+          <svg class="info-icon" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 18h6M10 21h4"></path>
+            <path d="M8.5 15.5C7 14.3 6 12.5 6 10.5a6 6 0 1 1 12 0c0 2-1 3.8-2.5 5l-.5 2h-6z"></path>
+          </svg>
+
+          <div class="info-content">
+            <h2 class="info-title">Getting Started</h2>
+
+            <p class="info-description">
+              Create your first application cycle to set up your
+              application process and start receiving applications
+              from students.
+            </p>
+          </div>
+        </section>
+
+        <section class="side-card info-card">
+          <svg class="info-icon" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 3h9l5 5v13H6z"></path>
+            <path d="M15 3v5h5M9 13h8M9 17h8"></path>
+          </svg>
+
+          <div class="info-content">
+            <h2 class="info-title">Need Help?</h2>
+
+            <p class="info-description">
+              Check out our admin guide or contact support for
+              assistance.
+            </p>
+
+            <span class="help-link">
+              View help resources
+
+              <svg viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.8"
+                   stroke-linecap="round" stroke-linejoin="round"
+                   aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"></path>
+              </svg>
+            </span>
+          </div>
+        </section>
+
+      </aside>
+    </main>
+
+    <!-- BOTTOM FOOTER -->
+    <footer class="footer">
+
+      <div class="copyright">
+        © 2026 Atlas College. All rights reserved.
+      </div>
+
+      <nav class="footer-links" aria-label="Footer">
+        <span class="footer-link">Privacy Policy</span>
+        <span class="footer-link">Terms &amp; Conditions</span>
+        <span class="footer-link">Help</span>
+      </nav>
+
+    </footer>
+
+  </div>
+</body>
+  </html>
