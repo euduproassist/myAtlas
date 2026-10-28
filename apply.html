@@ -636,10 +636,7 @@
                     <label for="program-wish-select">
                         What do you wish to apply for?
                     </label>
-                    <select
-                        id="program-wish-select"
-                        onchange="handleProgramWishChange(this.value)"
-                    >
+                    <select id="program-wish-select">
                         <option value="">
                             --- Select option ---
                         </option>
@@ -666,10 +663,7 @@
                     <label for="student-number-select">
                         Do you already have a student number?
                     </label>
-                    <select
-                        id="student-number-select"
-                        onchange="handleStudentNumberChange(this.value)"
-                    >
+                    <select id="student-number-select">
                         <option value="">
                             --- Please select ---
                         </option>
@@ -714,10 +708,7 @@
                     <label for="returning-select">
                         Are you returning to complete an application?
                     </label>
-                    <select
-                        id="returning-select"
-                        onchange="handleReturningChange(this.value)"
-                    >
+                    <select id="returning-select">
                         <option value="">
                             --- Please select ---
                         </option>
@@ -772,8 +763,8 @@
                 </div>
                 <button
                     class="submit-btn"
+                    id="find-app-btn"
                     type="button"
-                    onclick="findApplication()"
                 >
                     Find My Application ➔
                 </button>
@@ -895,8 +886,8 @@
                 </div>
                 <button
                     class="submit-btn"
+                    id="popia-continue-btn"
                     type="button"
-                    onclick="handlePopiaContinue()"
                 >
                     NEXT ➔
                 </button>
@@ -914,143 +905,6 @@
         </div>
     </footer>
 </div>
-<script>
-    let selectedProgramWish = '';
-
-    function handleProgramWishChange(value) {
-        selectedProgramWish = value;
-        
-        // Reset all downstream selects and inputs when program choice changes
-        document.getElementById('student-number-select').value = "";
-        document.getElementById('returning-select').value = "";
-        document.getElementById('sa-id').value = "";
-        document.getElementById('passport').value = "";
-        const radios = document.querySelectorAll('input[name="popia_consent"]');
-        radios.forEach(radio => radio.checked = false);
-
-        const step1Card = document.getElementById('step1-card');
-        const portalCard = document.getElementById('portal-redirect-card');
-        const step2Card = document.getElementById('step2-card');
-        const step3Card = document.getElementById('step3-card');
-        const step4Card = document.getElementById('step4-card');
-
-        step1Card.classList.add('hidden');
-        portalCard.classList.add('hidden');
-        step2Card.classList.add('hidden');
-        step3Card.classList.add('hidden');
-        step4Card.classList.add('hidden');
-
-        if (value) {
-            step1Card.classList.remove('hidden');
-            step1Card.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    }
-
-    function handleStudentNumberChange(value) {
-        const portalCard =
-            document.getElementById('portal-redirect-card');
-        const step2Card =
-            document.getElementById('step2-card');
-        const step3Card =
-            document.getElementById('step3-card');
-        const step4Card =
-            document.getElementById('step4-card');
-            
-        // Reset subsequent selections on change
-        document.getElementById('returning-select').value = "";
-        document.getElementById('sa-id').value = "";
-        document.getElementById('passport').value = "";
-        document.querySelectorAll('input[name="popia_consent"]').forEach(r => r.checked = false);
-
-        portalCard.classList.add('hidden');
-        step2Card.classList.add('hidden');
-        step3Card.classList.add('hidden');
-        step4Card.classList.add('hidden');
-
-        if (value === 'yes') {
-            portalCard.classList.remove('hidden');
-            portalCard.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        } else if (value === 'no') {
-            step2Card.classList.remove('hidden');
-            step2Card.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    }
-
-    function handleReturningChange(value) {
-        const step3Card =
-            document.getElementById('step3-card');
-        const step4Card =
-            document.getElementById('step4-card');
-            
-        // Reset subsequent fields on change
-        document.getElementById('sa-id').value = "";
-        document.getElementById('passport').value = "";
-        document.querySelectorAll('input[name="popia_consent"]').forEach(r => r.checked = false);
-
-        step3Card.classList.add('hidden');
-        step4Card.classList.add('hidden');
-
-        if (value === 'yes') {
-            step3Card.classList.remove('hidden');
-            step3Card.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        } else if (value === 'no') {
-            step4Card.classList.remove('hidden');
-            step4Card.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    }
-
-    function findApplication() {
-        const id =
-            document.getElementById('sa-id').value.trim();
-        const passport =
-            document.getElementById('passport').value.trim();
-        if (!id && !passport) {
-            alert(
-                'Please enter your South African ID number or passport number.'
-            );
-            return;
-        }
-        alert(
-            'Searching for your existing application...'
-        );
-    }
-
-    function handlePopiaContinue() {
-        const selectedOption =
-            document.querySelector(
-                'input[name="popia_consent"]:checked'
-            );
-        if (!selectedOption) {
-            alert(
-                'Please select whether you accept or do not accept the POPIA terms to continue.'
-            );
-            return;
-        }
-        if (selectedOption.value === 'accept') {
-            alert(
-                'later development still in operation'
-            );
-        } else {
-            alert(
-                'You must accept the POPIA terms to proceed with your application.'
-            );
-        }
-    }
-</script>
+<script type="module" src="apply.js"></script>
 </body>
 </html>
