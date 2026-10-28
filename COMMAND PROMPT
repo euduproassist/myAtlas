@@ -1,3 +1,18 @@
+I wanna talk about what we'll do in apply.js and apply.html 
+
+
+
+And what we put here will need u to remember what's in admin.html and admin.js
+
+So what i want is on the option for asking wat do u wish to apply for, it will display degrees that its cycles are open currently and can to be able to be selected by reading the opened cycled that were saved in Firestore database created from admin.js, those degree cycles that are closed with will be blurry in very light grey and unabled to be selected since its cycle for that degree hasn't been created yet or its opening date hasnt reached yet or it reached its closing date or it was manually closed thats its bro we are not adding anything else that's all we're add right now to apply.html and apply.js please explain in simple English what we're doing, what ur doing must refer to what is currently in admin.html amd admin.js amd Firestore.rules so that what we will update to apply.js and apply.html or even Firestore.rules if updates are needed will be synced together
+
+Dont give me any codes yet right now, ur just explaining in simple English wat and how we'll update wat i just told u abt
+
+
+
+
+
+
 Okay i hear you now listen to this very very carefully and make sure u understand me if you dont understand then dont answer me cz if u dont understand but u still choose to force urself to give codes u will make errors so give me codes only and only if u understand what i want if u dont understand dont give codes just tell me u dont understand then i will try to explain in a more clear way
 Im.not going to repeat my self u need to check these codes carefully bro check them three times before answer camz u tell me to go to codes that  i already fixed ur job to check which ones i forgot to fix evaluate the code carefully three times then answer 
 Check this codes carefully if i fixed everything already just say so bro dont tell me to fix something that i already fixed bro check these codes carefully before u give me an answer
