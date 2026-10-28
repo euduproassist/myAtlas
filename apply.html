@@ -229,6 +229,13 @@
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
         }
+        /* Style for closed/unavailable dropdown options */
+        option.disabled-option {
+            color: #b0b8c1 !important;
+            background-color: #f8f9fa !important;
+            filter: blur(0.3px);
+            font-style: italic;
+        }
         .required-star {
             color: var(--danger);
         }
@@ -640,10 +647,10 @@
                         <option value="">
                             --- Select option ---
                         </option>
-                        <option value="Undergraduate">
+                        <option value="Undergraduate Degree">
                             Undergraduate degree
                         </option>
-                        <option value="Postgraduate">
+                        <option value="Postgraduate Degree">
                             Postgraduate degree
                         </option>
                         <option value="Research Degree">
