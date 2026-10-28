@@ -1,4 +1,7 @@
-document.addEventListener('DOMContentLoaded', () => {
+import { db } from "./firebase-config.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+document.addEventListener('DOMContentLoaded', async () => {
     let selectedProgramWish = '';
 
     const programWishSelect = document.getElementById('program-wish-select');
@@ -16,8 +19,80 @@ document.addEventListener('DOMContentLoaded', () => {
     const saIdInput = document.getElementById('sa-id');
     const passportInput = document.getElementById('passport');
 
+    // Function to check Firestore and update dropdown states based on active cycles
+    async function checkActiveCycles() {
+        if (!programWishSelect) return;
+
+        const currentYear = new Date().getFullYear();
+        const yearsToCheck = [currentYear, currentYear + 1];
+        const qualificationTypes = [
+            { value: "Undergraduate Degree", slug: "undergraduate" },
+            { value: "Postgraduate Degree", slug: "postgraduate" },
+            { value: "Research Degree", slug: "research" }
+        ];
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const activeQualifications = new Set();
+
+        for (const yr of yearsToCheck) {
+            for (const qual of qualificationTypes) {
+                const collectionName = `${yr}_${qual.slug}_admissions`;
+                try {
+                    const querySnapshot = await getDocs(collection(db, collectionName));
+                    querySnapshot.forEach((docSnap) => {
+                        const data = docSnap.data();
+                        if (data.status === "published" && !data.isManuallyClosed) {
+                            if (data.openingDate && data.closingDate) {
+                                const openDate = new Date(data.openingDate);
+                                const closeDate = new Date(data.closingDate);
+                                openDate.setHours(0, 0, 0, 0);
+                                closeDate.setHours(23, 59, 59, 999);
+
+                                if (today >= openDate && today <= closeDate) {
+                                    activeQualifications.add(qual.value);
+                                }
+                            }
+                        }
+                    });
+                } catch (err) {
+                    // Collection might not exist yet; safe to ignore
+                }
+            }
+        }
+
+        // Loop through options and disable/blur if no active cycle exists
+        for (let i = 0; i < programWishSelect.options.length; i++) {
+            const opt = programWishSelect.options[i];
+            if (!opt.value) continue; // Skip the default prompt option
+
+            if (!activeQualifications.has(opt.value)) {
+                opt.disabled = true;
+                opt.classList.add('disabled-option');
+                if (!opt.textContent.includes('(Closed)')) {
+                    opt.textContent += ' (Closed / Unavailable)';
+                }
+            } else {
+                opt.disabled = false;
+                opt.classList.remove('disabled-option');
+            }
+        }
+    }
+
+    // Run cycle availability check on load
+    await checkActiveCycles();
+
     if (programWishSelect) {
-        programWishSelect.addEventListener('change', (e) => handleProgramWishChange(e.target.value));
+        programWishSelect.addEventListener('change', (e) => {
+            const selectedOption = e.target.options[e.target.selectedIndex];
+            if (selectedOption && selectedOption.disabled) {
+                alert("This application cycle is currently closed or unavailable.");
+                e.target.value = "";
+                return;
+            }
+            handleProgramWishChange(e.target.value);
+        });
     }
 
     if (studentNumberSelect) {
