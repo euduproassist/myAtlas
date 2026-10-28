@@ -354,58 +354,6 @@
         .submit-btn:active {
             transform: scale(0.99);
         }
-        .academic-heading {
-            margin-bottom: 25px;
-        }
-        .academic-heading h2 {
-            color: var(--primary-color);
-            font-size: clamp(1.4rem, 2.5vw, 2.1rem);
-            margin-bottom: 5px;
-        }
-        .academic-heading p {
-            color: var(--text-muted);
-            font-size: clamp(0.85rem, 1vw, 0.98rem);
-        }
-        .academic-grid {
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: clamp(15px, 2vw, 30px);
-        }
-        .academic-card {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 9px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
-        }
-        .academic-card-content {
-            padding: clamp(18px, 2vw, 28px);
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-        .level-label {
-            color: var(--primary-color);
-            font-size: 0.82rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        .academic-card h3 {
-            color: #173d70;
-            font-size: clamp(1rem, 1.5vw, 1.3rem);
-            line-height: 1.3;
-            margin-bottom: 10px;
-        }
-        .academic-card p {
-            color: var(--text-muted);
-            font-size: clamp(0.83rem, 1vw, 0.94rem);
-            margin-bottom: 22px;
-            flex: 1;
-        }
         .hidden {
             display: none !important;
         }
@@ -458,9 +406,6 @@
             text-decoration: underline;
         }
         @media (max-width: 900px) {
-            .academic-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
             .footer {
                 padding: 20px 18px;
                 flex-direction: column;
@@ -474,9 +419,6 @@
         }
         @media (max-width: 700px) {
             .process-grid {
-                grid-template-columns: 1fr;
-            }
-            .academic-grid {
                 grid-template-columns: 1fr;
             }
             .question-row {
@@ -959,92 +901,6 @@
                     NEXT ➔
                 </button>
             </div>
-            <section
-                id="academic-level-section"
-                class="hidden fade-in"
-            >
-                <div class="academic-heading">
-                    <h2>
-                        Choose Your Application Level
-                    </h2>
-                    <p>
-                        Select the academic category that matches
-                        your qualifications to proceed with your
-                        online application form.
-                    </p>
-                </div>
-                <div class="academic-grid">
-                    <div class="academic-card">
-                        <div class="academic-card-content">
-                            <div class="level-label">
-                                Level 01
-                            </div>
-                            <h3>
-                                Undergraduate Studies
-                            </h3>
-                            <p>
-                                Explore Higher Certificates,
-                                Diplomas, and Bachelor Degrees
-                                designed for school leavers
-                                and career starters.
-                            </p>
-                            <button
-                                class="submit-btn"
-                                type="button"
-                                onclick="selectAcademicLevel('Undergraduate')"
-                            >
-                                Apply for Undergraduate ➔
-                            </button>
-                        </div>
-                    </div>
-                    <div class="academic-card">
-                        <div class="academic-card-content">
-                            <div class="level-label">
-                                Level 02
-                            </div>
-                            <h3>
-                                Honours & Postgraduate Diplomas
-                            </h3>
-                            <p>
-                                Advance your expertise with
-                                specialised postgraduate
-                                diplomas, advanced certificates,
-                                and honours degrees.
-                            </p>
-                            <button
-                                class="submit-btn"
-                                type="button"
-                                onclick="selectAcademicLevel('Postgraduate')"
-                            >
-                                Apply for Postgraduate ➔
-                            </button>
-                        </div>
-                    </div>
-                    <div class="academic-card">
-                        <div class="academic-card-content">
-                            <div class="level-label">
-                                Level 03
-                            </div>
-                            <h3>
-                                Master's & Doctoral
-                            </h3>
-                            <p>
-                                Engage in high-level academic
-                                research and leadership
-                                specialisations with our
-                                master's and doctoral programmes.
-                            </p>
-                            <button
-                                class="submit-btn"
-                                type="button"
-                                onclick="selectAcademicLevel('Research Degree')"
-                            >
-                                Apply for Research Degree ➔
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </div>
     </main>
     <footer class="footer">
@@ -1068,14 +924,12 @@
         const step2Card = document.getElementById('step2-card');
         const step3Card = document.getElementById('step3-card');
         const step4Card = document.getElementById('step4-card');
-        const academicSection = document.getElementById('academic-level-section');
 
         step1Card.classList.add('hidden');
         portalCard.classList.add('hidden');
         step2Card.classList.add('hidden');
         step3Card.classList.add('hidden');
         step4Card.classList.add('hidden');
-        academicSection.classList.add('hidden');
 
         if (value) {
             step1Card.classList.remove('hidden');
@@ -1095,13 +949,10 @@
             document.getElementById('step3-card');
         const step4Card =
             document.getElementById('step4-card');
-        const academicSection =
-            document.getElementById('academic-level-section');
         portalCard.classList.add('hidden');
         step2Card.classList.add('hidden');
         step3Card.classList.add('hidden');
         step4Card.classList.add('hidden');
-        academicSection.classList.add('hidden');
         if (value === 'yes') {
             portalCard.classList.remove('hidden');
             portalCard.scrollIntoView({
@@ -1121,11 +972,8 @@
             document.getElementById('step3-card');
         const step4Card =
             document.getElementById('step4-card');
-        const academicSection =
-            document.getElementById('academic-level-section');
         step3Card.classList.add('hidden');
         step4Card.classList.add('hidden');
-        academicSection.classList.add('hidden');
         if (value === 'yes') {
             step3Card.classList.remove('hidden');
             step3Card.scrollIntoView({
@@ -1167,27 +1015,14 @@
             return;
         }
         if (selectedOption.value === 'accept') {
-            const academicSection =
-                document.getElementById(
-                    'academic-level-section'
-                );
-            academicSection.classList.remove('hidden');
-            academicSection.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+            alert(
+                'later development still in operation'
+            );
         } else {
             alert(
                 'You must accept the POPIA terms to proceed with your application.'
             );
         }
-    }
-    function selectAcademicLevel(level) {
-        alert(
-            'You selected: ' +
-            level +
-            '. The relevant application form will open here.'
-        );
     }
 </script>
 </body>
