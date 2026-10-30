@@ -60,7 +60,7 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
     fieldsSnapshot.forEach((docSnap) => {
       const fieldData = docSnap.data();
       const fieldId = docSnap.id;
-      
+
       const userState = savedFieldsState[fieldId];
       const isSelected = userState ? userState.isSelected : fieldData.isSelected;
       const requirement = userState ? userState.requirement : fieldData.requirement;
@@ -95,6 +95,45 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
 
     let formHtml = `
       <div class="application-form-preview-wrapper" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);">
+        <style>
+          /* Responsive, white-only styling scoped to the application form preview. */
+          .application-form-preview-wrapper,
+          .application-form-preview-wrapper * { box-sizing: border-box; }
+          .application-form-preview-wrapper {
+            width: 100%; max-width: 100%; min-width: 0;
+            padding: clamp(12px, 3vw, 32px) !important;
+            background: #ffffff !important;
+            color: #0f172a;
+          }
+          .application-form-preview-wrapper * { min-width: 0; }
+          .application-form-preview-wrapper *:not(svg):not(path) { background-color: #ffffff !important; }
+          .application-form-preview-wrapper .form-preview-section > div:last-child,
+          .application-form-preview-wrapper [style*="display: grid"],
+          .application-form-preview-wrapper [style*="display:grid"] {
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)) !important;
+          }
+          .application-form-preview-wrapper input:not([type="checkbox"]):not([type="file"]),
+          .application-form-preview-wrapper select,
+          .application-form-preview-wrapper textarea {
+            width: 100% !important; max-width: 100% !important; min-width: 0 !important;
+            font: inherit;
+          }
+          .application-form-preview-wrapper label,
+          .application-form-preview-wrapper h2,
+          .application-form-preview-wrapper h3,
+          .application-form-preview-wrapper h4,
+          .application-form-preview-wrapper p { overflow-wrap: anywhere; }
+          .application-form-preview-wrapper table { width: 100%; }
+          .application-form-preview-wrapper [style*="display: flex"] { min-width: 0; }
+          .application-form-preview-wrapper .disability-row { flex-wrap: wrap; }
+          .application-form-preview-wrapper button { max-width: 100%; white-space: normal; }
+          @media (max-width: 640px) {
+            .application-form-preview-wrapper { border-radius: 8px !important; }
+            .application-form-preview-wrapper .form-preview-section > div:last-child { padding: 14px !important; }
+            .application-form-preview-wrapper header h2 { font-size: 20px !important; line-height: 1.3; }
+            .application-form-preview-wrapper [style*="min-width: 500px"] { min-width: 500px !important; }
+          }
+        </style>
         <header style="border-bottom: 2px solid #f1f5f9; padding-bottom: 16px; margin-bottom: 28px;">
           <span style="font-size: 11px; font-weight: 700; color: #0866f5; text-transform: uppercase; letter-spacing: 1px;">Live Form Preview</span>
           <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin-top: 4px;">
@@ -376,7 +415,7 @@ function renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCourses
   return `
     <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 16px;" id="previewCascadingWrapper" data-courses='${JSON.stringify(validCourses)}'>
       <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">Course Selection</h4>
-      
+
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Academic year</label>
@@ -721,6 +760,7 @@ function attachFormEventListeners() {
       const uniqueStudyModes = Array.from(new Set(validCourses.map(v => v.studyMode))).sort();
 
       smSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
+      uniqueStudyModes.sm = uniqueStudyModes.forEach ? undefined : undefined; // clean safety
       uniqueStudyModes.forEach(sm => {
         const opt = document.createElement("option");
         opt.value = sm;
