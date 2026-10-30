@@ -378,18 +378,18 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
     `;
   }
 
-  // 3. Course selection with Progressive Cascading Filters
-  if (fieldNamesSet.has("Course selection")) {
-    html += renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCoursesList, savedBasicInfo);
+  // 3. Updated field name "What do you wish to study for" with Progressive Cascading Filters
+  if (fieldNamesSet.has("What do you wish to study for")) {
+    html += renderCascadingCourseSelectionBlock(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo);
   }
 
   return html;
 }
 
 /**
- * Render Progressive Cascading Course Selection Block (with Unique Preview IDs)
+ * Render Progressive Cascading Course Selection Block with Primary "What do you wish to study for" Dropdown
  */
-function renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCoursesList, savedBasicInfo) {
+function renderCascadingCourseSelectionBlock(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo) {
   if (!savedSelectedCourses || savedSelectedCourses.length === 0) {
     return `
       <div style="grid-column: 1 / -1; margin-top: 14px; background: #fff5f5; border: 1px solid #feb2b2; padding: 14px; border-radius: 6px; color: #c53030; font-size: 13px;">
@@ -411,36 +411,49 @@ function renderCascadingCourseSelectionBlock(savedSelectedCourses, masterCourses
   });
 
   const activeAcademicYear = savedBasicInfo.academicYear || new Date().getFullYear().toString();
+  const step1Qualification = savedBasicInfo.qualification || "";
+  
+  const fieldObj = activeEducationFields.find(f => f.fieldName === "What do you wish to study for");
+  const reqAsterisk = fieldObj?.requirement === "Required" ? `<span style="color: #e53b4d;">*</span>` : ``;
 
   return `
     <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 16px;" id="previewCascadingWrapper" data-courses='${JSON.stringify(validCourses)}'>
-      <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">Course Selection</h4>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <label style="font-size: 13px; font-weight: 700; color: #1e293b;">What do you wish to study for ${reqAsterisk}</label>
+        <select id="whatDoYouWishToStudyTrigger" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
+          <option value="" disabled selected>Select option</option>
+          ${step1Qualification ? `<option value="${step1Qualification}">${step1Qualification}</option>` : ''}
+        </select>
+      </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
-        <div>
-          <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Academic year</label>
-          <input type="text" id="preview_displayAcademicYear" class="control" value="${activeAcademicYear}" readonly style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#f1f5f9; color:#64748b; cursor:not-allowed;" />
-        </div>
+      <div id="cascadingSubFieldsBlock" style="display: none; margin-top: 10px; flex-direction: column; gap: 16px;">
+        <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">Course Selection Details</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+          <div>
+            <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Academic year</label>
+            <input type="text" id="preview_displayAcademicYear" class="control" value="${activeAcademicYear}" readonly style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#f1f5f9; color:#64748b; cursor:not-allowed;" />
+          </div>
 
-        <div>
-          <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Study mode</label>
-          <select id="preview_filterStudyMode" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;">
-            <option value="" disabled selected>Select option</option>
-          </select>
-        </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Study mode</label>
+            <select id="preview_filterStudyMode" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;">
+              <option value="" disabled selected>Select option</option>
+            </select>
+          </div>
 
-        <div>
-          <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Campus</label>
-          <select id="preview_filterCampus" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" disabled>
-            <option value="" disabled selected>Select option</option>
-          </select>
-        </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Campus</label>
+            <select id="preview_filterCampus" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" disabled>
+              <option value="" disabled selected>Select option</option>
+            </select>
+          </div>
 
-        <div>
-          <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Course</label>
-          <select id="preview_filterCourseDropdown" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" disabled>
-            <option value="" disabled selected>Select option</option>
-          </select>
+          <div>
+            <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Course</label>
+            <select id="preview_filterCourseDropdown" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" disabled>
+              <option value="" disabled selected>Select option</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
@@ -747,7 +760,20 @@ function attachFormEventListeners() {
     });
   }
 
-  // 7. Progressive Cascading Course Selection Filters (Using Unique Preview IDs)
+  // 7. "What do you wish to study for" Trigger & Progressive Cascading Course Selection Filters
+  const whatDoYouWishToStudyTrigger = document.getElementById("whatDoYouWishToStudyTrigger");
+  const cascadingSubFieldsBlock = document.getElementById("cascadingSubFieldsBlock");
+
+  if (whatDoYouWishToStudyTrigger && cascadingSubFieldsBlock) {
+    whatDoYouWishToStudyTrigger.addEventListener("change", (e) => {
+      if (e.target.value) {
+        cascadingSubFieldsBlock.style.display = "flex";
+      } else {
+        cascadingSubFieldsBlock.style.display = "none";
+      }
+    });
+  }
+
   const cascadingWrapper = document.getElementById("previewCascadingWrapper");
   if (cascadingWrapper) {
     const validCourses = JSON.parse(cascadingWrapper.dataset.courses || "[]");
@@ -760,7 +786,6 @@ function attachFormEventListeners() {
       const uniqueStudyModes = Array.from(new Set(validCourses.map(v => v.studyMode))).sort();
 
       smSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
-      uniqueStudyModes.sm = uniqueStudyModes.forEach ? undefined : undefined; // clean safety
       uniqueStudyModes.forEach(sm => {
         const opt = document.createElement("option");
         opt.value = sm;
