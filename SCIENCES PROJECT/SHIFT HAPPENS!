@@ -1,0 +1,760 @@
+# SHIFT HAPPENS!
+## Game Design Document (GDD)
+
+**Genre:** 3D Arcade / Endless Survival / Obstacle Avoidance  
+**Gameplay Style:** Hybrid (Level Challenge + Endless Survival)  
+**Visual Style:** Bubbly, colourful, stylised 3D cartoon  
+**Platform:** Mobile-first (Android initially; iOS can follow)  
+**Core Objective:** Survive for as long as possible while avoiding incoming factory obstacles.
+
+---
+
+# 1. GAME OVERVIEW
+
+### 1.1 Game Concept
+
+SHIFT HAPPENS! is a humorous 3D cartoon arcade survival game in which players control a small, human-shaped bubbly creature who works at a factory but would rather do anything except work.
+
+During lunchtime, the lazy employee sneaks onto a long industrial conveyor belt instead of returning to his duties.
+
+Unfortunately, the factory machinery is still operating.
+
+The employee finds himself running continuously in one place while the conveyor belt moves underneath him, carrying incoming factory equipment and obstacles towards him.
+
+The player's responsibility is to dodge, jump over and duck under incoming obstacles for as long as possible.
+
+The game features two separate gameplay modes:
+
+1. Level Challenge – Complete increasingly difficult factory obstacle courses.
+2. Endless Survival – Survive for as long as possible while the conveyor continuously accelerates.
+
+### 1.2 Game Identity
+
+SHIFT HAPPENS! combines:
+- Humorous factory-worker storytelling.
+- Simple swipe-based controls.
+- Fast reaction-based gameplay.
+- Increasing difficulty.
+- Unlockable characters and customisation.
+- Competitive leaderboards.
+- Two different ways to play.
+
+The experience should be easy to understand but challenging to master.
+
+---
+
+# 2. STORY AND SETTING
+
+### 2.1 The Story
+
+The main character is a lazy factory employee who doesn't particularly enjoy working.
+
+While everyone else is busy doing their jobs, our little employee is constantly looking for opportunities to avoid his responsibilities.
+
+During lunchtime, he sneaks onto a factory conveyor belt.
+
+What starts as an innocent attempt to have some fun turns into a ridiculous survival challenge when the factory machinery continues operating.
+
+Now he must keep running in place and avoid the equipment travelling towards him.
+
+The longer he survives, the more chaotic the factory becomes.
+
+### 2.2 The Setting
+
+The entire game takes place inside a colourful, cartoon-style factory.
+
+The environment includes:
+- Industrial machinery.
+- Conveyor systems.
+- Packaging equipment.
+- Robotic arms.
+- Storage areas.
+- Factory equipment.
+- Warning lights and safety signs.
+- Different factory departments.
+
+The factory should look playful and colourful rather than dark, dirty or realistic.
+
+### 2.3 Humour and Personality
+
+Humour should be part of the game's identity.
+
+Examples of humorous messages:
+
+| Situation | Message |
+|---|---|
+| Starting a game | "Back to avoiding work!" |
+| Pausing | "Taking another break?" |
+| Completing a level | "Congratulations! You avoided actual work." |
+| Achieving a record | "Employee of the month? Absolutely not." |
+| Game over | "You've been caught slacking!" |
+| Restarting | "One more break!" |
+
+The game should have funny character reactions, playful sound effects and occasional humorous factory announcements.
+
+---
+
+# 3. MAIN CHARACTER DESIGN
+
+### 3.1 Character Concept
+
+The main character is not a realistic human being.
+
+It is a cute, human-shaped bubbly creature with:
+- A rounded head.
+- A soft, squishy body.
+- Short rounded arms.
+- Short legs.
+- Large expressive eyes.
+- A simple funny mouth.
+- A smooth, colourful appearance.
+
+The character should resemble a walking, running bubble with a recognisable human body shape.
+
+### 3.2 Character Appearance
+
+The character can wear a small or oversized factory safety helmet.
+
+Its appearance should be:
+- Cute.
+- Funny.
+- Colourful.
+- Easily recognisable.
+- Visually appealing on mobile screens.
+
+### 3.3 Character Animations
+
+Animations should be playful without becoming excessively exaggerated.
+
+Required animations:
+
+1. Running animation – The character continuously runs in place.
+2. Idle animation – Looks around, yawns or scratches its head.
+3. Left/right movement – Performs a bouncy sidestep.
+4. Jump animation – Performs a funny little jump.
+5. Duck animation – Squashes down to avoid overhead obstacles.
+6. Near-miss animation – Displays a shocked facial expression.
+7. Collision animation – Falls or tumbles dramatically.
+8. Victory animation – Celebrates completing a level.
+
+---
+
+# 4. CORE GAMEPLAY MECHANICS
+
+### 4.1 The Conveyor Belt System
+
+This is the central gameplay mechanic.
+
+Unlike traditional endless-running games, the character does not run forward through the environment.
+
+Instead:
+
+- The character runs continuously in approximately the same position.
+- The conveyor belt moves underneath the character.
+- Obstacles are positioned along the conveyor.
+- The moving belt carries those obstacles towards the character.
+- The character must avoid incoming obstacles.
+
+The conveyor belt is long, straight and linear.
+
+It is NOT a circular treadmill, hamster wheel or roller coaster.
+
+It should look like an industrial conveyor belt with a continuous moving surface.
+
+### 4.2 Conveyor Belt Layout
+
+The conveyor has three visual lanes:
+
+- Left.
+- Middle.
+- Right.
+
+However, the character is not locked into these lanes.
+
+Movement is free and smooth within the boundaries of the conveyor belt.
+
+The player can move between positions rather than snapping between fixed lanes.
+
+### 4.3 Player Controls
+
+The game uses intuitive touchscreen swipe controls.
+
+| Gesture | Action |
+|---|---|
+| Swipe left | Move towards the left |
+| Swipe right | Move towards the right |
+| Swipe up | Jump |
+| Swipe down | Duck / slide |
+| Diagonal swipe | Move diagonally |
+
+Movement must be responsive and smooth.
+
+The character must remain within the conveyor belt's boundaries.
+
+### 4.4 Obstacle Collision
+
+Obstacles must have clearly defined collision areas.
+
+A collision occurs when the character makes contact with an obstacle without successfully avoiding it.
+
+The initial design proposal is:
+
+**One collision ends the run.**
+
+This makes survival challenging and gives every successful dodge importance.
+
+This rule can be adjusted during playtesting.
+
+---
+
+# 5. GAME MODE A: LEVEL CHALLENGE
+
+### 5.1 Overview
+
+Level Challenge is a progression-based game mode.
+
+Players must complete factory obstacle courses to unlock higher levels.
+
+Each level has:
+- A defined starting point.
+- A predetermined obstacle course.
+- A finish line.
+- A difficulty rating.
+- A completion reward.
+
+### 5.2 Level Progression
+
+The player begins at Level 1.
+
+As they progress, the obstacle arrangements become more challenging.
+
+Example progression:
+
+| Level | Factory environment | Difficulty |
+|---|---|---|
+| 1 | Packaging department | Easy |
+| 2 | Assembly department | Easy |
+| 3 | Warehouse | Medium |
+| 4 | Machinery department | Medium |
+| 5 | Production floor | Hard |
+| 6 | Heavy equipment section | Hard |
+| 7 | Automated factory | Expert |
+| 8 | Supervisor's department | Expert |
+
+These are initial environment concepts, not a requirement that every level must introduce an entirely new factory.
+
+### 5.3 Level Difficulty
+
+Difficulty increases through:
+- More obstacles.
+- Different obstacle combinations.
+- Shorter reaction times.
+- More complicated obstacle arrangements.
+- Moving obstacles.
+- Narrower safe spaces.
+- Increased conveyor speed.
+
+### 5.4 Completing a Level
+
+The player must survive the obstacle course and reach the finish line.
+
+Upon completion:
+
+- Display a victory animation.
+- Show the level completion screen.
+- Display the player's performance.
+- Award the level reward.
+- Unlock the next level.
+
+Players should be able to replay previously completed levels.
+
+### 5.5 Competition
+
+The main competition is:
+
+**Who can reach the highest level?**
+
+The game should track:
+- Highest level unlocked.
+- Highest level completed.
+- Total levels completed.
+- Level completion records.
+- Best performance on individual levels.
+
+---
+
+# 6. GAME MODE B: ENDLESS SURVIVAL
+
+### 6.1 Overview
+
+Endless Survival is a continuous survival challenge.
+
+Unlike Level Challenge, there are:
+- No levels.
+- No finish line.
+- No predetermined endpoint.
+
+The conveyor belt continues moving, bringing an endless stream of obstacles towards the player.
+
+The objective is to survive for as long as possible.
+
+### 6.2 Increasing Difficulty
+
+The conveyor gradually increases its speed.
+
+As the conveyor accelerates:
+- Obstacles approach faster.
+- Reaction time decreases.
+- Obstacles appear more frequently.
+- Combinations become more complicated.
+- The player must make faster decisions.
+
+The game should begin at a comfortable speed and gradually become extremely challenging.
+
+### 6.3 Survival Scoring
+
+The game tracks:
+
+- Total survival time.
+- Obstacles avoided.
+- Near misses.
+- Highest speed reached.
+- Final score.
+- Personal best.
+
+### 6.4 Competition
+
+The main competition is:
+
+**Who can survive the longest?**
+
+Players compete against their personal records, friends and other players through leaderboards.
+
+---
+
+# 7. OBSTACLE SYSTEM
+
+Obstacles are factory equipment and machinery.
+
+They should look like exaggerated, colourful cartoon versions of real industrial equipment.
+
+### 7.1 Basic Obstacles
+
+Examples:
+
+- Stationary barriers.
+- Large boxes.
+- Stacked packages.
+- Industrial containers.
+- Equipment blocking the conveyor.
+
+### 7.2 Moving Obstacles
+
+Examples:
+
+- Robotic arms swinging across the belt.
+- Moving barriers.
+- Rotating machinery.
+- Moving mechanical platforms.
+
+### 7.3 Jump Obstacles
+
+Examples:
+
+- Low barriers.
+- Small conveyor blockages.
+- Objects that require the character to jump over them.
+
+### 7.4 Duck Obstacles
+
+Examples:
+
+- Overhead mechanical arms.
+- Low hanging barriers.
+- Horizontal pipes.
+- Machinery extending across the upper part of the conveyor.
+
+### 7.5 Special Obstacles
+
+Examples:
+
+- Rolling barrels.
+- Steam vents.
+- Moving factory equipment.
+- Multiple obstacles appearing together.
+- Obstacles that temporarily change position.
+
+### 7.6 Obstacle Fairness
+
+The game must never generate impossible obstacle combinations.
+
+Players must always receive enough visual warning to understand what is approaching.
+
+The difficulty should come from requiring better timing and decision-making, not from unfair obstacle generation.
+
+---
+
+# 8. REWARDS AND PROGRESSION
+
+### 8.1 Reward System
+
+Players should earn rewards through gameplay.
+
+Possible rewards include:
+- Coins.
+- Character skins.
+- Different helmets.
+- Factory uniforms.
+- Conveyor belt appearances.
+- Character accessories.
+- Special animations.
+
+### 8.2 Character Customisation
+
+Players can customise their bubbly employee.
+
+Possible unlockables:
+
+- Different body colours.
+- Different facial expressions.
+- Different safety helmets.
+- Funny uniforms.
+- Different shoes.
+- Special victory animations.
+
+Customisation should be cosmetic and should not provide unfair gameplay advantages.
+
+### 8.3 Achievements
+
+Examples:
+
+| Achievement | Requirement |
+|---|---|
+| First Day | Complete your first run |
+| Lazy Legend | Survive for 2 minutes |
+| Break Champion | Survive for 5 minutes |
+| Untouchable | Avoid 100 obstacles |
+| Almost Fired | Complete a difficult level |
+| Factory Survivor | Reach a major survival milestone |
+
+---
+
+# 9. COMPETITIVE FEATURES
+
+### 9.1 Leaderboards
+
+The game should have separate leaderboards for both game modes.
+
+**Level Challenge leaderboard:**
+- Highest level completed.
+- Best level performance.
+- Total levels completed.
+
+**Endless Survival leaderboard:**
+- Longest survival time.
+- Highest score.
+- Weekly survival records.
+
+### 9.2 Personal Records
+
+Every player should have a personal statistics page.
+
+It should display:
+- Personal best survival time.
+- Highest level completed.
+- Total games played.
+- Total obstacles avoided.
+- Total survival time.
+- Achievements unlocked.
+
+### 9.3 Daily Challenges
+
+Optional daily challenges can encourage players to return.
+
+Examples:
+- Survive for 90 seconds.
+- Complete a level without colliding.
+- Avoid 50 obstacles.
+- Complete a run with a particular character.
+
+Rewards can include coins and cosmetic unlockables.
+
+---
+
+# 10. VISUAL DESIGN AND ART DIRECTION
+
+### 10.1 Overall Style
+
+The game must use a bubbly, stylised 3D cartoon aesthetic.
+
+It must NOT look like:
+- A realistic industrial simulator.
+- An anime game.
+- A dark survival horror game.
+- A realistic Temple Run or Subway Surfers clone.
+
+### 10.2 Visual Characteristics
+
+The art direction should use:
+- Rounded shapes.
+- Soft edges.
+- Bright, clean colours.
+- Playful industrial environments.
+- Toy-like materials.
+- Expressive characters.
+- Chunky, recognisable obstacles.
+- Soft lighting.
+
+### 10.3 Animation Philosophy
+
+Animations should be charming but controlled.
+
+The player must always be able to clearly see:
+- The character.
+- Incoming obstacles.
+- Safe spaces.
+- The direction of danger.
+
+Visual effects must never interfere with gameplay readability.
+
+---
+
+# 11. SOUND AND AUDIO
+
+The game should have playful cartoon-style sound effects.
+
+Examples:
+
+**Character sounds:**
+- Funny running footsteps.
+- Jump sounds.
+- Ducking sounds.
+- Surprised reactions.
+- Collision sounds.
+
+**Factory sounds:**
+- Conveyor machinery.
+- Robotic arms.
+- Mechanical movement.
+- Warning alarms.
+- Steam releases.
+
+**Interface sounds:**
+- Button clicks.
+- Reward sounds.
+- Level completion sounds.
+- Game-over sounds.
+
+Background music should be energetic, playful and suitable for an arcade game.
+
+---
+
+# 12. USER INTERFACE AND MAIN MENUS
+
+### 12.1 Main Menu
+
+The main menu should feature:
+
+- Game logo: SHIFT HAPPENS!
+- Main character.
+- Level Challenge button.
+- Endless Survival button.
+- Characters / Customisation.
+- Leaderboard.
+- Achievements.
+- Settings.
+
+The interface should be clean, modern and easy to navigate.
+
+### 12.2 Gameplay Interface
+
+During gameplay, display:
+
+- Current survival time.
+- Current level (Level Challenge).
+- Current score.
+- Speed indicator (particularly in Endless Survival).
+- Pause button.
+
+The interface must not cover important parts of the gameplay environment.
+
+### 12.3 Game Over Screen
+
+After a collision, display:
+
+- Funny character collision animation.
+- Survival time.
+- Final score.
+- Personal best comparison.
+- Obstacles avoided.
+- Restart button.
+- Main menu button.
+
+### 12.4 Level Completion Screen
+
+After completing a level, display:
+
+- Victory animation.
+- Level completed.
+- Final performance.
+- Rewards earned.
+- Next level button.
+- Replay button.
+
+---
+
+# 13. TECHNICAL AND DEVELOPMENT PRINCIPLES
+
+### 13.1 Platform
+
+Initial development should prioritise Android mobile devices.
+
+The game should be designed around touchscreen controls.
+
+### 13.2 Performance
+
+The game should:
+- Run smoothly on supported mid-range devices.
+- Have optimised 3D models.
+- Use efficient obstacle spawning.
+- Avoid unnecessary visual effects.
+- Maintain responsive controls.
+- Minimise loading times.
+
+### 13.3 Game Architecture
+
+The game should be designed with separate systems for:
+
+1. Character movement.
+2. Conveyor movement.
+3. Obstacle spawning.
+4. Obstacle behaviour.
+5. Collision detection.
+6. Difficulty progression.
+7. Level management.
+8. Endless survival management.
+9. Scoring.
+10. Rewards and customisation.
+11. User interface.
+12. Audio.
+
+The two gameplay modes should share the same core movement and obstacle systems wherever possible.
+
+Their progression and scoring rules should remain separate.
+
+### 13.4 Gameplay Integrity
+
+Obstacle generation must be tested to prevent impossible situations.
+
+The game should not rely on random unfair obstacle placement.
+
+Difficulty should be controlled through tested obstacle patterns, speed settings and reaction-time requirements.
+
+---
+
+# 14. INITIAL DEVELOPMENT ROADMAP
+
+Development should happen in stages.
+
+### Phase 1: Core Prototype
+
+Build:
+- The bubbly character.
+- The long linear conveyor belt.
+- Continuous running animation.
+- Swipe controls.
+- Basic obstacles.
+- Collision detection.
+- Basic survival timer.
+
+Goal: Prove that the central gameplay is enjoyable.
+
+### Phase 2: Endless Survival
+
+Implement:
+- Continuous obstacle spawning.
+- Gradually increasing conveyor speed.
+- Survival scoring.
+- Game-over screen.
+- Restart functionality.
+- Personal best records.
+
+### Phase 3: Level Challenge
+
+Implement:
+- Level selection.
+- Predetermined obstacle courses.
+- Finish lines.
+- Level completion.
+- Unlocking progression.
+- Level-specific difficulty.
+
+### Phase 4: Visual Polish
+
+Implement:
+- Final cartoon character design.
+- Factory environments.
+- Obstacle animations.
+- Funny character reactions.
+- Sound effects.
+- Main menu.
+- Gameplay interface.
+
+### Phase 5: Competition and Rewards
+
+Implement:
+- Leaderboards.
+- Achievements.
+- Coins.
+- Character customisation.
+- Daily challenges.
+
+### Phase 6: Testing and Release
+
+Test:
+- Swipe responsiveness.
+- Collision accuracy.
+- Obstacle fairness.
+- Difficulty balancing.
+- Device performance.
+- Gameplay consistency.
+- Both game modes.
+
+---
+
+# 15. CORE DESIGN RULES
+
+The following principles must guide all future development:
+
+1. The character runs in place; the conveyor moves underneath.
+2. The conveyor is one long, straight, linear belt.
+3. Obstacles approach the character because the conveyor carries them forward.
+4. The player has free movement across the belt, with three visual lanes.
+5. The character must remain within the belt boundaries.
+6. Gameplay uses swipe-based movement, jumping and ducking.
+7. The game has two distinct modes: Level Challenge and Endless Survival.
+8. The factory setting and lazy employee story are central to the game's identity.
+9. The visual style must remain bubbly, colourful and cartoon-like.
+10. The game must be challenging but fair.
+11. Both modes must be enjoyable independently.
+12. The gameplay must prioritise fun, responsiveness and replayability.
+
+---
+
+# 16. FINAL GAME VISION
+
+SHIFT HAPPENS! is a humorous, colourful and competitive arcade survival game built around a simple but distinctive mechanic.
+
+A lazy little factory employee runs in place on a moving conveyor belt while factory equipment approaches him.
+
+Players must react quickly, dodge obstacles and survive increasingly difficult situations.
+
+They can choose between completing structured factory obstacle courses in Level Challenge or testing their endurance in Endless Survival.
+
+The game aims to combine accessible controls, funny character animations, challenging gameplay, unlockable rewards and competitive leaderboards into one enjoyable mobile gaming experience.
+
+**SHIFT HAPPENS!**
+
+*One lazy employee. One moving conveyor. A whole factory full of trouble.*
+
+**The shift is on. Try not to get fired.**
