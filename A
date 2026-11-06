@@ -1,24 +1,3 @@
 
-CREATE OR REPLACE FUNCTION public.assign_personnel_number_on_activation()
-RETURNS TRIGGER
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    IF NEW.activation_status = 'activated'
-       AND OLD.activation_status IS DISTINCT FROM 'activated'
-       AND NEW.personnel_number IS NULL THEN
-
-        NEW.personnel_number :=
-            public.generate_random_personnel_number();
-
-    END IF;
-
-    RETURN NEW;
-END;
-$$;
-
-CREATE TRIGGER assign_personnel_number_before_activation
-BEFORE UPDATE OF activation_status
-ON public.authorised_personnel
-FOR EACH ROW
-EXECUTE FUNCTION public.assign_personnel_number_on_activation();
+CREATE EXTENSION IF NOT EXISTS pgcrypto
+WITH SCHEMA extensions;
