@@ -1,26 +1,37 @@
-// Setup type definitions for built-in Supabase Runtime APIs
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { withSupabase } from "jsr:@supabase/server@^1";
 
-interface ReqPayload {
-  name: string;
-}
+CREATE OR REPLACE FUNCTION public.complete_personnel_activation(
+    p_personnel_id UUID,
+    p_auth_user_id UUID
+)
+RETURNS TEXT
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = pg_catalog, public
+AS $$
+DECLARE
+    assigned_number TEXT;
+BEGIN
+    UPDATE public.authorised_personnel
+    SET
+        auth_user_id = p_auth_user_id,
+        activation_status = 'activated',
+        activated_at = NOW(),
+        updated_at = NOW()
+    WHERE id = p_personnel_id
+      AND activation_status = 'pending'
+      AND auth_user_id IS NULL
+    RETURNING personnel_number INTO assigned_number;
 
-console.info("server started");
+    IF assigned_number IS NULL THEN
+        RAISE EXCEPTION 'Personnel activation could not be completed.';
+    END IF;
 
-export default {
-  fetch: withSupabase({ auth: ["publishable", "secret"] }, async (req, ctx) => {
-    const { name }: ReqPayload = await req.json();
+    RETURN assigned_number;
+END;
+$$;
 
-    // Using 'sb_secret_xyz' bypasses RLS — use for privileged operations
-    if (ctx.authMode === "secret") {
-      return Response.json({
-        message: `Hello ${name} admin!`,
-      });
-    }
+REVOKE ALL ON FUNCTION public.complete_personnel_activation(UUID, UUID)
+FROM PUBLIC, anon, authenticated;
 
-    return Response.json({
-      message: `Hello ${name}!`,
-    });
-  }),
-};
+GRANT EXECUTE ON FUNCTION public.complete_personnel_activation(UUID, UUID)
+TO service_role;
