@@ -6,9 +6,21 @@ AS $$
 DECLARE
     new_number TEXT;
 BEGIN
+    PERFORM pg_advisory_xact_lock(731942);
+
     LOOP
         new_number :=
-            (floor(random() * 9000000000)::BIGINT + 1000000000)::TEXT;
+            (
+                (
+                    'x' || SUBSTRING(
+                        REPLACE(gen_random_uuid()::TEXT, '-', ''),
+                        1,
+                        15
+                    )
+                )::BIT(60)::BIGINT
+                % 9000000000
+                + 1000000000
+            )::TEXT;
 
         EXIT WHEN NOT EXISTS (
             SELECT 1
