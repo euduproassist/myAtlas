@@ -1,37 +1,214 @@
 
-CREATE OR REPLACE FUNCTION public.complete_personnel_activation(
-    p_personnel_id UUID,
-    p_auth_user_id UUID
-)
-RETURNS TEXT
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = pg_catalog, public
-AS $$
-DECLARE
-    assigned_number TEXT;
-BEGIN
-    UPDATE public.authorised_personnel
-    SET
-        auth_user_id = p_auth_user_id,
-        activation_status = 'activated',
-        activated_at = NOW(),
-        updated_at = NOW()
-    WHERE id = p_personnel_id
-      AND activation_status = 'pending'
-      AND auth_user_id IS NULL
-    RETURNING personnel_number INTO assigned_number;
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { withSupabase } from "jsr:@supabase/server@^1";
 
-    IF assigned_number IS NULL THEN
-        RAISE EXCEPTION 'Personnel activation could not be completed.';
-    END IF;
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
 
-    RETURN assigned_number;
-END;
-$$;
+const handler = withSupabase(
+  { auth: ["publishable"] },
+  async (req, ctx) => {
+    if (req.method !== "POST") {
+      return Response.json(
+        { error: "Method not allowed." },
+        { status: 405 }
+      );
+    }
 
-REVOKE ALL ON FUNCTION public.complete_personnel_activation(UUID, UUID)
-FROM PUBLIC, anon, authenticated;
+    try {
+      const body = await req.json();
 
-GRANT EXECUTE ON FUNCTION public.complete_personnel_activation(UUID, UUID)
-TO service_role;
+      const {
+        initials,
+        first_name,
+        surname,
+        email_address,
+        phone_number,
+        role,
+        temporary_password,
+        new_password,
+        confirm_password,
+      } = body;
+
+      const required = [
+        initials,
+        first_name,
+        surname,
+        email_address,
+        phone_number,
+        role,
+        temporary_password,
+        new_password,
+        confirm_password,
+      ];
+
+      if (
+        required.some(
+          (value) =>
+            typeof value !== "string" ||
+            value.trim().length === 0
+        )
+      ) {
+        return Response.json(
+          { error: "Please complete all required fields." },
+          { status: 400 }
+        );
+      }
+
+      if (new_password !== confirm_password) {
+        return Response.json(
+          { error: "Your new passwords do not match." },
+          { status: 400 }
+        );
+      }
+
+      if (
+        new_password.length < 8 ||
+        new_password.length > 132 ||
+        !/[A-Z]/.test(new_password) ||
+        !/[0-9]/.test(new_password) ||
+        !/_/.test(new_password)
+      ) {
+        return Response.json(
+          {
+            error:
+              "Your password must be 8–132 characters and contain an uppercase letter, a number and an underscore.",
+          },
+          { status: 400 }
+        );
+      }
+
+      const allowedRoles = [
+        "admin",
+        "academic_head",
+        "system_administration",
+      ];
+
+      if (!allowedRoles.includes(role)) {
+        return Response.json(
+          { error: "Invalid personnel role." },
+          { status: 400 }
+        );
+      }
+
+      const supabaseAdmin = ctx.supabaseAdmin;
+
+      const { data: matches, error: verificationError } =
+        await supabaseAdmin.rpc(
+          "verify_personnel_activation",
+          {
+            p_initials: initials.trim(),
+            p_first_name: first_name.trim(),
+            p_surname: surname.trim(),
+            p_email_address: email_address.trim().toLowerCase(),
+            p_phone_number: phone_number.trim(),
+            p_role: role,
+            p_temporary_password: temporary_password,
+          }
+        );
+
+      if (verificationError) {
+        console.error("Verification error:", verificationError);
+
+        return Response.json(
+          { error: "Activation could not be verified." },
+          { status: 500 }
+        );
+      }
+
+      if (!matches || matches.length !== 1) {
+        return Response.json(
+          {
+            error:
+              "The details could not be verified. Please check them.",
+          },
+          { status: 400 }
+        );
+      }
+
+      const personnel = matches[0];
+
+      const { data: createdUser, error: createError } =
+        await supabaseAdmin.auth.admin.createUser({
+          email: personnel.verified_email,
+          password: new_password,
+          email_confirm: true,
+          user_metadata: {
+            personnel_id: personnel.personnel_id,
+            role: personnel.verified_role,
+          },
+        });
+
+      if (createError || !createdUser.user) {
+        console.error("Account creation error:", createError);
+
+        return Response.json(
+          { error: "The personnel account could not be created." },
+          { status: 409 }
+        );
+      }
+
+      const { data: personnelNumber, error: activationError } =
+        await supabaseAdmin.rpc(
+          "complete_personnel_activation",
+          {
+            p_personnel_id: personnel.personnel_id,
+            p_auth_user_id: createdUser.user.id,
+          }
+        );
+
+      if (activationError || !personnelNumber) {
+        console.error("Activation completion error:", activationError);
+
+        await supabaseAdmin.auth.admin.deleteUser(
+          createdUser.user.id
+        );
+
+        return Response.json(
+          { error: "Activation could not be completed. Please try again." },
+          { status: 500 }
+        );
+      }
+
+      return Response.json(
+        {
+          success: true,
+          message: "Your personnel account has been activated.",
+          personnel_number: personnelNumber,
+        },
+        { status: 200 }
+      );
+    } catch (error) {
+      console.error("Unexpected activation error:", error);
+
+      return Response.json(
+        { error: "An unexpected activation error occurred." },
+        { status: 500 }
+      );
+    }
+  }
+);
+
+export default {
+  fetch: async (req: Request) => {
+    if (req.method === "OPTIONS") {
+      return new Response("ok", { headers: corsHeaders });
+    }
+
+    const response = await handler(req);
+    const headers = new Headers(response.headers);
+
+    for (const [key, value] of Object.entries(corsHeaders)) {
+      headers.set(key, value);
+    }
+
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
+  },
+};
