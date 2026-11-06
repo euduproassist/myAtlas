@@ -1,37 +1,24 @@
-SELECT public.generate_random_personnel_number() AS test_number;
 
-
-
-CREATE OR REPLACE FUNCTION public.generate_random_personnel_number()
-RETURNS TEXT
+CREATE OR REPLACE FUNCTION public.assign_personnel_number_on_activation()
+RETURNS TRIGGER
 LANGUAGE plpgsql
 AS $$
-DECLARE
-    new_number TEXT;
 BEGIN
-    PERFORM pg_advisory_xact_lock(731942);
+    IF NEW.activation_status = 'activated'
+       AND OLD.activation_status IS DISTINCT FROM 'activated'
+       AND NEW.personnel_number IS NULL THEN
 
-    LOOP
-        new_number :=
-            (
-                (
-                    'x' || SUBSTRING(
-                        REPLACE(gen_random_uuid()::TEXT, '-', ''),
-                        1,
-                        15
-                    )
-                )::BIT(60)::BIGINT
-                % 9000000000
-                + 1000000000
-            )::TEXT;
+        NEW.personnel_number :=
+            public.generate_random_personnel_number();
 
-        EXIT WHEN NOT EXISTS (
-            SELECT 1
-            FROM public.authorised_personnel
-            WHERE personnel_number = new_number
-        );
-    END LOOP;
+    END IF;
 
-    RETURN new_number;
+    RETURN NEW;
 END;
 $$;
+
+CREATE TRIGGER assign_personnel_number_before_activation
+BEFORE UPDATE OF activation_status
+ON public.authorised_personnel
+FOR EACH ROW
+EXECUTE FUNCTION public.assign_personnel_number_on_activation();
