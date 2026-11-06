@@ -1,3 +1,4 @@
-
-CREATE EXTENSION IF NOT EXISTS pgcrypto
-WITH SCHEMA extensions;
+SELECT extensions.crypt(
+    'temporary-test-password',
+    extensions.gen_salt('bf', 12)
+) AS password_hash;
