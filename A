@@ -43,4 +43,3 @@ REVOKE ALL ON FUNCTION public.verify_personnel_activation(
 GRANT EXECUTE ON FUNCTION public.verify_personnel_activation(
     TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT
 ) TO service_role;
-
