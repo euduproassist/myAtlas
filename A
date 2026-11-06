@@ -1,7 +1,22 @@
 
-ALTER TABLE public.authorised_personnel
-ADD CONSTRAINT personnel_number_format_check
-CHECK (
-    personnel_number IS NULL
-    OR personnel_number ~ '^[0-9]{10}$'
-);
+CREATE OR REPLACE FUNCTION public.generate_random_personnel_number()
+RETURNS TEXT
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    new_number TEXT;
+BEGIN
+    LOOP
+        new_number :=
+            (floor(random() * 9000000000)::BIGINT + 1000000000)::TEXT;
+
+        EXIT WHEN NOT EXISTS (
+            SELECT 1
+            FROM public.authorised_personnel
+            WHERE personnel_number = new_number
+        );
+    END LOOP;
+
+    RETURN new_number;
+END;
+$$;
