@@ -1,3 +1,6 @@
+SELECT public.generate_random_personnel_number() AS test_number;
+
+
 
 CREATE OR REPLACE FUNCTION public.generate_random_personnel_number()
 RETURNS TEXT
