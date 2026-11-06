@@ -1,45 +1,26 @@
+// Setup type definitions for built-in Supabase Runtime APIs
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { withSupabase } from "jsr:@supabase/server@^1";
 
-CREATE OR REPLACE FUNCTION public.verify_personnel_activation(
-    p_initials TEXT,
-    p_first_name TEXT,
-    p_surname TEXT,
-    p_email_address TEXT,
-    p_phone_number TEXT,
-    p_role TEXT,
-    p_temporary_password TEXT
-)
-RETURNS TABLE (
-    personnel_id UUID,
-    verified_role TEXT,
-    verified_email TEXT
-)
-LANGUAGE sql
-SECURITY DEFINER
-SET search_path = pg_catalog, public, extensions
-AS $$
-    SELECT
-        ap.id,
-        ap.role,
-        ap.email_address
-    FROM public.authorised_personnel AS ap
-    WHERE ap.activation_status = 'pending'
-      AND ap.initials = TRIM(p_initials)
-      AND ap.first_name = TRIM(p_first_name)
-      AND ap.surname = TRIM(p_surname)
-      AND ap.email_address = LOWER(TRIM(p_email_address))
-      AND ap.phone_number = TRIM(p_phone_number)
-      AND ap.role = p_role
-      AND extensions.crypt(
-          p_temporary_password,
-          ap.temporary_password_hash
-      ) = ap.temporary_password_hash
-    LIMIT 1;
-$$;
+interface ReqPayload {
+  name: string;
+}
 
-REVOKE ALL ON FUNCTION public.verify_personnel_activation(
-    TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT
-) FROM PUBLIC, anon, authenticated;
+console.info("server started");
 
-GRANT EXECUTE ON FUNCTION public.verify_personnel_activation(
-    TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT
-) TO service_role;
+export default {
+  fetch: withSupabase({ auth: ["publishable", "secret"] }, async (req, ctx) => {
+    const { name }: ReqPayload = await req.json();
+
+    // Using 'sb_secret_xyz' bypasses RLS — use for privileged operations
+    if (ctx.authMode === "secret") {
+      return Response.json({
+        message: `Hello ${name} admin!`,
+      });
+    }
+
+    return Response.json({
+      message: `Hello ${name}!`,
+    });
+  }),
+};
