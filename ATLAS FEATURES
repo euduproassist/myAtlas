@@ -17,3 +17,50 @@ Role & Feature Matrix
  * User Management & Access Control: View all registered admin accounts, monitor activity, and enable or disable access permissions per admin.
  * Data Export: Export complete application forms and supporting document packages per intake cycle.
  * Billing Management: Pay Atlas platform licensing fees for the institution.
+
+
+
+# myAtlas Pricing Structure
+
+The pricing below applies per campus. The first campus is charged at the standard rate, while every additional campus receives a 40% discount on both once-off implementation and annual licensing fees. The discount applies independently to each additional campus and is not compounded. Implementation is charged once; annual licensing is recurring.
+
+Backend fees: Each college is responsible for paying its own Supabase subscription and any applicable usage charges directly to Supabase. These costs are separate from myAtlas fees and are not included in the prices below.
+
+Supabase pricing tiers:
+
+- Free: $0/month
+- Pro: $25/month
+- Team: $599/month
+- Enterprise: Custom pricing
+
+### 1 Campus
+
+| Charge                  | Amount  |
+| ----------------------- | ------- |
+| Once-off implementation | R8,500  |
+| First-year licence      | R24,000 |
+| First-year total        | R32,500 |
+| Second-year licence     | R24,000 |
+| Second-year total       | R24,000 |
+
+### 2 Campuses
+
+| Charge                  | Amount  |
+| ----------------------- | ------- |
+| Once-off implementation | R13,600 |
+| First-year licence      | R38,400 |
+| First-year total        | R52,000 |
+| Second-year licence     | R38,400 |
+| Second-year total       | R38,400 |
+
+### 3 Campuses
+
+| Charge                  | Amount  |
+| ----------------------- | ------- |
+| Once-off implementation | R18,700 |
+| First-year licence      | R52,800 |
+| First-year total        | R71,500 |
+| Second-year licence     | R52,800 |
+| Second-year total       | R52,800 |
+
+Supabase subscription prices are listed in US dollars and may change. Usage beyond included allowances may incur additional charges.
