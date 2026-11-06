@@ -1,16 +1,11 @@
-https://supabase.com/dashboard/sign-in?utm_source=chatgpt.com&returnTo=%2Forg
 
+CREATE TABLE public.campuses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    campus_name TEXT NOT NULL,
+    campus_code TEXT UNIQUE,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 
-https://www.google.com/search?q=https%3A%2F%2Fconsole.cloud.google.com%2Fbilling&hl=en-ZA
-
-
-
-https://wallet.google.com/wallet/u/0/home?utm_source=pgc&utm_medium=website&utm_campaign=redirect
-
-
-https://console.cloud.google.com/billing/01286F-1B9401-D33928/settings
-
-
-
-
-https://console.cloud.google.com/storage/browser?hl=en-ZA
+ALTER TABLE public.campuses
+ENABLE ROW LEVEL SECURITY;
