@@ -1,0 +1,19 @@
+Role & Feature Matrix
+1. Student Portal
+ * Browse Programmes: View course details, requirements, and information without barrier.
+ * Submit Application: Fill out the cycle-specific form, choose courses, and upload required documents.
+ * Email Confirmation: Receive automatic email confirmation containing their generated Application Number and their own created PIN.
+ * Status Dashboard: Log in using their Application Number and PIN to view overall status, submitted details, and uploaded files.
+ * Document Re-upload: Restricted re-upload access triggered only if an admin flags and rejects a specific document with a specified reason.
+ * Outcome Notifications: Receive automated acceptance letters or rejection notices via email.
+ * Offer Management: Accept or reject course admission offers within a specified deadline.
+2. Administrator Portal
+ * Cycle Management: Create, configure (dates, qualification types, available courses, custom form fields), and publish application cycles.
+ * Application Review: Access cycle-specific dashboards to view applicant forms and submitted documents.
+ * Manual Decision Engine: Manually evaluate applicants against institutional selection criteria and update admission statuses based on space availability and document validity.
+ * Audit Trail: View personal administrative activity history for transparency and tracking.
+3. Academic Head Portal
+ * Full Administrative Access: Inherits all base Admin privileges.
+ * User Management & Access Control: View all registered admin accounts, monitor activity, and enable or disable access permissions per admin.
+ * Data Export: Export complete application forms and supporting document packages per intake cycle.
+ * Billing Management: Pay Atlas platform licensing fees for the institution.
