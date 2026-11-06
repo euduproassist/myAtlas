@@ -1,3 +1,4 @@
+#####################
 CREATE TABLE public.campuses (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     campus_name TEXT NOT NULL,
@@ -14,7 +15,90 @@ ENABLE ROW LEVEL SECURITY;
 
 
 
-
+#########################
 INSERT INTO public.campuses (campus_name, campus_code)
 VALUES ('Main Campus', 'MAIN')
 RETURNING *;
+
+
+
+
+
+
+
+
+
+#########################
+-- 1. Create Atlas College's institution record
+CREATE TABLE public.colleges (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    college_name TEXT NOT NULL UNIQUE,
+    contact_email TEXT,
+    contact_number TEXT,
+    physical_address TEXT,
+    logo_url TEXT,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 2. Register Atlas College
+INSERT INTO public.colleges (college_name)
+VALUES ('Atlas College');
+
+-- 3. Link Main Campus to Atlas College
+ALTER TABLE public.campuses
+ADD COLUMN college_id UUID REFERENCES public.colleges(id);
+
+UPDATE public.campuses
+SET college_id = (
+    SELECT id
+    FROM public.colleges
+    WHERE college_name = 'Atlas College'
+)
+WHERE campus_code = 'MAIN';
+
+ALTER TABLE public.campuses
+ALTER COLUMN college_id SET NOT NULL;
+
+-- 4. Create the pre-authorised personnel table
+CREATE TABLE public.authorised_personnel (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    initials TEXT NOT NULL,
+    first_name TEXT NOT NULL,
+    surname TEXT NOT NULL,
+    email_address TEXT NOT NULL UNIQUE,
+    phone_number TEXT NOT NULL,
+
+    role TEXT NOT NULL CHECK (
+        role IN (
+            'admin',
+            'academic_head',
+            'system_administration'
+        )
+    ),
+
+    temporary_password_hash TEXT NOT NULL,
+
+    personnel_number TEXT UNIQUE,
+
+    activation_status TEXT NOT NULL DEFAULT 'pending'
+        CHECK (
+            activation_status IN (
+                'pending',
+                'activated',
+                'disabled'
+            )
+        ),
+
+    activated_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 5. Enable Row Level Security
+ALTER TABLE public.colleges
+ENABLE ROW LEVEL SECURITY;
+
+ALTER TABLE public.authorised_personnel
+ENABLE ROW LEVEL SECURITY;
