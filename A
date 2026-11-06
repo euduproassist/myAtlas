@@ -1,4 +1,7 @@
 
 ALTER TABLE public.authorised_personnel
-ADD COLUMN auth_user_id UUID UNIQUE
-REFERENCES auth.users(id) ON DELETE SET NULL;
+ADD CONSTRAINT personnel_number_format_check
+CHECK (
+    personnel_number IS NULL
+    OR personnel_number ~ '^[0-9]{10}$'
+);
