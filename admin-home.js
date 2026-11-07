@@ -53,7 +53,7 @@ footerSigninTriggers.forEach(trig => {
 footerActivateTriggers.forEach(trig => {
   trig.addEventListener('click', (e) => {
     e.preventDefault();
-    window.history.pushState({ view: 'form' }, '', '#complete-profile');
+    window.history.pushState({ view: 'signin' }, '', '#sign-in');
     showFormView();
   });
 });
@@ -167,7 +167,7 @@ autoCapitalizeIds.forEach((id) => {
   }
 });
 
-// --- STEPS 9 & 10: ACTIVATION SUBMISSION LOGIC (SUPABASE) ---
+// --- STEPS 9, 10 & 11: ACTIVATION SUBMISSION LOGIC (SUPABASE) ---
 const activationForm = document.querySelector('#view-form form');
 
 activationForm.addEventListener('submit', async (e) => {
@@ -196,7 +196,7 @@ activationForm.addEventListener('submit', async (e) => {
   }
 
   try {
-    // 1. Verify against pre_approved_personnel table
+    // 1. Verify against pre_approved_personnel table (Step 9)
     const { data: preApproved, error: preError } = await supabase
       .from('pre_approved_personnel')
       .select('*')
@@ -214,7 +214,7 @@ activationForm.addEventListener('submit', async (e) => {
       return;
     }
 
-    // 2. Register user via Supabase Auth
+    // 2. Register user via Supabase Auth (Step 10)
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: email,
       password: newPass
@@ -224,7 +224,7 @@ activationForm.addEventListener('submit', async (e) => {
     const userId = authData.user?.id;
     if (!userId) throw new Error('User ID could not be retrieved from authentication.');
 
-    // 3. Generate 8-digit unique Personnel Number (YY + 6 random digits)
+    // 3. Generate 8-digit unique Personnel Number (YY + 6 random digits) (Step 10)
     const currentYearSuffix = new Date().getFullYear().toString().slice(-2);
     let personnelNumber = '';
     let isUnique = false;
@@ -244,7 +244,7 @@ activationForm.addEventListener('submit', async (e) => {
       }
     }
 
-    // 4. Insert into personnel table
+    // 4. Insert into personnel table (Step 10)
     const { error: insertError } = await supabase
       .from('personnel')
       .insert([
@@ -262,6 +262,19 @@ activationForm.addEventListener('submit', async (e) => {
       ]);
 
     if (insertError) throw insertError;
+
+    // 5. Trigger Welcome Email (Step 11)
+    try {
+      await supabase.functions.invoke('send-welcome-email', {
+        body: {
+          email: email,
+          firstname: firstname,
+          personnelNumber: personnelNumber
+        }
+      });
+    } catch (emailError) {
+      console.warn('Email trigger notification note:', emailError);
+    }
 
     alert(`Your MyAtlas account has been successfully activated!\n\nYour Generated Personnel Number is: ${personnelNumber}\nPlease keep this safe.`);
 
@@ -315,14 +328,7 @@ signinForm.addEventListener('submit', async (e) => {
       return;
     }
 
-    // 3. Optional: check is_active status if required by roadmap
-    if (personnelRecord.is_active === false) {
-      // Note: depending on your logic, you can allow or block. Roadmap says: "Block login if details don't align or if is_active is false."
-      // Uncomment the line below if you want to block inactive accounts:
-      // alert('Account is currently inactive. Please contact administration.'); return;
-    }
-
-    // 4. Successful login redirect
+    // 3. Successful login redirect
     window.location.href = 'admin.html';
 
   } catch (error) {
