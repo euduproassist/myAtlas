@@ -1,4 +1,3 @@
-// supabase-config.js import
 import { supabase } from "./supabase-config.js";
 
 document.documentElement.style.overflowX = "hidden";
@@ -53,7 +52,7 @@ footerSigninTriggers.forEach(trig => {
 footerActivateTriggers.forEach(trig => {
   trig.addEventListener('click', (e) => {
     e.preventDefault();
-    window.history.pushState({ view: 'signin' }, '', '#sign-in');
+    window.history.pushState({ view: 'form' }, '', '#complete-profile');
     showFormView();
   });
 });
@@ -108,7 +107,7 @@ passwordToggleBtn.addEventListener('click', () => {
   }
 });
 
-// --- STEP 8: PASSWORD VALIDATION LIVE CHECK ---
+// Password Validation Live Check
 const newPassInput = document.getElementById('newpass');
 const critLength = document.getElementById('crit-length');
 const critUpper = document.getElementById('crit-upper');
@@ -155,7 +154,7 @@ newPassInput.addEventListener('input', (e) => {
   }
 });
 
-// --- STEP 8: AUTO-CAPITALIZE SPECIFIC INPUT FIELDS ON BLUR ---
+// --- AUTO-CAPITALIZE SPECIFIC INPUT FIELDS ON BLUR ---
 const autoCapitalizeIds = ['initials', 'firstname', 'surname', 'email', 'signin-email'];
 
 autoCapitalizeIds.forEach((id) => {
@@ -167,12 +166,13 @@ autoCapitalizeIds.forEach((id) => {
   }
 });
 
-// --- STEPS 9, 10 & 11: ACTIVATION SUBMISSION LOGIC (SUPABASE) ---
+// --- ACTIVATION SUBMISSION LOGIC VIA SUPABASE RPC & AUTH ---
 const activationForm = document.querySelector('#view-form form');
 
 activationForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
+  // Convert inputs to uppercase before reading values
   autoCapitalizeIds.forEach((id) => {
     const inputElem = document.getElementById(id);
     if (inputElem) {
@@ -190,109 +190,103 @@ activationForm.addEventListener('submit', async (e) => {
   const newPass = document.getElementById('newpass').value;
   const confirmPass = document.getElementById('confirmpass').value;
 
+  // 1. Validate passwords match
   if (newPass !== confirmPass) {
     alert('New password and confirm password do not match.');
     return;
   }
 
-  try {
-    // 1. Verify against pre_approved_personnel table (Step 9)
-    const { data: preApproved, error: preError } = await supabase
-      .from('pre_approved_personnel')
-      .select('*')
-      .eq('email', email)
-      .eq('initials', initials)
-      .eq('firstname', firstname)
-      .eq('surname', surname)
-      .eq('phone', phone)
-      .eq('role', role)
-      .eq('temppass', tempPass)
-      .maybeSingle();
+  // 2. Map roles to their respective Supabase RPC verification functions and active tables
+  let rpcFunction = '';
+  let targetTable = '';
 
-    if (preError || !preApproved) {
-      alert('Activation failed: The details entered do not match our pre-approved records in the database.');
+  if (role === 'admin') {
+    rpcFunction = 'verify_pre_approved_admin';
+    targetTable = 'admins';
+  } else if (role === 'academic_head') {
+    rpcFunction = 'verify_pre_approved_academic_head';
+    targetTable = 'academic_heads';
+  } else if (role === 'system_admin') {
+    rpcFunction = 'verify_pre_approved_system_admin';
+    targetTable = 'system_admins';
+  } else {
+    alert('Please select a valid role.');
+    return;
+  }
+
+  try {
+    // 3. Call secure Supabase RPC backend function to verify pre-approved whitelist credentials
+    const { data: isPreApproved, error: rpcError } = await supabase.rpc(rpcFunction, {
+      p_email: email,
+      p_temppass: tempPass,
+      p_initials: initials,
+      p_firstname: firstname,
+      p_surname: surname,
+      p_phone: phone
+    });
+
+    if (rpcError) throw rpcError;
+
+    if (!isPreApproved) {
+      alert('Activation failed: The details entered do not match our pre-approved records in the database. Please verify your information.');
       return;
     }
 
-    // 2. Register user via Supabase Auth (Step 10)
+    // 4. Create user in Supabase Authentication
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: email,
       password: newPass
     });
 
     if (authError) throw authError;
-    const userId = authData.user?.id;
-    if (!userId) throw new Error('User ID could not be retrieved from authentication.');
 
-    // 3. Generate 8-digit unique Personnel Number (YY + 6 random digits) (Step 10)
-    const currentYearSuffix = new Date().getFullYear().toString().slice(-2);
-    let personnelNumber = '';
-    let isUnique = false;
-
-    while (!isUnique) {
-      const randomDigits = Math.floor(100000 + Math.random() * 900000).toString();
-      personnelNumber = `${currentYearSuffix}${randomDigits}`;
-
-      const { data: existing } = await supabase
-        .from('personnel')
-        .select('personnel_number')
-        .eq('personnel_number', personnelNumber)
-        .maybeSingle();
-
-      if (!existing) {
-        isUnique = true;
-      }
+    const user = authData.user;
+    if (!user) {
+      throw new Error('User sign-up failed to return a user object.');
     }
 
-    // 4. Insert into personnel table (Step 10)
+    // 5. Generate 8-digit MyAtlas Personnel Number (2-digit Year prefix + 6 random digits)
+    const currentYearSuffix = new Date().getFullYear().toString().slice(-2);
+    const randomDigits = Math.floor(100000 + Math.random() * 900000).toString();
+    const personnelNumber = `${currentYearSuffix}${randomDigits}`;
+
+    // 6. Insert user profile details with personnelNumber into designated active PostgreSQL table
     const { error: insertError } = await supabase
-      .from('personnel')
+      .from(targetTable)
       .insert([
         {
-          id: userId,
+          uid: user.id,
           personnel_number: personnelNumber,
-          initials,
-          firstname,
-          surname,
-          email,
-          phone,
-          role,
-          is_active: false
+          initials: initials,
+          firstname: firstname,
+          surname: surname,
+          email: email,
+          phone: phone,
+          role: role
         }
       ]);
 
     if (insertError) throw insertError;
 
-    // 5. Trigger Welcome Email (Step 11)
-    try {
-      await supabase.functions.invoke('send-welcome-email', {
-        body: {
-          email: email,
-          firstname: firstname,
-          personnelNumber: personnelNumber
-        }
-      });
-    } catch (emailError) {
-      console.warn('Email trigger notification note:', emailError);
-    }
+    alert('Your MyAtlas account has been successfully activated! Your Personnel Number is: ' + personnelNumber + '. Please keep this safe.');
 
-    alert(`Your MyAtlas account has been successfully activated!\n\nYour Generated Personnel Number is: ${personnelNumber}\nPlease keep this safe.`);
-
+    // Switch to Sign-In view automatically
     window.history.pushState({ view: 'signin' }, '', '#sign-in');
     showSigninView();
 
-  } catch (error) {
+   } catch (error) {
     console.error('Activation Error:', error);
     alert('Error during activation: ' + error.message);
   }
 });
 
-// --- STEP 12: SIGN-IN VERIFICATION LOGIC (SUPABASE) ---
+// --- SIGN IN SUBMISSION LOGIC VIA SUPABASE AUTH & ACTIVE TABLES ---
 const signinForm = document.querySelector('#view-signin form');
 
 signinForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
+  // Convert signin email input to uppercase
   const signinEmailElem = document.getElementById('signin-email');
   if (signinEmailElem) {
     signinEmailElem.value = signinEmailElem.value.toUpperCase();
@@ -303,32 +297,48 @@ signinForm.addEventListener('submit', async (e) => {
   const password = document.getElementById('signin-password').value;
   const role = document.getElementById('signin-role').value;
 
+  // Map selected role to target active profile table
+  let targetTable = '';
+  if (role === 'admin') {
+    targetTable = 'admins';
+  } else if (role === 'academic_head') {
+    targetTable = 'academic_heads';
+  } else if (role === 'system_admin') {
+    targetTable = 'system_admins';
+  } else {
+    alert('Please select a valid role.');
+    return;
+  }
+
   try {
-    // 1. Authenticate with Supabase Auth
+    // 1. Authenticate user credentials with Supabase Authentication
     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
       email: email,
       password: password
     });
 
     if (authError) throw authError;
-    const userId = authData.user?.id;
 
-    // 2. Cross-check personnel table details
-    const { data: personnelRecord, error: fetchError } = await supabase
-      .from('personnel')
+    const user = authData.user;
+
+    // 2. Query active table to verify matching profile record (uid, personnel_number, email, role)
+    const { data: profileData, error: profileError } = await supabase
+      .from(targetTable)
       .select('*')
-      .eq('id', userId)
+      .eq('uid', user.id)
       .eq('personnel_number', personnelNumber)
       .eq('email', email)
       .eq('role', role)
       .maybeSingle();
 
-    if (fetchError || !personnelRecord) {
-      alert('Sign-In failed: The details entered do not match our active records for this account.');
+    if (profileError) throw profileError;
+
+    if (!profileData) {
+      alert('Sign-In failed: The details entered (Personnel Number, Email, or Role) do not match our active records for this account.');
       return;
     }
 
-    // 3. Successful login redirect
+    // 3. Successful verification — redirect user to admin portal home page
     window.location.href = 'admin.html';
 
   } catch (error) {
