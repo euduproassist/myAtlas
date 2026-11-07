@@ -1,6 +1,5 @@
-import { auth, db } from "./firebase-config.js";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { collection, query, where, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+// supabase-config.js import
+import { supabase } from "./supabase-config.js";
 
 document.documentElement.style.overflowX = "hidden";
 document.body.style.overflowX = "hidden";
@@ -109,7 +108,7 @@ passwordToggleBtn.addEventListener('click', () => {
   }
 });
 
-// Password Validation Live Check
+// --- STEP 8: PASSWORD VALIDATION LIVE CHECK ---
 const newPassInput = document.getElementById('newpass');
 const critLength = document.getElementById('crit-length');
 const critUpper = document.getElementById('crit-upper');
@@ -156,7 +155,7 @@ newPassInput.addEventListener('input', (e) => {
   }
 });
 
-// --- AUTO-CAPITALIZE SPECIFIC INPUT FIELDS ON BLUR ---
+// --- STEP 8: AUTO-CAPITALIZE SPECIFIC INPUT FIELDS ON BLUR ---
 const autoCapitalizeIds = ['initials', 'firstname', 'surname', 'email', 'signin-email'];
 
 autoCapitalizeIds.forEach((id) => {
@@ -168,13 +167,12 @@ autoCapitalizeIds.forEach((id) => {
   }
 });
 
-// --- ACTIVATION SUBMISSION LOGIC ---
+// --- STEPS 9 & 10: ACTIVATION SUBMISSION LOGIC (SUPABASE) ---
 const activationForm = document.querySelector('#view-form form');
 
 activationForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  // Convert inputs to uppercase before reading values
   autoCapitalizeIds.forEach((id) => {
     const inputElem = document.getElementById(id);
     if (inputElem) {
@@ -192,124 +190,96 @@ activationForm.addEventListener('submit', async (e) => {
   const newPass = document.getElementById('newpass').value;
   const confirmPass = document.getElementById('confirmpass').value;
 
-  // 1. Validate passwords match
   if (newPass !== confirmPass) {
     alert('New password and confirm password do not match.');
     return;
   }
 
-  // 2. Map roles to their respective Firestore pre-approved and active profile collections
-  let preApprovedCollection = '';
-  let targetCollection = '';
-
-  if (role === 'admin') {
-    preApprovedCollection = 'pre_approved_admins';
-    targetCollection = 'admins';
-  } else if (role === 'academic_head') {
-    preApprovedCollection = 'pre_approved_academic_heads';
-    targetCollection = 'academic_heads';
-  } else if (role === 'system_admin') {
-    preApprovedCollection = 'pre_approved_system_admins';
-    targetCollection = 'system_admins';
-  } else {
-    alert('Please select a valid role.');
-    return;
-  }
-
   try {
-    // 3. Query corresponding Firestore pre-approved collection to verify entered details
-    const preApprovedRef = collection(db, preApprovedCollection);
-    const q = query(
-      preApprovedRef,
-      where('email', '==', email),
-      where('initials', '==', initials),
-      where('firstname', '==', firstname),
-      where('surname', '==', surname),
-      where('phone', '==', phone),
-      where('role', '==', role),
-      where('temppass', '==', tempPass)
-    );
+    // 1. Verify against pre_approved_personnel table
+    const { data: preApproved, error: preError } = await supabase
+      .from('pre_approved_personnel')
+      .select('*')
+      .eq('email', email)
+      .eq('initials', initials)
+      .eq('firstname', firstname)
+      .eq('surname', surname)
+      .eq('phone', phone)
+      .eq('role', role)
+      .eq('temppass', tempPass)
+      .maybeSingle();
 
-    const querySnapshot = await getDocs(q);
-
-    if (querySnapshot.empty) {
-      alert('Activation failed: The details entered do not match our pre-approved records in the database. Please verify your information.');
+    if (preError || !preApproved) {
+      alert('Activation failed: The details entered do not match our pre-approved records in the database.');
       return;
     }
 
-    // 4. Create user in Firebase Authentication
-    const userCredential = await createUserWithEmailAndPassword(auth, email, newPass);
-    const user = userCredential.user;
+    // 2. Register user via Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email: email,
+      password: newPass
+    });
 
-    // 5. Generate 8-digit MyAtlas Personnel Number (2-digit Year prefix + 6 random digits)
+    if (authError) throw authError;
+    const userId = authData.user?.id;
+    if (!userId) throw new Error('User ID could not be retrieved from authentication.');
+
+    // 3. Generate 8-digit unique Personnel Number (YY + 6 random digits)
     const currentYearSuffix = new Date().getFullYear().toString().slice(-2);
-    const randomDigits = Math.floor(100000 + Math.random() * 900000).toString();
-    const personnelNumber = `${currentYearSuffix}${randomDigits}`;
+    let personnelNumber = '';
+    let isUnique = false;
 
-    // 6. Save user profile details with personnelNumber to designated Firestore collection
-    await setDoc(doc(db, targetCollection, user.uid), {
-      uid: user.uid,
-      personnelNumber,
-      initials,
-      firstname,
-      surname,
-      email,
-      phone,
-      role,
-      createdAt: new Date().toISOString()
-    });
+    while (!isUnique) {
+      const randomDigits = Math.floor(100000 + Math.random() * 900000).toString();
+      personnelNumber = `${currentYearSuffix}${randomDigits}`;
 
-    // 7. Queue branded confirmation email via Firebase Trigger Email extension
-    await setDoc(doc(collection(db, "mail")), {
-      to: email,
-      message: {
-        subject: "Welcome to MyAtlas — Your Personnel Number",
-        text: `Hello ${firstname},\n\nYour MyAtlas account has been successfully activated.\n\nYour MyAtlas Personnel Number is: ${personnelNumber}\n\nPlease keep this number safe as you will need it to sign in to the portal.\n\nBest regards,\nAtlas College Admin Team`,
-        html: `
-          <div style="font-family: Inter, Helvetica, Arial, sans-serif; background-color: #f5f9ff; padding: 40px 20px; color: #071947;">
-            <div style="max-width: 550px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #cfe1f4; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-              <div style="background-color: #0b3d91; padding: 25px; text-align: center;">
-                <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 800; letter-spacing: 0.05em;">ATLAS COLLEGE</h1>
-                <p style="color: #55ddf4; margin: 5px 0 0 0; font-size: 12px; font-weight: 700; text-transform: uppercase;">Admin Portal Activation</p>
-              </div>
-              <div style="padding: 30px;">
-                <h2 style="color: #143f88; margin-top: 0; font-size: 20px;">Welcome, ${firstname}!</h2>
-                <p style="color: #557198; font-size: 15px; line-height: 1.5; margin-bottom: 25px;">Your MyAtlas admin account has been successfully activated. Below is your generated personnel number required for signing in:</p>
-                <div style="background-color: #f5f9ff; border: 1px dashed #0878f8; border-radius: 6px; padding: 20px; text-align: center; margin-bottom: 25px;">
-                  <span style="display: block; font-size: 12px; color: #557198; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 6px;">Your MyAtlas Personnel Number</span>
-                  <span style="font-size: 28px; font-weight: 800; color: #0878f8; letter-spacing: 2px;">${personnelNumber}</span>
-                </div>
-                <p style="color: #557198; font-size: 14px; line-height: 1.5; margin-bottom: 0;">Please store this number securely. You will use this alongside your registered email address to sign in to the portal.</p>
-              </div>
-              <div style="background-color: #06325c; padding: 20px; text-align: center; color: rgba(255,255,255,0.8); font-size: 12px;">
-                <p style="margin: 0;">© ${new Date().getFullYear()} Atlas College. All rights reserved.</p>
-              </div>
-            </div>
-          </div>
-        `
+      const { data: existing } = await supabase
+        .from('personnel')
+        .select('personnel_number')
+        .eq('personnel_number', personnelNumber)
+        .maybeSingle();
+
+      if (!existing) {
+        isUnique = true;
       }
-    });
+    }
 
-    alert('Your MyAtlas account has been successfully activated! Please check your email inbox to view your MyAtlas Personnel Number.');
+    // 4. Insert into personnel table
+    const { error: insertError } = await supabase
+      .from('personnel')
+      .insert([
+        {
+          id: userId,
+          personnel_number: personnelNumber,
+          initials,
+          firstname,
+          surname,
+          email,
+          phone,
+          role,
+          is_active: false
+        }
+      ]);
 
-    
-    // Switch to Sign-In view automatically
+    if (insertError) throw insertError;
+
+    alert(`Your MyAtlas account has been successfully activated!\n\nYour Generated Personnel Number is: ${personnelNumber}\nPlease keep this safe.`);
+
     window.history.pushState({ view: 'signin' }, '', '#sign-in');
     showSigninView();
 
-   } catch (error) {
+  } catch (error) {
     console.error('Activation Error:', error);
     alert('Error during activation: ' + error.message);
   }
 });
 
-// --- SIGN IN SUBMISSION LOGIC ---
+// --- STEP 12: SIGN-IN VERIFICATION LOGIC (SUPABASE) ---
 const signinForm = document.querySelector('#view-signin form');
 
 signinForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  // Convert signin email input to uppercase
   const signinEmailElem = document.getElementById('signin-email');
   if (signinEmailElem) {
     signinEmailElem.value = signinEmailElem.value.toUpperCase();
@@ -320,42 +290,39 @@ signinForm.addEventListener('submit', async (e) => {
   const password = document.getElementById('signin-password').value;
   const role = document.getElementById('signin-role').value;
 
-  // Map selected role to target active profile collection
-  let targetCollection = '';
-  if (role === 'admin') {
-    targetCollection = 'admins';
-  } else if (role === 'academic_head') {
-    targetCollection = 'academic_heads';
-  } else if (role === 'system_admin') {
-    targetCollection = 'system_admins';
-  } else {
-    alert('Please select a valid role.');
-    return;
-  }
-
   try {
-    // 1. Authenticate user credentials (email & password) with Firebase Authentication
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+    // 1. Authenticate with Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
 
-    // 2. Query Firestore collection to verify matching user document details (uid, personnelNumber, email, role)
-    const activeRef = collection(db, targetCollection);
-    const q = query(
-      activeRef,
-      where('uid', '==', user.uid),
-      where('personnelNumber', '==', personnelNumber),
-      where('email', '==', email),
-      where('role', '==', role)
-    );
+    if (authError) throw authError;
+    const userId = authData.user?.id;
 
-    const querySnapshot = await getDocs(q);
+    // 2. Cross-check personnel table details
+    const { data: personnelRecord, error: fetchError } = await supabase
+      .from('personnel')
+      .select('*')
+      .eq('id', userId)
+      .eq('personnel_number', personnelNumber)
+      .eq('email', email)
+      .eq('role', role)
+      .maybeSingle();
 
-    if (querySnapshot.empty) {
-      alert('Sign-In failed: The details entered (Personnel Number, Email, or Role) do not match our active records for this account.');
+    if (fetchError || !personnelRecord) {
+      alert('Sign-In failed: The details entered do not match our active records for this account.');
       return;
     }
 
-    // 3. Successful verification — redirect user to admin portal home page
+    // 3. Optional: check is_active status if required by roadmap
+    if (personnelRecord.is_active === false) {
+      // Note: depending on your logic, you can allow or block. Roadmap says: "Block login if details don't align or if is_active is false."
+      // Uncomment the line below if you want to block inactive accounts:
+      // alert('Account is currently inactive. Please contact administration.'); return;
+    }
+
+    // 4. Successful login redirect
     window.location.href = 'admin.html';
 
   } catch (error) {
