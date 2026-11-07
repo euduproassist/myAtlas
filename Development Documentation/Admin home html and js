@@ -259,21 +259,9 @@ Step 5: Initialize Supabase Client Configuration
 Create supabase-config.js using your Supabase Project URL and public anon key, and update script references in admin-home.html.
 
 
-Step 6: Maintain Form Validation and Formatting Logic
-Keep client-side auto-capitalization on blur and live password criteria checks (8–12 characters, uppercase letter, number, and underscore) in admin-home.js.
-
-
-Step 7: Implement Secure Activation via RPC
-Update the activation form submission listener in admin-home.js to call the secure Supabase RPC function instead of querying pre-approved tables directly from the client.
-
-
-Step 8: Implement Auth Sign-Up and Active Record Insertion
-Upon successful RPC verification, call supabase.auth.signUp(), generate the 8-digit MyAtlas personnel number, and insert the user record into the correct active role table (admins, academic_heads, or system_admins).
 
 
 Step 9: Configure Welcome Email Trigger
 Set up your email trigger (via Supabase Edge Functions or database triggers) to send the generated personnel number to the user's email upon activation.
 
 
-Step 10: Implement Sign-In Verification Logic
-Update the sign-in form submission listener in admin-home.js to authenticate via supabase.auth.signInWithPassword() and cross-verify credentials against the corresponding active role table before redirecting to admin.html.
