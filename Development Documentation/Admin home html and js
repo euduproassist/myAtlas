@@ -126,6 +126,31 @@ CREATE TABLE system_admins (
 Step 3: Enable Strict RLS and Keep Tables Private
 Keep Row Level Security (RLS) enabled on all tables without granting any public/anonymous read policies, ensuring raw whitelist data cannot be queried directly from the frontend.
 
+We will open the SQL Editor in your Supabase dashboard and run a SQL script to enable Row Level Security (RLS) on all six of our tables (pre_approved_admins, pre_approved_academic_heads, pre_approved_system_admins, admins, academic_heads, and system_admins).
+Each of these tables will have strict security enforced without granting any public or anonymous read policies. This ensures that raw whitelist credentials and private personnel records cannot be queried or accessed directly from the frontend by unauthenticated users.
+
+we pasted this to sql editor and ran it it was successful:
+
+-- 1. Enable RLS on pre-approved tables
+ALTER TABLE pre_approved_admins ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pre_approved_academic_heads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pre_approved_system_admins ENABLE ROW LEVEL SECURITY;
+
+-- 2. Enable RLS on active personnel tables
+ALTER TABLE admins ENABLE ROW LEVEL SECURITY;
+ALTER TABLE academic_heads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE system_admins ENABLE ROW LEVEL SECURITY;
+
+
+
+
+
+
+
+
+
+
+
 
 Step 4: Create Secure Postgres RPC Verification Functions
 Write secure database RPC functions (SECURITY DEFINER) that take the activation input parameters, check the correct pre-approved role table internally on the backend, and return a secure match status.
