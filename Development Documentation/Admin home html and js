@@ -155,6 +155,105 @@ ALTER TABLE system_admins ENABLE ROW LEVEL SECURITY;
 Step 4: Create Secure Postgres RPC Verification Functions
 Write secure database RPC functions (SECURITY DEFINER) that take the activation input parameters, check the correct pre-approved role table internally on the backend, and return a secure match status.
 
+We will open the SQL Editor in your Supabase dashboard and run a SQL script to create secure PostgreSQL RPC functions (SECURITY DEFINER).
+Each function will take the activation credentials provided by the user, internally check the correct pre-approved whitelist table on the backend while bypassing RLS restrictions safely, and return a secure match status. This allows the frontend to verify staff credentials without exposing raw table data or direct queries to the browser.
+
+we pasted this to sql editor and ran it it was successful:
+
+-- 1. RPC function to verify pre-approved admin
+CREATE OR REPLACE FUNCTION verify_pre_approved_admin(
+    p_email VARCHAR,
+    p_temppass VARCHAR,
+    p_initials VARCHAR,
+    p_firstname VARCHAR,
+    p_surname VARCHAR,
+    p_phone VARCHAR
+)
+RETURNS BOOLEAN
+SECURITY DEFINER
+SET search_path = public
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM pre_approved_admins
+        WHERE email = p_email
+          AND temppass = p_temppass
+          AND initials = p_initials
+          AND firstname = p_firstname
+          AND surname = p_surname
+          AND phone = p_phone
+    );
+END;
+$$;
+
+-- 2. RPC function to verify pre-approved academic head
+CREATE OR REPLACE FUNCTION verify_pre_approved_academic_head(
+    p_email VARCHAR,
+    p_temppass VARCHAR,
+    p_initials VARCHAR,
+    p_firstname VARCHAR,
+    p_surname VARCHAR,
+    p_phone VARCHAR
+)
+RETURNS BOOLEAN
+SECURITY DEFINER
+SET search_path = public
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM pre_approved_academic_heads
+        WHERE email = p_email
+          AND temppass = p_temppass
+          AND initials = p_initials
+          AND firstname = p_firstname
+          AND surname = p_surname
+          AND phone = p_phone
+    );
+END;
+$$;
+
+-- 3. RPC function to verify pre-approved system admin
+CREATE OR REPLACE FUNCTION verify_pre_approved_system_admin(
+    p_email VARCHAR,
+    p_temppass VARCHAR,
+    p_initials VARCHAR,
+    p_firstname VARCHAR,
+    p_surname VARCHAR,
+    p_phone VARCHAR
+)
+RETURNS BOOLEAN
+SECURITY DEFINER
+SET search_path = public
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM pre_approved_system_admins
+        WHERE email = p_email
+          AND temppass = p_temppass
+          AND initials = p_initials
+          AND firstname = p_firstname
+          AND surname = p_surname
+          AND phone = p_phone
+    );
+END;
+$$;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Step 5: Initialize Supabase Client Configuration
 Create supabase-config.js using your Supabase Project URL and public anon key, and update script references in admin-home.html.
