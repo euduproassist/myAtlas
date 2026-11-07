@@ -1,36 +1,21 @@
--- Step 3: Enable Row Level Security (RLS) and configure access policies
-
--- 1. Enable RLS on pre_approved_personnel table
+-- 1. Enable Row Level Security on both tables
 ALTER TABLE public.pre_approved_personnel ENABLE ROW LEVEL SECURITY;
-
--- Allow public/anon access to query the whitelist during activation check
-CREATE POLICY "Enable read access for public on pre_approved_personnel"
-ON public.pre_approved_personnel
-FOR SELECT
-TO public
-USING (true);
-
-
--- 2. Enable RLS on personnel table
 ALTER TABLE public.personnel ENABLE ROW LEVEL SECURITY;
 
--- Allow public/anon access to insert new personnel profiles during activation
-CREATE POLICY "Enable insert access for public on personnel"
-ON public.personnel
-FOR INSERT
-TO public
-WITH CHECK (true);
-
--- Allow public/anon access to read personnel profiles during sign-in verification
-CREATE POLICY "Enable read access for public on personnel"
-ON public.personnel
-FOR SELECT
-TO public
+-- 2. Allow public/anonymous lookup on pre_approved_personnel during activation verification
+CREATE POLICY "Allow public lookup for activation" 
+ON public.pre_approved_personnel 
+FOR SELECT 
 USING (true);
 
--- Allow public/anon access to update personnel profiles if needed
-CREATE POLICY "Enable update access for public on personnel"
-ON public.personnel
-FOR UPDATE
-TO public
-USING (true);
+-- 3. Allow newly authenticated users to insert their own profile during activation
+CREATE POLICY "Allow authenticated user insert own profile" 
+ON public.personnel 
+FOR INSERT 
+WITH CHECK (auth.uid() = id);
+
+-- 4. Allow authenticated users to read their own profile during sign-in verification
+CREATE POLICY "Allow authenticated user read own profile" 
+ON public.personnel 
+FOR SELECT 
+USING (auth.uid() = id);
