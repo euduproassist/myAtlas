@@ -1,12 +1,13 @@
--- Create the pre-approved personnel whitelist table
-CREATE TABLE public.pre_approved_personnel (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+-- Create the active personnel accounts table
+CREATE TABLE public.personnel (
+    id UUID PRIMARY KEY,
+    personnel_number TEXT UNIQUE NOT NULL,
     initials TEXT NOT NULL,
     firstname TEXT NOT NULL,
     surname TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
     phone TEXT NOT NULL,
     role TEXT NOT NULL,
-    temppass TEXT NOT NULL,
+    is_active BOOLEAN DEFAULT false,
     created_at TIMESTAMPTZ DEFAULT now()
 );
