@@ -258,10 +258,60 @@ $$;
 Step 5: Initialize Supabase Client Configuration
 Create supabase-config.js using your Supabase Project URL and public anon key, and update script references in admin-home.html.
 
+We will create a new configuration file named supabase-config.js and update your admin-home.html script references.
+Each of these components will be structured with your unique Supabase Project URL and public publishable anon key to initialize the official Supabase client via a browser-safe ES module CDN link. This allows your frontend application scripts to securely connect, authenticate, and communicate with your Supabase backend and database services.
+
+we created supabase-config.js:
+
+// supabase-config.js
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = 'https://eejhuoascszybhmpelqo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_WZzwe6xezCKhNViuy39L-Q_5Jmi...';
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+we updated admin-home.html:
+<!-- Include Supabase Configuration and Main Logic Modules -->
+<script type="module" src="supabase-config.js"></script>
+<script type="module" src="admin-home.js"></script>
+</body>
+</html>
 
 
 
-Step 9: Configure Welcome Email Trigger
+
+
+
+
+
+
+
+
+
+
+
+
+Step 6: Complete Frontend Authentication, Validation, and Integration Logic (admin-home.js)
+ * Maintain Form Validation and Formatting: Keep client-side auto-capitalization on field blur and live password criteria checks verifying length (8–12 characters), uppercase letters, numbers, and underscores.
+ * Implement Secure Activation via RPC: Update the activation form submission listener to call your secure Supabase RPC verification functions (verify_pre_approved_*) instead of querying whitelist tables directly from the client.
+ * Execute Auth Sign-Up and Active Record Insertion: Upon successful RPC verification, execute supabase.auth.signUp(), generate the unique 8-digit MyAtlas personnel number, and insert the registered user profile into the corresponding active role table (admins, academic_heads, or system_admins).
+ * Implement Sign-In Verification Logic: Update the sign-in form submission listener to authenticate users via supabase.auth.signInWithPassword() and cross-verify their credentials against the correct active role table before redirecting them to admin.html.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Step 7: Configure Welcome Email Trigger
 Set up your email trigger (via Supabase Edge Functions or database triggers) to send the generated personnel number to the user's email upon activation.
 
 
