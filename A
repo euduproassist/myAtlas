@@ -1,41 +1,9 @@
--- 1. Create admins active table
-CREATE TABLE admins (
-    id SERIAL PRIMARY KEY,
-    uid UUID NOT NULL,
-    personnel_number VARCHAR(20) UNIQUE NOT NULL,
-    initials VARCHAR(10) NOT NULL,
-    firstname VARCHAR(100) NOT NULL,
-    surname VARCHAR(100) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    phone VARCHAR(50) NOT NULL,
-    role VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
-);
+-- 1. Enable RLS on pre-approved tables
+ALTER TABLE pre_approved_admins ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pre_approved_academic_heads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pre_approved_system_admins ENABLE ROW LEVEL SECURITY;
 
--- 2. Create academic_heads active table
-CREATE TABLE academic_heads (
-    id SERIAL PRIMARY KEY,
-    uid UUID NOT NULL,
-    personnel_number VARCHAR(20) UNIQUE NOT NULL,
-    initials VARCHAR(10) NOT NULL,
-    firstname VARCHAR(100) NOT NULL,
-    surname VARCHAR(100) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    phone VARCHAR(50) NOT NULL,
-    role VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
-);
-
--- 3. Create system_admins active table
-CREATE TABLE system_admins (
-    id SERIAL PRIMARY KEY,
-    uid UUID NOT NULL,
-    personnel_number VARCHAR(20) UNIQUE NOT NULL,
-    initials VARCHAR(10) NOT NULL,
-    firstname VARCHAR(100) NOT NULL,
-    surname VARCHAR(100) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    phone VARCHAR(50) NOT NULL,
-    role VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
-);
+-- 2. Enable RLS on active personnel tables
+ALTER TABLE admins ENABLE ROW LEVEL SECURITY;
+ALTER TABLE academic_heads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE system_admins ENABLE ROW LEVEL SECURITY;
