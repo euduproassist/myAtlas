@@ -1,9 +1,80 @@
--- 1. Enable RLS on pre-approved tables
-ALTER TABLE pre_approved_admins ENABLE ROW LEVEL SECURITY;
-ALTER TABLE pre_approved_academic_heads ENABLE ROW LEVEL SECURITY;
-ALTER TABLE pre_approved_system_admins ENABLE ROW LEVEL SECURITY;
+-- 1. RPC function to verify pre-approved admin
+CREATE OR REPLACE FUNCTION verify_pre_approved_admin(
+    p_email VARCHAR,
+    p_temppass VARCHAR,
+    p_initials VARCHAR,
+    p_firstname VARCHAR,
+    p_surname VARCHAR,
+    p_phone VARCHAR
+)
+RETURNS BOOLEAN
+SECURITY DEFINER
+SET search_path = public
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM pre_approved_admins
+        WHERE email = p_email
+          AND temppass = p_temppass
+          AND initials = p_initials
+          AND firstname = p_firstname
+          AND surname = p_surname
+          AND phone = p_phone
+    );
+END;
+$$;
 
--- 2. Enable RLS on active personnel tables
-ALTER TABLE admins ENABLE ROW LEVEL SECURITY;
-ALTER TABLE academic_heads ENABLE ROW LEVEL SECURITY;
-ALTER TABLE system_admins ENABLE ROW LEVEL SECURITY;
+-- 2. RPC function to verify pre-approved academic head
+CREATE OR REPLACE FUNCTION verify_pre_approved_academic_head(
+    p_email VARCHAR,
+    p_temppass VARCHAR,
+    p_initials VARCHAR,
+    p_firstname VARCHAR,
+    p_surname VARCHAR,
+    p_phone VARCHAR
+)
+RETURNS BOOLEAN
+SECURITY DEFINER
+SET search_path = public
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM pre_approved_academic_heads
+        WHERE email = p_email
+          AND temppass = p_temppass
+          AND initials = p_initials
+          AND firstname = p_firstname
+          AND surname = p_surname
+          AND phone = p_phone
+    );
+END;
+$$;
+
+-- 3. RPC function to verify pre-approved system admin
+CREATE OR REPLACE FUNCTION verify_pre_approved_system_admin(
+    p_email VARCHAR,
+    p_temppass VARCHAR,
+    p_initials VARCHAR,
+    p_firstname VARCHAR,
+    p_surname VARCHAR,
+    p_phone VARCHAR
+)
+RETURNS BOOLEAN
+SECURITY DEFINER
+SET search_path = public
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM pre_approved_system_admins
+        WHERE email = p_email
+          AND temppass = p_temppass
+          AND initials = p_initials
+          AND firstname = p_firstname
+          AND surname = p_surname
+          AND phone = p_phone
+    );
+END;
+$$;
