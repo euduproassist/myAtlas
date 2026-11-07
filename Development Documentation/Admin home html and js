@@ -1,5 +1,5 @@
-
 Personnel Activation and Sign-In System Roadmap (Supabase Integration)
+
 
 Phase 1: Supabase Database & Security Setup
 
@@ -8,33 +8,54 @@ Phase 1: Supabase Database & Security Setup
 
  * Step 2: Create the personnel Table
    * Create the active personnel table in PostgreSQL to store registered users (id, personnel_number, initials, firstname, surname, email, phone, role, is_active). Set personnel_number to UNIQUE so duplicates are physically impossible at the database level.
+
  * Step 3: Enable Row Level Security (RLS)
    * Apply RLS policies to both tables so that unauthenticated users cannot read or modify administrative data directly.
+
  * Step 4: Copy Your Supabase API Keys
    * Go to Project Settings > API in your Supabase dashboard and copy your Project URL and anon public key.
+
+
 Phase 2: Manual Pre-Approval Data Entry
+
  * Step 5: Insert Test Pre-Approved Personnel
    * Go to the Table Editor in Supabase, select pre_approved_personnel, and manually insert a test staff record (with your test email, name, role, and temporary password) so you have data to test activation against.
+
+
 Phase 3: Project File Restructuring
+
  * Step 6: Create supabase-config.js
    * Delete or replace firebase-config.js with a new supabase-config.js file that initializes the Supabase JS SDK using your Project URL and anon key.
+
  * Step 7: Update admin-home.html Script References
    * Ensure admin-home.html links to your updated JavaScript files and that field inputs and IDs match the Supabase connection setup.
+
+
 Phase 4: JavaScript Logic Implementation (admin-home.js)
+
  * Step 8: Implement Form Field Formatting & Validation
    * Keep your auto-capitalization on blur and live password criteria check (8 to 12 characters, uppercase letter, number, underscore, and matching confirmation).
+
  * Step 9: Build the Activation Logic (supabase.from('pre_approved_personnel'))
    * On activation submit: query pre_approved_personnel to verify that all entered details match the pre-approved record exactly. Deny access if any field fails to match.
+
  * Step 10: Build Account Creation & Personnel Number Generation
    * On successful pre-approval match: call supabase.auth.signUp(), generate a random 8-digit MyAtlas Personnel Number, check database uniqueness, and write the permanent record into the personnel table with is_active: false.
+
  * Step 11: Configure Welcome Email Trigger
    * Trigger an automated email to send the generated 8-digit MyAtlas Personnel Number to the user's email address upon successful activation.
+
  * Step 12: Build the Sign-In Verification Logic (supabase.auth.signInWithPassword)
    * On sign-in submit: authenticate the email and password via Supabase Auth, then cross-check personnel_number, email, role, and is_active status in the personnel table. Block login if details don't align or if is_active is false.
+
+
 Phase 5: Testing & Verification
+
  * Step 13: Test Mismatched Activation
    * Submit incorrect names or temporary passwords to confirm the system rejects unauthorized activation attempts.
+
  * Step 14: Test Valid Activation & Account Creation
    * Submit valid matching details, verify that the new account appears under Supabase Auth and the personnel table, and confirm the 8-digit personnel number is generated cleanly.
+
  * Step 15: Test Sign-In & Dashboard Redirect
    * Log in with the new personnel number, email, password, and role to verify successful redirection to admin.html.
