@@ -1,8 +1,38 @@
--- Allow public select lookup on pre_approved_personnel during activation
-DROP POLICY IF EXISTS "Allow public lookup for activation" ON public.pre_approved_personnel;
+-- 1. Create pre_approved_admins table
+CREATE TABLE pre_approved_admins (
+    id SERIAL PRIMARY KEY,
+    initials VARCHAR(10) NOT NULL,
+    firstname VARCHAR(100) NOT NULL,
+    surname VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    phone VARCHAR(50) NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    temppass VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
 
-CREATE POLICY "Allow public lookup for activation" 
-ON public.pre_approved_personnel 
-FOR SELECT 
-TO public
-USING (true);
+-- 2. Create pre_approved_academic_heads table
+CREATE TABLE pre_approved_academic_heads (
+    id SERIAL PRIMARY KEY,
+    initials VARCHAR(10) NOT NULL,
+    firstname VARCHAR(100) NOT NULL,
+    surname VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    phone VARCHAR(50) NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    temppass VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- 3. Create pre_approved_system_admins table
+CREATE TABLE pre_approved_system_admins (
+    id SERIAL PRIMARY KEY,
+    initials VARCHAR(10) NOT NULL,
+    firstname VARCHAR(100) NOT NULL,
+    surname VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    phone VARCHAR(50) NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    temppass VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
