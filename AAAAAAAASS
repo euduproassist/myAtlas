@@ -1,1 +1,8 @@
-sb_publishable_cRmFAsk6AuVxxOnMcNEWsA_4_YrdnT-
+-- Allow public select lookup on pre_approved_personnel during activation
+DROP POLICY IF EXISTS "Allow public lookup for activation" ON public.pre_approved_personnel;
+
+CREATE POLICY "Allow public lookup for activation" 
+ON public.pre_approved_personnel 
+FOR SELECT 
+TO public
+USING (true);
