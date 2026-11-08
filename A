@@ -1,3 +1,15 @@
+<h2>Confirm your email address</h2>
+
+<p>Your MyAtlas Personnel Number is: <strong>{{ .Data.personnel_number }}</strong></p>
+
+<p>Follow the link below to confirm your email address and finish signing up.</p>
+<p><a href="{{ .ConfirmationURL }}">Confirm email address</a></p>
+
+
+
+
+
+
 cnrz nzoe vqum izto
 
 
