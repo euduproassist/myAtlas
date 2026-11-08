@@ -541,10 +541,20 @@ activationForm.addEventListener('submit', async (e) => {
       return;
     }
 
-    // 4. Create user in Supabase Authentication
+    // 4. Generate 8-digit MyAtlas Personnel Number (2-digit Year prefix + 6 random digits)
+    const currentYearSuffix = new Date().getFullYear().toString().slice(-2);
+    const randomDigits = Math.floor(100000 + Math.random() * 900000).toString();
+    const personnelNumber = `${currentYearSuffix}${randomDigits}`;
+
+    // 5. Create user in Supabase Authentication and pass personnel number in metadata for the email template
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: email,
-      password: newPass
+      password: newPass,
+      options: {
+        data: {
+          personnel_number: personnelNumber
+        }
+      }
     });
 
     if (authError) throw authError;
@@ -553,11 +563,6 @@ activationForm.addEventListener('submit', async (e) => {
     if (!user) {
       throw new Error('User sign-up failed to return a user object.');
     }
-
-    // 5. Generate 8-digit MyAtlas Personnel Number (2-digit Year prefix + 6 random digits)
-    const currentYearSuffix = new Date().getFullYear().toString().slice(-2);
-    const randomDigits = Math.floor(100000 + Math.random() * 900000).toString();
-    const personnelNumber = `${currentYearSuffix}${randomDigits}`;
 
     // 6. Insert user profile details with personnelNumber into designated active PostgreSQL table
     const { error: insertError } = await supabase
@@ -577,7 +582,7 @@ activationForm.addEventListener('submit', async (e) => {
 
     if (insertError) throw insertError;
 
-    alert('Your MyAtlas account has been successfully activated! Your Personnel Number is: ' + personnelNumber + '. Please keep this safe.');
+    alert('Your MyAtlas account has been successfully activated! A confirmation email containing your Personnel Number has been sent to your email address.');
 
     // Switch to Sign-In view automatically
     window.history.pushState({ view: 'signin' }, '', '#sign-in');
