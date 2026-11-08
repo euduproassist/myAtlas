@@ -1,100 +1,26 @@
-https://account-app.brevo.com/account/session/organization
+// Setup type definitions for built-in Supabase Runtime APIs
+import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { withSupabase } from "jsr:@supabase/server@^1";
 
+interface ReqPayload {
+  name: string;
+}
 
+console.info("server started");
 
-<h2>Confirm your email address</h2>
+export default {
+  fetch: withSupabase({ auth: ["publishable", "secret"] }, async (req, ctx) => {
+    const { name }: ReqPayload = await req.json();
 
-<p>Your MyAtlas Personnel Number is: <strong>{{ .Data.personnel_number }}</strong></p>
+    // Using 'sb_secret_xyz' bypasses RLS — use for privileged operations
+    if (ctx.authMode === "secret") {
+      return Response.json({
+        message: `Hello ${name} admin!`,
+      });
+    }
 
-<p>Follow the link below to confirm your email address and finish signing up.</p>
-<p><a href="{{ .ConfirmationURL }}">Confirm email address</a></p>
-
-
-
-
-
-
-cnrz nzoe vqum izto
-
-
-
--- 1. RPC function to verify pre-approved admin
-CREATE OR REPLACE FUNCTION verify_pre_approved_admin(
-    p_email VARCHAR,
-    p_temppass VARCHAR,
-    p_initials VARCHAR,
-    p_firstname VARCHAR,
-    p_surname VARCHAR,
-    p_phone VARCHAR
-)
-RETURNS BOOLEAN
-SECURITY DEFINER
-SET search_path = public
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN EXISTS (
-        SELECT 1 FROM pre_approved_admins
-        WHERE email = p_email
-          AND temppass = p_temppass
-          AND initials = p_initials
-          AND firstname = p_firstname
-          AND surname = p_surname
-          AND phone = p_phone
-    );
-END;
-$$;
-
--- 2. RPC function to verify pre-approved academic head
-CREATE OR REPLACE FUNCTION verify_pre_approved_academic_head(
-    p_email VARCHAR,
-    p_temppass VARCHAR,
-    p_initials VARCHAR,
-    p_firstname VARCHAR,
-    p_surname VARCHAR,
-    p_phone VARCHAR
-)
-RETURNS BOOLEAN
-SECURITY DEFINER
-SET search_path = public
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN EXISTS (
-        SELECT 1 FROM pre_approved_academic_heads
-        WHERE email = p_email
-          AND temppass = p_temppass
-          AND initials = p_initials
-          AND firstname = p_firstname
-          AND surname = p_surname
-          AND phone = p_phone
-    );
-END;
-$$;
-
--- 3. RPC function to verify pre-approved system admin
-CREATE OR REPLACE FUNCTION verify_pre_approved_system_admin(
-    p_email VARCHAR,
-    p_temppass VARCHAR,
-    p_initials VARCHAR,
-    p_firstname VARCHAR,
-    p_surname VARCHAR,
-    p_phone VARCHAR
-)
-RETURNS BOOLEAN
-SECURITY DEFINER
-SET search_path = public
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN EXISTS (
-        SELECT 1 FROM pre_approved_system_admins
-        WHERE email = p_email
-          AND temppass = p_temppass
-          AND initials = p_initials
-          AND firstname = p_firstname
-          AND surname = p_surname
-          AND phone = p_phone
-    );
-END;
-$$;
+    return Response.json({
+      message: `Hello ${name}!`,
+    });
+  }),
+};
