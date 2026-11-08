@@ -1,3 +1,7 @@
+cnrz nzoe vqum izto
+
+
+
 -- 1. RPC function to verify pre-approved admin
 CREATE OR REPLACE FUNCTION verify_pre_approved_admin(
     p_email VARCHAR,
