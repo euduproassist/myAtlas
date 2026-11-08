@@ -1,3 +1,30 @@
+﻿
+index.js:2 
+ POST https://eejhuoascszybhmpelqo.supabase.co/auth/v1/signup 500 (Internal Server Error)
+(anonymous)	@	index.js:2
+Kt	@	index.js:2
+f	@	index.js:2
+signUp	@	index.js:17
+(anonymous)	@	admin-home.js:241
+[NEW] Explain Console errors by using Copilot in Edge: click 
+ to explain an error Learn more
+Don’t show again
+admin-home.js:283
+ Activation Error: AuthRetryableFetchError: Error sending confirmation email
+    at Ge (index.js:2:1)
+    at async Kt (index.js:2:1)
+    at async f (index.js:2:1)
+    at async he.signUp (index.js:17:1)
+    at async HTMLFormElement.<anonymous> (admin-home.js:241:50)
+(anonymous)	@	admin-home.js:283
+
+
+
+
+
+
+
+
 <h2>Confirm your email address</h2>
 
 <p>Your MyAtlas Personnel Number is: <strong>{{ .Data.personnel_number }}</strong></p>
