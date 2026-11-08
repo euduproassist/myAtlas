@@ -1,4 +1,40 @@
-﻿
+	
+08 Nov 26 13:21:14
+500
+POST	/auth/v1/signup	
+POST | 500 | https://eejhuoascszybhmpelqo.supabase.co/auth/v1/signup | Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0
+
+08 Nov 26 13:21:14
+200
+OPTIONS	/auth/v1/signup	
+OPTIONS | 200 | https://eejhuoascszybhmpelqo.supabase.co/auth/v1/signup | Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0
+
+08 Nov 26 13:21:13
+200
+POST	/rest/v1/rpc/verify_pre_approved_admin	
+POST | 200 | https://eejhuoascszybhmpelqo.supabase.co/rest/v1/rpc/verify_pre_approved_admin | Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0
+
+08 Nov 26 13:21:12
+200
+OPTIONS	/rest/v1/rpc/verify_pre_approved_admin	
+OPTIONS | 200 | https://eejhuoascszybhmpelqo.supabase.co/rest/v1/rpc/verify_pre_approved_admin | Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36 Edg/156.0.0.0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 index.js:2 
  POST https://eejhuoascszybhmpelqo.supabase.co/auth/v1/signup 500 (Internal Server Error)
 (anonymous)	@	index.js:2
