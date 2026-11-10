@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>myAtlas — Admin Portal</title>
+
+  <style>
+    :root {
+      --blue: #0866f5;
+      --blue-dark: #0647ad;
+      --navy: #071c72;
+      --text: #244b88;
+      --muted: #7897c5;
+      --border: #cfe3ff;
+      --pale-blue: #eaf5ff;
+      --white: #ffffff;
+      --red: #f35c63;
+      --line: #d8e8f8;
+      --border-light: #cfe3f7;
+      --shadow: 0 1px 4px rgba(24,76,125,.05);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      width: 100%;
+      min-width: 0;
+      min-height: 100%;
+      overflow-x: hidden;
+      background: #ffffff;
+    }
+
+    body {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background: #ffffff;
+      font-size: 13.5px;
+      font-weight: 400;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: default; }
+    a { text-decoration: none; color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    img, svg, video, canvas { display: block; max-width: 100%; }
+    p, h1, h2, h3, a, span { overflow-wrap: break-word; }
+
+    /* PAGE WRAPPER */
+    .app {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      width: 100%;
+      background: #fff;
+    }
+
+    /* TOP BAR */
+    .topbar {
+      width: 100%;
+      max-width: 100%;
+      height: 72px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 25px;
+      background: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 0 0 auto;
+    }
+    .brand-logo {
+      width: 125px;
+      height: auto;
+      display: block;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .search {
+      width: 320px;
+      height: 40px;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      color: #7b96b6;
+      background: #ffffff;
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+    .search svg { width: 16px; height: 16px; flex: 0 0 auto; margin-right: 10px; color: #8fa6c2; }
+    .search input {
+      border: 0;
+      outline: 0;
+      width: 100%;
+      color: var(--text);
+      background: transparent;
+      font-size: 13px;
+      font-weight: 400;
+      min-width: 0;
+    }
+    .search input::placeholder { color: #8fa6c2; }
+
+    .help {
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid #8fa6c2;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #536d8d;
+      font-weight: 600;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 750;
+      flex-shrink: 0;
+    }
+    .chevron {
+      width: 7px;
+      height: 7px;
+      border-right: 2px solid #536d8d;
+      border-bottom: 2px solid #536d8d;
+      transform: rotate(45deg);
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+
+    /* USER MENU DROPDOWN STYLES */
+    .user-menu-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0px;
+      cursor: default;
+    }
+
+    .user-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 240px;
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(23, 60, 105, 0.12);
+      display: none;
+      flex-direction: column;
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    .dropdown-user-info {
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fafcfe;
+    }
+
+    .dropdown-user-name {
+      font-size: 14px;
+      font-weight: 750;
+      color: var(--navy);
+      margin-bottom: 2px;
+    }
+
+    .dropdown-user-email {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--muted);
+      margin-bottom: 6px;
+      word-break: break-all;
+    }
+
+    .dropdown-user-role {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #eaf5ff;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 750;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .dropdown-logout-btn {
+      width: 100%;
+      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      text-align: left;
+      color: #e53e3e;
+      font-size: 13.5px;
+      font-weight: 750;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* MAIN THREE-COLUMN WORKSPACE */
+    .workspace {
+      flex: 1;
+      display: grid;
+      grid-template-columns:
+        minmax(220px, 22%)
+        minmax(0, 1fr)
+        minmax(240px, 22%);
+      width: 100%;
+      min-height: 0;
+      align-items: stretch;
+      background: #fff;
+    }
+
+    /* Left application cycles panel */
+    .cycles-sidebar {
+      min-width: 0;
+      padding: 22px 18px;
+      border-right: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .sidebar-heading-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .sidebar-heading {
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 750;
+    }
+
+    .new-cycle-button {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 12px;
+      color: #fff;
+      background: var(--blue);
+      border: 1px solid var(--blue);
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .new-cycle-button svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .cycle-search {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .cycle-search svg {
+      position: absolute;
+      top: 50%;
+      left: 11px;
+      width: 15px;
+      height: 15px;
+      color: #8797ad;
+      transform: translateY(-50%);
+    }
+
+    .cycle-search input {
+      display: block;
+      width: 100%;
+      height: 39px;
+      padding: 0 12px 0 34px;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .cycle-search input::placeholder {
+      color: #8997aa;
+    }
+
+    .cycle-filter {
+      min-height: 41px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      color: #425875;
+      background: var(--pale-blue);
+      border-left: 3px solid var(--blue);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .cycle-filter svg {
+      width: 17px;
+      height: 17px;
+      color: #55769f;
+      flex: 0 0 auto;
+    }
+
+    .count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 21px;
+      height: 21px;
+      margin-left: auto;
+      color: #6481a7;
+      background: #e2edfb;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .empty-cycles {
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      padding: 48px 8px 24px;
+    }
+
+    .empty-icon {
+      width: 48px;
+      height: 48px;
+      color: #7188a6;
+      margin-bottom: 18px;
+    }
+
+    .empty-title {
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 750;
+      margin-bottom: 7px;
+    }
+
+    .empty-description {
+      max-width: 230px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* Centre welcome area */
+    .main-content {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: clamp(35px, 7vh, 90px) clamp(20px, 4vw, 64px) 50px;
+      background: #fff;
+      text-align: center;
+    }
+
+    .welcome-illustration {
+      position: relative;
+      width: 152px;
+      height: 125px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .illustration-cloud {
+      position: absolute;
+      width: 118px;
+      height: 58px;
+      left: 17px;
+      bottom: 18px;
+      background: #f0f6ff;
+      border-radius: 50%;
+    }
+
+    .calendar-illustration {
+      position: relative;
+      z-index: 1;
+      width: 76px;
+      height: 76px;
+      color: #557da9;
+    }
+
+    .illustration-plus {
+      position: absolute;
+      z-index: 2;
+      right: 19px;
+      bottom: 11px;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      background: #4b9aee;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .welcome-title {
+      max-width: 100%;
+      color: var(--navy);
+      font-size: clamp(23px, 2.2vw, 34px);
+      font-weight: 750;
+      letter-spacing: -0.6px;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+      margin-bottom: 12px;
+    }
+
+    .welcome-description {
+      max-width: 540px;
+      color: #6e7e95;
+      font-size: 13.5px;
+      font-weight: 400;
+      line-height: 1.55;
+      margin-bottom: 26px;
+    }
+
+    .primary-button {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 20px;
+      color: #fff;
+      background: var(--blue);
+      border: 1px solid var(--blue);
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 750;
+      box-shadow: 0 3px 10px rgba(8, 102, 245, 0.15);
+      white-space: nowrap;
+    }
+
+    .primary-button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Right-side information panels */
+    .right-sidebar {
+      min-width: 0;
+      padding: 22px 18px;
+      border-left: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .side-card {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .side-card-heading {
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 750;
+      padding: 16px 15px 10px;
+    }
+
+    .quick-action {
+      width: 100%;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      color: #344963;
+      background: #fff;
+      border: 0;
+      border-top: 1px solid #f0f3f8;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .quick-action:first-of-type {
+      border-top: 0;
+    }
+
+    .quick-action-icon {
+      width: 31px;
+      height: 31px;
+      flex: 0 0 31px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3e80c8;
+      background: #edf5ff;
+      border-radius: 50%;
+    }
+
+    .quick-action-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .quick-action-label {
+      min-width: 0;
+      flex: 1;
+      font-weight: 700;
+    }
+
+    .quick-chevron {
+      width: 15px;
+      height: 15px;
+      flex: 0 0 auto;
+      color: #8b9bb0;
+    }
+
+    .info-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      padding: 18px 15px;
+      background: #ffffff;
+    }
+
+    .info-icon {
+      width: 27px;
+      height: 27px;
+      flex: 0 0 27px;
+      color: #4389d0;
+    }
+
+    .info-content {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .info-title {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 750;
+      margin-bottom: 6px;
+    }
+
+    .info-description {
+      color: #718198;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .help-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 11px;
+      color: #276cb8;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .help-link svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* FOOTER */
+    .footer {
+      width: 100%;
+      max-width: 100%;
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+      padding: 24px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 0 0 auto;
+      font-size: 12px;
+      font-weight: 500;
+      color: #708aa8;
+    }
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .footer-right a {
+      font-size: 12px;
+      font-weight: 500;
+      color: #708aa8;
+      pointer-events: none;
+    }
+
+    @media (max-width: 700px) {
+      .topbar {
+        padding: 0 18px;
+      }
+      .workspace {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+      .cycles-sidebar {
+        order: 1;
+        width: 100%;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .main-content {
+        order: 2;
+        width: 100%;
+        padding: 34px 18px 38px;
+      }
+      .right-sidebar {
+        order: 3;
+        width: 100%;
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+      .footer {
+        padding: 20px 18px;
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+      }
+      .footer-right {
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .topbar { padding: 0 14px; height: 64px; }
+      .search { width: 36px; height: 36px; padding: 0; justify-content: center; border: none; background: #f5f9fd; box-shadow: none; }
+      .search input { display: none; }
+      .search svg { margin: 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- TOP HEADER -->
+    <header class="topbar">
+      <div class="brand">
+        <a href="#" aria-label="myAtlas home" class="logo-link" onclick="return false;">
+          <img class="brand-logo" src="assets/logos.png" alt="myAtlas College">
+        </a>
+      </div>
+
+      <div class="top-right">
+        <label class="search" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="10.7" cy="10.7" r="6.7"></circle>
+            <path d="M16 16l5 5"></path>
+          </svg>
+          <input type="search" placeholder="Search applications, cycles, students..." />
+        </label>
+        <div class="help" aria-label="Help">?</div>
+
+        <!-- User Profile Menu Wrapper -->
+        <div class="user-menu-wrapper" id="userMenuTrigger">
+          <div class="avatar" id="userAvatar">AD</div>
+          <div class="chevron" aria-hidden="true"></div>
+
+          <!-- Dropdown Menu -->
+          <div class="user-dropdown-menu" id="userDropdownMenu">
+            <div class="dropdown-user-info">
+              <div class="dropdown-user-name" id="dropdownUserName">Admin User</div>
+              <div class="dropdown-user-email" id="dropdownUserEmail">admin@atlas.ac.za</div>
+              <span class="dropdown-user-role" id="dropdownUserRole">Administrator</span>
+            </div>
+            <button type="button" class="dropdown-logout-btn" onclick="return false;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="workspace">
+
+      <!-- LEFT: APPLICATION CYCLES -->
+      <aside class="cycles-sidebar">
+        <div class="sidebar-heading-row">
+          <h2 class="sidebar-heading">Application cycles</h2>
+
+          <button class="new-cycle-button" type="button">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" aria-hidden="true">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            New cycle
+          </button>
+        </div>
+
+        <div class="cycle-search">
+          <svg viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" aria-hidden="true">
+            <circle cx="10.8" cy="10.8" r="6.8"></circle>
+            <path d="m16 16 4.5 4.5"></path>
+          </svg>
+
+          <input
+            type="search"
+            placeholder="Find a cycle..."
+            aria-label="Find an application cycle"
+          >
+        </div>
+
+        <div class="cycle-filter">
+          <svg viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+            <path d="M8 3v4M16 3v4M4 10h16"></path>
+          </svg>
+
+          <span>All cycles</span>
+          <span class="count">0</span>
+        </div>
+
+        <div class="empty-cycles">
+          <svg class="empty-icon" viewBox="0 0 48 48"
+               fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <rect x="10" y="11" width="28" height="29" rx="3"></rect>
+            <path d="M17 7v8M31 7v8M10 20h28"></path>
+          </svg>
+
+          <h3 class="empty-title">No application cycles yet</h3>
+
+          <p class="empty-description">
+            Your created cycles will appear here once you add them.
+          </p>
+        </div>
+      </aside>
+
+      <!-- CENTRE: WELCOME -->
+      <section class="main-content">
+        <div class="welcome-illustration" aria-hidden="true">
+          <div class="illustration-cloud"></div>
+
+          <svg class="calendar-illustration"
+               viewBox="0 0 80 80" fill="none"
+               stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round">
+            <rect x="12" y="16" width="51" height="53" rx="5"></rect>
+            <path d="M12 30h51M24 9v14M51 9v14"></path>
+            <path d="M23 42h12M23 53h20"></path>
+          </svg>
+
+          <div class="illustration-plus">+</div>
+        </div>
+
+        <h1 class="welcome-title">
+          Welcome to myAtlas Admin Portal
+        </h1>
+
+        <p class="welcome-description">
+          Manage your institution's application cycles, forms,
+          documents and student applications from one place.
+        </p>
+
+        <button class="primary-button" type="button">
+          <svg viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14"></path>
+          </svg>
+          Create Application Cycle
+        </button>
+      </section>
+
+      <!-- RIGHT: QUICK ACTIONS AND ACTIVITY LOG -->
+      <aside class="right-sidebar">
+        <section class="side-card">
+          <h2 class="side-card-heading">Quick Actions</h2>
+
+          <button class="quick-action" type="button">
+            <span class="quick-action-icon">
+              <svg viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" aria-hidden="true">
+                <path d="M12 5v14M5 12h14"></path>
+              </svg>
+            </span>
+
+            <span class="quick-action-label">
+              Create Application Cycle
+            </span>
+
+            <svg class="quick-chevron" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </button>
+
+          <button class="quick-action" type="button">
+            <span class="quick-action-icon">
+              <svg viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.8"
+                   stroke-linecap="round" aria-hidden="true">
+                <path d="M4 6h16M4 12h16M4 18h16"></path>
+                <circle cx="2.5" cy="6" r=".5" fill="currentColor"></circle>
+                <circle cx="2.5" cy="12" r=".5" fill="currentColor"></circle>
+                <circle cx="2.5" cy="18" r=".5" fill="currentColor"></circle>
+              </svg>
+            </span>
+
+            <span class="quick-action-label">Manage Fields</span>
+
+            <svg class="quick-chevron" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </button>
+
+          <button class="quick-action" type="button">
+            <span class="quick-action-icon">
+              <svg viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.8"
+                   stroke-linecap="round" aria-hidden="true">
+                <path d="M4 20V10h4v10M10 20V4h4v16M16 20v-7h4v7"></path>
+              </svg>
+            </span>
+
+            <span class="quick-action-label">View Reports</span>
+
+            <svg class="quick-chevron" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </button>
+        </section>
+
+        <!-- ACTIVITY LOG CARD -->
+        <section class="side-card info-card">
+          <svg class="info-icon" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <polyline points="12 7 12 12 15 15"></polyline>
+          </svg>
+
+          <div class="info-content">
+            <h2 class="info-title">Activity Log</h2>
+
+            <p class="info-description">
+              No recent administrative activities recorded yet. System actions and updates will appear here once initiated.
+            </p>
+          </div>
+        </section>
+
+        <section class="side-card info-card">
+          <svg class="info-icon" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 3h9l5 5v13H6z"></path>
+            <path d="M15 3v5h5M9 13h8M9 17h8"></path>
+          </svg>
+
+          <div class="info-content">
+            <h2 class="info-title">Need Help?</h2>
+
+            <p class="info-description">
+              Check out our admin guide or contact support for
+              assistance.
+            </p>
+
+            <span class="help-link">
+              View help resources
+
+              <svg viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="1.8"
+                   stroke-linecap="round" stroke-linejoin="round"
+                   aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"></path>
+              </svg>
+            </span>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <!-- BOTTOM FOOTER -->
+    <footer class="footer">
+      <div class="footer-left">
+        &copy; 2026 Atlas College. All rights reserved.
+      </div>
+      <div class="footer-right">
+        <a href="#" onclick="return false;">Privacy Policy</a>
+        <a href="#" onclick="return false;">Terms &amp; Conditions</a>
+        <a href="#" onclick="return false;">Help</a>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
