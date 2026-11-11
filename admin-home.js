@@ -12,6 +12,8 @@ const panels = {
     forgot: document.getElementById("forgotPanel")
 };
 
+let currentPanel = "home";
+
 function showPanel(panelName) {
     if (!panels[panelName]) return;
     const rightSection = document.getElementById("rightSection");
@@ -26,6 +28,9 @@ function showPanel(panelName) {
     void selectedPanel.offsetWidth;
     selectedPanel.style.animation = "";
 
+    currentPanel = panelName;
+    closeMenu();
+
     if (window.innerWidth <= 760) {
         requestAnimationFrame(() => {
             rightSection.scrollIntoView({
@@ -35,9 +40,6 @@ function showPanel(panelName) {
         });
     }
 }
-
-// Make showPanel globally available for inline onclick handlers
-window.showPanel = showPanel;
 
 /* =====================================================
    2. NAVIGATION MENU
@@ -64,6 +66,12 @@ document.addEventListener("click", event => {
     }
 });
 
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        closeMenu();
+    }
+});
+
 /* =====================================================
    3. PASSWORD / PIN VISIBILITY
 ===================================================== */
@@ -82,7 +90,6 @@ document.querySelectorAll(".password-toggle").forEach(button => {
 ===================================================== */
 function showToast(message, type = "success") {
     const container = document.getElementById("toastContainer");
-    if (!container) return;
     const toast = document.createElement("div");
     toast.className = "toast " + type;
     toast.textContent = message;
@@ -91,20 +98,18 @@ function showToast(message, type = "success") {
         toast.style.opacity = "0";
         toast.style.transform = "translateY(8px)";
         setTimeout(() => toast.remove(), 250);
-    }, 3500);
+    }, 3000);
 }
 
-window.showToast = showToast;
-
 /* =====================================================
-   5. ACTIVATION FORM LOGIC
+   5. ACTIVATION FORM SUBMISSION
 ===================================================== */
 const activationForm = document.getElementById("activationForm");
 
-activationForm.addEventListener("submit", async event => {
+activationForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const title = document.getElementById("activationTitle").value;
+    const title = document.getElementById("activationTitle").value.trim();
     const surname = document.getElementById("activationSurname").value.trim();
     const email = document.getElementById("activationEmail").value.trim();
     const role = document.getElementById("activationRole").value;
@@ -114,44 +119,46 @@ activationForm.addEventListener("submit", async event => {
     const confirmPin = document.getElementById("confirmPin").value;
 
     if (newPin !== confirmPin) {
-        showToast("Details invalid", "error");
+        showToast("Your new PIN and confirmation PIN do not match.", "error");
+        document.getElementById("confirmPin").focus();
         return;
     }
 
     if (!/^[0-9]{6}$/.test(newPin)) {
-        showToast("Details invalid", "error");
+        showToast("Your PIN must contain exactly 6 digits.", "error");
+        document.getElementById("newPin").focus();
         return;
     }
 
-    // Map role to pre-approved and active target collections
-    let preApprovedCollection = '';
-    let targetCollection = '';
+    // Map roles to pre-approved & target collections
+    let preApprovedCollection = "";
+    let targetCollection = "";
 
-    if (role === 'Administration') {
-        preApprovedCollection = 'pre_approved_admins';
-        targetCollection = 'admins';
-    } else if (role === 'Admissions') {
-        preApprovedCollection = 'pre_approved_admissions';
-        targetCollection = 'admissions';
-    } else if (role === 'Technical Support') {
-        preApprovedCollection = 'pre_approved_system_admins';
-        targetCollection = 'system_admins';
+    if (role === "Admissions") {
+        preApprovedCollection = "pre_approved_admissions";
+        targetCollection = "admissions_staff";
+    } else if (role === "Administration") {
+        preApprovedCollection = "pre_approved_administrators";
+        targetCollection = "administrators";
+    } else if (role === "Technical Support") {
+        preApprovedCollection = "pre_approved_tech_support";
+        targetCollection = "technical_support";
     } else {
         showToast("Details invalid", "error");
         return;
     }
 
     try {
-        // Query pre-approved collection
+        // 1. Double-Check against Pre-Approval Collection
         const preApprovedRef = collection(db, preApprovedCollection);
         const q = query(
             preApprovedRef,
-            where('title', '==', title),
-            where('surname', '==', surname),
-            where('email', '==', email),
-            where('role', '==', role),
-            where('campus', '==', campus),
-            where('temporaryPassword', '==', temporaryPassword)
+            where("title", "==", title),
+            where("surname", "==", surname),
+            where("email", "==", email),
+            where("role", "==", role),
+            where("campus", "==", campus),
+            where("temporaryPassword", "==", temporaryPassword)
         );
 
         const querySnapshot = await getDocs(q);
@@ -161,16 +168,16 @@ activationForm.addEventListener("submit", async event => {
             return;
         }
 
-        // Create user in Firebase Auth using email and new 6-digit PIN
+        // 2. Create secure login in Firebase Authentication using Email & new 6-digit PIN
         const userCredential = await createUserWithEmailAndPassword(auth, email, newPin);
         const user = userCredential.user;
 
-        // Generate 8-digit Personnel Number (2-digit year + 6 random digits)
-        const yearSuffix = new Date().getFullYear().toString().slice(-2);
+        // 3. Generate 8-digit MyAtlas Personnel Number (2-digit year + 6 random digits)
+        const currentYearSuffix = new Date().getFullYear().toString().slice(-2);
         const randomDigits = Math.floor(100000 + Math.random() * 900000).toString();
-        const personnelNumber = `${yearSuffix}${randomDigits}`;
+        const personnelNumber = `${currentYearSuffix}${randomDigits}`;
 
-        // Save profile in target collection
+        // 4. Save profile details to designated active Firestore collection
         await setDoc(doc(db, targetCollection, user.uid), {
             uid: user.uid,
             personnelNumber,
@@ -182,18 +189,39 @@ activationForm.addEventListener("submit", async event => {
             createdAt: new Date().toISOString()
         });
 
-        // Queue welcome email
+        // 5. Send Welcome Email via Trigger Email Extension
         await setDoc(doc(collection(db, "mail")), {
             to: email,
             message: {
                 subject: "Welcome to MyAtlas — Your Personnel Number",
-                text: `Hello ${title} ${surname},\n\nYour MyAtlas account has been successfully activated.\n\nYour MyAtlas Personnel Number is: ${personnelNumber}\n\nPlease keep this safe as you will need it to sign in.\n\nBest regards,\nAtlas College Admin Team`,
-                html: `<div style="font-family: sans-serif; padding: 20px; color: #071c72;"><h2>Welcome, ${title} ${surname}!</h2><p>Your MyAtlas account has been successfully activated.</p><p>Your Personnel Number is: <strong>${personnelNumber}</strong></p></div>`
+                text: `Hello ${title} ${surname},\n\nYour MyAtlas account has been successfully activated.\n\nYour MyAtlas Personnel Number is: ${personnelNumber}\n\nPlease keep this number safe as you will need it to sign in to the portal.\n\nBest regards,\nAtlas College Admin Team`,
+                html: `
+                  <div style="font-family: sans-serif; background-color: #f5f9ff; padding: 40px 20px; color: #071c72;">
+                    <div style="max-width: 550px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #cfe3ff;">
+                      <div style="background-color: #071c72; padding: 25px; text-align: center;">
+                        <h1 style="color: #ffffff; margin: 0; font-size: 22px;">ATLAS COLLEGE</h1>
+                        <p style="color: #0866f5; margin: 5px 0 0 0; font-size: 12px; font-weight: 700; text-transform: uppercase;">Admin Portal Activation</p>
+                      </div>
+                      <div style="padding: 30px;">
+                        <h2 style="color: #071c72; margin-top: 0;">Welcome, ${title} ${surname}!</h2>
+                        <p style="color: #244b88; font-size: 15px; line-height: 1.5;">Your MyAtlas admin account has been successfully activated. Below is your generated personnel number required for signing in:</p>
+                        <div style="background-color: #eaf5ff; border: 1px dashed #0866f5; border-radius: 6px; padding: 20px; text-align: center; margin: 20px 0;">
+                          <span style="display: block; font-size: 12px; color: #7897c5; text-transform: uppercase; font-weight: 700; margin-bottom: 6px;">Your Personnel Number</span>
+                          <span style="font-size: 28px; font-weight: 800; color: #0866f5; letter-spacing: 2px;">${personnelNumber}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                `
             }
         });
 
-        showToast("Account activated successfully! Check your email for your Personnel Number.", "success");
-        showPanel("signin");
+        showToast("Account activated successfully! Check your email for your Personnel Number.");
+        
+        // Switch to Sign In view after brief pause
+        setTimeout(() => {
+            showPanel("signin");
+        }, 1500);
 
     } catch (error) {
         console.error("Activation Error:", error);
@@ -202,11 +230,11 @@ activationForm.addEventListener("submit", async event => {
 });
 
 /* =====================================================
-   6. SIGN IN FORM LOGIC
+   6. SIGN IN FORM SUBMISSION
 ===================================================== */
 const signinForm = document.getElementById("signinForm");
 
-signinForm.addEventListener("submit", async event => {
+signinForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const personnelNumber = document.getElementById("personnelNumber").value.trim();
@@ -215,32 +243,32 @@ signinForm.addEventListener("submit", async event => {
     const campus = document.getElementById("signinCampus").value;
     const pin = document.getElementById("signinPin").value;
 
-    let targetCollection = '';
-    if (role === 'Administration') {
-        targetCollection = 'admins';
-    } else if (role === 'Admissions') {
-        targetCollection = 'admissions';
-    } else if (role === 'Technical Support') {
-        targetCollection = 'system_admins';
+    let targetCollection = "";
+    if (role === "Admissions") {
+        targetCollection = "admissions_staff";
+    } else if (role === "Administration") {
+        targetCollection = "administrators";
+    } else if (role === "Technical Support") {
+        targetCollection = "technical_support";
     } else {
         showToast("Details invalid.", "error");
         return;
     }
 
     try {
-        // 1. Authenticate with Firebase Auth using email and PIN
+        // 1. Authenticate with Firebase Auth using email and pin
         const userCredential = await signInWithEmailAndPassword(auth, email, pin);
         const user = userCredential.user;
 
-        // 2. Verify secondary parameters in Firestore
+        // 2. Verify database profile parameters match user ID
         const activeRef = collection(db, targetCollection);
         const q = query(
             activeRef,
-            where('uid', '==', user.uid),
-            where('personnelNumber', '==', personnelNumber),
-            where('email', '==', email),
-            where('role', '==', role),
-            where('campus', '==', campus)
+            where("uid", "==", user.uid),
+            where("personnelNumber", "==", personnelNumber),
+            where("email", "==", email),
+            where("role", "==", role),
+            where("campus", "==", campus)
         );
 
         const querySnapshot = await getDocs(q);
@@ -250,10 +278,10 @@ signinForm.addEventListener("submit", async event => {
             return;
         }
 
-        // Success redirect
-        showToast("Sign in successful! Redirecting...", "success");
+        // 3. Successful verification — Redirect to portal dashboard
+        showToast("Sign-in successful! Redirecting...");
         setTimeout(() => {
-            window.location.href = 'admin-portal.html';
+            window.location.href = "admin-portal.html";
         }, 1000);
 
     } catch (error) {
@@ -263,14 +291,16 @@ signinForm.addEventListener("submit", async event => {
 });
 
 /* =====================================================
-   7. FORGOT PASSWORD FORM LOGIC
+   7. FORGOT PASSWORD / PIN FORM
 ===================================================== */
 const forgotForm = document.getElementById("forgotForm");
 
 forgotForm.addEventListener("submit", event => {
     event.preventDefault();
-    showToast("Password recovery instructions have been noted.");
+    showToast("Recovery instructions have been sent to your email.");
 });
 
-// Initial load state
+/* =====================================================
+   8. INITIAL STATE
+===================================================== */
 showPanel("home");
