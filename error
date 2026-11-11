@@ -1,8 +1,8 @@
-admin-home.html:1251
- Uncaught ReferenceError: showPanel is not defined
-    at HTMLButtonElement.onclick (admin-home.html:1251:93)
-onclick	@	admin-home.html:1251
-admin-home.html:1266
- Uncaught ReferenceError: showPanel is not defined
-    at HTMLAnchorElement.onclick (admin-home.html:1266:78)
-onclick	@	admin-home.html:1266
+admin-home.js:240 Activation Error: FirebaseError: Firebase: Error (auth/email-already-in-use).
+    at createErrorInternal (assert.ts:171:7)
+    at _createError (assert.ts:86:17)
+    at _makeTaggedError (index.ts:334:50)
+    at _performFetchWithErrorHandling (index.ts:211:66)
+    at async _performSignInRequest (index.ts:251:7)
+    at async createUserWithEmailAndPassword (email_and_password.ts:304:22)
+    at async HTMLFormElement.<anonymous> (admin-home.js:190:32)
