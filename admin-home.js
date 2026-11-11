@@ -42,7 +42,7 @@ function showPanel(panelName) {
 }
 
 /* =====================================================
-   2. NAVIGATION MENU
+   2. NAVIGATION & EVENT BINDINGS
 ===================================================== */
 const menuButton = document.getElementById("menuButton");
 const menuDropdown = document.getElementById("menuDropdown");
@@ -71,6 +71,27 @@ document.addEventListener("keydown", event => {
         closeMenu();
     }
 });
+
+// Bind UI Navigation buttons programmatically
+document.getElementById("navHomeBrand").addEventListener("click", () => showPanel("home"));
+document.getElementById("btnGoActivate").addEventListener("click", () => showPanel("activate"));
+document.getElementById("linkGoSignin").addEventListener("click", (e) => { e.preventDefault(); showPanel("signin"); });
+document.getElementById("linkGoForgot").addEventListener("click", (e) => { e.preventDefault(); showPanel("forgot"); });
+
+// Dropdown menu buttons
+document.querySelectorAll(".menu-dropdown button[data-panel]").forEach(btn => {
+    btn.addEventListener("click", () => showPanel(btn.getAttribute("data-panel")));
+});
+
+// Back links
+document.querySelectorAll("button.back-link[data-panel]").forEach(btn => {
+    btn.addEventListener("click", () => showPanel(btn.getAttribute("data-panel")));
+});
+
+// Footer links
+document.getElementById("footerPrivacy").addEventListener("click", (e) => { e.preventDefault(); showToast("Privacy Policy page will be connected later."); });
+document.getElementById("footerTerms").addEventListener("click", (e) => { e.preventDefault(); showToast("Terms & Conditions page will be connected later."); });
+document.getElementById("footerHelp").addEventListener("click", (e) => { e.preventDefault(); showToast("Help section will be connected later."); });
 
 /* =====================================================
    3. PASSWORD / PIN VISIBILITY
@@ -130,7 +151,6 @@ activationForm.addEventListener("submit", async (event) => {
         return;
     }
 
-    // Map roles to pre-approved & target collections
     let preApprovedCollection = "";
     let targetCollection = "";
 
@@ -149,7 +169,6 @@ activationForm.addEventListener("submit", async (event) => {
     }
 
     try {
-        // 1. Double-Check against Pre-Approval Collection
         const preApprovedRef = collection(db, preApprovedCollection);
         const q = query(
             preApprovedRef,
@@ -168,16 +187,13 @@ activationForm.addEventListener("submit", async (event) => {
             return;
         }
 
-        // 2. Create secure login in Firebase Authentication using Email & new 6-digit PIN
         const userCredential = await createUserWithEmailAndPassword(auth, email, newPin);
         const user = userCredential.user;
 
-        // 3. Generate 8-digit MyAtlas Personnel Number (2-digit year + 6 random digits)
         const currentYearSuffix = new Date().getFullYear().toString().slice(-2);
         const randomDigits = Math.floor(100000 + Math.random() * 900000).toString();
         const personnelNumber = `${currentYearSuffix}${randomDigits}`;
 
-        // 4. Save profile details to designated active Firestore collection
         await setDoc(doc(db, targetCollection, user.uid), {
             uid: user.uid,
             personnelNumber,
@@ -189,7 +205,6 @@ activationForm.addEventListener("submit", async (event) => {
             createdAt: new Date().toISOString()
         });
 
-        // 5. Send Welcome Email via Trigger Email Extension
         await setDoc(doc(collection(db, "mail")), {
             to: email,
             message: {
@@ -217,8 +232,6 @@ activationForm.addEventListener("submit", async (event) => {
         });
 
         showToast("Account activated successfully! Check your email for your Personnel Number.");
-        
-        // Switch to Sign In view after brief pause
         setTimeout(() => {
             showPanel("signin");
         }, 1500);
@@ -256,11 +269,9 @@ signinForm.addEventListener("submit", async (event) => {
     }
 
     try {
-        // 1. Authenticate with Firebase Auth using email and pin
         const userCredential = await signInWithEmailAndPassword(auth, email, pin);
         const user = userCredential.user;
 
-        // 2. Verify database profile parameters match user ID
         const activeRef = collection(db, targetCollection);
         const q = query(
             activeRef,
@@ -278,7 +289,6 @@ signinForm.addEventListener("submit", async (event) => {
             return;
         }
 
-        // 3. Successful verification — Redirect to portal dashboard
         showToast("Sign-in successful! Redirecting...");
         setTimeout(() => {
             window.location.href = "admin-portal.html";
