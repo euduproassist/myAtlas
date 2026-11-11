@@ -1,1 +1,8 @@
-GET https://euduproassist.github.io/myAtlas/Admin-management.js net::ERR_ABORTED 404 (Not Found)
+admin-home.html:1251
+ Uncaught ReferenceError: showPanel is not defined
+    at HTMLButtonElement.onclick (admin-home.html:1251:93)
+onclick	@	admin-home.html:1251
+admin-home.html:1266
+ Uncaught ReferenceError: showPanel is not defined
+    at HTMLAnchorElement.onclick (admin-home.html:1266:78)
+onclick	@	admin-home.html:1266
