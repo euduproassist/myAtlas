@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Pre-approved validation collections for account activation
+    match /pre_approved_admissions/{id} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /pre_approved_administrators/{id} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /pre_approved_tech_support/{id} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Active personnel profile collections created upon successful activation
+    match /admissions_staff/{id} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /administrators/{id} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /technical_support/{id} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Mail queue collection for Firebase Trigger Email extension
+    match /mail/{mailId} {
+      allow create: if true;
+    }
+  }
+}
