@@ -1,0 +1,1010 @@
+# MAZERUSH
+## Game Design & Development Documentation
+**Document type:** Game Concept & Preliminary Game Design Document (GDD)  
+**Project name:** MAZERUSH  
+**Genre:** 3D Multiplayer Combat Shooter  
+**Perspective:** Third-person  
+**Primary platform:** Mobile  
+**Development status:** Concept and pre-production  
+**Working tagline:** *Enter the Maze. Survive the Rush.*
+
+---
+
+# 1. Executive Summary
+
+## 1.1 Game Overview
+
+MAZERUSH is an original, fast-paced 3D multiplayer combat shooter built around an enormous and strategically complex hedge-maze environment.
+
+Players enter large maze arenas, navigate twisting corridors, hunt opponents, collect weapons and equipment, avoid ambushes, and fight to become the last surviving player or help their team secure victory.
+
+Unlike conventional shooter games where combat primarily happens across open landscapes, MAZERUSH makes the maze itself an essential part of the gameplay.
+
+Players must use navigation, positioning, timing, awareness, tactical decisions and combat skills to survive.
+
+A player might be an excellent shooter, but that alone will not guarantee victory. Understanding the maze, predicting enemy movement, finding shortcuts and using the environment strategically will be equally important.
+
+## 1.2 Core Identity
+
+MAZERUSH combines two central concepts:
+
+- **MAZE:** The distinctive battlefield and environment.
+- **RUSH:** The fast-paced action, pursuit, combat and pressure.
+
+The objective is to establish a recognisable shooter identity in which the maze is not simply decoration but the defining gameplay mechanic.
+
+## 1.3 Core Design Philosophy
+
+The game should be built around five principles:
+
+1. **Combat:** Responsive, competitive and exciting shooting.
+2. **Navigation:** Players must understand and navigate complex environments.
+3. **Strategy:** Positioning, sound, timing and map knowledge matter.
+4. **Exploration:** Discovering shortcuts, hidden areas and valuable resources should be rewarding.
+5. **Competition:** Players should have meaningful opportunities to improve their skills and compete against others.
+
+---
+
+# 2. Game Vision and Positioning
+
+## 2.1 Vision
+
+To create a distinctive multiplayer shooter where players compete inside dangerous, unpredictable and strategically designed mazes.
+
+MAZERUSH should be recognisable through its environment, gameplay identity and combat experience.
+
+## 2.2 Intended Player Experience
+
+Players should experience:
+
+- The tension of moving around an unknown corner.
+- The excitement of unexpectedly encountering an opponent.
+- The satisfaction of successfully ambushing an enemy.
+- The pressure of hearing footsteps nearby.
+- The challenge of escaping when surrounded.
+- The reward of discovering a hidden route.
+- The excitement of winning a close combat encounter.
+- The satisfaction of mastering a maze.
+
+## 2.3 Competitive Positioning
+
+MAZERUSH takes inspiration from established shooter conventions without depending on copying another game's identity.
+
+Its intended distinction is the combination of:
+
+- Third-person shooter combat.
+- Large hedge-maze battlefields.
+- Tactical navigation.
+- Close-range encounters.
+- Environmental exploration.
+- Multiplayer competition.
+
+---
+
+# 3. Game World and Environment
+
+## 3.1 The Maze as the Battlefield
+
+The primary battlefield consists of large, interconnected hedge mazes.
+
+These mazes should be designed to create uncertainty, tactical decisions and opportunities for combat.
+
+The environment should include:
+
+- Narrow hedge corridors.
+- Multiple intersections.
+- Dead ends.
+- Circular pathways.
+- Blind corners.
+- Open courtyards.
+- Hidden rooms.
+- Secret passages.
+- Underground tunnels.
+- Watchtowers.
+- Supply rooms.
+- Weapon caches.
+- Alternative routes.
+- Elevated viewpoints.
+
+The maze should offer multiple ways to reach important locations rather than forcing every player through one predictable route.
+
+## 3.2 Environmental Gameplay
+
+The environment should directly influence combat.
+
+### Blind Corners
+
+Players cannot always see what is waiting around the next corner. This creates opportunities for ambushes and close-range encounters.
+
+### Narrow Corridors
+
+Corridors restrict movement and create situations where positioning and weapon selection become important.
+
+### Dead Ends
+
+Players may find themselves trapped and must react quickly.
+
+### Secret Passages
+
+Hidden routes allow experienced players to move between sections of the maze unexpectedly.
+
+### Underground Tunnels
+
+Underground routes can provide alternative access to different areas of the battlefield.
+
+### Courtyards
+
+Open spaces provide opportunities for longer-range combat and more exposed encounters.
+
+### Watchtowers
+
+Elevated positions allow players to observe sections of the maze, although these positions may expose them to enemy fire.
+
+### Supply Rooms
+
+These areas can contain weapons, ammunition, healing items and other useful equipment.
+
+### Moving Maze Sections
+
+Some maps could feature sections that change their configuration during a match, creating new routes and changing the tactical situation.
+
+These environmental features are proposed design elements and should be evaluated during prototyping.
+
+---
+
+# 4. Core Gameplay
+
+## 4.1 Third-Person Perspective
+
+MAZERUSH is designed as a third-person shooter.
+
+Players control a character viewed from behind or over the shoulder.
+
+The camera should provide enough visibility for players to navigate corridors, observe their surroundings and engage enemies.
+
+Camera controls should be responsive and suitable for touchscreen devices.
+
+## 4.2 Player Movement
+
+The proposed movement system includes:
+
+- Walking.
+- Running.
+- Sprinting.
+- Jumping.
+- Crouching.
+- Turning.
+- Camera rotation.
+- Directional movement.
+- Optional sliding or dodging.
+
+Movement should feel smooth and responsive.
+
+The maze should create interesting movement decisions without making navigation frustrating.
+
+## 4.3 Combat System
+
+Combat is a central part of MAZERUSH.
+
+The proposed combat system includes:
+
+- Weapon aiming.
+- Shooting.
+- Reloading.
+- Weapon switching.
+- Damage calculation.
+- Health management.
+- Ammunition management.
+- Eliminations.
+- Player respawning where the game mode allows it.
+
+Weapon performance should be balanced around the environment.
+
+For example:
+
+- Shotguns could be effective in narrow corridors.
+- Assault rifles could be versatile across different encounters.
+- Sniper rifles could be useful in courtyards and longer sightlines.
+- Submachine guns could support aggressive close-range movement.
+
+## 4.4 Maze Awareness
+
+Players should be encouraged to pay attention to their surroundings.
+
+Possible awareness mechanics include:
+
+**Footstep detection:** Nearby enemy movement can provide audio clues.
+
+**Gunfire direction:** Players can use sound to estimate where combat is happening.
+
+**Visual clues:** Movement, shadows or other environmental details can reveal nearby opponents.
+
+**Map knowledge:** Learning the layout of a maze gives experienced players a strategic advantage.
+
+**Maze Scanner:** A possible tactical gadget that provides limited information about nearby areas or enemy activity.
+
+The scanner should have restrictions, such as a cooldown, limited range or temporary duration, to prevent it from removing the uncertainty that makes the maze interesting.
+
+## 4.5 Health and Survival
+
+Players need a health system that determines how much damage they can sustain.
+
+Possible supporting mechanics include:
+
+- Health pickups.
+- Healing equipment.
+- Limited-use recovery items.
+- Armour or defensive equipment.
+- Damage indicators.
+
+The final health and recovery system should be determined through gameplay testing.
+
+---
+
+# 5. Game Modes
+
+The following modes are proposed for MAZERUSH. They are not yet finalised.
+
+## 5.1 Maze Royale
+
+**Mode type:** Battle royale-style survival.
+
+Players enter a large maze and compete against one another.
+
+The objective is to survive while eliminating opponents.
+
+Potential mechanics:
+
+- Players begin with limited equipment.
+- Weapons and supplies are distributed throughout the maze.
+- Players explore to find better equipment.
+- Combat encounters become increasingly frequent.
+- A shrinking or changing safe zone can encourage movement.
+- The last surviving player wins.
+
+The maze itself becomes the primary survival challenge.
+
+## 5.2 Team Conquest
+
+**Mode type:** Team-based combat.
+
+Players are divided into competing teams.
+
+Teams fight to control designated locations or objectives inside the maze.
+
+Potential mechanics:
+
+- Multiple capture points.
+- Team scoring.
+- Respawning.
+- Tactical routes.
+- Defensive positions.
+- Team coordination.
+
+Victory could be determined by reaching a target score or controlling objectives for a specified period.
+
+## 5.3 Treasure Rush
+
+**Mode type:** Objective-based competition.
+
+Players or teams search the maze for valuable objects or supplies.
+
+Potential mechanics:
+
+- Hidden treasure locations.
+- Collectible objectives.
+- Enemy interference.
+- Risky shortcuts.
+- Extraction or delivery points.
+- Time limits.
+
+Players must balance exploration and combat while trying to secure the objective.
+
+---
+
+# 6. Multiplayer Architecture
+
+MAZERUSH is intended to support different ways of playing.
+
+## 6.1 Online Multiplayer
+
+Players connect through the internet and compete with other players.
+
+Potential features:
+
+- Global matchmaking.
+- Public matches.
+- Private matches.
+- Friends and invitations.
+- Player profiles.
+- Leaderboards.
+- Competitive rankings.
+- Online tournaments.
+
+Online multiplayer is important for building a long-term competitive community.
+
+## 6.2 Local Multiplayer
+
+Players connect through a local Wi-Fi network or mobile hotspot.
+
+The objective is to allow nearby players to compete without requiring an internet connection.
+
+Potential features:
+
+- Local room creation.
+- Room joining.
+- Player lobby.
+- Host controls.
+- Match configuration.
+- Local team selection.
+
+Local multiplayer should be explored as a separate networking capability, not assumed to work automatically through the online multiplayer system.
+
+## 6.3 Offline Mode
+
+Players should also have an option to play without an internet connection.
+
+The proposed offline experience is single-player combat against AI-controlled opponents.
+
+Potential features:
+
+- AI enemies.
+- Practice matches.
+- Maze exploration.
+- Weapon testing.
+- Movement training.
+- Offline challenges.
+
+Offline mode should not be confused with local multiplayer: offline mode means playing without other human players connected.
+
+## 6.4 Multiplayer Development Recommendation
+
+The networking architecture should be designed early enough to support the intended online and local multiplayer experiences.
+
+A sensible development sequence is:
+
+1. Build a playable single-player prototype.
+2. Test player movement and combat.
+3. Prototype local multiplayer.
+4. Establish online networking.
+5. Implement matchmaking and player sessions.
+6. Test performance with multiple players.
+
+The exact networking technology and hosting architecture remain undecided.
+
+---
+
+# 7. Weapons and Equipment
+
+## 7.1 Weapon Categories
+
+The proposed weapon categories include:
+
+| Category | Intended role |
+|---|---|
+| Assault rifles | General-purpose combat |
+| Submachine guns | Fast close-range combat |
+| Shotguns | Powerful corridor encounters |
+| Sniper rifles | Long-range engagements |
+| Pistols | Secondary weapons |
+| Melee weapons | Emergency close combat |
+
+## 7.2 Weapon Characteristics
+
+Each weapon should have distinct characteristics:
+
+- Damage.
+- Fire rate.
+- Reload time.
+- Range.
+- Accuracy.
+- Recoil.
+- Magazine capacity.
+- Ammunition type.
+
+Weapon balance should ensure that no single weapon dominates every environment.
+
+## 7.3 Tactical Equipment
+
+Possible tactical equipment includes:
+
+- Maze Scanner.
+- Smoke grenades.
+- Flash grenades.
+- Detection devices.
+- Defensive equipment.
+- Temporary distractions.
+
+Equipment should support different playstyles without making combat overly complicated.
+
+## 7.4 Weapon Customisation
+
+Potential customisation options:
+
+- Weapon skins.
+- Colours.
+- Patterns.
+- Cosmetic attachments.
+- Visual effects.
+
+Cosmetic customisation should not create unfair competitive advantages.
+
+---
+
+# 8. Characters and Player Identity
+
+Players should be able to create or customise their in-game identity.
+
+Potential features include:
+
+- Character outfits.
+- Headwear.
+- Masks.
+- Uniforms.
+- Character colours.
+- Emotes.
+- Victory animations.
+- Player banners.
+- Profile icons.
+
+Characters should be visually recognisable within the maze.
+
+The visual style of the characters and environments still needs to be established.
+
+---
+
+# 9. Maps and Game Worlds
+
+MAZERUSH should eventually feature multiple maze environments.
+
+The following are proposed map concepts.
+
+## 9.1 Royal Gardens
+
+<description>Large, carefully maintained hedge gardens with decorative structures, courtyards and complex pathways.</description>
+
+Potential features:
+
+- Formal hedge layouts.
+- Garden fountains.
+- Stone walkways.
+- Hidden garden rooms.
+- Open courtyards.
+
+## 9.2 Forgotten Estate
+
+An abandoned estate with overgrown hedge mazes and neglected structures.
+
+Potential features:
+
+- Ruined buildings.
+- Broken pathways.
+- Abandoned courtyards.
+- Hidden storage areas.
+- Underground access points.
+
+## 9.3 Jungle Labyrinth
+
+A dense natural environment featuring vegetation and less predictable pathways.
+
+Potential features:
+
+- Thick vegetation.
+- Natural obstacles.
+- Hidden routes.
+- Dense foliage.
+- Ruined structures.
+
+## 9.4 Frozen Garden
+
+A winter-themed maze.
+
+Potential features:
+
+- Snow-covered hedges.
+- Frozen pathways.
+- Ice-covered courtyards.
+- Winter structures.
+- Reduced visibility in certain areas.
+
+## 9.5 Haunted Estate
+
+A darker environment designed around atmosphere and visibility.
+
+Potential features:
+
+- Dim lighting.
+- Abandoned structures.
+- Fog.
+- Hidden corridors.
+- Atmospheric sound effects.
+
+Each map should have its own visual identity while maintaining the core maze-combat gameplay.
+
+---
+
+# 10. Artificial Intelligence
+
+AI opponents are required for the proposed offline experience.
+
+Potential AI behaviours include:
+
+- Patrolling.
+- Exploring.
+- Detecting nearby players.
+- Reacting to gunfire.
+- Following sounds.
+- Taking cover.
+- Pursuing enemies.
+- Retreating when necessary.
+- Using different weapons.
+- Guarding objectives.
+
+AI difficulty levels could include:
+
+- Easy.
+- Normal.
+- Hard.
+- Expert.
+
+AI should feel believable without having unfair knowledge of player positions.
+
+---
+
+# 11. User Interface and User Experience
+
+The interface must be designed for mobile devices.
+
+## 11.1 Main Menu
+
+Potential menu options:
+
+- Play.
+- Game Modes.
+- Multiplayer.
+- Local Play.
+- Offline Play.
+- Loadout.
+- Characters.
+- Customisation.
+- Profile.
+- Settings.
+
+## 11.2 Match Interface
+
+During gameplay, the interface may display:
+
+- Health.
+- Ammunition.
+- Equipped weapon.
+- Weapon switching.
+- Movement controls.
+- Shooting controls.
+- Aiming controls.
+- Mini-map or navigation information.
+- Match timer.
+- Team scores.
+- Remaining players where relevant.
+
+The interface should avoid unnecessarily obstructing the player's view.
+
+## 11.3 Mobile Controls
+
+Proposed touchscreen controls:
+
+- Virtual movement joystick.
+- Camera movement.
+- Fire button.
+- Aim button.
+- Jump button.
+- Crouch button.
+- Reload button.
+- Weapon selection.
+- Equipment activation.
+
+Controls should be configurable so players can adjust button placement and sensitivity.
+
+---
+
+# 12. Progression and Competitive Systems
+
+MAZERUSH should provide reasons for players to continue playing and improving.
+
+Potential systems include:
+
+## 12.1 Player Levels
+
+Players gain experience through matches and challenges.
+
+## 12.2 Achievements
+
+Examples:
+
+- First elimination.
+- Multiple eliminations in one match.
+- Winning a match.
+- Discovering hidden routes.
+- Winning without being eliminated.
+- Completing objectives.
+
+## 12.3 Leaderboards
+
+Possible leaderboards:
+
+- Global rankings.
+- Friends rankings.
+- Seasonal rankings.
+- Mode-specific rankings.
+
+## 12.4 Competitive Ranking
+
+A ranked mode could measure player performance and assign competitive divisions.
+
+The ranking system should reward skill and consistent performance rather than purchases.
+
+## 12.5 Seasons
+
+Seasonal content could introduce:
+
+- New cosmetic items.
+- New challenges.
+- Limited-time events.
+- Themed rewards.
+- New map variations.
+
+---
+
+# 13. Monetisation Strategy
+
+The proposed business model is free-to-play with optional purchases.
+
+The core objective is to generate revenue without making the competitive experience unfair.
+
+## 13.1 Free Content
+
+The free experience should provide meaningful access to the game.
+
+Potential free features:
+
+- Core combat.
+- Competitive gameplay.
+- Standard characters.
+- Standard weapons.
+- Core maps.
+- Public matchmaking.
+- Basic progression.
+
+Competitive maps should not be divided between paying and non-paying players in a way that fragments matchmaking.
+
+## 13.2 Optional Purchases
+
+Potential revenue sources:
+
+- Character skins.
+- Weapon skins.
+- Cosmetic bundles.
+- Emotes.
+- Seasonal passes.
+- Cosmetic effects.
+- Optional themed expansions.
+
+## 13.3 Competitive Fairness
+
+The game should avoid pay-to-win mechanics.
+
+Purchases should primarily provide cosmetic value rather than superior damage, health or weapon performance.
+
+---
+
+# 14. Graphics, Audio and Presentation
+
+## 14.1 Graphics
+
+MAZERUSH is planned as a 3D game.
+
+The final graphical direction remains undecided.
+
+Important requirements include:
+
+- Clear character visibility.
+- Recognisable hedge structures.
+- Readable environments.
+- Good lighting.
+- Smooth animations.
+- Responsive effects.
+- Optimised performance on mobile devices.
+
+## 14.2 Audio
+
+Sound should play an important role in the gameplay.
+
+Potential audio elements:
+
+- Footsteps.
+- Gunfire.
+- Reloading.
+- Weapon switching.
+- Player movement.
+- Environmental ambience.
+- Victory and defeat sounds.
+- Match announcements.
+
+Directional audio should help players understand what is happening around them.
+
+## 14.3 Music
+
+Music should support the competitive atmosphere without overpowering important gameplay sounds.
+
+---
+
+# 15. Technology and Development Architecture
+
+## 15.1 Game Engine
+
+**Proposed engine: Unity.**
+
+Unity is a candidate for development because the project is mobile-first and requires 3D gameplay, character control, environmental systems and multiplayer integration.
+
+The final engine decision has not been confirmed.
+
+## 15.2 Core Technical Systems
+
+The game will require:
+
+- 3D rendering.
+- Character controller.
+- Camera system.
+- Weapon and combat system.
+- Health and damage system.
+- AI system.
+- Maze environment system.
+- Collision detection.
+- Audio system.
+- User interface.
+- Save and progression system.
+- Multiplayer networking.
+- Matchmaking.
+- Player accounts.
+- Server-side game logic for online competitive matches.
+
+## 15.3 Performance Requirements
+
+Mobile optimisation should be a priority.
+
+Areas requiring attention:
+
+- Frame rate.
+- Memory consumption.
+- Loading times.
+- Network latency.
+- Battery usage.
+- Device compatibility.
+- Texture optimisation.
+- Level-of-detail systems.
+- Efficient environmental rendering.
+
+## 15.4 Security and Fair Play
+
+Online competitive play should account for:
+
+- Server-authoritative match logic where appropriate.
+- Validation of player actions.
+- Protection against cheating.
+- Secure account handling.
+- Match integrity.
+- Abuse reporting.
+- Player moderation.
+
+---
+
+# 16. Development Roadmap
+
+A staged approach is recommended.
+
+## Phase 1: Concept and Pre-production
+
+Objectives:
+
+- Establish the final game vision.
+- Define the visual direction.
+- Finalise the first game mode.
+- Establish player movement requirements.
+- Design the first maze.
+- Define the initial weapon set.
+- Select the development engine.
+
+Deliverable: A detailed production-ready game design specification.
+
+## Phase 2: Core Prototype
+
+Objectives:
+
+- Create a basic 3D environment.
+- Build a maze.
+- Implement player movement.
+- Implement third-person camera controls.
+- Implement basic shooting.
+- Add health and damage.
+- Add simple AI opponents.
+
+Deliverable: A playable single-player combat prototype.
+
+## Phase 3: Multiplayer Prototype
+
+Objectives:
+
+- Test local multiplayer.
+- Establish player connections.
+- Synchronise movement.
+- Synchronise combat.
+- Test player elimination.
+- Test match completion.
+
+Deliverable: A playable multiplayer prototype.
+
+## Phase 4: First Playable Game
+
+Objectives:
+
+- Build the first polished maze.
+- Implement the selected game mode.
+- Add the initial weapons.
+- Add sound effects.
+- Add a basic interface.
+- Improve mobile performance.
+
+Deliverable: A complete first playable version.
+
+## Phase 5: Online Infrastructure
+
+Objectives:
+
+- Implement online matchmaking.
+- Introduce player accounts.
+- Create match sessions.
+- Implement player progression.
+- Add leaderboards.
+- Test network stability.
+
+Deliverable: An online multiplayer test version.
+
+## Phase 6: Content Expansion
+
+Objectives:
+
+- Add additional maps.
+- Add additional weapons.
+- Introduce additional modes.
+- Expand customisation.
+- Improve AI.
+- Introduce progression and seasonal content.
+
+Deliverable: Expanded game content.
+
+## Phase 7: Testing and Release
+
+Objectives:
+
+- Conduct performance testing.
+- Test multiplayer stability.
+- Fix gameplay issues.
+- Test different mobile devices.
+- Conduct security testing.
+- Improve user experience.
+- Prepare store listings.
+- Release the game.
+
+Deliverable: Public release of MAZERUSH.
+
+---
+
+# 17. Minimum Viable Product (MVP)
+
+The first version should focus on proving that the core idea is fun.
+
+The recommended MVP includes:
+
+| Component | Initial requirement |
+|---|---|
+| Game engine | Selected 3D engine |
+| Perspective | Third-person |
+| Environment | One hedge-maze map |
+| Player | Basic controllable character |
+| Movement | Walk, run and jump |
+| Combat | Basic shooting and aiming |
+| Weapons | A small balanced selection |
+| Health | Basic health and damage |
+| AI | Basic opponents |
+| Game mode | One complete mode |
+| Interface | Main menu and match HUD |
+| Audio | Basic movement and weapon sounds |
+| Multiplayer | Prototype connection and combat |
+| Platform | Mobile |
+
+Additional maps, advanced progression, monetisation and seasonal content should follow after the core gameplay has been validated.
+
+---
+
+# 18. Risks and Development Challenges
+
+## 18.1 Maze Navigation
+
+Large mazes can become confusing or frustrating.
+
+**Proposed solution:** Design clear visual landmarks, useful navigation systems and multiple route options.
+
+## 18.2 Mobile Performance
+
+Large 3D environments can place significant demands on mobile hardware.
+
+**Proposed solution:** Optimise rendering, textures, lighting and environmental detail.
+
+## 18.3 Multiplayer Networking
+
+Synchronising players, weapons, movement and combat can be technically challenging.
+
+**Proposed solution:** Prototype networking early and test under realistic conditions.
+
+## 18.4 Combat Balance
+
+Some weapons may become too powerful in narrow corridors.
+
+**Proposed solution:** Balance weapons against different maze environments and combat distances.
+
+## 18.5 Match Pacing
+
+Players may spend too long searching without encountering opponents.
+
+**Proposed solution:** Use map design, objectives, match timers and carefully tested player placement to maintain engagement.
+
+## 18.6 Player Frustration
+
+Players may repeatedly become trapped or lost.
+
+**Proposed solution:** Make navigation challenging but understandable, and provide enough environmental information for players to learn the map.
+
+---
+
+# 19. Unresolved Product Decisions
+
+The following decisions must be made before the concept becomes a fully specified production project.
+
+| Decision | Current status |
+|---|---|
+| Game name | MAZERUSH selected as working name |
+| Genre | 3D combat shooter |
+| Perspective | Third-person |
+| Primary platform | Mobile |
+| Visual style | Not finalised |
+| Game engine | Unity proposed |
+| Maximum players per match | Not decided |
+| First game mode | Not decided |
+| First map | Not decided |
+| Weapon inventory | Not finalised |
+| Character designs | Not finalised |
+| Online multiplayer | Intended |
+| Local multiplayer | Intended |
+| Offline AI mode | Proposed |
+| Match duration | Not decided |
+| Monetisation | Free-to-play model proposed |
+| Ranked system | Proposed |
+| Seasonal content | Proposed |
+| Release date | Not decided |
+
+---
+
+# 20. Final Product Definition
+
+MAZERUSH is a mobile-first, 3D third-person multiplayer combat shooter in which players fight inside large, strategically designed hedge mazes.
+
+The game's central identity is the combination of fast-paced shooter combat and maze-based tactical gameplay.
+
+Players must navigate complex environments, locate weapons and supplies, detect enemy activity, exploit hidden routes, use positioning to their advantage and defeat opponents.
+
+The long-term vision is to develop a competitive game with online multiplayer, local multiplayer, offline AI gameplay, multiple maze environments, several game modes, player customisation and ongoing content updates.
+
+**MAZERUSH**
+
+*ENTER THE MAZE. SURVIVE THE RUSH.*
+
+**End of Preliminary Game Design Document.**
