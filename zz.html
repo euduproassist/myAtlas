@@ -22,7 +22,7 @@
     --red: #f35c63;
     --white: #ffffff;
     --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    --page-padding: clamp(18px, 5.5vw, 90px);
+    --page-padding: 25px;
 }
 
 *,
@@ -43,6 +43,7 @@ html {
 
 body {
     width: 100%;
+    max-width: 100%;
     min-height: 100vh;
     min-height: 100dvh;
     overflow-x: clip;
@@ -136,6 +137,7 @@ select:focus-visible {
 ===================================================== */
 .header {
     width: 100%;
+    max-width: 100%;
     min-height: 80px;
     padding: 0 var(--page-padding);
     display: flex;
@@ -238,33 +240,34 @@ select:focus-visible {
 }
 
 /* =====================================================
-   4. MAIN LAYOUT
+   4. MAIN LAYOUT (FULL-BLEED EDGE-TO-EDGE STRETCH)
 ===================================================== */
 .main {
     width: 100%;
+    max-width: 100%;
     flex: 1;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: clamp(28px, 4.5vw, 65px) var(--page-padding);
+    align-items: stretch;
+    padding: 0;
 }
 
 .main-grid {
     width: 100%;
-    max-width: 1750px;
-    margin: auto;
+    max-width: none;
+    min-height: 0;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: center;
-    gap: clamp(28px, 5vw, 75px);
+    align-items: stretch;
+    gap: 0;
 }
 
 /* =====================================================
-   5. LEFT WELCOME SECTION (REDUCED ~30%)
+   5. LEFT WELCOME SECTION
 ===================================================== */
 .welcome-section {
     width: 100%;
     min-width: 0;
+    padding: clamp(28px, 4.5vw, 65px) clamp(24px, 4vw, 60px) clamp(28px, 4.5vw, 65px) var(--page-padding);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -390,8 +393,8 @@ select:focus-visible {
 .right-section {
     width: 100%;
     min-width: 0;
-    padding-left: clamp(24px, 4.5vw, 65px);
-    border-left: 1px solid var(--border);
+    padding: clamp(28px, 4.5vw, 65px) var(--page-padding) clamp(28px, 4.5vw, 65px) clamp(24px, 4vw, 60px);
+    border-left: 1px solid var(--line);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -733,8 +736,10 @@ select.form-control {
 ===================================================== */
 .footer {
     width: 100%;
+    max-width: 100%;
     min-height: 60px;
-    padding: 14px var(--page-padding);
+    padding: 20px var(--page-padding);
+    border-top: 1px solid var(--line);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -742,6 +747,7 @@ select.form-control {
     gap: 12px;
     position: relative;
     z-index: 2;
+    flex-shrink: 0;
 }
 
 .footer-left {
@@ -860,8 +866,8 @@ select.form-control {
 ===================================================== */
 @media (min-width: 1600px) {
     .main-grid {
-        max-width: 1850px;
-        gap: 80px;
+        max-width: none;
+        gap: 0;
     }
 
     .welcome-title {
@@ -894,16 +900,14 @@ select.form-control {
    15. LAPTOPS & TABLETS
 ===================================================== */
 @media (max-width: 1050px) {
-    .main {
+    .welcome-section {
         padding-top: 45px;
         padding-bottom: 45px;
     }
 
-    .main-grid {
-        gap: 25px;
-    }
-
     .right-section {
+        padding-top: 45px;
+        padding-bottom: 45px;
         padding-left: 24px;
     }
 
@@ -926,20 +930,17 @@ select.form-control {
 @media (max-width: 760px) {
     .header {
         min-height: 64px;
-    }
-
-    .main {
-        padding-top: 38px;
-        padding-bottom: 38px;
+        padding: 0 18px;
     }
 
     .main-grid {
         grid-template-columns: minmax(0, 1fr);
-        gap: 35px;
+        gap: 0;
     }
 
     .welcome-section {
         align-items: flex-start;
+        padding: 38px 18px;
     }
 
     .eyebrow {
@@ -968,8 +969,8 @@ select.form-control {
 
     .right-section {
         border-left: 0;
-        border-top: 1px solid var(--border);
-        padding: 30px 0 0;
+        border-top: 1px solid var(--line);
+        padding: 30px 18px 38px;
     }
 
     .panel-heading {
@@ -999,8 +1000,7 @@ select.form-control {
     }
 
     .footer {
-        padding-top: 18px;
-        padding-bottom: 18px;
+        padding: 18px;
     }
 }
 
@@ -1022,12 +1022,8 @@ select.form-control {
         height: 36px;
     }
 
-    .main {
+    .welcome-section {
         padding: 30px 16px 28px;
-    }
-
-    .main-grid {
-        gap: 28px;
     }
 
     .eyebrow {
@@ -1064,7 +1060,7 @@ select.form-control {
     }
 
     .right-section {
-        padding-top: 26px;
+        padding: 26px 16px 28px;
     }
 
     .panel-heading {
@@ -1159,7 +1155,12 @@ select.form-control {
    18. VERY SMALL PHONES
 ===================================================== */
 @media (max-width: 340px) {
-    .main {
+    .welcome-section {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .right-section {
         padding-left: 14px;
         padding-right: 14px;
     }
@@ -1193,7 +1194,8 @@ select.form-control {
    19. LANDSCAPE / SHORT SCREENS
 ===================================================== */
 @media (min-width: 761px) and (max-height: 700px) {
-    .main {
+    .welcome-section,
+    .right-section {
         padding-top: 30px;
         padding-bottom: 30px;
     }
