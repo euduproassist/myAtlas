@@ -55,7 +55,7 @@
     }
 
     button, input, select { font: inherit; }
-    button { cursor: default; }
+    button { cursor: pointer; }
     a { text-decoration: none; color: inherit; }
     button, a { -webkit-tap-highlight-color: transparent; }
     img, svg, video, canvas { display: block; max-width: 100%; }
@@ -169,7 +169,7 @@
       display: flex;
       align-items: center;
       gap: 0px;
-      cursor: default;
+      cursor: pointer;
     }
 
     .user-dropdown-menu {
@@ -185,6 +185,10 @@
       flex-direction: column;
       z-index: 100;
       overflow: hidden;
+    }
+
+    .user-dropdown-menu.active {
+      display: flex;
     }
 
     .dropdown-user-info {
@@ -231,6 +235,11 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .dropdown-logout-btn:hover {
+      background: #fff5f5;
     }
 
     /* MAIN THREE-COLUMN WORKSPACE */
@@ -601,22 +610,6 @@
       overflow-wrap: anywhere;
     }
 
-    .help-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      margin-top: 11px;
-      color: #276cb8;
-      font-size: 12px;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .help-link svg {
-      width: 15px;
-      height: 15px;
-    }
-
     /* FOOTER */
     .footer {
       width: 100%;
@@ -720,17 +713,17 @@
 
         <!-- User Profile Menu Wrapper -->
         <div class="user-menu-wrapper" id="userMenuTrigger">
-          <div class="avatar" id="userAvatar">AD</div>
+          <div class="avatar" id="userAvatar">--</div>
           <div class="chevron" aria-hidden="true"></div>
 
           <!-- Dropdown Menu -->
           <div class="user-dropdown-menu" id="userDropdownMenu">
             <div class="dropdown-user-info">
-              <div class="dropdown-user-name" id="dropdownUserName">Admin User</div>
-              <div class="dropdown-user-email" id="dropdownUserEmail">admin@atlas.ac.za</div>
-              <span class="dropdown-user-role" id="dropdownUserRole">Administrator</span>
+              <div class="dropdown-user-name" id="dropdownUserName">Loading...</div>
+              <div class="dropdown-user-email" id="dropdownUserEmail">---</div>
+              <span class="dropdown-user-role" id="dropdownUserRole">---</span>
             </div>
-            <button type="button" class="dropdown-logout-btn" onclick="return false;">
+            <button type="button" class="dropdown-logout-btn" id="logoutBtn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                 <polyline points="16 17 21 12 16 7"></polyline>
@@ -944,5 +937,8 @@
     </footer>
 
   </div>
+
+  <!-- JAVASCRIPT MODULE -->
+  <script type="module" src="admin-portal.js"></script>
 </body>
 </html>
