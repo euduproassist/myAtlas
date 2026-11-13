@@ -93,7 +93,7 @@ select:focus-visible {
 }
 
 /* =====================================================
-   2. BACKGROUND DECORATION
+   2. BACKGROUND DECORATION & APP SHELL CONTAINER
 ===================================================== */
 .page {
     min-height: 100vh;
@@ -104,6 +104,17 @@ select:focus-visible {
     position: relative;
     isolation: isolate;
     overflow: clip;
+}
+
+/* Centered structural wrapper to prevent ultra-wide screen over-stretching */
+.app-shell {
+    width: 100%;
+    max-width: 1560px;
+    margin: 0 auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .background-shape {
@@ -251,8 +262,8 @@ select:focus-visible {
 
 .main-grid {
     width: 100%;
-    max-width: none;
-    margin: 0;
+    max-width: 1750px;
+    margin: auto;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: center;
@@ -860,7 +871,7 @@ select.form-control {
 ===================================================== */
 @media (min-width: 1600px) {
     .main-grid {
-        max-width: none;
+        max-width: 1850px;
         gap: 80px;
     }
 
@@ -1220,402 +1231,405 @@ select.form-control {
     <div class="background-shape shape-top"></div>
     <div class="background-shape shape-bottom"></div>
 
-    <!-- =================================================
-         HEADER
-    ================================================== -->
-    <header class="header">
-        <button type="button" class="brand" id="navHomeBrand" aria-label="Atlas College home">
-            <img src="assets/logos.png" alt="Atlas College">
-        </button>
-        <div class="menu-area">
-            <button class="menu-button" id="menuButton" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="menuDropdown">
-                <span></span>
-                <span></span>
-                <span></span>
+    <!-- APP SHELL CONTAINER (Enforces max-width constraint on ultra-wide screens) -->
+    <div class="app-shell">
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+        <header class="header">
+            <button type="button" class="brand" id="navHomeBrand" aria-label="Atlas College home">
+                <img src="assets/logos.png" alt="Atlas College">
             </button>
-            <nav class="menu-dropdown" id="menuDropdown" hidden>
-                <button type="button" data-panel="home">Home</button>
-                <button type="button" data-panel="activate">Activate Account</button>
-                <button type="button" data-panel="signin">Sign In</button>
-                <button type="button" data-panel="forgot">Forgot Password</button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- =================================================
-         MAIN CONTENT
-    ================================================== -->
-    <main class="main">
-        <div class="main-grid">
-            <!-- =========================================
-                 LEFT SIDE - ALWAYS REMAINS VISIBLE
-            ========================================== -->
-            <section class="welcome-section">
-                <p class="eyebrow">WELCOME TO THE ATLAS COLLEGE</p>
-                <h1 class="welcome-title">Admin Portal <span>Welcome!</span></h1>
-                <p class="welcome-description">Your hub for managing student applications and supporting the next generation of learners.</p>
-
-                <!-- ACTIVATE ACCOUNT -->
-                <button class="activate-main" id="btnGoActivate" type="button">
-                    <svg class="user-icon" viewBox="0 0 24 24">
-                        <path d="M20 21v-2a8 8 0 0 0-16 0v2"/>
-                        <circle cx="12" cy="7" r="4"/>
-                    </svg>
-                    <span>Activate Account</span>
-                    <svg class="arrow" viewBox="0 0 24 24">
-                        <path d="M5 12h14"/>
-                        <path d="m12 5 7 7-7 7"/>
-                    </svg>
+            <div class="menu-area">
+                <button class="menu-button" id="menuButton" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="menuDropdown">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </button>
+                <nav class="menu-dropdown" id="menuDropdown" hidden>
+                    <button type="button" data-panel="home">Home</button>
+                    <button type="button" data-panel="activate">Activate Account</button>
+                    <button type="button" data-panel="signin">Sign In</button>
+                    <button type="button" data-panel="forgot">Forgot Password</button>
+                </nav>
+            </div>
+        </header>
 
-                <!-- SIGN IN -->
-                <div class="signin-divider">
-                    <span>Already have an account?</span>
-                    <a href="#" id="linkGoSignin">Sign In</a>
-                </div>
-            </section>
+        <!-- =================================================
+             MAIN CONTENT
+        ================================================== -->
+        <main class="main">
+            <div class="main-grid">
+                <!-- =========================================
+                     LEFT SIDE - ALWAYS REMAINS VISIBLE
+                ========================================== -->
+                <section class="welcome-section">
+                    <p class="eyebrow">WELCOME TO THE ATLAS COLLEGE</p>
+                    <h1 class="welcome-title">Admin Portal <span>Welcome!</span></h1>
+                    <p class="welcome-description">Your hub for managing student applications and supporting the next generation of learners.</p>
 
-            <!-- =========================================
-                 RIGHT SIDE - DYNAMIC CONTENT
-            ========================================== -->
-            <section class="right-section" id="rightSection">
-                <!-- =====================================
-                     PANEL 1: HOW IT WORKS
-                ====================================== -->
-                <div class="panel" id="homePanel">
-                    <div class="panel-heading">
-                        <h2>How It Works</h2>
-                        <div class="heading-line"></div>
-                        <p class="panel-subtitle">Here's what you can do as an admin:</p>
+                    <!-- ACTIVATE ACCOUNT -->
+                    <button class="activate-main" id="btnGoActivate" type="button">
+                        <svg class="user-icon" viewBox="0 0 24 24">
+                            <path d="M20 21v-2a8 8 0 0 0-16 0v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <span>Activate Account</span>
+                        <svg class="arrow" viewBox="0 0 24 24">
+                            <path d="M5 12h14"/>
+                            <path d="m12 5 7 7-7 7"/>
+                        </svg>
+                    </button>
+
+                    <!-- SIGN IN -->
+                    <div class="signin-divider">
+                        <span>Already have an account?</span>
+                        <a href="#" id="linkGoSignin">Sign In</a>
+                    </div>
+                </section>
+
+                <!-- =========================================
+                     RIGHT SIDE - DYNAMIC CONTENT
+                ========================================== -->
+                <section class="right-section" id="rightSection">
+                    <!-- =====================================
+                         PANEL 1: HOW IT WORKS
+                    ====================================== -->
+                    <div class="panel" id="homePanel">
+                        <div class="panel-heading">
+                            <h2>How It Works</h2>
+                            <div class="heading-line"></div>
+                            <p class="panel-subtitle">Here's what you can do as an admin:</p>
+                        </div>
+
+                        <div class="feature-list">
+                            <!-- FEATURE 1 -->
+                            <div class="feature">
+                                <div class="feature-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <rect x="3" y="3" width="8" height="8" rx="1.5"/>
+                                        <rect x="14" y="3" width="7" height="8" rx="1.5"/>
+                                        <rect x="3" y="14" width="8" height="7" rx="1.5"/>
+                                        <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                                    </svg>
+                                </div>
+                                <div class="feature-text">
+                                    <h3>View Applications</h3>
+                                    <p>Access all student applications submitted through the platform.</p>
+                                </div>
+                            </div>
+
+                            <!-- FEATURE 2 -->
+                            <div class="feature">
+                                <div class="feature-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </div>
+                                <div class="feature-text">
+                                    <h3>Review &amp; Verify Documents</h3>
+                                    <p>Check and verify the required documents for each application.</p>
+                                </div>
+                            </div>
+
+                            <!-- FEATURE 3 -->
+                            <div class="feature">
+                                <div class="feature-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M3 20h3v-5H3z"/>
+                                        <path d="M10 20h3V9h-3z"/>
+                                        <path d="M17 20h3V3h-3z"/>
+                                    </svg>
+                                </div>
+                                <div class="feature-text">
+                                    <h3>Update Application Status</h3>
+                                    <p>Keep applications informed by updating their status in real time.</p>
+                                </div>
+                            </div>
+
+                            <!-- FEATURE 4 -->
+                            <div class="feature">
+                                <div class="feature-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="m7 12 3.5 3.5L17 9"/>
+                                    </svg>
+                                </div>
+                                <div class="feature-text">
+                                    <h3>Accept or Reject Applications</h3>
+                                    <p>Make the final decision and help us build a brighter future for our students.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="feature-list">
-                        <!-- FEATURE 1 -->
-                        <div class="feature">
-                            <div class="feature-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <rect x="3" y="3" width="8" height="8" rx="1.5"/>
-                                    <rect x="14" y="3" width="7" height="8" rx="1.5"/>
-                                    <rect x="3" y="14" width="8" height="7" rx="1.5"/>
-                                    <rect x="14" y="14" width="7" height="7" rx="1.5"/>
-                                </svg>
-                            </div>
-                            <div class="feature-text">
-                                <h3>View Applications</h3>
-                                <p>Access all student applications submitted through the platform.</p>
-                            </div>
+                    <!-- =====================================
+                         PANEL 2: ACTIVATE ACCOUNT
+                    ====================================== -->
+                    <div class="panel form-panel" id="activatePanel" hidden>
+                        <div class="form-header">
+                            <h2>Activate Account</h2>
+                            <p>Complete the form below to activate your personnel account.</p>
                         </div>
 
-                        <!-- FEATURE 2 -->
-                        <div class="feature">
-                            <div class="feature-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
-                            </div>
-                            <div class="feature-text">
-                                <h3>Review &amp; Verify Documents</h3>
-                                <p>Check and verify the required documents for each application.</p>
-                            </div>
-                        </div>
+                        <form id="activationForm">
+                            <div class="form-grid">
+                                <!-- TITLE -->
+                                <div class="form-group">
+                                    <label for="activationTitle">Title <span>*</span></label>
+                                    <select class="form-control" id="activationTitle" name="title" required>
+                                        <option value="">Select Title</option>
+                                        <option value="Mr">Mr</option>
+                                        <option value="Mrs">Mrs</option>
+                                        <option value="Ms">Ms</option>
+                                        <option value="Miss">Miss</option>
+                                        <option value="Dr">Dr</option>
+                                        <option value="Prof">Prof</option>
+                                    </select>
+                                </div>
 
-                        <!-- FEATURE 3 -->
-                        <div class="feature">
-                            <div class="feature-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M3 20h3v-5H3z"/>
-                                    <path d="M10 20h3V9h-3z"/>
-                                    <path d="M17 20h3V3h-3z"/>
-                                </svg>
-                            </div>
-                            <div class="feature-text">
-                                <h3>Update Application Status</h3>
-                                <p>Keep applications informed by updating their status in real time.</p>
-                            </div>
-                        </div>
+                                <!-- SURNAME -->
+                                <div class="form-group">
+                                    <label for="activationSurname">Surname <span>*</span></label>
+                                    <input class="form-control" type="text" id="activationSurname" name="surname" placeholder="Enter Surname" autocomplete="family-name" required>
+                                </div>
 
-                        <!-- FEATURE 4 -->
-                        <div class="feature">
-                            <div class="feature-icon">
+                                <!-- EMAIL -->
+                                <div class="form-group full">
+                                    <label for="activationEmail">Email Address <span>*</span></label>
+                                    <input class="form-control" type="email" id="activationEmail" name="email" placeholder="Enter your email address" autocomplete="email" required>
+                                </div>
+
+                                <!-- ROLE -->
+                                <div class="form-group">
+                                    <label for="activationRole">Role <span>*</span></label>
+                                    <select class="form-control" id="activationRole" name="role" required>
+                                        <option value="">Select Role</option>
+                                        <option value="Admissions">Admissions</option>
+                                        <option value="Administration">Administration</option>
+                                        <option value="Technical Support">Technical Support</option>
+                                    </select>
+                                </div>
+
+                                <!-- CAMPUS -->
+                                <div class="form-group">
+                                    <label for="activationCampus">Campus <span>*</span></label>
+                                    <select class="form-control" id="activationCampus" name="campus" required>
+                                        <option value="">Select Campus</option>
+                                        <option value="Main Campus">Main Campus</option>
+                                        <option value="Pretoria Campus">Pretoria Campus</option>
+                                        <option value="Johannesburg Campus">Johannesburg Campus</option>
+                                    </select>
+                                </div>
+
+                                <!-- TEMPORARY PASSWORD -->
+                                <div class="form-group full">
+                                    <label for="temporaryPassword">Temporary Password <span>*</span></label>
+                                    <div class="password-wrap">
+                                        <input class="form-control" type="password" id="temporaryPassword" name="temporaryPassword" placeholder="Enter temporary password" autocomplete="current-password" required>
+                                        <button class="password-toggle" type="button" data-target="temporaryPassword" aria-label="Show password">
+                                            <svg viewBox="0 0 24 24">
+                                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
+                                                <circle cx="12" cy="12" r="3"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- NEW PIN -->
+                                <div class="form-group full">
+                                    <label for="newPin">New PIN (6 digits) <span>*</span></label>
+                                    <div class="password-wrap">
+                                        <input class="form-control" type="password" id="newPin" name="newPin" placeholder="Enter new 6-digit PIN" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="new-password" required>
+                                        <button class="password-toggle" type="button" data-target="newPin" aria-label="Show PIN">
+                                            <svg viewBox="0 0 24 24">
+                                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
+                                                <circle cx="12" cy="12" r="3"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- CONFIRM PIN -->
+                                <div class="form-group full">
+                                    <label for="confirmPin">Confirm PIN <span>*</span></label>
+                                    <div class="password-wrap">
+                                        <input class="form-control" type="password" id="confirmPin" name="confirmPin" placeholder="Confirm your 6-digit PIN" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="new-password" required>
+                                        <button class="password-toggle" type="button" data-target="confirmPin" aria-label="Show PIN">
+                                            <svg viewBox="0 0 24 24">
+                                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
+                                                <circle cx="12" cy="12" r="3"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="form-submit" type="submit">
                                 <svg viewBox="0 0 24 24">
                                     <circle cx="12" cy="12" r="10"/>
-                                    <path d="m7 12 3.5 3.5L17 9"/>
+                                    <path d="m7 12 3 3 7-7"/>
                                 </svg>
-                            </div>
-                            <div class="feature-text">
-                                <h3>Accept or Reject Applications</h3>
-                                <p>Make the final decision and help us build a brighter future for our students.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                Activate Account
+                            </button>
+                        </form>
 
-                <!-- =====================================
-                     PANEL 2: ACTIVATE ACCOUNT
-                ====================================== -->
-                <div class="panel form-panel" id="activatePanel" hidden>
-                    <div class="form-header">
-                        <h2>Activate Account</h2>
-                        <p>Complete the form below to activate your personnel account.</p>
-                    </div>
-
-                    <form id="activationForm">
-                        <div class="form-grid">
-                            <!-- TITLE -->
-                            <div class="form-group">
-                                <label for="activationTitle">Title <span>*</span></label>
-                                <select class="form-control" id="activationTitle" name="title" required>
-                                    <option value="">Select Title</option>
-                                    <option value="Mr">Mr</option>
-                                    <option value="Mrs">Mrs</option>
-                                    <option value="Ms">Ms</option>
-                                    <option value="Miss">Miss</option>
-                                    <option value="Dr">Dr</option>
-                                    <option value="Prof">Prof</option>
-                                </select>
-                            </div>
-
-                            <!-- SURNAME -->
-                            <div class="form-group">
-                                <label for="activationSurname">Surname <span>*</span></label>
-                                <input class="form-control" type="text" id="activationSurname" name="surname" placeholder="Enter Surname" autocomplete="family-name" required>
-                            </div>
-
-                            <!-- EMAIL -->
-                            <div class="form-group full">
-                                <label for="activationEmail">Email Address <span>*</span></label>
-                                <input class="form-control" type="email" id="activationEmail" name="email" placeholder="Enter your email address" autocomplete="email" required>
-                            </div>
-
-                            <!-- ROLE -->
-                            <div class="form-group">
-                                <label for="activationRole">Role <span>*</span></label>
-                                <select class="form-control" id="activationRole" name="role" required>
-                                    <option value="">Select Role</option>
-                                    <option value="Admissions">Admissions</option>
-                                    <option value="Administration">Administration</option>
-                                    <option value="Technical Support">Technical Support</option>
-                                </select>
-                            </div>
-
-                            <!-- CAMPUS -->
-                            <div class="form-group">
-                                <label for="activationCampus">Campus <span>*</span></label>
-                                <select class="form-control" id="activationCampus" name="campus" required>
-                                    <option value="">Select Campus</option>
-                                    <option value="Main Campus">Main Campus</option>
-                                    <option value="Pretoria Campus">Pretoria Campus</option>
-                                    <option value="Johannesburg Campus">Johannesburg Campus</option>
-                                </select>
-                            </div>
-
-                            <!-- TEMPORARY PASSWORD -->
-                            <div class="form-group full">
-                                <label for="temporaryPassword">Temporary Password <span>*</span></label>
-                                <div class="password-wrap">
-                                    <input class="form-control" type="password" id="temporaryPassword" name="temporaryPassword" placeholder="Enter temporary password" autocomplete="current-password" required>
-                                    <button class="password-toggle" type="button" data-target="temporaryPassword" aria-label="Show password">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- NEW PIN -->
-                            <div class="form-group full">
-                                <label for="newPin">New PIN (6 digits) <span>*</span></label>
-                                <div class="password-wrap">
-                                    <input class="form-control" type="password" id="newPin" name="newPin" placeholder="Enter new 6-digit PIN" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="new-password" required>
-                                    <button class="password-toggle" type="button" data-target="newPin" aria-label="Show PIN">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- CONFIRM PIN -->
-                            <div class="form-group full">
-                                <label for="confirmPin">Confirm PIN <span>*</span></label>
-                                <div class="password-wrap">
-                                    <input class="form-control" type="password" id="confirmPin" name="confirmPin" placeholder="Confirm your 6-digit PIN" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="new-password" required>
-                                    <button class="password-toggle" type="button" data-target="confirmPin" aria-label="Show PIN">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button class="form-submit" type="submit">
+                        <button type="button" class="back-link" data-panel="home">
                             <svg viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="m7 12 3 3 7-7"/>
+                                <path d="m15 18-6-6 6-6"/>
+                                <path d="M9 12h12"/>
                             </svg>
-                            Activate Account
+                            Back to How It Works
                         </button>
-                    </form>
-
-                    <button type="button" class="back-link" data-panel="home">
-                        <svg viewBox="0 0 24 24">
-                            <path d="m15 18-6-6 6-6"/>
-                            <path d="M9 12h12"/>
-                        </svg>
-                        Back to How It Works
-                    </button>
-                </div>
-
-                <!-- =====================================
-                     PANEL 3: SIGN IN
-                ====================================== -->
-                <div class="panel form-panel" id="signinPanel" hidden>
-                    <div class="form-header">
-                        <h2>Sign In</h2>
-                        <p>Enter your personnel details to access the Atlas College administration portal.</p>
                     </div>
 
-                    <form id="signinForm">
-                        <div class="form-grid">
-                            <!-- PERSONNEL NUMBER -->
-                            <div class="form-group full">
-                                <label for="personnelNumber">Personnel Number <span>*</span></label>
-                                <input class="form-control" type="text" id="personnelNumber" name="personnelNumber" placeholder="Enter personnel number" autocomplete="username" required>
-                            </div>
+                    <!-- =====================================
+                         PANEL 3: SIGN IN
+                    ====================================== -->
+                    <div class="panel form-panel" id="signinPanel" hidden>
+                        <div class="form-header">
+                            <h2>Sign In</h2>
+                            <p>Enter your personnel details to access the Atlas College administration portal.</p>
+                        </div>
 
-                            <!-- EMAIL -->
-                            <div class="form-group full">
-                                <label for="signinEmail">Email Address <span>*</span></label>
-                                <input class="form-control" type="email" id="signinEmail" name="email" placeholder="Enter your email address" autocomplete="email" required>
-                            </div>
+                        <form id="signinForm">
+                            <div class="form-grid">
+                                <!-- PERSONNEL NUMBER -->
+                                <div class="form-group full">
+                                    <label for="personnelNumber">Personnel Number <span>*</span></label>
+                                    <input class="form-control" type="text" id="personnelNumber" name="personnelNumber" placeholder="Enter personnel number" autocomplete="username" required>
+                                </div>
 
-                            <!-- ROLE -->
-                            <div class="form-group">
-                                <label for="signinRole">Role <span>*</span></label>
-                                <select class="form-control" id="signinRole" name="role" required>
-                                    <option value="">Select Role</option>
-                                    <option value="Admissions">Admissions</option>
-                                    <option value="Administration">Administration</option>
-                                    <option value="Technical Support">Technical Support</option>
-                                </select>
-                            </div>
+                                <!-- EMAIL -->
+                                <div class="form-group full">
+                                    <label for="signinEmail">Email Address <span>*</span></label>
+                                    <input class="form-control" type="email" id="signinEmail" name="email" placeholder="Enter your email address" autocomplete="email" required>
+                                </div>
 
-                            <!-- CAMPUS -->
-                            <div class="form-group">
-                                <label for="signinCampus">Campus <span>*</span></label>
-                                <select class="form-control" id="signinCampus" name="campus" required>
-                                    <option value="">Select Campus</option>
-                                    <option value="Main Campus">Main Campus</option>
-                                    <option value="Pretoria Campus">Pretoria Campus</option>
-                                    <option value="Johannesburg Campus">Johannesburg Campus</option>
-                                </select>
-                            </div>
+                                <!-- ROLE -->
+                                <div class="form-group">
+                                    <label for="signinRole">Role <span>*</span></label>
+                                    <select class="form-control" id="signinRole" name="role" required>
+                                        <option value="">Select Role</option>
+                                        <option value="Admissions">Admissions</option>
+                                        <option value="Administration">Administration</option>
+                                        <option value="Technical Support">Technical Support</option>
+                                    </select>
+                                </div>
 
-                            <!-- PIN -->
-                            <div class="form-group full">
-                                <label for="signinPin">6-Digit PIN <span>*</span></label>
-                                <div class="password-wrap">
-                                    <input class="form-control" type="password" id="signinPin" name="pin" placeholder="Enter your 6-digit PIN" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="current-password" required>
-                                    <button class="password-toggle" type="button" data-target="signinPin" aria-label="Show PIN">
-                                        <svg viewBox="0 0 24 24">
-                                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
-                                    </button>
+                                <!-- CAMPUS -->
+                                <div class="form-group">
+                                    <label for="signinCampus">Campus <span>*</span></label>
+                                    <select class="form-control" id="signinCampus" name="campus" required>
+                                        <option value="">Select Campus</option>
+                                        <option value="Main Campus">Main Campus</option>
+                                        <option value="Pretoria Campus">Pretoria Campus</option>
+                                        <option value="Johannesburg Campus">Johannesburg Campus</option>
+                                    </select>
+                                </div>
+
+                                <!-- PIN -->
+                                <div class="form-group full">
+                                    <label for="signinPin">6-Digit PIN <span>*</span></label>
+                                    <div class="password-wrap">
+                                        <input class="form-control" type="password" id="signinPin" name="pin" placeholder="Enter your 6-digit PIN" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="current-password" required>
+                                        <button class="password-toggle" type="button" data-target="signinPin" aria-label="Show PIN">
+                                            <svg viewBox="0 0 24 24">
+                                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
+                                                <circle cx="12" cy="12" r="3"/>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-bottom">
-                            <span style="color:var(--muted);font-size:11.5px;">Secure personnel access</span>
-                            <a href="#" id="linkGoForgot" class="text-link">Forgot PIN?</a>
-                        </div>
+                            <div class="form-bottom">
+                                <span style="color:var(--muted);font-size:11.5px;">Secure personnel access</span>
+                                <a href="#" id="linkGoForgot" class="text-link">Forgot PIN?</a>
+                            </div>
 
-                        <button class="form-submit" type="submit">
+                            <button class="form-submit" type="submit">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                                    <path d="m10 17 5-5-5-5"/>
+                                    <path d="M15 12H3"/>
+                                </svg>
+                                Sign In
+                            </button>
+                        </form>
+
+                        <button type="button" class="back-link" data-panel="home">
                             <svg viewBox="0 0 24 24">
-                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                                <path d="m10 17 5-5-5-5"/>
-                                <path d="M15 12H3"/>
+                                <path d="m15 18-6-6 6-6"/>
+                                <path d="M9 12h12"/>
                             </svg>
-                            Sign In
+                            Back to How It Works
                         </button>
-                    </form>
-
-                    <button type="button" class="back-link" data-panel="home">
-                        <svg viewBox="0 0 24 24">
-                            <path d="m15 18-6-6 6-6"/>
-                            <path d="M9 12h12"/>
-                        </svg>
-                        Back to How It Works
-                    </button>
-                </div>
-
-                <!-- =====================================
-                     PANEL 4: FORGOT PASSWORD
-                ====================================== -->
-                <div class="panel form-panel" id="forgotPanel" hidden>
-                    <div class="form-header">
-                        <h2>Forgot PIN?</h2>
-                        <p>Enter your personnel number and registered email address to begin account recovery.</p>
                     </div>
 
-                    <form id="forgotForm">
-                        <div class="form-grid">
-                            <div class="form-group full">
-                                <label for="recoveryPersonnel">Personnel Number <span>*</span></label>
-                                <input class="form-control" type="text" id="recoveryPersonnel" name="personnelNumber" placeholder="Enter personnel number" required>
-                            </div>
-
-                            <div class="form-group full">
-                                <label for="recoveryEmail">Email Address <span>*</span></label>
-                                <input class="form-control" type="email" id="recoveryEmail" name="email" placeholder="Enter registered email address" required>
-                            </div>
+                    <!-- =====================================
+                         PANEL 4: FORGOT PASSWORD
+                    ====================================== -->
+                    <div class="panel form-panel" id="forgotPanel" hidden>
+                        <div class="form-header">
+                            <h2>Forgot PIN?</h2>
+                            <p>Enter your personnel number and registered email address to begin account recovery.</p>
                         </div>
 
-                        <div class="recovery-info">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 16v-4"/>
-                                <path d="M12 8h.01"/>
+                        <form id="forgotForm">
+                            <div class="form-grid">
+                                <div class="form-group full">
+                                    <label for="recoveryPersonnel">Personnel Number <span>*</span></label>
+                                    <input class="form-control" type="text" id="recoveryPersonnel" name="personnelNumber" placeholder="Enter personnel number" required>
+                                </div>
+
+                                <div class="form-group full">
+                                    <label for="recoveryEmail">Email Address <span>*</span></label>
+                                    <input class="form-control" type="email" id="recoveryEmail" name="email" placeholder="Enter registered email address" required>
+                                </div>
+                            </div>
+
+                            <div class="recovery-info">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 16v-4"/>
+                                    <path d="M12 8h.01"/>
+                                </svg>
+                                <p>Your account details will be used to identify your personnel account. Recovery instructions will be connected to the backend later.</p>
+                            </div>
+
+                            <button class="form-submit" type="submit">Continue</button>
+                        </form>
+
+                        <button type="button" class="back-link" data-panel="signin">
+                            <svg viewBox="0 0 24 24">
+                                <path d="m15 18-6-6 6-6"/>
+                                <path d="M9 12h12"/>
                             </svg>
-                            <p>Your account details will be used to identify your personnel account. Recovery instructions will be connected to the backend later.</p>
-                        </div>
+                            Back to Sign In
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
 
-                        <button class="form-submit" type="submit">Continue</button>
-                    </form>
-
-                    <button type="button" class="back-link" data-panel="signin">
-                        <svg viewBox="0 0 24 24">
-                            <path d="m15 18-6-6 6-6"/>
-                            <path d="M9 12h12"/>
-                        </svg>
-                        Back to Sign In
-                    </button>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <!-- =================================================
-         FOOTER
-    ================================================== -->
-    <footer class="footer">
-        <div class="footer-left">
-            © 2026 Atlas College. All rights reserved.
-        </div>
-        <nav class="footer-right" aria-label="Footer navigation">
-            <a href="#" id="footerPrivacy">Privacy Policy</a>
-            <span class="footer-separator">|</span>
-            <a href="#" id="footerTerms">Terms &amp; Conditions</a>
-            <span class="footer-separator">|</span>
-            <a href="#" id="footerHelp">Help</a>
-        </nav>
-    </footer>
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+        <footer class="footer">
+            <div class="footer-left">
+                © 2026 Atlas College. All rights reserved.
+            </div>
+            <nav class="footer-right" aria-label="Footer navigation">
+                <a href="#" id="footerPrivacy">Privacy Policy</a>
+                <span class="footer-separator">|</span>
+                <a href="#" id="footerTerms">Terms &amp; Conditions</a>
+                <span class="footer-separator">|</span>
+                <a href="#" id="footerHelp">Help</a>
+            </nav>
+        </footer>
+    </div>
 
     <!-- NOTIFICATIONS -->
     <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
