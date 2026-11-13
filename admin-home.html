@@ -133,17 +133,17 @@ select:focus-visible {
 }
 
 /* =====================================================
-   3. HEADER
+   3. HEADER (POSITION MATCHED TO admin-portal.html)
 ===================================================== */
 .header {
     width: 100%;
     max-width: 100%;
-    min-height: 80px;
-    padding: 0 var(--page-padding);
+    height: 72px;
+    padding: 0 25px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(255,255,255,.88);
+    background: #ffffff;
     border-bottom: 1px solid var(--line);
     position: relative;
     z-index: 20;
@@ -153,6 +153,8 @@ select:focus-visible {
 .brand {
     display: flex;
     align-items: center;
+    gap: 16px;
+    flex: 0 0 auto;
     background: transparent;
     border: 0;
     padding: 0;
@@ -160,13 +162,16 @@ select:focus-visible {
 }
 
 .brand img {
-    width: clamp(95px, 9.5vw, 125px);
+    width: 125px;
     height: auto;
+    display: block;
     object-fit: contain;
 }
 
 .menu-area {
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .menu-button {
@@ -210,14 +215,14 @@ select:focus-visible {
 
 .menu-dropdown {
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% + 12px);
     right: 0;
     width: 195px;
     padding: 6px;
     background: white;
     border: 1px solid var(--border-light);
     border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(7,28,114,.08);
+    box-shadow: 0 10px 25px rgba(23, 60, 105, 0.12);
     animation: fadeUp .2s ease both;
 }
 
@@ -732,25 +737,27 @@ select.form-control {
 }
 
 /* =====================================================
-   11. FOOTER
+   11. FOOTER (POSITION MATCHED TO admin-portal.html)
 ===================================================== */
 .footer {
     width: 100%;
     max-width: 100%;
-    min-height: 60px;
-    padding: 20px var(--page-padding);
     border-top: 1px solid var(--line);
+    background: #ffffff;
+    padding: 24px 25px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
     position: relative;
     z-index: 2;
     flex-shrink: 0;
 }
 
 .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 0 0 auto;
     color: #708aa8;
     font-size: 12px;
     font-weight: 500;
@@ -759,24 +766,18 @@ select.form-control {
 .footer-right {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    gap: 12px;
-    color: #708aa8;
-    font-size: 12px;
-    font-weight: 500;
+    gap: 32px;
 }
 
 .footer-right a {
+    color: #708aa8;
+    font-size: 12px;
+    font-weight: 500;
     transition: var(--transition);
 }
 
 .footer-right a:hover {
     color: var(--blue);
-}
-
-.footer-separator {
-    color: #a9bed8;
 }
 
 /* =====================================================
@@ -928,11 +929,6 @@ select.form-control {
    16. SMALLER TABLETS & NARROW SCREENS
 ===================================================== */
 @media (max-width: 760px) {
-    .header {
-        min-height: 64px;
-        padding: 0 18px;
-    }
-
     .main-grid {
         grid-template-columns: minmax(0, 1fr);
         gap: 0;
@@ -998,25 +994,37 @@ select.form-control {
     .feature-text p {
         font-size: 12.5px;
     }
+}
+
+@media (max-width: 700px) {
+    .header {
+        padding: 0 18px;
+    }
 
     .footer {
-        padding: 18px;
+        padding: 20px 18px;
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+
+    .footer-right {
+        gap: 20px;
+        flex-wrap: wrap;
     }
 }
 
 /* =====================================================
    17. MOBILE PHONES
 ===================================================== */
-@media (max-width: 480px) {
+@media (max-width: 560px) {
     .header {
-        min-height: 58px;
-        padding: 0 16px;
+        padding: 0 14px;
+        height: 64px;
     }
+}
 
-    .brand img {
-        width: 95px;
-    }
-
+@media (max-width: 480px) {
     .menu-button {
         width: 36px;
         height: 36px;
@@ -1132,23 +1140,6 @@ select.form-control {
         min-height: 40px;
         font-size: 13px;
     }
-
-    .footer {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-        padding: 18px 16px;
-    }
-
-    .footer-left {
-        font-size: 11px;
-    }
-
-    .footer-right {
-        justify-content: flex-start;
-        gap: 8px;
-        font-size: 11px;
-    }
 }
 
 /* =====================================================
@@ -1182,11 +1173,6 @@ select.form-control {
     .feature-icon {
         width: 44px;
         height: 44px;
-    }
-
-    .footer-right {
-        gap: 6px;
-        font-size: 10.5px;
     }
 }
 
@@ -1604,17 +1590,15 @@ select.form-control {
     </main>
 
     <!-- =================================================
-         FOOTER
+         FOOTER (POSITION MATCHED TO admin-portal.html)
     ================================================== -->
     <footer class="footer">
         <div class="footer-left">
-            © 2026 Atlas College. All rights reserved.
+            &copy; 2026 Atlas College. All rights reserved.
         </div>
         <nav class="footer-right" aria-label="Footer navigation">
             <a href="#" id="footerPrivacy">Privacy Policy</a>
-            <span class="footer-separator">|</span>
             <a href="#" id="footerTerms">Terms &amp; Conditions</a>
-            <span class="footer-separator">|</span>
             <a href="#" id="footerHelp">Help</a>
         </nav>
     </footer>
