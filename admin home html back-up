@@ -151,6 +151,10 @@ select:focus-visible {
 .brand {
     display: flex;
     align-items: center;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
 }
 
 .brand img {
@@ -680,6 +684,10 @@ select.form-control {
     color: #708aa8;
     font-size: 12px;
     font-weight: 600;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
 }
 
 .back-link:hover {
@@ -1216,9 +1224,9 @@ select.form-control {
          HEADER
     ================================================== -->
     <header class="header">
-        <a href="#" class="brand" aria-label="Atlas College home" onclick="showPanel('home'); return false;">
+        <button type="button" class="brand" id="navHomeBrand" aria-label="Atlas College home">
             <img src="assets/logos.png" alt="Atlas College">
-        </a>
+        </button>
         <div class="menu-area">
             <button class="menu-button" id="menuButton" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="menuDropdown">
                 <span></span>
@@ -1226,10 +1234,10 @@ select.form-control {
                 <span></span>
             </button>
             <nav class="menu-dropdown" id="menuDropdown" hidden>
-                <button type="button" onclick="showPanel('home')">Home</button>
-                <button type="button" onclick="showPanel('activate')">Activate Account</button>
-                <button type="button" onclick="showPanel('signin')">Sign In</button>
-                <button type="button" onclick="showPanel('forgot')">Forgot Password</button>
+                <button type="button" data-panel="home">Home</button>
+                <button type="button" data-panel="activate">Activate Account</button>
+                <button type="button" data-panel="signin">Sign In</button>
+                <button type="button" data-panel="forgot">Forgot Password</button>
             </nav>
         </div>
     </header>
@@ -1248,7 +1256,7 @@ select.form-control {
                 <p class="welcome-description">Your hub for managing student applications and supporting the next generation of learners.</p>
 
                 <!-- ACTIVATE ACCOUNT -->
-                <button class="activate-main" type="button" onclick="showPanel('activate')">
+                <button class="activate-main" id="btnGoActivate" type="button">
                     <svg class="user-icon" viewBox="0 0 24 24">
                         <path d="M20 21v-2a8 8 0 0 0-16 0v2"/>
                         <circle cx="12" cy="7" r="4"/>
@@ -1263,7 +1271,7 @@ select.form-control {
                 <!-- SIGN IN -->
                 <div class="signin-divider">
                     <span>Already have an account?</span>
-                    <a href="#" onclick="showPanel('signin'); return false;">Sign In</a>
+                    <a href="#" id="linkGoSignin">Sign In</a>
                 </div>
             </section>
 
@@ -1385,11 +1393,9 @@ select.form-control {
                                 <label for="activationRole">Role <span>*</span></label>
                                 <select class="form-control" id="activationRole" name="role" required>
                                     <option value="">Select Role</option>
-                                    <option value="Administrator">Administrator</option>
-                                    <option value="Admissions Officer">Admissions Officer</option>
-                                    <option value="Registrar">Registrar</option>
-                                    <option value="Finance Officer">Finance Officer</option>
-                                    <option value="Academic Officer">Academic Officer</option>
+                                    <option value="Admissions">Admissions</option>
+                                    <option value="Administration">Administration</option>
+                                    <option value="Technical Support">Technical Support</option>
                                 </select>
                             </div>
 
@@ -1399,10 +1405,8 @@ select.form-control {
                                 <select class="form-control" id="activationCampus" name="campus" required>
                                     <option value="">Select Campus</option>
                                     <option value="Main Campus">Main Campus</option>
-                                    <option value="Johannesburg Campus">Johannesburg Campus</option>
                                     <option value="Pretoria Campus">Pretoria Campus</option>
-                                    <option value="Durban Campus">Durban Campus</option>
-                                    <option value="Cape Town Campus">Cape Town Campus</option>
+                                    <option value="Johannesburg Campus">Johannesburg Campus</option>
                                 </select>
                             </div>
 
@@ -1422,9 +1426,9 @@ select.form-control {
 
                             <!-- NEW PIN -->
                             <div class="form-group full">
-                                <label for="newPin">New PIN <span>*</span></label>
+                                <label for="newPin">New PIN (6 digits) <span>*</span></label>
                                 <div class="password-wrap">
-                                    <input class="form-control" type="password" id="newPin" name="newPin" placeholder="Enter new PIN (4–6 digits)" inputmode="numeric" pattern="[0-9]{4,6}" minlength="4" maxlength="6" autocomplete="new-password" required>
+                                    <input class="form-control" type="password" id="newPin" name="newPin" placeholder="Enter new 6-digit PIN" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="new-password" required>
                                     <button class="password-toggle" type="button" data-target="newPin" aria-label="Show PIN">
                                         <svg viewBox="0 0 24 24">
                                             <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
@@ -1438,7 +1442,7 @@ select.form-control {
                             <div class="form-group full">
                                 <label for="confirmPin">Confirm PIN <span>*</span></label>
                                 <div class="password-wrap">
-                                    <input class="form-control" type="password" id="confirmPin" name="confirmPin" placeholder="Confirm your PIN" inputmode="numeric" pattern="[0-9]{4,6}" minlength="4" maxlength="6" autocomplete="new-password" required>
+                                    <input class="form-control" type="password" id="confirmPin" name="confirmPin" placeholder="Confirm your 6-digit PIN" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="new-password" required>
                                     <button class="password-toggle" type="button" data-target="confirmPin" aria-label="Show PIN">
                                         <svg viewBox="0 0 24 24">
                                             <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
@@ -1458,13 +1462,13 @@ select.form-control {
                         </button>
                     </form>
 
-                    <a href="#" class="back-link" onclick="showPanel('home'); return false;">
+                    <button type="button" class="back-link" data-panel="home">
                         <svg viewBox="0 0 24 24">
                             <path d="m15 18-6-6 6-6"/>
                             <path d="M9 12h12"/>
                         </svg>
                         Back to How It Works
-                    </a>
+                    </button>
                 </div>
 
                 <!-- =====================================
@@ -1495,11 +1499,9 @@ select.form-control {
                                 <label for="signinRole">Role <span>*</span></label>
                                 <select class="form-control" id="signinRole" name="role" required>
                                     <option value="">Select Role</option>
-                                    <option value="Administrator">Administrator</option>
-                                    <option value="Admissions Officer">Admissions Officer</option>
-                                    <option value="Registrar">Registrar</option>
-                                    <option value="Finance Officer">Finance Officer</option>
-                                    <option value="Academic Officer">Academic Officer</option>
+                                    <option value="Admissions">Admissions</option>
+                                    <option value="Administration">Administration</option>
+                                    <option value="Technical Support">Technical Support</option>
                                 </select>
                             </div>
 
@@ -1509,19 +1511,17 @@ select.form-control {
                                 <select class="form-control" id="signinCampus" name="campus" required>
                                     <option value="">Select Campus</option>
                                     <option value="Main Campus">Main Campus</option>
-                                    <option value="Johannesburg Campus">Johannesburg Campus</option>
                                     <option value="Pretoria Campus">Pretoria Campus</option>
-                                    <option value="Durban Campus">Durban Campus</option>
-                                    <option value="Cape Town Campus">Cape Town Campus</option>
+                                    <option value="Johannesburg Campus">Johannesburg Campus</option>
                                 </select>
                             </div>
 
-                            <!-- PASSWORD -->
+                            <!-- PIN -->
                             <div class="form-group full">
-                                <label for="signinPassword">Password <span>*</span></label>
+                                <label for="signinPin">6-Digit PIN <span>*</span></label>
                                 <div class="password-wrap">
-                                    <input class="form-control" type="password" id="signinPassword" name="password" placeholder="Enter your password" autocomplete="current-password" required>
-                                    <button class="password-toggle" type="button" data-target="signinPassword" aria-label="Show password">
+                                    <input class="form-control" type="password" id="signinPin" name="pin" placeholder="Enter your 6-digit PIN" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="current-password" required>
+                                    <button class="password-toggle" type="button" data-target="signinPin" aria-label="Show PIN">
                                         <svg viewBox="0 0 24 24">
                                             <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
                                             <circle cx="12" cy="12" r="3"/>
@@ -1533,7 +1533,7 @@ select.form-control {
 
                         <div class="form-bottom">
                             <span style="color:var(--muted);font-size:11.5px;">Secure personnel access</span>
-                            <a href="#" class="text-link" onclick="showPanel('forgot'); return false;">Forgot Password?</a>
+                            <a href="#" id="linkGoForgot" class="text-link">Forgot PIN?</a>
                         </div>
 
                         <button class="form-submit" type="submit">
@@ -1546,13 +1546,13 @@ select.form-control {
                         </button>
                     </form>
 
-                    <a href="#" class="back-link" onclick="showPanel('home'); return false;">
+                    <button type="button" class="back-link" data-panel="home">
                         <svg viewBox="0 0 24 24">
                             <path d="m15 18-6-6 6-6"/>
                             <path d="M9 12h12"/>
                         </svg>
                         Back to How It Works
-                    </a>
+                    </button>
                 </div>
 
                 <!-- =====================================
@@ -1560,7 +1560,7 @@ select.form-control {
                 ====================================== -->
                 <div class="panel form-panel" id="forgotPanel" hidden>
                     <div class="form-header">
-                        <h2>Forgot Password?</h2>
+                        <h2>Forgot PIN?</h2>
                         <p>Enter your personnel number and registered email address to begin account recovery.</p>
                     </div>
 
@@ -1583,19 +1583,19 @@ select.form-control {
                                 <path d="M12 16v-4"/>
                                 <path d="M12 8h.01"/>
                             </svg>
-                            <p>Your account details will be used to identify your personnel account. Password recovery will be connected to the backend later.</p>
+                            <p>Your account details will be used to identify your personnel account. Recovery instructions will be connected to the backend later.</p>
                         </div>
 
                         <button class="form-submit" type="submit">Continue</button>
                     </form>
 
-                    <a href="#" class="back-link" onclick="showPanel('signin'); return false;">
+                    <button type="button" class="back-link" data-panel="signin">
                         <svg viewBox="0 0 24 24">
                             <path d="m15 18-6-6 6-6"/>
                             <path d="M9 12h12"/>
                         </svg>
                         Back to Sign In
-                    </a>
+                    </button>
                 </div>
             </section>
         </div>
@@ -1609,11 +1609,11 @@ select.form-control {
             © 2026 Atlas College. All rights reserved.
         </div>
         <nav class="footer-right" aria-label="Footer navigation">
-            <a href="#" onclick="showToast('Privacy Policy page will be connected later.'); return false;">Privacy Policy</a>
+            <a href="#" id="footerPrivacy">Privacy Policy</a>
             <span class="footer-separator">|</span>
-            <a href="#" onclick="showToast('Terms &amp; Conditions page will be connected later.'); return false;">Terms &amp; Conditions</a>
+            <a href="#" id="footerTerms">Terms &amp; Conditions</a>
             <span class="footer-separator">|</span>
-            <a href="#" onclick="showToast('Help section will be connected later.'); return false;">Help</a>
+            <a href="#" id="footerHelp">Help</a>
         </nav>
     </footer>
 
@@ -1621,8 +1621,8 @@ select.form-control {
     <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
 </div>
 
-<!-- EXTERNAL JAVASCRIPT -->
-<script src="admin-home.js"></script>
+<!-- EXTERNAL JAVASCRIPT MODULE -->
+<script type="module" src="admin-home.js"></script>
 
 </body>
 </html>
