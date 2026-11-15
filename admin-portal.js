@@ -84,8 +84,10 @@ if (logoutBtn) {
 /* =====================================================
    2. STEP 1: APPLICATION CYCLE BUILDER LOGIC
 ===================================================== */
+const mainWorkspace = document.getElementById('mainWorkspace');
 const welcomeView = document.getElementById('welcomeView');
 const cycleBuilderView = document.getElementById('cycleBuilderView');
+const rightSidebar = document.getElementById('rightSidebar');
 
 const qualificationSelect = document.getElementById('qualification');
 const academicYearSelect = document.getElementById('academic-year');
@@ -225,6 +227,8 @@ function openCycleBuilder(e) {
   populateAcademicYears();
   loadBasicInfoFromLocalStorage();
   if (welcomeView) welcomeView.style.display = 'none';
+  if (rightSidebar) rightSidebar.style.display = 'none';
+  if (mainWorkspace) mainWorkspace.classList.add('builder-active');
   if (cycleBuilderView) cycleBuilderView.style.display = 'block';
   updateAutoNaming();
 }
@@ -244,8 +248,10 @@ function closeCycleBuilderAndReset(e) {
   if (folderNameInput) folderNameInput.value = '';
   if (cycleNameInput) cycleNameInput.value = '';
 
-  // Return to welcome view
+  // Return to welcome view and restore right sidebar
   if (cycleBuilderView) cycleBuilderView.style.display = 'none';
+  if (mainWorkspace) mainWorkspace.classList.remove('builder-active');
+  if (rightSidebar) rightSidebar.style.display = 'block';
   if (welcomeView) welcomeView.style.display = 'flex';
 }
 
