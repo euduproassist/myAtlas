@@ -255,6 +255,9 @@
       align-items: stretch;
       background: #fff;
     }
+    .workspace.builder-active {
+      grid-template-columns: minmax(220px, 22%) minmax(0, 1fr);
+    }
 
     /* Left application cycles panel */
     .cycles-sidebar {
@@ -564,6 +567,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex: 0 0 27px;
       width: 27px;
       height: 27px;
       border: 1px solid #b8d9ff;
@@ -951,7 +955,7 @@
     </header>
 
     <!-- MAIN WORKSPACE -->
-    <main class="workspace">
+    <main class="workspace" id="mainWorkspace">
 
       <!-- LEFT: APPLICATION CYCLES -->
       <aside class="cycles-sidebar">
@@ -1154,7 +1158,7 @@
       </section>
 
       <!-- RIGHT: QUICK ACTIONS AND ACTIVITY LOG -->
-      <aside class="right-sidebar">
+      <aside class="right-sidebar" id="rightSidebar">
         <section class="side-card">
           <h2 class="side-card-heading">Quick Actions</h2>
 
@@ -1251,7 +1255,7 @@
       <div class="footer-right">
         <a href="#" onclick="return false;">Privacy Policy</a>
         <a href="#" onclick="return false;">Terms &amp; Conditions</a>
-        <a href="#" onclick="return false;">Help</a>
+        <a href="#" onclick="return-false;">Help</a>
       </div>
     </footer>
 
