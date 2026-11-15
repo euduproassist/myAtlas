@@ -400,7 +400,7 @@
       line-height: 1.5;
     }
 
-    /* Centre welcome area */
+    /* Centre area */
     .main-content {
       min-width: 0;
       display: flex;
@@ -501,6 +501,244 @@
       height: 16px;
     }
 
+    /* BUILDER / STEP 1 STYLES */
+    .cycle-builder-container {
+      width: 100%;
+      text-align: left;
+    }
+
+    .page-heading {
+      margin-bottom: 20px;
+    }
+    .page-heading h1 {
+      margin: 0 0 7px;
+      color: #003b99;
+      font-size: clamp(23px, 2.1vw, 30px);
+      font-weight: 750;
+      letter-spacing: -0.5px;
+    }
+    .page-heading p {
+      margin: 0;
+      color: #4e91e7;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    .steps {
+      display: flex;
+      width: 100%;
+      min-height: 55px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      border: 1px solid #c5e0ff;
+      border-radius: 6px;
+      background: #fff;
+    }
+    .step {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 130px;
+      padding: 10px 12px;
+      color: #7897c5;
+      white-space: nowrap;
+      font-size: 12.5px;
+    }
+    .step.active {
+      color: #006dff;
+      font-weight: 750;
+    }
+    .step.active::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: #087cff;
+    }
+    .step-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 27px;
+      height: 27px;
+      border: 1px solid #b8d9ff;
+      border-radius: 50%;
+      color: #5579b1;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .step.active .step-number {
+      border-color: #087cff;
+      color: #fff;
+      background: #087cff;
+    }
+
+    .details-card {
+      width: 100%;
+      padding: 20px 18px 24px;
+      border: 1px solid #c5e0ff;
+      border-radius: 6px;
+      background: #fff;
+    }
+    .card-heading {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 0 0 28px;
+    }
+    .heading-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 48px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      color: #087cff;
+      background: #eaf5ff;
+    }
+    .heading-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+    .card-heading h2 {
+      margin: 0 0 6px;
+      color: #003b99;
+      font-size: 16px;
+      font-weight: 750;
+    }
+    .card-heading p {
+      margin: 0;
+      color: #2688f5;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+
+    .fields-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 24px;
+      row-gap: 24px;
+    }
+    .field {
+      min-width: 0;
+    }
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      color: #087cff;
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+    .required {
+      color: #e53b4d;
+    }
+    .control {
+      display: block;
+      width: 100%;
+      height: 42px;
+      padding: 0 14px;
+      border: 1px solid #b8d9ff;
+      border-radius: 6px;
+      outline: none;
+      color: #073783;
+      background: #fff;
+      font-size: 13.5px;
+    }
+    .control:focus {
+      border-color: #087cff;
+      box-shadow: 0 0 0 2px #e6f2ff;
+    }
+    select.control {
+      cursor: pointer;
+    }
+
+    .automatic-section {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 30px minmax(0, 1fr);
+      align-items: end;
+      gap: 0;
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid #e1efff;
+    }
+    .automatic-field {
+      min-width: 0;
+    }
+    .automatic-field label {
+      display: block;
+      margin-bottom: 8px;
+      color: #087cff;
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+    .automatic-label {
+      color: #388cf0;
+      font-weight: 400;
+    }
+    .automatic-input {
+      display: block;
+      width: 100%;
+      height: 42px;
+      padding: 0 13px;
+      border: 1px solid #b8d9ff;
+      border-radius: 6px;
+      color: #5797e5;
+      background: #edf6ff;
+      font-size: 13.5px;
+      cursor: not-allowed;
+    }
+    .separator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: stretch;
+      padding-top: 20px;
+      color: #087cff;
+      font-size: 20px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+      width: 100%;
+      margin-top: 24px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 22px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .btn-cancel {
+      color: #006dff;
+      background: #fff;
+      border: 1px solid #087cff;
+    }
+    .btn-next {
+      color: #fff;
+      background: #087cff;
+      border: 1px solid #087cff;
+      box-shadow: 0 2px 5px rgba(0, 100, 255, 0.12);
+    }
+
     /* Right-side information panels */
     .right-sidebar {
       min-width: 0;
@@ -539,6 +777,7 @@
       border-top: 1px solid #f0f3f8;
       text-align: left;
       font-size: 12px;
+      cursor: pointer;
     }
 
     .quick-action:first-of-type {
@@ -644,41 +883,16 @@
     }
 
     @media (max-width: 700px) {
-      .topbar {
-        padding: 0 18px;
-      }
-      .workspace {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-      }
-      .cycles-sidebar {
-        order: 1;
-        width: 100%;
-        border-right: 0;
-        border-bottom: 1px solid var(--line);
-      }
-      .main-content {
-        order: 2;
-        width: 100%;
-        padding: 34px 18px 38px;
-      }
-      .right-sidebar {
-        order: 3;
-        width: 100%;
-        border-left: 0;
-        border-top: 1px solid var(--line);
-      }
-      .footer {
-        padding: 20px 18px;
-        flex-direction: column;
-        gap: 16px;
-        align-items: flex-start;
-      }
-      .footer-right {
-        gap: 20px;
-        flex-wrap: wrap;
-      }
+      .topbar { padding: 0 18px; }
+      .workspace { display: flex; flex-direction: column; width: 100%; }
+      .cycles-sidebar { order: 1; width: 100%; border-right: 0; border-bottom: 1px solid var(--line); }
+      .main-content { order: 2; width: 100%; padding: 34px 18px 38px; }
+      .right-sidebar { order: 3; width: 100%; border-left: 0; border-top: 1px solid var(--line); }
+      .footer { padding: 20px 18px; flex-direction: column; gap: 16px; align-items: flex-start; }
+      .footer-right { gap: 20px; flex-wrap: wrap; }
+      .fields-grid { grid-template-columns: 1fr; }
+      .automatic-section { grid-template-columns: 1fr; gap: 16px; }
+      .separator { display: none; }
     }
 
     @media (max-width: 560px) {
@@ -744,7 +958,8 @@
         <div class="sidebar-heading-row">
           <h2 class="sidebar-heading">Application cycles</h2>
 
-          <button class="new-cycle-button" type="button">
+          <!-- BUTTON 1: Sidebar New Cycle Button -->
+          <button class="new-cycle-button create-cycle-trigger" type="button">
             <svg viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2"
                  stroke-linecap="round" aria-hidden="true">
@@ -799,40 +1014,143 @@
         </div>
       </aside>
 
-      <!-- CENTRE: WELCOME -->
-      <section class="main-content">
-        <div class="welcome-illustration" aria-hidden="true">
-          <div class="illustration-cloud"></div>
+      <!-- CENTRE AREA -->
+      <section class="main-content" id="mainContentArea">
+        
+        <!-- DEFAULT WELCOME VIEW -->
+        <div id="welcomeView" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+          <div class="welcome-illustration" aria-hidden="true">
+            <div class="illustration-cloud"></div>
 
-          <svg class="calendar-illustration"
-               viewBox="0 0 80 80" fill="none"
-               stroke="currentColor" stroke-width="2.5"
-               stroke-linecap="round" stroke-linejoin="round">
-            <rect x="12" y="16" width="51" height="53" rx="5"></rect>
-            <path d="M12 30h51M24 9v14M51 9v14"></path>
-            <path d="M23 42h12M23 53h20"></path>
-          </svg>
+            <svg class="calendar-illustration"
+                 viewBox="0 0 80 80" fill="none"
+                 stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <rect x="12" y="16" width="51" height="53" rx="5"></rect>
+              <path d="M12 30h51M24 9v14M51 9v14"></path>
+              <path d="M23 42h12M23 53h20"></path>
+            </svg>
 
-          <div class="illustration-plus">+</div>
+            <div class="illustration-plus">+</div>
+          </div>
+
+          <h1 class="welcome-title">
+            Welcome to myAtlas Admin Portal
+          </h1>
+
+          <p class="welcome-description">
+            Manage your institution's application cycles, forms,
+            documents and student applications from one place.
+          </p>
+
+          <!-- BUTTON 2: Centre Welcome Button -->
+          <button class="primary-button create-cycle-trigger" type="button">
+            <svg viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" aria-hidden="true">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            Create Application Cycle
+          </button>
         </div>
 
-        <h1 class="welcome-title">
-          Welcome to myAtlas Admin Portal
-        </h1>
+        <!-- CYCLE BUILDER / STEP 1 VIEW (HIDDEN INITIALLY) -->
+        <div id="cycleBuilderView" class="cycle-builder-container" style="display: none;">
+          <header class="page-heading">
+            <h1>Create Application Cycle</h1>
+            <p>Set up the basic information for your application cycle. You can complete the other sections later.</p>
+          </header>
 
-        <p class="welcome-description">
-          Manage your institution's application cycles, forms,
-          documents and student applications from one place.
-        </p>
+          <!-- 4-STEP INDICATOR (Steps 2, 3, 4 Disabled for now) -->
+          <nav class="steps" aria-label="Application cycle steps">
+            <div class="step active">
+              <span class="step-number">1</span>
+              <span>Basic Info</span>
+            </div>
+            <div class="step" style="opacity: 0.5;">
+              <span class="step-number">2</span>
+              <span>Application Form</span>
+            </div>
+            <div class="step" style="opacity: 0.5;">
+              <span class="step-number">3</span>
+              <span>Courses</span>
+            </div>
+            <div class="step" style="opacity: 0.5;">
+              <span class="step-number">4</span>
+              <span>Review &amp; Publish</span>
+            </div>
+          </nav>
 
-        <button class="primary-button" type="button">
-          <svg viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" aria-hidden="true">
-            <path d="M12 5v14M5 12h14"></path>
-          </svg>
-          Create Application Cycle
-        </button>
+          <!-- STEP 1 CARD -->
+          <section class="details-card">
+            <div class="card-heading">
+              <div class="heading-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="3" ry="3"></rect>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>              
+              <div>
+                <h2>Application Details</h2>
+                <p>Enter the key details for your application cycle. The system will automatically create the folder and cycle name.</p>
+              </div>
+            </div>
+
+            <!-- 4 FIELDS -->
+            <div class="fields-grid">
+              <div class="field">
+                <label for="qualification">Qualification Type <span class="required">*</span></label>
+                <select id="qualification" class="control">
+                  <option value="" selected disabled>Select qualification type</option>
+                  <option value="Undergraduate Degree">Undergraduate Degree</option>
+                  <option value="Postgraduate Degree">Postgraduate Degree</option>
+                  <option value="Research Degree">Research Degree</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="academic-year">Academic Year <span class="required">*</span></label>
+                <select id="academic-year" class="control">
+                  <option value="" selected disabled>Select academic year</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="opening-date">Opening Date <span class="required">*</span></label>
+                <input id="opening-date" class="control" type="date">
+              </div>
+
+              <div class="field">
+                <label for="closing-date">Closing Date <span class="required">*</span></label>
+                <input id="closing-date" class="control" type="date">
+              </div>
+            </div>
+
+            <!-- AUTOMATIC NAMES -->
+            <div class="automatic-section">
+              <div class="automatic-field">
+                <label for="folder-name">Folder Name <span class="automatic-label">(automatic)</span></label>
+                <input id="folder-name" class="automatic-input" type="text" readonly tabindex="-1">
+              </div>
+
+              <div class="separator" aria-hidden="true">/</div>
+
+              <div class="automatic-field">
+                <label for="cycle-name">Application Cycle Name <span class="automatic-label">(automatic)</span></label>
+                <input id="cycle-name" class="automatic-input" type="text" readonly tabindex="-1">
+              </div>
+            </div>
+          </section>
+
+          <!-- BUTTONS -->
+          <div class="actions">
+            <button type="button" class="btn btn-cancel" id="cancelCycleBtn">Cancel</button>
+            <button type="button" class="btn btn-next" id="nextStepBtn">Next: Application Form <span>→</span></button>
+          </div>
+        </div>
+
       </section>
 
       <!-- RIGHT: QUICK ACTIONS AND ACTIVITY LOG -->
@@ -840,7 +1158,8 @@
         <section class="side-card">
           <h2 class="side-card-heading">Quick Actions</h2>
 
-          <button class="quick-action" type="button">
+          <!-- BUTTON 3: Right Sidebar Quick Action Button -->
+          <button class="quick-action create-cycle-trigger" type="button">
             <span class="quick-action-icon">
               <svg viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2"
@@ -861,7 +1180,7 @@
             </svg>
           </button>
 
-          <button class="quick-action" type="button">
+          <button class="quick-action" type="button" onclick="return false;">
             <span class="quick-action-icon">
               <svg viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="1.8"
@@ -883,7 +1202,7 @@
             </svg>
           </button>
 
-          <button class="quick-action" type="button">
+          <button class="quick-action" type="button" onclick="return false;">
             <span class="quick-action-icon">
               <svg viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="1.8"
