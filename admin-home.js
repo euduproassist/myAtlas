@@ -291,7 +291,7 @@ signinForm.addEventListener("submit", async (event) => {
 
         showToast("Sign-in successful! Redirecting...");
         setTimeout(() => {
-            window.location.href = "admin.html";
+            window.location.href = "admin-portal.html";
         }, 1000);
 
     } catch (error) {
