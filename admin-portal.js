@@ -104,25 +104,59 @@ const BASIC_INFO_STORAGE_KEY = 'myAtlas_basicInfo';
 function setupDateConstraints() {
   if (!openingDateInput || !closingDateInput) return;
   
+  // Make inputs readonly so users cannot type custom dates manually from keyboard
+  openingDateInput.setAttribute('readonly', true);
+  closingDateInput.setAttribute('readonly', true);
+
+  // Inject placeholder styling so empty inputs show "Select date" in greyed-out text
+  if (!document.getElementById('datePlaceholderStyle')) {
+    const styleElem = document.createElement('style');
+    styleElem.id = 'datePlaceholderStyle';
+    styleElem.textContent = `
+      input[type="date"]::-webkit-datetime-edit { color: transparent; }
+      input[type="date"]:focus::-webkit-datetime-edit,
+      input[type="date"].has-value::-webkit-datetime-edit { color: #073783; }
+      input[type="date"]::before {
+        content: attr(data-placeholder);
+        width: 100%;
+        color: #8997aa;
+        position: absolute;
+      }
+      input[type="date"]:focus::before,
+      input[type="date"].has-value::before {
+        content: "";
+      }
+    `;
+    document.head.appendChild(styleElem);
+  }
+
+  openingDateInput.setAttribute('data-placeholder', 'Select date');
+  closingDateInput.setAttribute('data-placeholder', 'Select date');
+
   const now = new Date();
   const currentYear = now.getFullYear();
   
-  // Format today's date as YYYY-MM-DD in local time
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
   const todayStr = `${year}-${month}-${day}`;
-  
-  // Format December 31st of current year as YYYY-12-31
   const maxStr = `${currentYear}-12-31`;
 
-  // Restrict opening date: cannot be earlier than today, cannot exceed current year end
   openingDateInput.min = todayStr;
   openingDateInput.max = maxStr;
-
-  // Restrict closing date initially based on current year bounds
   closingDateInput.min = todayStr;
   closingDateInput.max = maxStr;
+
+  // Handle visual placeholder toggle on input change/load
+  [openingDateInput, closingDateInput].forEach(input => {
+    input.addEventListener('input', () => {
+      if (input.value) {
+        input.classList.add('has-value');
+      } else {
+        input.classList.remove('has-value');
+      }
+    });
+  });
 }
 
 function populateAcademicYears() {
@@ -200,11 +234,16 @@ function loadBasicInfoFromLocalStorage() {
     if (openingDateInput) {
       openingDateInput.value = parsed.openingDate || '';
       if (openingDateInput.value) {
-        // Ensure closing date minimum updates if opening date was restored from storage
         closingDateInput.min = openingDateInput.value;
+        openingDateInput.classList.add('has-value');
       }
     }
-    if (closingDateInput) closingDateInput.value = parsed.closingDate || '';
+    if (closingDateInput) {
+      closingDateInput.value = parsed.closingDate || '';
+      if (closingDateInput.value) {
+        closingDateInput.classList.add('has-value');
+      }
+    }
     updateAutoNaming();
   } catch (err) {
     console.error("Error loading local storage data:", err);
@@ -218,7 +257,7 @@ async function validateBasicInfoFields() {
   const closing = closingDateInput.value;
 
   if (!qual || !yr || !opening || !closing) {
-    alert("Please fill in all required fields in Basic Info before proceeding.");
+    alert("Please select all required fields (Qualification, Academic Year, Opening Date, and Closing Date) before proceeding.");
     return false;
   }
 
@@ -266,37 +305,31 @@ function openCycleBuilder(e) {
 
 function closeCycleBuilderAndReset(e) {
   if (e) e.preventDefault();
-  // Erase all saved progress in local storage
   localStorage.removeItem(BASIC_INFO_STORAGE_KEY);
   localStorage.removeItem('myAtlas_formFieldsState');
   localStorage.removeItem('myAtlas_selectedCourses');
 
-  // Reset inputs
   if (qualificationSelect) qualificationSelect.value = '';
   if (academicYearSelect) { populateAcademicYears(); academicYearSelect.value = ''; }
-  if (openingDateInput) openingDateInput.value = '';
-  if (closingDateInput) closingDateInput.value = '';
+  if (openingDateInput) { openingDateInput.value = ''; openingDateInput.classList.remove('has-value'); }
+  if (closingDateInput) { closingDateInput.value = ''; closingDateInput.classList.remove('has-value'); }
   if (folderNameInput) folderNameInput.value = '';
   if (cycleNameInput) cycleNameInput.value = '';
 
-  // Return to welcome view and restore right sidebar
   if (cycleBuilderView) cycleBuilderView.style.display = 'none';
   if (mainWorkspace) mainWorkspace.classList.remove('builder-active');
   if (rightSidebar) rightSidebar.style.display = 'block';
   if (welcomeView) welcomeView.style.display = 'flex';
 }
 
-// Bind all 3 "Create Application Cycle" buttons
 document.querySelectorAll('.create-cycle-trigger').forEach(btn => {
   btn.addEventListener('click', openCycleBuilder);
 });
 
-// Cancel button
 if (cancelCycleBtn) {
   cancelCycleBtn.addEventListener('click', closeCycleBuilderAndReset);
 }
 
-// Next Step 1 validation button (Step 2 is disabled for now)
 if (nextStepBtn) {
   nextStepBtn.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -307,7 +340,6 @@ if (nextStepBtn) {
   });
 }
 
-// Listeners for automatic updates & local storage saving
 if (qualificationSelect) {
   qualificationSelect.addEventListener('change', async () => {
     await updateAutoNaming();
@@ -324,10 +356,10 @@ if (openingDateInput) {
   openingDateInput.addEventListener('change', () => {
     const openVal = openingDateInput.value;
     if (openVal) {
-      // Ensure closing date cannot be set before or on the chosen opening date
       closingDateInput.min = openVal;
       if (closingDateInput.value && closingDateInput.value <= openVal) {
-        closingDateInput.value = ''; // Reset invalid closing date
+        closingDateInput.value = '';
+        closingDateInput.classList.remove('has-value');
       }
     }
     saveBasicInfoToLocalStorage();
