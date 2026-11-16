@@ -93,6 +93,8 @@ const qualificationSelect = document.getElementById('qualification');
 const academicYearSelect = document.getElementById('academic-year');
 const openingDateInput = document.getElementById('opening-date');
 const closingDateInput = document.getElementById('closing-date');
+const openingDateWrapper = document.getElementById('opening-date-wrapper');
+const closingDateWrapper = document.getElementById('closing-date-wrapper');
 const folderNameInput = document.getElementById('folder-name');
 const cycleNameInput = document.getElementById('cycle-name');
 
@@ -101,62 +103,68 @@ const nextStepBtn = document.getElementById('nextStepBtn');
 
 const BASIC_INFO_STORAGE_KEY = 'myAtlas_basicInfo';
 
-function setupDateConstraints() {
-  if (!openingDateInput || !closingDateInput) return;
-  
-  // Make inputs readonly so users cannot type custom dates manually from keyboard
-  openingDateInput.setAttribute('readonly', true);
-  closingDateInput.setAttribute('readonly', true);
-
-  // Inject placeholder styling so empty inputs show "Select date" in greyed-out text
-  if (!document.getElementById('datePlaceholderStyle')) {
-    const styleElem = document.createElement('style');
-    styleElem.id = 'datePlaceholderStyle';
-    styleElem.textContent = `
-      input[type="date"]::-webkit-datetime-edit { color: transparent; }
-      input[type="date"]:focus::-webkit-datetime-edit,
-      input[type="date"].has-value::-webkit-datetime-edit { color: #073783; }
-      input[type="date"]::before {
-        content: attr(data-placeholder);
-        width: 100%;
-        color: #8997aa;
-        position: absolute;
-      }
-      input[type="date"]:focus::before,
-      input[type="date"].has-value::before {
-        content: "";
-      }
-    `;
-    document.head.appendChild(styleElem);
-  }
-
-  openingDateInput.setAttribute('data-placeholder', 'Select date');
-  closingDateInput.setAttribute('data-placeholder', 'Select date');
-
+function getTodayAndMaxDateStrings() {
   const now = new Date();
   const currentYear = now.getFullYear();
-  
-  const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
-  const todayStr = `${year}-${month}-${day}`;
-  const maxStr = `${currentYear}-12-31`;
+  return {
+    todayStr: `${currentYear}-${month}-${day}`,
+    maxStr: `${currentYear}-12-31`,
+    currentYear
+  };
+}
+
+function updateDatePlaceholderState(inputEl, wrapperEl) {
+  if (!inputEl || !wrapperEl) return;
+  if (inputEl.value) {
+    wrapperEl.classList.remove('is-empty');
+  } else {
+    wrapperEl.classList.add('is-empty');
+  }
+}
+
+function bindCalendarOnlyInput(inputEl, wrapperEl) {
+  if (!inputEl || !wrapperEl) return;
+
+  // Block all manual keyboard input and pasting so user can only select via calendar
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') {
+      e.preventDefault();
+    }
+  });
+  inputEl.addEventListener('paste', (e) => e.preventDefault());
+  inputEl.addEventListener('drop', (e) => e.preventDefault());
+
+  // Open native calendar picker when clicking anywhere on the wrapper or input
+  wrapperEl.addEventListener('click', () => {
+    if (typeof inputEl.showPicker === 'function') {
+      try {
+        inputEl.showPicker();
+      } catch (err) {
+        inputEl.focus();
+      }
+    } else {
+      inputEl.focus();
+    }
+  });
+}
+
+bindCalendarOnlyInput(openingDateInput, openingDateWrapper);
+bindCalendarOnlyInput(closingDateInput, closingDateWrapper);
+
+function setupDateConstraints() {
+  if (!openingDateInput || !closingDateInput) return;
+  const { todayStr, maxStr } = getTodayAndMaxDateStrings();
 
   openingDateInput.min = todayStr;
   openingDateInput.max = maxStr;
-  closingDateInput.min = todayStr;
+
+  closingDateInput.min = openingDateInput.value || todayStr;
   closingDateInput.max = maxStr;
 
-  // Handle visual placeholder toggle on input change/load
-  [openingDateInput, closingDateInput].forEach(input => {
-    input.addEventListener('input', () => {
-      if (input.value) {
-        input.classList.add('has-value');
-      } else {
-        input.classList.remove('has-value');
-      }
-    });
-  });
+  updateDatePlaceholderState(openingDateInput, openingDateWrapper);
+  updateDatePlaceholderState(closingDateInput, closingDateWrapper);
 }
 
 function populateAcademicYears() {
@@ -226,23 +234,26 @@ function loadBasicInfoFromLocalStorage() {
   if (!raw) return;
   try {
     const parsed = JSON.parse(raw);
+    const { todayStr, maxStr } = getTodayAndMaxDateStrings();
+
     if (qualificationSelect) qualificationSelect.value = parsed.qualification || '';
     if (academicYearSelect) {
       populateAcademicYears();
       academicYearSelect.value = parsed.academicYear || '';
     }
     if (openingDateInput) {
-      openingDateInput.value = parsed.openingDate || '';
+      const savedOpen = parsed.openingDate || '';
+      openingDateInput.value = (savedOpen >= todayStr && savedOpen <= maxStr) ? savedOpen : '';
       if (openingDateInput.value) {
         closingDateInput.min = openingDateInput.value;
-        openingDateInput.classList.add('has-value');
       }
+      updateDatePlaceholderState(openingDateInput, openingDateWrapper);
     }
     if (closingDateInput) {
-      closingDateInput.value = parsed.closingDate || '';
-      if (closingDateInput.value) {
-        closingDateInput.classList.add('has-value');
-      }
+      const savedClose = parsed.closingDate || '';
+      const minClose = openingDateInput.value || todayStr;
+      closingDateInput.value = (savedClose > minClose && savedClose <= maxStr) ? savedClose : '';
+      updateDatePlaceholderState(closingDateInput, closingDateWrapper);
     }
     updateAutoNaming();
   } catch (err) {
@@ -255,9 +266,15 @@ async function validateBasicInfoFields() {
   const yr = academicYearSelect.value;
   const opening = openingDateInput.value;
   const closing = closingDateInput.value;
+  const { todayStr, maxStr, currentYear } = getTodayAndMaxDateStrings();
 
   if (!qual || !yr || !opening || !closing) {
-    alert("Please select all required fields (Qualification, Academic Year, Opening Date, and Closing Date) before proceeding.");
+    alert("Please fill in all required fields in Basic Info before proceeding.");
+    return false;
+  }
+
+  if (opening < todayStr || opening > maxStr || closing < todayStr || closing > maxStr) {
+    alert(`Opening and closing dates must be between today (${todayStr}) and ${currentYear}-12-31.`);
     return false;
   }
 
@@ -305,31 +322,43 @@ function openCycleBuilder(e) {
 
 function closeCycleBuilderAndReset(e) {
   if (e) e.preventDefault();
+  // Erase all saved progress in local storage
   localStorage.removeItem(BASIC_INFO_STORAGE_KEY);
   localStorage.removeItem('myAtlas_formFieldsState');
   localStorage.removeItem('myAtlas_selectedCourses');
 
+  // Reset inputs
   if (qualificationSelect) qualificationSelect.value = '';
   if (academicYearSelect) { populateAcademicYears(); academicYearSelect.value = ''; }
-  if (openingDateInput) { openingDateInput.value = ''; openingDateInput.classList.remove('has-value'); }
-  if (closingDateInput) { closingDateInput.value = ''; closingDateInput.classList.remove('has-value'); }
+  if (openingDateInput) {
+    openingDateInput.value = '';
+    updateDatePlaceholderState(openingDateInput, openingDateWrapper);
+  }
+  if (closingDateInput) {
+    closingDateInput.value = '';
+    updateDatePlaceholderState(closingDateInput, closingDateWrapper);
+  }
   if (folderNameInput) folderNameInput.value = '';
   if (cycleNameInput) cycleNameInput.value = '';
 
+  // Return to welcome view and restore right sidebar
   if (cycleBuilderView) cycleBuilderView.style.display = 'none';
   if (mainWorkspace) mainWorkspace.classList.remove('builder-active');
   if (rightSidebar) rightSidebar.style.display = 'block';
   if (welcomeView) welcomeView.style.display = 'flex';
 }
 
+// Bind all 3 "Create Application Cycle" buttons
 document.querySelectorAll('.create-cycle-trigger').forEach(btn => {
   btn.addEventListener('click', openCycleBuilder);
 });
 
+// Cancel button
 if (cancelCycleBtn) {
   cancelCycleBtn.addEventListener('click', closeCycleBuilderAndReset);
 }
 
+// Next Step 1 validation button (Step 2 is disabled for now)
 if (nextStepBtn) {
   nextStepBtn.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -340,6 +369,7 @@ if (nextStepBtn) {
   });
 }
 
+// Listeners for automatic updates & local storage saving
 if (qualificationSelect) {
   qualificationSelect.addEventListener('change', async () => {
     await updateAutoNaming();
@@ -354,17 +384,22 @@ if (academicYearSelect) {
 }
 if (openingDateInput) {
   openingDateInput.addEventListener('change', () => {
+    updateDatePlaceholderState(openingDateInput, openingDateWrapper);
     const openVal = openingDateInput.value;
     if (openVal) {
+      // Ensure closing date cannot be set before or on the chosen opening date
       closingDateInput.min = openVal;
       if (closingDateInput.value && closingDateInput.value <= openVal) {
         closingDateInput.value = '';
-        closingDateInput.classList.remove('has-value');
+        updateDatePlaceholderState(closingDateInput, closingDateWrapper);
       }
     }
     saveBasicInfoToLocalStorage();
   });
 }
 if (closingDateInput) {
-  closingDateInput.addEventListener('change', saveBasicInfoToLocalStorage);
+  closingDateInput.addEventListener('change', () => {
+    updateDatePlaceholderState(closingDateInput, closingDateWrapper);
+    saveBasicInfoToLocalStorage();
+  });
 }
