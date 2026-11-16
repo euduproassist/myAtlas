@@ -101,6 +101,30 @@ const nextStepBtn = document.getElementById('nextStepBtn');
 
 const BASIC_INFO_STORAGE_KEY = 'myAtlas_basicInfo';
 
+function setupDateConstraints() {
+  if (!openingDateInput || !closingDateInput) return;
+  
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  
+  // Format today's date as YYYY-MM-DD in local time
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const todayStr = `${year}-${month}-${day}`;
+  
+  // Format December 31st of current year as YYYY-12-31
+  const maxStr = `${currentYear}-12-31`;
+
+  // Restrict opening date: cannot be earlier than today, cannot exceed current year end
+  openingDateInput.min = todayStr;
+  openingDateInput.max = maxStr;
+
+  // Restrict closing date initially based on current year bounds
+  closingDateInput.min = todayStr;
+  closingDateInput.max = maxStr;
+}
+
 function populateAcademicYears() {
   if (!academicYearSelect) return;
   const currentYear = new Date().getFullYear();
@@ -173,7 +197,13 @@ function loadBasicInfoFromLocalStorage() {
       populateAcademicYears();
       academicYearSelect.value = parsed.academicYear || '';
     }
-    if (openingDateInput) openingDateInput.value = parsed.openingDate || '';
+    if (openingDateInput) {
+      openingDateInput.value = parsed.openingDate || '';
+      if (openingDateInput.value) {
+        // Ensure closing date minimum updates if opening date was restored from storage
+        closingDateInput.min = openingDateInput.value;
+      }
+    }
     if (closingDateInput) closingDateInput.value = parsed.closingDate || '';
     updateAutoNaming();
   } catch (err) {
@@ -224,6 +254,7 @@ async function validateBasicInfoFields() {
 
 function openCycleBuilder(e) {
   if (e) e.preventDefault();
+  setupDateConstraints();
   populateAcademicYears();
   loadBasicInfoFromLocalStorage();
   if (welcomeView) welcomeView.style.display = 'none';
@@ -289,5 +320,19 @@ if (academicYearSelect) {
     saveBasicInfoToLocalStorage();
   });
 }
-if (openingDateInput) openingDateInput.addEventListener('change', saveBasicInfoToLocalStorage);
-if (closingDateInput) closingDateInput.addEventListener('change', saveBasicInfoToLocalStorage);
+if (openingDateInput) {
+  openingDateInput.addEventListener('change', () => {
+    const openVal = openingDateInput.value;
+    if (openVal) {
+      // Ensure closing date cannot be set before or on the chosen opening date
+      closingDateInput.min = openVal;
+      if (closingDateInput.value && closingDateInput.value <= openVal) {
+        closingDateInput.value = ''; // Reset invalid closing date
+      }
+    }
+    saveBasicInfoToLocalStorage();
+  });
+}
+if (closingDateInput) {
+  closingDateInput.addEventListener('change', saveBasicInfoToLocalStorage);
+}
