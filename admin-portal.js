@@ -82,7 +82,7 @@ if (logoutBtn) {
 }
 
 /* =====================================================
-   2. APPLICATION CYCLE BUILDER LOGIC (STEPS 1 & 2)
+   2. APPLICATION CYCLE BUILDER LOGIC (STEPS 1, 2 & 3)
 ===================================================== */
 const mainWorkspace = document.getElementById('mainWorkspace');
 const welcomeView = document.getElementById('welcomeView');
@@ -91,8 +91,11 @@ const rightSidebar = document.getElementById('rightSidebar');
 
 const builderStep1 = document.getElementById('builderStep1');
 const builderStep2 = document.getElementById('builderStep2');
+const builderStep3 = document.getElementById('builderStep3');
+
 const navStep1 = document.getElementById('navStep1');
 const navStep2 = document.getElementById('navStep2');
+const navStep3 = document.getElementById('navStep3');
 
 const qualificationSelect = document.getElementById('qualification');
 const academicYearSelect = document.getElementById('academic-year');
@@ -105,12 +108,17 @@ const cycleNameInput = document.getElementById('cycle-name');
 
 const cancelCycleBtn = document.getElementById('cancelCycleBtn');
 const cancelFormBtn = document.getElementById('cancelFormBtn');
+const cancelCoursesBtn = document.getElementById('cancelCoursesBtn');
+
 const nextStepBtn = document.getElementById('nextStepBtn');
 const prevStepBtn = document.getElementById('prevStepBtn');
 const toCoursesBtn = document.getElementById('toCoursesBtn');
+const prevToFormBtn = document.getElementById('prevToFormBtn');
+const toReviewBtn = document.getElementById('toReviewBtn');
 
 const BASIC_INFO_STORAGE_KEY = 'myAtlas_basicInfo';
 const FORM_FIELDS_STATE_KEY = 'myAtlas_formFieldsState';
+const SELECTED_COURSES_STORAGE_KEY = 'myAtlas_selectedCourses';
 
 function getTodayAndMaxDateStrings() {
   const now = new Date();
@@ -435,20 +443,290 @@ setupSelectAllHandler('selectAdditionalInfoAllCheck', 'additional-info-field-che
 setupSelectAllHandler('selectDocumentsAllCheck', 'documents-field-checkbox', 'documentsSelectedCountBadge');
 
 /* =====================================================
-   4. NAVIGATION & VIEW SWITCHING
+   4. STEP 3 COURSES INTEGRATION & FILTERING LOGIC
+===================================================== */
+let cachedMasterCourses = [];
+
+function getSelectedCoursesState() {
+  try {
+    return JSON.parse(localStorage.getItem(SELECTED_COURSES_STORAGE_KEY) || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveSelectedCoursesState(selectedIds) {
+  localStorage.setItem(SELECTED_COURSES_STORAGE_KEY, JSON.stringify(selectedIds));
+}
+
+function getQualificationFilteredCourses(allCourses) {
+  const basicInfo = JSON.parse(localStorage.getItem(BASIC_INFO_STORAGE_KEY) || '{}');
+  const qualVal = (basicInfo.qualification || '').trim().toLowerCase();
+
+  if (!qualVal) return allCourses;
+
+  return allCourses.filter(course => {
+    const name = (course.courseName || course.name || '').toLowerCase();
+    if (qualVal.includes('undergraduate')) {
+      return name.startsWith('higher certificate') || name.startsWith('diploma') || name.startsWith('bachelor');
+    } else if (qualVal.includes('postgraduate')) {
+      return name.startsWith('postgraduate') || name.includes('honours') || name.includes('master') || name.includes('post-graduate');
+    } else if (qualVal.includes('research')) {
+      return name.includes('master') || name.includes('phd') || name.includes('doctorate') || name.includes('research');
+    }
+    return true;
+  });
+}
+
+async function loadMasterCoursesForStep3() {
+  const tbody = document.getElementById('masterCoursesTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">Loading master courses from database...</td></tr>';
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "master_courses"));
+    cachedMasterCourses = [];
+    querySnapshot.forEach((docSnap) => {
+      cachedMasterCourses.push({ id: docSnap.id, ...docSnap.data() });
+    });
+
+    populateStep3FilterDropdowns(cachedMasterCourses);
+    renderFilteredMasterCourses();
+  } catch (err) {
+    console.error("Error loading master_courses:", err);
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:red;">Failed to load courses from master records.</td></tr>';
+  }
+}
+
+function populateStep3FilterDropdowns(courses) {
+  const filterCourse = document.getElementById('filterCourse');
+  const filterStudyMode = document.getElementById('filterStudyMode');
+  const filterCampus = document.getElementById('filterCampus');
+
+  if (!filterCourse || !filterStudyMode || !filterCampus) return;
+
+  const qualFiltered = getQualificationFilteredCourses(courses);
+
+  const courseNames = [...new Set(qualFiltered.map(c => c.courseName || c.name || ''))].filter(Boolean).sort();
+  const studyModes = [...new Set(qualFiltered.map(c => c.studyMode || c.mode || ''))].filter(Boolean).sort();
+  const campuses = [...new Set(qualFiltered.map(c => c.campus || ''))].filter(Boolean).sort();
+
+  filterCourse.innerHTML = '<option value="">All Courses</option>';
+  courseNames.forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    filterCourse.appendChild(opt);
+  });
+
+  filterStudyMode.innerHTML = '<option value="">All Study Modes</option>';
+  studyModes.forEach(mode => {
+    const opt = document.createElement('option');
+    opt.value = mode;
+    opt.textContent = mode;
+    filterStudyMode.appendChild(opt);
+  });
+
+  filterCampus.innerHTML = '<option value="">All Campuses</option>';
+  campuses.forEach(campus => {
+    const opt = document.createElement('option');
+    opt.value = campus;
+    opt.textContent = campus;
+    filterCampus.appendChild(opt);
+  });
+}
+
+function renderFilteredMasterCourses() {
+  const tbody = document.getElementById('masterCoursesTableBody');
+  if (!tbody) return;
+
+  const filterCourseVal = (document.getElementById('filterCourse')?.value || '').trim().toLowerCase();
+  const filterStudyModeVal = (document.getElementById('filterStudyMode')?.value || '').trim().toLowerCase();
+  const filterCampusVal = (document.getElementById('filterCampus')?.value || '').trim().toLowerCase();
+  const searchQuery = (document.getElementById('filterSearch')?.value || '').trim().toLowerCase();
+
+  const qualFiltered = getQualificationFilteredCourses(cachedMasterCourses);
+
+  const filtered = qualFiltered.filter(c => {
+    const name = (c.courseName || c.name || '').toLowerCase();
+    const mode = (c.studyMode || c.mode || '').toLowerCase();
+    const campus = (c.campus || '').toLowerCase();
+    const year = String(c.academicYear || c.year || '').toLowerCase();
+
+    if (filterCourseVal && name !== filterCourseVal) return false;
+    if (filterStudyModeVal && mode !== filterStudyModeVal) return false;
+    if (filterCampusVal && campus !== filterCampusVal) return false;
+
+    if (searchQuery) {
+      const matchText = `${name} ${mode} ${campus} ${year}`;
+      if (!matchText.includes(searchQuery)) return false;
+    }
+
+    return true;
+  });
+
+  tbody.innerHTML = '';
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#7897c5;">No courses match the selected filters.</td></tr>';
+    updateCoursesSelectedCountBadge();
+    updateSelectAllCoursesCheckboxState();
+    return;
+  }
+
+  const selectedCourses = getSelectedCoursesState();
+
+  filtered.forEach(course => {
+    const tr = document.createElement('tr');
+    tr.dataset.courseId = course.id;
+    const isChecked = selectedCourses.includes(course.id) ? 'checked' : '';
+
+    const courseName = course.courseName || course.name || 'Unnamed Course';
+    const studyMode = course.studyMode || course.mode || 'Full-time';
+    const campus = course.campus || 'Main Campus';
+    const academicYear = course.academicYear || course.year || '2026';
+
+    tr.innerHTML = `
+      <td style="padding-left: 21px;">
+        <input type="checkbox" class="check course-row-checkbox" ${isChecked} aria-label="Select ${courseName}">
+      </td>
+      <td><strong>${courseName}</strong></td>
+      <td>${studyMode}</td>
+      <td>${campus}</td>
+      <td>${academicYear}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  updateCoursesSelectedCountBadge();
+  updateSelectAllCoursesCheckboxState();
+}
+
+function updateCoursesSelectedCountBadge() {
+  const badge = document.getElementById('coursesSelectedCountBadge');
+  if (!badge) return;
+  const selectedCourses = getSelectedCoursesState();
+  badge.textContent = `${selectedCourses.length} selected`;
+}
+
+function updateSelectAllCoursesCheckboxState() {
+  const selectAllCb = document.getElementById('selectAllCoursesCheck');
+  if (!selectAllCb) return;
+
+  const rowCheckboxes = document.querySelectorAll('.course-row-checkbox');
+  if (rowCheckboxes.length === 0) {
+    selectAllCb.checked = false;
+    selectAllCb.indeterminate = false;
+    return;
+  }
+
+  let allChecked = true;
+  let anyChecked = false;
+  rowCheckboxes.forEach(cb => {
+    if (cb.checked) {
+      anyChecked = true;
+    } else {
+      allChecked = false;
+    }
+  });
+
+  selectAllCb.checked = allChecked;
+  selectAllCb.indeterminate = anyChecked && !allChecked;
+}
+
+const selectAllCoursesCheck = document.getElementById('selectAllCoursesCheck');
+if (selectAllCoursesCheck) {
+  selectAllCoursesCheck.addEventListener('change', (e) => {
+    const isChecked = e.target.checked;
+    const rowCheckboxes = document.querySelectorAll('.course-row-checkbox');
+    let selectedCourses = getSelectedCoursesState();
+
+    rowCheckboxes.forEach(cb => {
+      cb.checked = isChecked;
+      const tr = cb.closest('tr');
+      if (tr && tr.dataset.courseId) {
+        const courseId = tr.dataset.courseId;
+        if (isChecked) {
+          if (!selectedCourses.includes(courseId)) selectedCourses.push(courseId);
+        } else {
+          selectedCourses = selectedCourses.filter(id => id !== courseId);
+        }
+      }
+    });
+
+    saveSelectedCoursesState(selectedCourses);
+    updateCoursesSelectedCountBadge();
+  });
+}
+
+document.addEventListener('change', (e) => {
+  if (e.target.classList.contains('course-row-checkbox')) {
+    const tr = e.target.closest('tr');
+    if (!tr || !tr.dataset.courseId) return;
+    const courseId = tr.dataset.courseId;
+    let selectedCourses = getSelectedCoursesState();
+
+    if (e.target.checked) {
+      if (!selectedCourses.includes(courseId)) selectedCourses.push(courseId);
+    } else {
+      selectedCourses = selectedCourses.filter(id => id !== courseId);
+    }
+
+    saveSelectedCoursesState(selectedCourses);
+    updateCoursesSelectedCountBadge();
+    updateSelectAllCoursesCheckboxState();
+  }
+});
+
+['filterCourse', 'filterStudyMode', 'filterCampus'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener('change', renderFilteredMasterCourses);
+  }
+});
+
+const filterSearch = document.getElementById('filterSearch');
+if (filterSearch) {
+  filterSearch.addEventListener('input', renderFilteredMasterCourses);
+}
+
+/* =====================================================
+   5. NAVIGATION & VIEW SWITCHING (STEPS 1, 2, 3)
 ===================================================== */
 function showBuilderStep(stepNum) {
+  if (builderStep1) builderStep1.style.display = (stepNum === 1) ? 'block' : 'none';
+  if (builderStep2) builderStep2.style.display = (stepNum === 2) ? 'block' : 'none';
+  if (builderStep3) builderStep3.style.display = (stepNum === 3) ? 'block' : 'none';
+
+  if (navStep1) {
+    navStep1.classList.toggle('active', stepNum === 1);
+    navStep1.classList.toggle('completed', stepNum > 1);
+  }
+  if (navStep2) {
+    navStep2.classList.toggle('active', stepNum === 2);
+    navStep2.classList.toggle('completed', stepNum > 2);
+  }
+  if (navStep3) {
+    navStep3.classList.toggle('active', stepNum === 3);
+    navStep3.classList.toggle('completed', stepNum > 3);
+    navStep3.style.opacity = '1';
+  }
+
   if (stepNum === 1) {
-    if (builderStep1) builderStep1.style.display = 'block';
-    if (builderStep2) builderStep2.style.display = 'none';
-    if (navStep1) { navStep1.classList.add('active'); navStep1.classList.remove('completed'); }
-    if (navStep2) { navStep2.classList.remove('active', 'completed'); }
+    const sub = document.getElementById('builderMainSub');
+    if (sub) sub.textContent = "Set up the basic information for your application cycle. You can complete the other sections later.";
   } else if (stepNum === 2) {
-    if (builderStep1) builderStep1.style.display = 'none';
-    if (builderStep2) builderStep2.style.display = 'block';
-    if (navStep1) { navStep1.classList.remove('active'); navStep1.classList.add('completed'); }
-    if (navStep2) { navStep2.classList.add('active'); navStep2.classList.remove('completed'); }
     loadAllFormTables();
+    const sub = document.getElementById('builderMainSub');
+    if (sub) sub.textContent = "Select the information applicants must provide when completing their applications.";
+  } else if (stepNum === 3) {
+    const basicInfo = JSON.parse(localStorage.getItem(BASIC_INFO_STORAGE_KEY) || '{}');
+    const headingEl = document.getElementById('coursesDynamicHeading');
+    if (headingEl) {
+      headingEl.textContent = basicInfo.qualification ? `${basicInfo.qualification} Courses` : "Courses";
+    }
+    const sub = document.getElementById('builderMainSub');
+    if (sub) sub.textContent = "Select the courses available for this application cycle from master records.";
+    loadMasterCoursesForStep3();
   }
 }
 
@@ -469,7 +747,7 @@ function closeCycleBuilderAndReset(e) {
   if (e) e.preventDefault();
   localStorage.removeItem(BASIC_INFO_STORAGE_KEY);
   localStorage.removeItem(FORM_FIELDS_STATE_KEY);
-  localStorage.removeItem('myAtlas_selectedCourses');
+  localStorage.removeItem(SELECTED_COURSES_STORAGE_KEY);
 
   if (qualificationSelect) qualificationSelect.value = '';
   if (academicYearSelect) { populateAcademicYears(); academicYearSelect.value = ''; }
@@ -496,6 +774,7 @@ document.querySelectorAll('.create-cycle-trigger').forEach(btn => {
 
 if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', closeCycleBuilderAndReset);
 if (cancelFormBtn) cancelFormBtn.addEventListener('click', closeCycleBuilderAndReset);
+if (cancelCoursesBtn) cancelCoursesBtn.addEventListener('click', closeCycleBuilderAndReset);
 
 if (nextStepBtn) {
   nextStepBtn.addEventListener('click', async (e) => {
@@ -517,11 +796,30 @@ if (prevStepBtn) {
 if (toCoursesBtn) {
   toCoursesBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    alert("Step 2 validated and saved successfully! Steps 3 and 4 are coming up next.");
+    showBuilderStep(3);
   });
 }
 
-// Listeners for row changes
+if (prevToFormBtn) {
+  prevToFormBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showBuilderStep(2);
+  });
+}
+
+if (toReviewBtn) {
+  toReviewBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const selectedCourses = getSelectedCoursesState();
+    if (selectedCourses.length === 0) {
+      alert("Please select at least one course before proceeding to Step 4.");
+      return;
+    }
+    alert("Step 3 courses saved successfully! Step 4 (Review & Publish) is coming up next.");
+  });
+}
+
+// Form field change listeners
 document.addEventListener('change', (e) => {
   const tr = e.target.closest('tr');
   if (!tr || !tr.dataset.fieldId) return;
