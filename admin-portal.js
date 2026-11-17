@@ -408,6 +408,32 @@ function loadAllFormTables() {
   loadTableFieldsFromFirestore("documents", "documentsFieldsTableBody", "documents-field-checkbox", "documentsSelectedCountBadge");
 }
 
+function setupSelectAllHandler(selectAllCheckboxId, rowCheckboxClass, badgeId) {
+  const selectAllCb = document.getElementById(selectAllCheckboxId);
+  if (!selectAllCb) return;
+
+  selectAllCb.addEventListener('change', (e) => {
+    const isChecked = e.target.checked;
+    const checkboxes = document.querySelectorAll(`.${rowCheckboxClass}`);
+    checkboxes.forEach(cb => {
+      cb.checked = isChecked;
+      const tr = cb.closest('tr');
+      if (tr && tr.dataset.fieldId) {
+        const reqSelect = tr.querySelector('.requirement-select');
+        saveFormFieldState(tr.dataset.fieldId, isChecked, reqSelect ? reqSelect.value : 'Required');
+      }
+    });
+    updateTableSelectedCount(rowCheckboxClass, badgeId);
+  });
+}
+
+setupSelectAllHandler('selectAllCheck', 'field-checkbox', 'selectedCountBadge');
+setupSelectAllHandler('selectContactAllCheck', 'contact-field-checkbox', 'contactSelectedCountBadge');
+setupSelectAllHandler('selectGuardianAllCheck', 'guardian-field-checkbox', 'guardianSelectedCountBadge');
+setupSelectAllHandler('selectEducCoursesAllCheck', 'educ-courses-field-checkbox', 'educCoursesSelectedCountBadge');
+setupSelectAllHandler('selectAdditionalInfoAllCheck', 'additional-info-field-checkbox', 'additionalInfoSelectedCountBadge');
+setupSelectAllHandler('selectDocumentsAllCheck', 'documents-field-checkbox', 'documentsSelectedCountBadge');
+
 /* =====================================================
    4. NAVIGATION & VIEW SWITCHING
 ===================================================== */
@@ -495,7 +521,7 @@ if (toCoursesBtn) {
   });
 }
 
-// Table row and checkbox event listener for saving state
+// Listeners for row changes
 document.addEventListener('change', (e) => {
   const tr = e.target.closest('tr');
   if (!tr || !tr.dataset.fieldId) return;
