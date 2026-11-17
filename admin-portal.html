@@ -977,6 +977,7 @@
       gap: 14px;
       width: 100%;
       margin-top: 24px;
+      flex-wrap: wrap;
     }
     .btn {
       display: inline-flex;
@@ -1161,6 +1162,16 @@
       .fields-grid { grid-template-columns: 1fr; }
       .automatic-section { grid-template-columns: 1fr; gap: 16px; }
       .separator { display: none; }
+      
+      /* Updated actions wrapper for smaller screens to ensure all buttons stay fully visible */
+      .actions { 
+        justify-content: stretch; 
+        gap: 10px;
+      }
+      .actions .btn { 
+        flex: 1 1 100%; 
+        width: 100%;
+      }
     }
 
     @media (max-width: 560px) {
