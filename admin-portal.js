@@ -82,12 +82,17 @@ if (logoutBtn) {
 }
 
 /* =====================================================
-   2. STEP 1: APPLICATION CYCLE BUILDER LOGIC
+   2. APPLICATION CYCLE BUILDER LOGIC (STEPS 1 & 2)
 ===================================================== */
 const mainWorkspace = document.getElementById('mainWorkspace');
 const welcomeView = document.getElementById('welcomeView');
 const cycleBuilderView = document.getElementById('cycleBuilderView');
 const rightSidebar = document.getElementById('rightSidebar');
+
+const builderStep1 = document.getElementById('builderStep1');
+const builderStep2 = document.getElementById('builderStep2');
+const navStep1 = document.getElementById('navStep1');
+const navStep2 = document.getElementById('navStep2');
 
 const qualificationSelect = document.getElementById('qualification');
 const academicYearSelect = document.getElementById('academic-year');
@@ -99,9 +104,13 @@ const folderNameInput = document.getElementById('folder-name');
 const cycleNameInput = document.getElementById('cycle-name');
 
 const cancelCycleBtn = document.getElementById('cancelCycleBtn');
+const cancelFormBtn = document.getElementById('cancelFormBtn');
 const nextStepBtn = document.getElementById('nextStepBtn');
+const prevStepBtn = document.getElementById('prevStepBtn');
+const toCoursesBtn = document.getElementById('toCoursesBtn');
 
 const BASIC_INFO_STORAGE_KEY = 'myAtlas_basicInfo';
+const FORM_FIELDS_STATE_KEY = 'myAtlas_formFieldsState';
 
 function getTodayAndMaxDateStrings() {
   const now = new Date();
@@ -126,24 +135,15 @@ function updateDatePlaceholderState(inputEl, wrapperEl) {
 
 function bindCalendarOnlyInput(inputEl, wrapperEl) {
   if (!inputEl || !wrapperEl) return;
-
-  // Block all manual keyboard input and pasting so user can only select via calendar
   inputEl.addEventListener('keydown', (e) => {
-    if (e.key !== 'Tab') {
-      e.preventDefault();
-    }
+    if (e.key !== 'Tab') e.preventDefault();
   });
   inputEl.addEventListener('paste', (e) => e.preventDefault());
   inputEl.addEventListener('drop', (e) => e.preventDefault());
 
-  // Open native calendar picker when clicking anywhere on the wrapper or input
   wrapperEl.addEventListener('click', () => {
     if (typeof inputEl.showPicker === 'function') {
-      try {
-        inputEl.showPicker();
-      } catch (err) {
-        inputEl.focus();
-      }
+      try { inputEl.showPicker(); } catch (err) { inputEl.focus(); }
     } else {
       inputEl.focus();
     }
@@ -156,13 +156,10 @@ bindCalendarOnlyInput(closingDateInput, closingDateWrapper);
 function setupDateConstraints() {
   if (!openingDateInput || !closingDateInput) return;
   const { todayStr, maxStr } = getTodayAndMaxDateStrings();
-
   openingDateInput.min = todayStr;
   openingDateInput.max = maxStr;
-
   closingDateInput.min = openingDateInput.value || todayStr;
   closingDateInput.max = maxStr;
-
   updateDatePlaceholderState(openingDateInput, openingDateWrapper);
   updateDatePlaceholderState(closingDateInput, closingDateWrapper);
 }
@@ -308,6 +305,127 @@ async function validateBasicInfoFields() {
   return true;
 }
 
+/* =====================================================
+   3. STEP 2 FORM FIELDS STATE & FIRESTORE INTEGRATION
+===================================================== */
+function getFormFieldsState() {
+  try {
+    return JSON.parse(localStorage.getItem(FORM_FIELDS_STATE_KEY) || '{}');
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveFormFieldState(fieldId, isSelected, requirement) {
+  const state = getFormFieldsState();
+  state[fieldId] = { isSelected, requirement };
+  localStorage.setItem(FORM_FIELDS_STATE_KEY, JSON.stringify(state));
+}
+
+async function loadTableFieldsFromFirestore(sectionName, tbodyId, checkboxClass, countBadgeId) {
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:15px;">Loading fields...</td></tr>';
+
+  try {
+    const querySnapshot = await getDocs(collection(db, "application_form_fields"));
+    let fields = [];
+    const savedState = getFormFieldsState();
+
+    querySnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (sectionName === "personal") {
+        if (["contact", "guardian", "education_courses", "additional_info", "documents"].includes(data.section)) return;
+      } else {
+        if (data.section !== sectionName) return;
+      }
+
+      let isSelected = data.isSelected !== undefined ? data.isSelected : true;
+      let requirement = data.requirement || 'Required';
+      if (savedState[docSnap.id]) {
+        isSelected = savedState[docSnap.id].isSelected;
+        requirement = savedState[docSnap.id].requirement;
+      }
+
+      fields.push({ id: docSnap.id, ...data, isSelected, requirement });
+    });
+
+    fields.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    tbody.innerHTML = '';
+    if (fields.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:15px;">No fields found in database.</td></tr>';
+      return;
+    }
+
+    fields.forEach((field) => {
+      const tr = document.createElement('tr');
+      tr.dataset.fieldId = field.id;
+      const isCheckedAttr = field.isSelected ? 'checked' : '';
+      const reqSelected = field.requirement === 'Required' ? 'selected' : '';
+      const optSelected = field.requirement === 'Optional' ? 'selected' : '';
+
+      let behaviourHtml = `<span class="behaviour">Standard</span>`;
+      if (field.fieldBehaviour === 'Conditional') {
+        behaviourHtml = `<span class="behaviour conditional">Conditional</span>`;
+      }
+
+      tr.innerHTML = `
+        <td><input type="checkbox" class="check ${checkboxClass}" ${isCheckedAttr} aria-label="Include ${field.fieldName}"></td>
+        <td>${field.fieldName || ''}</td>
+        <td>
+          <select class="requirement-select" aria-label="${field.fieldName} requirement">
+            <option ${reqSelected}>Required</option>
+            <option ${optSelected}>Optional</option>
+          </select>
+        </td>
+        <td>${behaviourHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    updateTableSelectedCount(checkboxClass, countBadgeId);
+  } catch (err) {
+    console.error(`Error loading fields for ${sectionName}:`, err);
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:15px; color:red;">Failed to load fields.</td></tr>';
+  }
+}
+
+function updateTableSelectedCount(checkboxClass, badgeId) {
+  const checkboxes = document.querySelectorAll(`.${checkboxClass}`);
+  let count = 0;
+  checkboxes.forEach(cb => { if (cb.checked) count++; });
+  const badge = document.getElementById(badgeId);
+  if (badge) badge.textContent = `${count} selected`;
+}
+
+function loadAllFormTables() {
+  loadTableFieldsFromFirestore("personal", "formFieldsTableBody", "field-checkbox", "selectedCountBadge");
+  loadTableFieldsFromFirestore("contact", "contactFieldsTableBody", "contact-field-checkbox", "contactSelectedCountBadge");
+  loadTableFieldsFromFirestore("guardian", "guardianFieldsTableBody", "guardian-field-checkbox", "guardianSelectedCountBadge");
+  loadTableFieldsFromFirestore("education_courses", "educCoursesFieldsTableBody", "educ-courses-field-checkbox", "educCoursesSelectedCountBadge");
+  loadTableFieldsFromFirestore("additional_info", "additionalInfoFieldsTableBody", "additional-info-field-checkbox", "additionalInfoSelectedCountBadge");
+  loadTableFieldsFromFirestore("documents", "documentsFieldsTableBody", "documents-field-checkbox", "documentsSelectedCountBadge");
+}
+
+/* =====================================================
+   4. NAVIGATION & VIEW SWITCHING
+===================================================== */
+function showBuilderStep(stepNum) {
+  if (stepNum === 1) {
+    if (builderStep1) builderStep1.style.display = 'block';
+    if (builderStep2) builderStep2.style.display = 'none';
+    if (navStep1) { navStep1.classList.add('active'); navStep1.classList.remove('completed'); }
+    if (navStep2) { navStep2.classList.remove('active', 'completed'); }
+  } else if (stepNum === 2) {
+    if (builderStep1) builderStep1.style.display = 'none';
+    if (builderStep2) builderStep2.style.display = 'block';
+    if (navStep1) { navStep1.classList.remove('active'); navStep1.classList.add('completed'); }
+    if (navStep2) { navStep2.classList.add('active'); navStep2.classList.remove('completed'); }
+    loadAllFormTables();
+  }
+}
+
 function openCycleBuilder(e) {
   if (e) e.preventDefault();
   setupDateConstraints();
@@ -317,17 +435,16 @@ function openCycleBuilder(e) {
   if (rightSidebar) rightSidebar.style.display = 'none';
   if (mainWorkspace) mainWorkspace.classList.add('builder-active');
   if (cycleBuilderView) cycleBuilderView.style.display = 'block';
+  showBuilderStep(1);
   updateAutoNaming();
 }
 
 function closeCycleBuilderAndReset(e) {
   if (e) e.preventDefault();
-  // Erase all saved progress in local storage
   localStorage.removeItem(BASIC_INFO_STORAGE_KEY);
-  localStorage.removeItem('myAtlas_formFieldsState');
+  localStorage.removeItem(FORM_FIELDS_STATE_KEY);
   localStorage.removeItem('myAtlas_selectedCourses');
 
-  // Reset inputs
   if (qualificationSelect) qualificationSelect.value = '';
   if (academicYearSelect) { populateAcademicYears(); academicYearSelect.value = ''; }
   if (openingDateInput) {
@@ -341,35 +458,70 @@ function closeCycleBuilderAndReset(e) {
   if (folderNameInput) folderNameInput.value = '';
   if (cycleNameInput) cycleNameInput.value = '';
 
-  // Return to welcome view and restore right sidebar
   if (cycleBuilderView) cycleBuilderView.style.display = 'none';
   if (mainWorkspace) mainWorkspace.classList.remove('builder-active');
   if (rightSidebar) rightSidebar.style.display = 'block';
   if (welcomeView) welcomeView.style.display = 'flex';
 }
 
-// Bind all 3 "Create Application Cycle" buttons
 document.querySelectorAll('.create-cycle-trigger').forEach(btn => {
   btn.addEventListener('click', openCycleBuilder);
 });
 
-// Cancel button
-if (cancelCycleBtn) {
-  cancelCycleBtn.addEventListener('click', closeCycleBuilderAndReset);
-}
+if (cancelCycleBtn) cancelCycleBtn.addEventListener('click', closeCycleBuilderAndReset);
+if (cancelFormBtn) cancelFormBtn.addEventListener('click', closeCycleBuilderAndReset);
 
-// Next Step 1 validation button (Step 2 is disabled for now)
 if (nextStepBtn) {
   nextStepBtn.addEventListener('click', async (e) => {
     e.preventDefault();
     if (await validateBasicInfoFields()) {
       saveBasicInfoToLocalStorage();
-      alert("Step 1 validated and saved successfully! Steps 2, 3, and 4 are disabled for now.");
+      showBuilderStep(2);
     }
   });
 }
 
-// Listeners for automatic updates & local storage saving
+if (prevStepBtn) {
+  prevStepBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showBuilderStep(1);
+  });
+}
+
+if (toCoursesBtn) {
+  toCoursesBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    alert("Step 2 validated and saved successfully! Steps 3 and 4 are coming up next.");
+  });
+}
+
+// Table row and checkbox event listener for saving state
+document.addEventListener('change', (e) => {
+  const tr = e.target.closest('tr');
+  if (!tr || !tr.dataset.fieldId) return;
+
+  const cb = tr.querySelector('input[type="checkbox"]');
+  const reqSelect = tr.querySelector('.requirement-select');
+  if (cb && reqSelect) {
+    saveFormFieldState(tr.dataset.fieldId, cb.checked, reqSelect.value);
+  }
+
+  if (e.target.classList.contains('field-checkbox')) {
+    updateTableSelectedCount('field-checkbox', 'selectedCountBadge');
+  } else if (e.target.classList.contains('contact-field-checkbox')) {
+    updateTableSelectedCount('contact-field-checkbox', 'contactSelectedCountBadge');
+  } else if (e.target.classList.contains('guardian-field-checkbox')) {
+    updateTableSelectedCount('guardian-field-checkbox', 'guardianSelectedCountBadge');
+  } else if (e.target.classList.contains('educ-courses-field-checkbox')) {
+    updateTableSelectedCount('educ-courses-field-checkbox', 'educCoursesSelectedCountBadge');
+  } else if (e.target.classList.contains('additional-info-field-checkbox')) {
+    updateTableSelectedCount('additional-info-field-checkbox', 'additionalInfoSelectedCountBadge');
+  } else if (e.target.classList.contains('documents-field-checkbox')) {
+    updateTableSelectedCount('documents-field-checkbox', 'documentsSelectedCountBadge');
+  }
+});
+
+// Basic info change listeners
 if (qualificationSelect) {
   qualificationSelect.addEventListener('change', async () => {
     await updateAutoNaming();
@@ -387,7 +539,6 @@ if (openingDateInput) {
     updateDatePlaceholderState(openingDateInput, openingDateWrapper);
     const openVal = openingDateInput.value;
     if (openVal) {
-      // Ensure closing date cannot be set before or on the chosen opening date
       closingDateInput.min = openVal;
       if (closingDateInput.value && closingDateInput.value <= openVal) {
         closingDateInput.value = '';
