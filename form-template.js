@@ -379,7 +379,7 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
   }
 
   // 3. Updated field name "What do you wish to study for" with Progressive Cascading Filters
-  if (fieldNamesSet.has("What do you wish to study for")) {
+  if (fieldNamesSet.has("What do you wish to study for?")) {
     html += renderCascadingCourseSelectionBlock(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo);
   }
 
@@ -413,13 +413,13 @@ function renderCascadingCourseSelectionBlock(activeEducationFields, savedSelecte
   const activeAcademicYear = savedBasicInfo.academicYear || new Date().getFullYear().toString();
   const step1Qualification = savedBasicInfo.qualification || "";
   
-  const fieldObj = activeEducationFields.find(f => f.fieldName === "What do you wish to study for");
+  const fieldObj = activeEducationFields.find(f => f.fieldName === "What do you wish to study for?");
   const reqAsterisk = fieldObj?.requirement === "Required" ? `<span style="color: #e53b4d;">*</span>` : ``;
 
   return `
     <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 16px;" id="previewCascadingWrapper" data-courses='${JSON.stringify(validCourses)}'>
       <div style="display: flex; flex-direction: column; gap: 6px;">
-        <label style="font-size: 13px; font-weight: 700; color: #1e293b;">What do you wish to study for ${reqAsterisk}</label>
+        <label style="font-size: 13px; font-weight: 700; color: #1e293b;">What do you wish to study for? ${reqAsterisk}</label>
         <select id="whatDoYouWishToStudyTrigger" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
           <option value="" disabled selected>Select option</option>
           ${step1Qualification ? `<option value="${step1Qualification}">${step1Qualification}</option>` : ''}
