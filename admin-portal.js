@@ -14,8 +14,22 @@ const dropdownUserEmail = document.getElementById("dropdownUserEmail");
 const dropdownUserRole = document.getElementById("dropdownUserRole");
 const logoutBtn = document.getElementById("logoutBtn");
 
+let resolveAuthReady;
+let authReadySettled = false;
+const authReadyPromise = new Promise((resolve) => {
+  resolveAuthReady = resolve;
+});
+
+function settleAuthReady(verifiedUser) {
+  if (!authReadySettled) {
+    authReadySettled = true;
+    resolveAuthReady(verifiedUser);
+  }
+}
+
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
+    settleAuthReady(null);
     window.location.href = "admin-home.html";
     return;
   }
@@ -34,6 +48,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     if (!profileData) {
+      settleAuthReady(null);
       await signOut(auth);
       window.location.href = "admin-home.html";
       return;
@@ -51,8 +66,11 @@ onAuthStateChanged(auth, async (user) => {
     if (dropdownUserEmail) dropdownUserEmail.textContent = email;
     if (dropdownUserRole) dropdownUserRole.textContent = formattedRole;
 
+    settleAuthReady(user);
+
   } catch (error) {
     console.error("Security verification error:", error);
+    settleAuthReady(null);
     window.location.href = "admin-home.html";
   }
 });
@@ -222,6 +240,9 @@ function buildCycleNaming(qualVal, yearVal, cycleNumber) {
 
 async function fetchExistingCyclesForQualification(qualVal, yearVal, folderNameValue = '') {
   if (!qualVal || !yearVal) return [];
+  const verifiedUser = await authReadyPromise;
+  if (!verifiedUser) return [];
+
   try {
     const collectionName = getFolderCollectionName(folderNameValue || (folderNameInput ? folderNameInput.value : ''));
     const snapshot = await getDocs(collection(db, collectionName));
@@ -276,9 +297,12 @@ function saveBasicInfoToLocalStorage() {
   localStorage.setItem(BASIC_INFO_STORAGE_KEY, JSON.stringify(data));
 }
 
-function loadBasicInfoFromLocalStorage() {
+async function loadBasicInfoFromLocalStorage() {
   const raw = localStorage.getItem(BASIC_INFO_STORAGE_KEY);
-  if (!raw) return;
+  if (!raw) {
+    await updateAutoNaming();
+    return;
+  }
   try {
     const parsed = JSON.parse(raw);
     const { todayStr, maxStr } = getTodayAndMaxDateStrings();
@@ -302,7 +326,7 @@ function loadBasicInfoFromLocalStorage() {
       closingDateInput.value = (savedClose > minClose && savedClose <= maxStr) ? savedClose : '';
       updateDatePlaceholderState(closingDateInput, closingDateWrapper);
     }
-    updateAutoNaming();
+    await updateAutoNaming();
   } catch (err) {
     console.error("Error loading local storage data:", err);
   }
@@ -348,11 +372,9 @@ function resetStep3UiDefaults() {
 }
 
 async function handleQualificationTypeChange() {
-  // Wipe all saved Step 2 & Step 3 selections so switching qualifications always starts fresh
   localStorage.removeItem(FORM_FIELDS_STATE_KEY);
   localStorage.removeItem('myAtlas_selectedCourses');
 
-  // Clear Step 1 fields except the newly chosen Qualification Type
   if (academicYearSelect) {
     populateAcademicYears();
     academicYearSelect.value = '';
@@ -828,17 +850,16 @@ function showBuilderStep(stepNum) {
   }
 }
 
-function openCycleBuilder(e) {
+async function openCycleBuilder(e) {
   if (e) e.preventDefault();
   setupDateConstraints();
   populateAcademicYears();
-  loadBasicInfoFromLocalStorage();
   if (welcomeView) welcomeView.style.display = 'none';
   if (rightSidebar) rightSidebar.style.display = 'none';
   if (mainWorkspace) mainWorkspace.classList.add('builder-active');
   if (cycleBuilderView) cycleBuilderView.style.display = 'block';
   showBuilderStep(1);
-  updateAutoNaming();
+  await loadBasicInfoFromLocalStorage();
 }
 
 function closeCycleBuilderAndReset(e) {
