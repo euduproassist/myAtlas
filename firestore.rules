@@ -1,7 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
+
     // Pre-approved validation collections for account activation
     match /pre_approved_admissions/{id} {
       allow read: if true;
@@ -31,10 +31,9 @@ service cloud.firestore {
       allow read, write: if request.auth != null;
     }
 
-    // Folder-based application cycle collections (used by Step 1 overlap checks, cycle numbering & publishing)
-    match /{collectionName}/{cycleId} {
-      allow read, write: if request.auth != null 
-                        && collectionName.matches('^[0-9]{4}_.*_application_cycle$');
+    // Folder-based application cycle collections (e.g., 2026_application_cycle)
+    match /{year}_application_cycle/{cycleId} {
+      allow read, write: if request.auth != null;
     }
 
     // Application Form Fields collection (used by Step 2 form customization)
