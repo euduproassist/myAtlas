@@ -200,15 +200,42 @@ function populateAcademicYears() {
   });
 }
 
-async function fetchExistingCyclesForQualification(qualVal, yearVal) {
+function getFolderCollectionName(folderNameValue) {
+  const currentCreationYear = new Date().getFullYear();
+  const rawFolder = (folderNameValue || `${currentCreationYear} - Application Cycle`).trim();
+  const slug = rawFolder
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  return slug || `${currentCreationYear}_application_cycle`;
+}
+
+function buildCycleNaming(qualVal, yearVal, cycleNumber) {
+  const categoryName = qualVal.replace(/\s+Degree$/i, '').trim();
+  const cycleName = `${categoryName} Applications ${yearVal}-Cycle ${cycleNumber}`;
+  const docId = cycleName
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return { cycleName, docId };
+}
+
+async function fetchExistingCyclesForQualification(qualVal, yearVal, folderNameValue = '') {
   if (!qualVal || !yearVal) return [];
   try {
-    const qualSlug = qualVal.toLowerCase().replace(/\s+degree$/i, '').replace(/\s+/g, '_');
-    const collectionName = `${yearVal}_${qualSlug}_admissions`;
+    const collectionName = getFolderCollectionName(folderNameValue || (folderNameInput ? folderNameInput.value : ''));
     const snapshot = await getDocs(collection(db, collectionName));
+    const qualNormalized = qualVal.trim().toLowerCase();
+    const yearStr = String(yearVal).trim();
+
     let cycles = [];
     snapshot.forEach(docSnap => {
-      cycles.push({ id: docSnap.id, ...docSnap.data() });
+      const data = docSnap.data();
+      const sameQual = (data.qualificationType || '').trim().toLowerCase() === qualNormalized;
+      const sameYear = String(data.academicYear || '').trim() === yearStr;
+      if (sameQual && sameYear) {
+        cycles.push({ id: docSnap.id, ...data });
+      }
     });
     return cycles;
   } catch (err) {
@@ -227,10 +254,10 @@ async function updateAutoNaming() {
     const qual = qualificationSelect.value;
     const yr = academicYearSelect.value;
     if (qual && yr) {
-      const categoryName = qual.replace(/\s+Degree$/i, '');
-      const existingCycles = await fetchExistingCyclesForQualification(qual, yr);
+      const existingCycles = await fetchExistingCyclesForQualification(qual, yr, folderNameInput ? folderNameInput.value : '');
       const cycleNumber = existingCycles.length + 1;
-      cycleNameInput.value = `${categoryName} Applications ${yr}-Cycle ${cycleNumber}`;
+      const { cycleName } = buildCycleNaming(qual, yr, cycleNumber);
+      cycleNameInput.value = cycleName;
     } else {
       cycleNameInput.value = '';
     }
@@ -380,7 +407,7 @@ async function validateBasicInfoFields() {
     return false;
   }
 
-  const existingCycles = await fetchExistingCyclesForQualification(qual, yr);
+  const existingCycles = await fetchExistingCyclesForQualification(qual, yr, folderNameInput ? folderNameInput.value : '');
   if (existingCycles.length > 0) {
     let latestClosingDate = null;
     existingCycles.forEach(c => {
@@ -924,16 +951,13 @@ if (publishCycleBtn) {
     try {
       const qualVal = qualificationSelect.value.trim();
       const yearVal = academicYearSelect.value.trim();
-      
-      const existingCycles = await fetchExistingCyclesForQualification(qualVal, yearVal);
+      const folderVal = folderNameInput ? folderNameInput.value : '';
+
+      const existingCycles = await fetchExistingCyclesForQualification(qualVal, yearVal, folderVal);
       const cycleNumber = existingCycles.length + 1;
 
-      const qualSlug = qualVal.toLowerCase().replace(/\s+degree$/i, '').replace(/\s+/g, '_');
-      const collectionName = `${yearVal}_${qualSlug}_admissions`;
-
-      const prefix = qualVal.toLowerCase().includes('post') ? 'postgrad' : (qualVal.toLowerCase().includes('research') ? 'research' : 'undergrad');
-      const cycleId = `${prefix}-${yearVal}-cycle-${cycleNumber}`;
-      const finalCycleName = `${qualVal.replace(/\s+Degree$/i, '')} Applications ${yearVal}-Cycle ${cycleNumber}`;
+      const collectionName = getFolderCollectionName(folderVal);
+      const { cycleName: finalCycleName, docId: cycleId } = buildCycleNaming(qualVal, yearVal, cycleNumber);
 
       const querySnapshot = await getDocs(collection(db, "application_form_fields"));
       const formFieldsSnapshot = [];
@@ -971,7 +995,7 @@ if (publishCycleBtn) {
 
       const cyclePayload = {
         cycleId: cycleId,
-        folderName: folderNameInput.value,
+        folderName: folderVal,
         cycleName: finalCycleName,
         academicYear: yearVal,
         qualificationType: qualVal,
