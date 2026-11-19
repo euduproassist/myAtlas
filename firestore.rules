@@ -31,9 +31,10 @@ service cloud.firestore {
       allow read, write: if request.auth != null;
     }
 
-    // Folder-based application cycle collections (e.g., 2026_application_cycle)
-    match /{year}_application_cycle/{cycleId} {
-      allow read, write: if request.auth != null;
+    // Automatic multi-year folder-based application cycle collections (e.g., 2026_application_cycle, 2027_application_cycle)
+    match /{collectionName}/{cycleId} {
+      allow read, write: if request.auth != null
+                        && collectionName.matches('^[0-9]{4}(_[a-z0-9]+)*_application_cycle$');
     }
 
     // Application Form Fields collection (used by Step 2 form customization)
