@@ -281,6 +281,80 @@ function loadBasicInfoFromLocalStorage() {
   }
 }
 
+function resetStep2UiDefaults() {
+  const selectAllIds = [
+    'selectAllCheck',
+    'selectContactAllCheck',
+    'selectGuardianAllCheck',
+    'selectEducCoursesAllCheck',
+    'selectAdditionalInfoAllCheck',
+    'selectDocumentsAllCheck'
+  ];
+  selectAllIds.forEach((id) => {
+    const cb = document.getElementById(id);
+    if (cb) cb.checked = false;
+  });
+
+  const badgeIds = [
+    'selectedCountBadge',
+    'contactSelectedCountBadge',
+    'guardianSelectedCountBadge',
+    'educCoursesSelectedCountBadge',
+    'additionalInfoSelectedCountBadge',
+    'documentsSelectedCountBadge'
+  ];
+  badgeIds.forEach((id) => {
+    const badge = document.getElementById(id);
+    if (badge) badge.textContent = '0 selected';
+  });
+}
+
+function resetStep3UiDefaults() {
+  masterCoursesCache = [];
+  if (filterCourse) filterCourse.innerHTML = '<option value="">All Courses</option>';
+  if (filterStudyMode) filterStudyMode.innerHTML = '<option value="">All Study Modes</option>';
+  if (filterCampus) filterCampus.innerHTML = '<option value="">All Campuses</option>';
+  if (filterSearch) filterSearch.value = '';
+  if (selectAllCoursesCheck) selectAllCoursesCheck.checked = false;
+  if (coursesSelectedCountBadge) coursesSelectedCountBadge.textContent = '0 selected';
+  if (masterCoursesTableBody) masterCoursesTableBody.innerHTML = '';
+}
+
+async function handleQualificationTypeChange() {
+  // Wipe all saved Step 2 & Step 3 selections so switching qualifications always starts fresh
+  localStorage.removeItem(FORM_FIELDS_STATE_KEY);
+  localStorage.removeItem('myAtlas_selectedCourses');
+
+  // Clear Step 1 fields except the newly chosen Qualification Type
+  if (academicYearSelect) {
+    populateAcademicYears();
+    academicYearSelect.value = '';
+  }
+
+  const { todayStr, maxStr } = getTodayAndMaxDateStrings();
+  if (openingDateInput) {
+    openingDateInput.value = '';
+    openingDateInput.min = todayStr;
+    openingDateInput.max = maxStr;
+    updateDatePlaceholderState(openingDateInput, openingDateWrapper);
+  }
+  if (closingDateInput) {
+    closingDateInput.value = '';
+    closingDateInput.min = todayStr;
+    closingDateInput.max = maxStr;
+    updateDatePlaceholderState(closingDateInput, closingDateWrapper);
+  }
+  if (cycleNameInput) {
+    cycleNameInput.value = '';
+  }
+
+  resetStep2UiDefaults();
+  resetStep3UiDefaults();
+
+  await updateAutoNaming();
+  saveBasicInfoToLocalStorage();
+}
+
 async function validateBasicInfoFields() {
   const qual = qualificationSelect.value;
   const yr = academicYearSelect.value;
@@ -759,6 +833,9 @@ function closeCycleBuilderAndReset(e) {
   if (folderNameInput) folderNameInput.value = '';
   if (cycleNameInput) cycleNameInput.value = '';
 
+  resetStep2UiDefaults();
+  resetStep3UiDefaults();
+
   if (cycleBuilderView) cycleBuilderView.style.display = 'none';
   if (mainWorkspace) mainWorkspace.classList.remove('builder-active');
   if (rightSidebar) rightSidebar.style.display = 'block';
@@ -954,8 +1031,7 @@ document.addEventListener('change', (e) => {
 // Basic info change listeners
 if (qualificationSelect) {
   qualificationSelect.addEventListener('change', async () => {
-    await updateAutoNaming();
-    saveBasicInfoToLocalStorage();
+    await handleQualificationTypeChange();
   });
 }
 if (academicYearSelect) {
