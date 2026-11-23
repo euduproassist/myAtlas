@@ -1,0 +1,339 @@
+TILEYPOP 
+
+
+Complete Game Concept – Personal Photo Reconstruction Puzzle
+1. What is the game about?
+The game is a personal photo puzzle game where players use photographs from their own phone galleries to create and solve puzzles.
+
+Unlike traditional puzzle games, the game does not provide its own collection of puzzle photographs. Every puzzle picture comes from the player's personal gallery.
+
+Players select a photograph, memorise it before it disappears, and then reconstruct it by dragging individual square tiles into their correct positions on an empty puzzle board.
+
+As they correctly place the tiles, the photograph gradually comes to life through animation.
+
+The game combines three main experiences:
+1. Memory: Remember the photograph before it disappears.
+2. Puzzle solving: Reconstruct the photograph tile by tile.
+3. Visual reward: Watch the photograph gradually transform into an animated scene.
+It also includes progression, rewards, hints, optional time challenges and potentially daily challenges.
+
+2. How the game works
+Step 1: Select a photograph from your gallery
+
+
+
+
+
+
+
+
+handy24.de
+
+
+When starting a puzzle, the player selects a photograph directly from their phone's gallery.
+
+They can select:
+- Personal photographs.
+- Pictures of family and friends.
+- Animals and pets.
+- Landscapes and scenery.
+- Buildings, vehicles, food or anything else they have photographed or saved.
+The game does not supply the photographs. It uses the player's own selected image.
+
+Players can select a different photograph whenever they want, including when moving between stages.
+
+Changing photographs does not reset their stage progression.
+Step 2: Memorise the photograph
+
+
+
+
+
+
+
+
+globalgallery.com
+
+
+After selecting a photograph, the game displays the complete image for a few seconds.
+
+During this time, the player studies the photograph and tries to remember:
+- Where objects are positioned.
+- Different colours and patterns.
+- Background details.
+- The overall composition.
+After the viewing period, the photograph disappears.
+
+This introduces the first challenge: the player must reconstruct something they can no longer see in its complete form.
+Step 3: The photograph is divided into square tiles
+The selected photograph is divided into equally sized square pieces.
+
+The number of pieces depends on the player's current stage.
+
+For example:
+
+
+
+
+
+
+
+
+
+
+3 × 3
+9 tiles
+
+
+
+
+
+
+
+
+
+
+
+6 × 6
+36 tiles
+
+
+The tiles are separated from the photograph and displayed in a tray outside the empty puzzle board.
+
+The player must work out where each individual tile belongs.
+Step 4: Reconstruct the photograph
+
+
+
+
+
+
+
+
+rawg.io
+
+
+The player drags individual tiles from the tray and drops them into their correct positions on the puzzle board.
+
+There are two possible outcomes:
+
+Correct placement
+- The tile locks into its correct position.
+- The player receives coins.
+- The photograph's animation progresses.
+- A diamond may be awarded if the position is a designated special reward position.
+
+
+
+
+Incorrect placement
+- The device gives a short, gentle vibration.
+- The tile is rejected.
+- It returns to its original tray position.
+- No coins or diamonds are awarded.
+
+
+
+Incorrect placements do not occupy board spaces, keeping the puzzle organised and giving the player immediate feedback.
+
+There should also be an option to disable vibration.
+Step 5: Watch the photograph come to life
+Signature visual mechanic
+This is one of the most distinctive parts of the game.
+
+As the player correctly places tiles, the reconstructed photograph gradually transitions from a still photograph into an animated version.
+
+For example:
+
+
+
+
+
+
+
+
+
+
+Original photograph
+Static image
+
+
+
+
+
+
+
+
+
+
+Animated appearance
+Water flows and waves ripple
+
+Other examples:
+- Forest photographs: leaves gently sway and sunlight shifts.
+- Waterfalls: water flows.
+- City photographs: lights gradually illuminate.
+- Nature photographs: subtle environmental movements bring the scene to life.
+The intention is not to move the picture around the screen. It is to create a gradual animation transition as the player reconstructs it.
+
+The animation should be subtle and appropriate to the selected photograph.
+
+3. Rewards system
+Players earn two types of rewards: coins and diamonds.
+Coins
+Regular
+Earned through correct tile placements.
+
+Diamonds
+Special
+Earned through designated difficult tile positions.
+
+
+Coins
+- Every correctly placed tile earns a small number of coins.
+- Coins accumulate throughout the puzzle.
+- Larger puzzles have more tile placements and therefore more opportunities to earn coins.
+Diamonds
+- Certain designated tile positions offer diamond rewards.
+- These are special rewards rather than something earned with every correct placement.
+- Diamonds are intended to be rarer and more valuable than coins.
+The exact reward amounts and what players can spend these currencies on can be decided later.
+
+4. Hints system
+Players sometimes struggle to identify where a tile belongs. Hints provide assistance without automatically completing the puzzle.
+
+Two hint types:
+
+Position hint
+
+- Highlights the correct position for a tile.
+
+Next tile hint
+
+- Identifies a tile that can be correctly placed next.
+
+Hints should be limited by an appropriate coin or other reward cost, if you decide to use a currency cost.
+
+There is no picture reveal feature because players already have the original photograph in their own gallery. Showing it again would undermine the memory challenge.
+
+5. Game modes
+Players can choose how they want to experience the puzzle.
+Relaxed mode
+
+Untimed
+
+Players can take as much time as they need to complete the puzzle. There is no countdown, time limit or pressure to finish quickly.
+
+Time challenge
+
+Timed
+
+Players choose to challenge themselves by completing the puzzle against a time limit.
+- Completion times are recorded.
+- Players can try to beat their personal best.
+- Higher stages can introduce more demanding time targets.
+
+Time challenges are optional. Players who prefer relaxing puzzle-solving are never forced to race against a clock.
+
+6. Daily picture / daily challenge
+The proposed daily challenge is a separate optional activity.
+
+The game offers one featured daily photograph, which is the same for everyone participating in that day's challenge.
+
+Players can attempt to complete that daily puzzle and challenge their own completion records.
+
+However, there is one important distinction:
+
+The daily photograph is not selected from the player's gallery.
+
+This is the only proposed exception to the personal-gallery picture rule. It would need to be supplied by the game if you decide to include this feature.
+
+The daily challenge is still undecided and can be left out of the initial version.
+
+7. Stage progression and increasing difficulty
+The game has a stage-based progression system.
+
+Each new stage increases the number of square tiles, making the puzzle progressively more difficult.
+
+Here is an illustrative progression:
+Stage	Grid	Tiles
+1	3 × 3	9
+2	4 × 4	16
+3	5 × 5	25
+4	6 × 6	36
+5	7 × 7	49
+10	12 × 12	144
+20	22 × 22	484
+
+These are example values, not a final progression schedule.
+
+The important rule is that the difficulty increases independently of picture selection.
+
+For example:
+- Stage 1: Player chooses a photograph of their dog.
+- Stage 2: Player chooses a photograph of the ocean.
+- Stage 3: Player chooses a photograph of their car.
+- Stage 4: Player chooses a photograph of a forest.
+The player can change photographs at any time without losing progression.
+
+They can also replay previously unlocked stages.
+
+8. Player progress and records
+The game tracks the player's progress, including:
+- Highest unlocked stage.
+- Completed stages.
+- Coin balance.
+- Diamond balance.
+- Personal best completion times.
+- Daily challenge records, if implemented.
+The game should save progress locally on the device, allowing the player to continue without needing an online account or permanent internet connection.
+
+9. Complete gameplay cycle
+1. Select a photograph
+Choose an image from the player's own phone gallery.
+2. Memorise the photograph
+Study the complete image for a few seconds.
+3. Photograph disappears
+The memory challenge begins.
+4. Tiles are separated
+Individual square tiles appear in the tray.
+5. Reconstruct the photograph
+Drag tiles into their correct positions.Incorrect tiles vibrate and return to the tray.
+6. Earn rewards and watch the image animate
+Correct placements earn coins and designated placements earn diamonds.
+7. Complete the stage
+Save progress, records and rewards, then advance to the next stage.
+
+
+10. What makes this game different?
+The game's identity comes from combining:
+- Personal photographs rather than a supplied puzzle library.
+- A disappearing-picture memory challenge.
+- Individual drag-and-place tile reconstruction.
+- A photograph that gradually comes to life as it is rebuilt.
+- Coin rewards for correct placements and special diamond rewards.
+- Increasing difficulty through stage progression.
+- Optional relaxed and timed gameplay.
+The central experience is personal: players aren't just solving random pictures. They're reconstructing photographs they chose themselves.
+
+The game in one sentence:
+
+A personal photo reconstruction puzzle game where players memorise their own photographs, rebuild them tile by tile, earn rewards, and watch their pictures gradually come to life.
+11. Decisions still to be finalised
+To keep the concept documentation accurate, these details are not yet settled:
+Area	Current status
+Personal gallery photographs	Decided
+Disappearing-picture mechanic	Decided
+Drag-and-place tiles	Decided
+Incorrect tile vibration and rejection	Decided
+Gradual image animation	Decided
+Coins and diamond rewards	Decided
+Hints	Decided
+Relaxed and time challenge modes	Decided
+Daily picture/challenge	Undecided
+Exact coin and diamond amounts	To be determined
+Exact stage progression	To be determined
+What currencies can purchase	To be determined
+Exact animation implementation	To be determined
+
+My recommendation for the first version: Focus on the personal gallery, disappearing picture, tile reconstruction, correct/incorrect feedback, rewards, hints and the two play modes. Those are enough to establish the core game before adding the daily challenge.
