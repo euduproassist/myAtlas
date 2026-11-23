@@ -247,22 +247,22 @@
       flex: 1;
       display: grid;
       grid-template-columns:
-        minmax(220px, 22%)
+        minmax(240px, 24%)
         minmax(0, 1fr)
-        minmax(240px, 22%);
+        minmax(240px, 21%);
       width: 100%;
       min-height: 0;
       align-items: stretch;
       background: #fff;
     }
     .workspace.builder-active {
-      grid-template-columns: minmax(220px, 22%) minmax(0, 1fr);
+      grid-template-columns: minmax(240px, 24%) minmax(0, 1fr);
     }
 
     /* Left application cycles panel */
     .cycles-sidebar {
       min-width: 0;
-      padding: 22px 18px;
+      padding: 22px 16px;
       border-right: 1px solid var(--line);
       background: #fff;
     }
@@ -304,7 +304,7 @@
 
     .cycle-search {
       position: relative;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .cycle-search svg {
@@ -348,6 +348,7 @@
       border-radius: 6px;
       font-size: 12px;
       font-weight: 750;
+      margin-bottom: 14px;
     }
 
     .cycle-filter svg {
@@ -363,12 +364,184 @@
       justify-content: center;
       min-width: 21px;
       height: 21px;
+      padding: 0 6px;
       margin-left: auto;
       color: #6481a7;
       background: #e2edfb;
       border-radius: 20px;
       font-size: 11px;
       font-weight: 750;
+    }
+
+    /* SIDEBAR FOLDER & CYCLE LIST STYLES */
+    .cycles-folder-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cycle-folder-card {
+      background: #f5f9ff;
+      border: 1px solid #dceaff;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .cycle-folder-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: transparent;
+      border: 0;
+      text-align: left;
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .cycle-folder-icon {
+      width: 18px;
+      height: 18px;
+      color: var(--blue);
+      flex-shrink: 0;
+    }
+
+    .cycle-folder-chevron {
+      margin-left: auto;
+      width: 16px;
+      height: 16px;
+      color: #6c88ad;
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .cycle-folder-card.collapsed .cycle-folder-chevron {
+      transform: rotate(-90deg);
+    }
+
+    .cycle-folder-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0 10px 12px;
+    }
+
+    .cycle-folder-card.collapsed .cycle-folder-items {
+      display: none;
+    }
+
+    .cycle-item-card {
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 10px;
+      background: #ffffff;
+      border: 1px solid #e1ecfa;
+      border-radius: 8px;
+      text-align: left;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .cycle-item-card:hover {
+      border-color: #9bc3ff;
+      background: #fbfdff;
+    }
+
+    .cycle-item-card.active {
+      border-color: var(--blue);
+      background: #f2f7ff;
+      box-shadow: 0 2px 6px rgba(8, 102, 245, 0.08);
+    }
+
+    .cycle-item-icon {
+      width: 17px;
+      height: 17px;
+      color: #5b789d;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .cycle-item-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cycle-item-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .cycle-item-title {
+      color: var(--navy);
+      font-size: 12.5px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .cycle-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .cycle-status-pill.open {
+      background: #e3f8ef;
+      color: #0e8a55;
+    }
+
+    .cycle-status-pill.upcoming {
+      background: #eaf3ff;
+      color: #0866f5;
+    }
+
+    .cycle-status-pill.closed {
+      background: #f1f4f8;
+      color: #64748b;
+    }
+
+    .cycle-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .cycle-item-meta {
+      color: #6f86a6;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.35;
+    }
+
+    .view-all-cycles-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+      padding: 4px 2px;
+      background: transparent;
+      border: 0;
+      color: var(--blue);
+      font-size: 12.5px;
+      font-weight: 650;
+      text-align: left;
+    }
+
+    .view-all-cycles-link:hover {
+      color: var(--blue-dark);
+      text-decoration: underline;
     }
 
     .empty-cycles {
@@ -410,7 +583,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: clamp(35px, 7vh, 90px) clamp(20px, 4vw, 64px) 50px;
+      padding: clamp(28px, 5vh, 52px) clamp(20px, 3.5vw, 48px) 50px;
       background: #fff;
       text-align: center;
     }
@@ -502,6 +675,134 @@
     .primary-button svg {
       width: 16px;
       height: 16px;
+    }
+
+    /* ACTIVE CYCLE CONFIGURATION VIEW STYLES */
+    .active-cycle-view {
+      width: 100%;
+      text-align: left;
+    }
+
+    .cycle-detail-header {
+      margin-bottom: 22px;
+    }
+
+    .cycle-detail-title-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .cycle-detail-title {
+      color: var(--navy);
+      font-size: clamp(22px, 2vw, 28px);
+      font-weight: 750;
+      letter-spacing: -0.4px;
+      line-height: 1.25;
+    }
+
+    .cycle-detail-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 18px;
+      color: #5d7698;
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+
+    .cycle-detail-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cycle-detail-meta-item svg {
+      width: 15px;
+      height: 15px;
+      color: #6f88a9;
+      flex-shrink: 0;
+    }
+
+    .cycle-config-section-title {
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 750;
+      margin-bottom: 12px;
+    }
+
+    .cycle-config-table-wrap {
+      width: 100%;
+      border: 1px solid #d5e5f7;
+      border-radius: 10px;
+      overflow-x: auto;
+      background: #ffffff;
+    }
+
+    .cycle-config-table {
+      width: 100%;
+      min-width: 520px;
+      border-collapse: collapse;
+      table-layout: auto;
+    }
+
+    .cycle-config-table th {
+      background: #f6f9fd;
+      color: #5b7699;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: left;
+      padding: 12px 18px;
+      border-bottom: 1px solid #e2edf9;
+      position: static;
+    }
+
+    .cycle-config-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid #edf3fa;
+      font-size: 13px;
+      vertical-align: middle;
+      background: #ffffff;
+    }
+
+    .cycle-config-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .config-setting-cell {
+      width: 210px;
+      color: #4f6a8d;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .config-details-cell {
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    .config-action-cell {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .config-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: transparent;
+      border: 0;
+      color: var(--blue);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 2px 4px;
+    }
+
+    .config-link-btn:hover {
+      color: var(--blue-dark);
+      text-decoration: underline;
     }
 
     /* BUILDER / STEPS STYLES */
@@ -1257,12 +1558,13 @@
 
           <input
             type="search"
+            id="sidebarCycleSearch"
             placeholder="Find a cycle..."
             aria-label="Find an application cycle"
           >
         </div>
 
-        <div class="cycle-filter">
+        <button class="cycle-filter" id="allCyclesFilterBtn" type="button">
           <svg viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="1.8"
                stroke-linecap="round" stroke-linejoin="round"
@@ -1272,10 +1574,14 @@
           </svg>
 
           <span>All cycles</span>
-          <span class="count">0</span>
-        </div>
+          <span class="count" id="allCyclesCount">0</span>
+        </button>
 
-        <div class="empty-cycles">
+        <!-- POPULATED FOLDER & CYCLE LIST -->
+        <div class="cycles-folder-list" id="cyclesFolderList" style="display: none;"></div>
+
+        <!-- EMPTY STATE (ONLY SHOWN WHEN THERE ARE NO CYCLES OR NO MATCHES) -->
+        <div class="empty-cycles" id="emptyCyclesState">
           <svg class="empty-icon" viewBox="0 0 48 48"
                fill="none" stroke="currentColor"
                stroke-width="1.8" stroke-linecap="round"
@@ -1284,9 +1590,9 @@
             <path d="M17 7v8M31 7v8M10 20h28"></path>
           </svg>
 
-          <h3 class="empty-title">No application cycles yet</h3>
+          <h3 class="empty-title" id="emptyCyclesTitle">No application cycles yet</h3>
 
-          <p class="empty-description">
+          <p class="empty-description" id="emptyCyclesDescription">
             Your created cycles will appear here once you add them.
           </p>
         </div>
@@ -1330,6 +1636,108 @@
             </svg>
             Create Application Cycle
           </button>
+        </div>
+
+        <!-- ACTIVE CYCLE CONFIGURATION VIEW (SHOWN WHEN CYCLES EXIST) -->
+        <div id="activeCycleView" class="active-cycle-view" style="display: none;">
+          <header class="cycle-detail-header">
+            <div class="cycle-detail-title-row">
+              <h1 class="cycle-detail-title" id="detailCycleTitle">---</h1>
+              <span class="cycle-status-pill open" id="detailHeaderStatusBadge">
+                <span class="cycle-status-dot"></span>
+                <span id="detailHeaderStatusText">Open</span>
+              </span>
+            </div>
+
+            <div class="cycle-detail-meta">
+              <span class="cycle-detail-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                </svg>
+                <span id="detailMetaDegree">---</span>
+              </span>
+
+              <span class="cycle-detail-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                  <path d="M16 2v4M8 2v4M3 10h18"></path>
+                </svg>
+                <span id="detailMetaOpens">Opens ---</span>
+              </span>
+
+              <span class="cycle-detail-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                  <path d="M16 2v4M8 2v4M3 10h18"></path>
+                </svg>
+                <span id="detailMetaCloses">Closes ---</span>
+              </span>
+            </div>
+          </header>
+
+          <h2 class="cycle-config-section-title">Cycle Configuration</h2>
+
+          <div class="cycle-config-table-wrap">
+            <table class="cycle-config-table">
+              <thead>
+                <tr>
+                  <th>Setting</th>
+                  <th colspan="2">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="config-setting-cell">Degree Type</td>
+                  <td class="config-details-cell" colspan="2" id="configDegreeType">---</td>
+                </tr>
+                <tr>
+                  <td class="config-setting-cell">Opening Date</td>
+                  <td class="config-details-cell" colspan="2" id="configOpeningDate">---</td>
+                </tr>
+                <tr>
+                  <td class="config-setting-cell">Closing Date</td>
+                  <td class="config-details-cell" colspan="2" id="configClosingDate">---</td>
+                </tr>
+                <tr>
+                  <td class="config-setting-cell">Application Form</td>
+                  <td class="config-details-cell" id="configApplicationForm">---</td>
+                  <td class="config-action-cell">
+                    <button type="button" class="config-link-btn" id="viewFormBtn" onclick="return false;">
+                      View form <span>→</span>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="config-setting-cell">Required Documents</td>
+                  <td class="config-details-cell" id="configRequiredDocuments">---</td>
+                  <td class="config-action-cell">
+                    <button type="button" class="config-link-btn" id="viewDocumentsBtn" onclick="return false;">
+                      View documents <span>→</span>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="config-setting-cell">Application Count</td>
+                  <td class="config-details-cell" id="configApplicationCount">0</td>
+                  <td class="config-action-cell">
+                    <button type="button" class="config-link-btn" id="viewApplicationsBtn" onclick="return false;">
+                      View applications <span>→</span>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="config-setting-cell">Status</td>
+                  <td colspan="2">
+                    <span class="cycle-status-pill open" id="configTableStatusBadge">
+                      <span class="cycle-status-dot"></span>
+                      <span id="configTableStatusText">Open</span>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <!-- CYCLE BUILDER / STEPS VIEW (HIDDEN INITIALLY) -->
@@ -1817,6 +2225,7 @@
                   <p>Please carefully review all configured details before publishing this application cycle.</p>
                 </div>
               </div>
+              <div id="builderStep4Preview"></div>
             </section>
 
             <!-- BUTTONS FOR STEP 4 -->
@@ -1933,7 +2342,7 @@
       <div class="footer-right">
         <a href="#" onclick="return false;">Privacy Policy</a>
         <a href="#" onclick="return false;">Terms &amp; Conditions</a>
-        <a href="#" onclick="return-false;">Help</a>
+        <a href="#" onclick="return false;">Help</a>
       </div>
     </footer>
 
