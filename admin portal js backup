@@ -14,8 +14,22 @@ const dropdownUserEmail = document.getElementById("dropdownUserEmail");
 const dropdownUserRole = document.getElementById("dropdownUserRole");
 const logoutBtn = document.getElementById("logoutBtn");
 
+let resolveAuthReady;
+let authReadySettled = false;
+const authReadyPromise = new Promise((resolve) => {
+  resolveAuthReady = resolve;
+});
+
+function settleAuthReady(verifiedUser) {
+  if (!authReadySettled) {
+    authReadySettled = true;
+    resolveAuthReady(verifiedUser);
+  }
+}
+
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
+    settleAuthReady(null);
     window.location.href = "admin-home.html";
     return;
   }
@@ -34,6 +48,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     if (!profileData) {
+      settleAuthReady(null);
       await signOut(auth);
       window.location.href = "admin-home.html";
       return;
@@ -51,8 +66,11 @@ onAuthStateChanged(auth, async (user) => {
     if (dropdownUserEmail) dropdownUserEmail.textContent = email;
     if (dropdownUserRole) dropdownUserRole.textContent = formattedRole;
 
+    settleAuthReady(user);
+
   } catch (error) {
     console.error("Security verification error:", error);
+    settleAuthReady(null);
     window.location.href = "admin-home.html";
   }
 });
@@ -200,15 +218,45 @@ function populateAcademicYears() {
   });
 }
 
-async function fetchExistingCyclesForQualification(qualVal, yearVal) {
+function getFolderCollectionName(folderNameValue) {
+  const currentCreationYear = new Date().getFullYear();
+  const rawFolder = (folderNameValue || `${currentCreationYear} - Application Cycle`).trim();
+  const slug = rawFolder
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  return slug || `${currentCreationYear}_application_cycle`;
+}
+
+function buildCycleNaming(qualVal, yearVal, cycleNumber) {
+  const categoryName = qualVal.replace(/\s+Degree$/i, '').trim();
+  const cycleName = `${categoryName} Applications ${yearVal}-Cycle ${cycleNumber}`;
+  const docId = cycleName
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return { cycleName, docId };
+}
+
+async function fetchExistingCyclesForQualification(qualVal, yearVal, folderNameValue = '') {
   if (!qualVal || !yearVal) return [];
+  const verifiedUser = await authReadyPromise;
+  if (!verifiedUser) return [];
+
   try {
-    const qualSlug = qualVal.toLowerCase().replace(/\s+degree$/i, '').replace(/\s+/g, '_');
-    const collectionName = `${yearVal}_${qualSlug}_admissions`;
+    const collectionName = getFolderCollectionName(folderNameValue || (folderNameInput ? folderNameInput.value : ''));
     const snapshot = await getDocs(collection(db, collectionName));
+    const qualNormalized = qualVal.trim().toLowerCase();
+    const yearStr = String(yearVal).trim();
+
     let cycles = [];
     snapshot.forEach(docSnap => {
-      cycles.push({ id: docSnap.id, ...docSnap.data() });
+      const data = docSnap.data();
+      const sameQual = (data.qualificationType || '').trim().toLowerCase() === qualNormalized;
+      const sameYear = String(data.academicYear || '').trim() === yearStr;
+      if (sameQual && sameYear) {
+        cycles.push({ id: docSnap.id, ...data });
+      }
     });
     return cycles;
   } catch (err) {
@@ -227,10 +275,10 @@ async function updateAutoNaming() {
     const qual = qualificationSelect.value;
     const yr = academicYearSelect.value;
     if (qual && yr) {
-      const categoryName = qual.replace(/\s+Degree$/i, '');
-      const existingCycles = await fetchExistingCyclesForQualification(qual, yr);
+      const existingCycles = await fetchExistingCyclesForQualification(qual, yr, folderNameInput ? folderNameInput.value : '');
       const cycleNumber = existingCycles.length + 1;
-      cycleNameInput.value = `${categoryName} Applications ${yr}-Cycle ${cycleNumber}`;
+      const { cycleName } = buildCycleNaming(qual, yr, cycleNumber);
+      cycleNameInput.value = cycleName;
     } else {
       cycleNameInput.value = '';
     }
@@ -249,9 +297,12 @@ function saveBasicInfoToLocalStorage() {
   localStorage.setItem(BASIC_INFO_STORAGE_KEY, JSON.stringify(data));
 }
 
-function loadBasicInfoFromLocalStorage() {
+async function loadBasicInfoFromLocalStorage() {
   const raw = localStorage.getItem(BASIC_INFO_STORAGE_KEY);
-  if (!raw) return;
+  if (!raw) {
+    await updateAutoNaming();
+    return;
+  }
   try {
     const parsed = JSON.parse(raw);
     const { todayStr, maxStr } = getTodayAndMaxDateStrings();
@@ -275,10 +326,82 @@ function loadBasicInfoFromLocalStorage() {
       closingDateInput.value = (savedClose > minClose && savedClose <= maxStr) ? savedClose : '';
       updateDatePlaceholderState(closingDateInput, closingDateWrapper);
     }
-    updateAutoNaming();
+    await updateAutoNaming();
   } catch (err) {
     console.error("Error loading local storage data:", err);
   }
+}
+
+function resetStep2UiDefaults() {
+  const selectAllIds = [
+    'selectAllCheck',
+    'selectContactAllCheck',
+    'selectGuardianAllCheck',
+    'selectEducCoursesAllCheck',
+    'selectAdditionalInfoAllCheck',
+    'selectDocumentsAllCheck'
+  ];
+  selectAllIds.forEach((id) => {
+    const cb = document.getElementById(id);
+    if (cb) cb.checked = false;
+  });
+
+  const badgeIds = [
+    'selectedCountBadge',
+    'contactSelectedCountBadge',
+    'guardianSelectedCountBadge',
+    'educCoursesSelectedCountBadge',
+    'additionalInfoSelectedCountBadge',
+    'documentsSelectedCountBadge'
+  ];
+  badgeIds.forEach((id) => {
+    const badge = document.getElementById(id);
+    if (badge) badge.textContent = '0 selected';
+  });
+}
+
+function resetStep3UiDefaults() {
+  masterCoursesCache = [];
+  if (filterCourse) filterCourse.innerHTML = '<option value="">All Courses</option>';
+  if (filterStudyMode) filterStudyMode.innerHTML = '<option value="">All Study Modes</option>';
+  if (filterCampus) filterCampus.innerHTML = '<option value="">All Campuses</option>';
+  if (filterSearch) filterSearch.value = '';
+  if (selectAllCoursesCheck) selectAllCoursesCheck.checked = false;
+  if (coursesSelectedCountBadge) coursesSelectedCountBadge.textContent = '0 selected';
+  if (masterCoursesTableBody) masterCoursesTableBody.innerHTML = '';
+}
+
+async function handleQualificationTypeChange() {
+  localStorage.removeItem(FORM_FIELDS_STATE_KEY);
+  localStorage.removeItem('myAtlas_selectedCourses');
+
+  if (academicYearSelect) {
+    populateAcademicYears();
+    academicYearSelect.value = '';
+  }
+
+  const { todayStr, maxStr } = getTodayAndMaxDateStrings();
+  if (openingDateInput) {
+    openingDateInput.value = '';
+    openingDateInput.min = todayStr;
+    openingDateInput.max = maxStr;
+    updateDatePlaceholderState(openingDateInput, openingDateWrapper);
+  }
+  if (closingDateInput) {
+    closingDateInput.value = '';
+    closingDateInput.min = todayStr;
+    closingDateInput.max = maxStr;
+    updateDatePlaceholderState(closingDateInput, closingDateWrapper);
+  }
+  if (cycleNameInput) {
+    cycleNameInput.value = '';
+  }
+
+  resetStep2UiDefaults();
+  resetStep3UiDefaults();
+
+  await updateAutoNaming();
+  saveBasicInfoToLocalStorage();
 }
 
 async function validateBasicInfoFields() {
@@ -306,7 +429,7 @@ async function validateBasicInfoFields() {
     return false;
   }
 
-  const existingCycles = await fetchExistingCyclesForQualification(qual, yr);
+  const existingCycles = await fetchExistingCyclesForQualification(qual, yr, folderNameInput ? folderNameInput.value : '');
   if (existingCycles.length > 0) {
     let latestClosingDate = null;
     existingCycles.forEach(c => {
@@ -727,17 +850,16 @@ function showBuilderStep(stepNum) {
   }
 }
 
-function openCycleBuilder(e) {
+async function openCycleBuilder(e) {
   if (e) e.preventDefault();
   setupDateConstraints();
   populateAcademicYears();
-  loadBasicInfoFromLocalStorage();
   if (welcomeView) welcomeView.style.display = 'none';
   if (rightSidebar) rightSidebar.style.display = 'none';
   if (mainWorkspace) mainWorkspace.classList.add('builder-active');
   if (cycleBuilderView) cycleBuilderView.style.display = 'block';
   showBuilderStep(1);
-  updateAutoNaming();
+  await loadBasicInfoFromLocalStorage();
 }
 
 function closeCycleBuilderAndReset(e) {
@@ -758,6 +880,9 @@ function closeCycleBuilderAndReset(e) {
   }
   if (folderNameInput) folderNameInput.value = '';
   if (cycleNameInput) cycleNameInput.value = '';
+
+  resetStep2UiDefaults();
+  resetStep3UiDefaults();
 
   if (cycleBuilderView) cycleBuilderView.style.display = 'none';
   if (mainWorkspace) mainWorkspace.classList.remove('builder-active');
@@ -847,16 +972,13 @@ if (publishCycleBtn) {
     try {
       const qualVal = qualificationSelect.value.trim();
       const yearVal = academicYearSelect.value.trim();
-      
-      const existingCycles = await fetchExistingCyclesForQualification(qualVal, yearVal);
+      const folderVal = folderNameInput ? folderNameInput.value : '';
+
+      const existingCycles = await fetchExistingCyclesForQualification(qualVal, yearVal, folderVal);
       const cycleNumber = existingCycles.length + 1;
 
-      const qualSlug = qualVal.toLowerCase().replace(/\s+degree$/i, '').replace(/\s+/g, '_');
-      const collectionName = `${yearVal}_${qualSlug}_admissions`;
-
-      const prefix = qualVal.toLowerCase().includes('post') ? 'postgrad' : (qualVal.toLowerCase().includes('research') ? 'research' : 'undergrad');
-      const cycleId = `${prefix}-${yearVal}-cycle-${cycleNumber}`;
-      const finalCycleName = `${qualVal.replace(/\s+Degree$/i, '')} Applications ${yearVal}-Cycle ${cycleNumber}`;
+      const collectionName = getFolderCollectionName(folderVal);
+      const { cycleName: finalCycleName, docId: cycleId } = buildCycleNaming(qualVal, yearVal, cycleNumber);
 
       const querySnapshot = await getDocs(collection(db, "application_form_fields"));
       const formFieldsSnapshot = [];
@@ -894,7 +1016,7 @@ if (publishCycleBtn) {
 
       const cyclePayload = {
         cycleId: cycleId,
-        folderName: folderNameInput.value,
+        folderName: folderVal,
         cycleName: finalCycleName,
         academicYear: yearVal,
         qualificationType: qualVal,
@@ -954,8 +1076,7 @@ document.addEventListener('change', (e) => {
 // Basic info change listeners
 if (qualificationSelect) {
   qualificationSelect.addEventListener('change', async () => {
-    await updateAutoNaming();
-    saveBasicInfoToLocalStorage();
+    await handleQualificationTypeChange();
   });
 }
 if (academicYearSelect) {
