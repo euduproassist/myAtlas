@@ -67,6 +67,7 @@ onAuthStateChanged(auth, async (user) => {
     if (dropdownUserRole) dropdownUserRole.textContent = formattedRole;
 
     settleAuthReady(user);
+    await loadAllCyclesAndRenderWorkspace();
 
   } catch (error) {
     console.error("Security verification error:", error);
@@ -105,8 +106,34 @@ if (logoutBtn) {
 ===================================================== */
 const mainWorkspace = document.getElementById('mainWorkspace');
 const welcomeView = document.getElementById('welcomeView');
+const activeCycleView = document.getElementById('activeCycleView');
 const cycleBuilderView = document.getElementById('cycleBuilderView');
 const rightSidebar = document.getElementById('rightSidebar');
+
+// Sidebar cycle elements
+const sidebarCycleSearch = document.getElementById('sidebarCycleSearch');
+const allCyclesFilterBtn = document.getElementById('allCyclesFilterBtn');
+const allCyclesCount = document.getElementById('allCyclesCount');
+const cyclesFolderList = document.getElementById('cyclesFolderList');
+const emptyCyclesState = document.getElementById('emptyCyclesState');
+const emptyCyclesTitle = document.getElementById('emptyCyclesTitle');
+const emptyCyclesDescription = document.getElementById('emptyCyclesDescription');
+
+// Active cycle configuration elements
+const detailCycleTitle = document.getElementById('detailCycleTitle');
+const detailHeaderStatusBadge = document.getElementById('detailHeaderStatusBadge');
+const detailHeaderStatusText = document.getElementById('detailHeaderStatusText');
+const detailMetaDegree = document.getElementById('detailMetaDegree');
+const detailMetaOpens = document.getElementById('detailMetaOpens');
+const detailMetaCloses = document.getElementById('detailMetaCloses');
+const configDegreeType = document.getElementById('configDegreeType');
+const configOpeningDate = document.getElementById('configOpeningDate');
+const configClosingDate = document.getElementById('configClosingDate');
+const configApplicationForm = document.getElementById('configApplicationForm');
+const configRequiredDocuments = document.getElementById('configRequiredDocuments');
+const configApplicationCount = document.getElementById('configApplicationCount');
+const configTableStatusBadge = document.getElementById('configTableStatusBadge');
+const configTableStatusText = document.getElementById('configTableStatusText');
 
 const builderStep1 = document.getElementById('builderStep1');
 const builderStep2 = document.getElementById('builderStep2');
@@ -153,6 +180,11 @@ const selectAllCoursesCheck = document.getElementById('selectAllCoursesCheck');
 const BASIC_INFO_STORAGE_KEY = 'myAtlas_basicInfo';
 const FORM_FIELDS_STATE_KEY = 'myAtlas_formFieldsState';
 
+// Loaded cycles state
+let allPublishedCycles = [];
+let selectedCycleKey = null;
+const collapsedFolders = new Set();
+
 function getTodayAndMaxDateStrings() {
   const now = new Date();
   const currentYear = now.getFullYear();
@@ -163,6 +195,72 @@ function getTodayAndMaxDateStrings() {
     maxStr: `${currentYear}-12-31`,
     currentYear
   };
+}
+
+function getTodayDateOnly() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+}
+
+function parseIsoDateOnly(dateStr) {
+  if (!dateStr || typeof dateStr !== 'string') return null;
+  const parts = dateStr.trim().split('-');
+  if (parts.length !== 3) return null;
+  const year = Number(parts[0]);
+  const month = Number(parts[1]) - 1;
+  const day = Number(parts[2]);
+  if (!year || month < 0 || !day) return null;
+  return new Date(year, month, day);
+}
+
+function formatDisplayDate(dateStr) {
+  const parsed = parseIsoDateOnly(dateStr);
+  if (!parsed || Number.isNaN(parsed.getTime())) {
+    return dateStr || '---';
+  }
+  const day = String(parsed.getDate()).padStart(2, '0');
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const monthName = months[parsed.getMonth()] || '';
+  const year = parsed.getFullYear();
+  return `${day} ${monthName} ${year}`;
+}
+
+function getShortDegreeType(qualVal) {
+  const raw = (qualVal || '').trim();
+  const cleaned = raw.replace(/\s+Degree$/i, '').trim();
+  return cleaned || 'Undergraduate';
+}
+
+function computeCycleStatus(cycle) {
+  if (cycle.isManuallyClosed === true) {
+    return { key: 'closed', label: 'Closed' };
+  }
+  const today = getTodayDateOnly();
+  const openDate = parseIsoDateOnly(cycle.openingDate);
+  const closeDate = parseIsoDateOnly(cycle.closingDate);
+
+  if (closeDate && today > closeDate) {
+    return { key: 'closed', label: 'Closed' };
+  }
+  if (openDate && today < openDate) {
+    return { key: 'upcoming', label: 'Upcoming' };
+  }
+  return { key: 'open', label: 'Open' };
+}
+
+function getFolderDisplayTitle(cycle, collectionName) {
+  if (cycle.folderName && String(cycle.folderName).trim()) {
+    return String(cycle.folderName).trim().replace(/\s*-\s*/g, ' ');
+  }
+  const yearMatch = (collectionName || '').match(/^([0-9]{4})/);
+  if (yearMatch) {
+    return `${yearMatch[1]} Application Cycle`;
+  }
+  return `${new Date().getFullYear()} Application Cycle`;
+}
+
+function getCycleUniqueKey(cycle) {
+  return `${cycle._collectionName || 'default'}::${cycle.id || cycle.cycleId || cycle.cycleName}`;
 }
 
 function updateDatePlaceholderState(inputEl, wrapperEl) {
@@ -230,7 +328,7 @@ function getFolderCollectionName(folderNameValue) {
 
 function buildCycleNaming(qualVal, yearVal, cycleNumber) {
   const categoryName = qualVal.replace(/\s+Degree$/i, '').trim();
-  const cycleName = `${categoryName} Applications ${yearVal}-Cycle ${cycleNumber}`;
+  const cycleName = `${yearVal} ${categoryName} Applications Cycle ${cycleNumber}`;
   const docId = cycleName
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
@@ -283,6 +381,281 @@ async function updateAutoNaming() {
       cycleNameInput.value = '';
     }
   }
+}
+
+/* =====================================================
+   2B. SIDEBAR FOLDERS & CYCLE CONFIGURATION RENDERING
+===================================================== */
+async function fetchAllPublishedCycles() {
+  const verifiedUser = await authReadyPromise;
+  if (!verifiedUser) return [];
+
+  const currentYear = new Date().getFullYear();
+  const candidateCollections = Array.from(new Set([
+    `${currentYear - 1}_application_cycle`,
+    `${currentYear}_application_cycle`,
+    `${currentYear + 1}_application_cycle`
+  ]));
+
+  const loaded = [];
+  for (const colName of candidateCollections) {
+    try {
+      const snap = await getDocs(collection(db, colName));
+      snap.forEach(docSnap => {
+        const data = docSnap.data();
+        loaded.push({
+          id: docSnap.id,
+          _collectionName: colName,
+          ...data
+        });
+      });
+    } catch (err) {
+      // Ignore collections that do not exist yet
+    }
+  }
+
+  loaded.sort((a, b) => {
+    const aSec = a.publishedAt && typeof a.publishedAt.seconds === 'number' ? a.publishedAt.seconds : 0;
+    const bSec = b.publishedAt && typeof b.publishedAt.seconds === 'number' ? b.publishedAt.seconds : 0;
+    if (bSec !== aSec) return bSec - aSec;
+    return String(a.cycleName || '').localeCompare(String(b.cycleName || ''));
+  });
+
+  return loaded;
+}
+
+function getDefaultSelectedCycle(cycles) {
+  if (!cycles || cycles.length === 0) return null;
+  const openCycle = cycles.find(c => computeCycleStatus(c).key === 'open');
+  return openCycle || cycles[0];
+}
+
+function renderCycleConfigurationView(cycle) {
+  if (!cycle || !activeCycleView) return;
+
+  const statusObj = computeCycleStatus(cycle);
+  const shortDegree = getShortDegreeType(cycle.qualificationType);
+  const formattedOpen = formatDisplayDate(cycle.openingDate);
+  const formattedClose = formatDisplayDate(cycle.closingDate);
+  const cycleTitle = cycle.cycleName || `${cycle.academicYear || ''} ${shortDegree} Applications`.trim();
+
+  if (detailCycleTitle) detailCycleTitle.textContent = cycleTitle;
+
+  if (detailHeaderStatusBadge) {
+    detailHeaderStatusBadge.className = `cycle-status-pill ${statusObj.key}`;
+  }
+  if (detailHeaderStatusText) {
+    detailHeaderStatusText.textContent = statusObj.label;
+  }
+
+  if (detailMetaDegree) detailMetaDegree.textContent = shortDegree;
+  if (detailMetaOpens) detailMetaOpens.textContent = `Opens ${formattedOpen}`;
+  if (detailMetaCloses) detailMetaCloses.textContent = `Closes ${formattedClose}`;
+
+  if (configDegreeType) configDegreeType.textContent = shortDegree;
+  if (configOpeningDate) configOpeningDate.textContent = formattedOpen;
+  if (configClosingDate) configClosingDate.textContent = formattedClose;
+  if (configApplicationForm) {
+    configApplicationForm.textContent = `Standard ${shortDegree} Application Form`;
+  }
+
+  const snapshotFields = Array.isArray(cycle.formFieldsSnapshot) ? cycle.formFieldsSnapshot : [];
+  const requiredDocs = snapshotFields
+    .filter(f => f && f.section === 'documents' && String(f.requirement || '').toLowerCase() === 'required')
+    .map(f => f.fieldName)
+    .filter(Boolean);
+
+  if (configRequiredDocuments) {
+    configRequiredDocuments.textContent = requiredDocs.length > 0 ? requiredDocs.join(', ') : 'None required';
+  }
+
+  const appCount = typeof cycle.applicationCount === 'number' ? cycle.applicationCount : 0;
+  if (configApplicationCount) configApplicationCount.textContent = String(appCount);
+
+  if (configTableStatusBadge) {
+    configTableStatusBadge.className = `cycle-status-pill ${statusObj.key}`;
+  }
+  if (configTableStatusText) {
+    configTableStatusText.textContent = statusObj.label;
+  }
+}
+
+function syncCenterViewWithCycles() {
+  const isBuilderOpen = cycleBuilderView && cycleBuilderView.style.display === 'block';
+  if (isBuilderOpen) return;
+
+  if (allPublishedCycles.length === 0) {
+    if (activeCycleView) activeCycleView.style.display = 'none';
+    if (welcomeView) welcomeView.style.display = 'flex';
+    return;
+  }
+
+  let currentCycle = allPublishedCycles.find(c => getCycleUniqueKey(c) === selectedCycleKey);
+  if (!currentCycle) {
+    currentCycle = getDefaultSelectedCycle(allPublishedCycles);
+    selectedCycleKey = currentCycle ? getCycleUniqueKey(currentCycle) : null;
+  }
+
+  if (welcomeView) welcomeView.style.display = 'none';
+  if (activeCycleView) activeCycleView.style.display = 'block';
+  renderCycleConfigurationView(currentCycle);
+}
+
+function renderSidebarCyclesList() {
+  const totalCount = allPublishedCycles.length;
+  if (allCyclesCount) {
+    allCyclesCount.textContent = String(totalCount);
+  }
+
+  const query = sidebarCycleSearch ? sidebarCycleSearch.value.trim().toLowerCase() : '';
+  const filteredCycles = query
+    ? allPublishedCycles.filter(c => {
+        const nameMatch = String(c.cycleName || '').toLowerCase().includes(query);
+        const degreeMatch = String(c.qualificationType || '').toLowerCase().includes(query);
+        const yearMatch = String(c.academicYear || '').toLowerCase().includes(query);
+        return nameMatch || degreeMatch || yearMatch;
+      })
+    : allPublishedCycles;
+
+  if (totalCount === 0) {
+    if (cyclesFolderList) cyclesFolderList.style.display = 'none';
+    if (emptyCyclesState) emptyCyclesState.style.display = 'flex';
+    if (emptyCyclesTitle) emptyCyclesTitle.textContent = 'No application cycles yet';
+    if (emptyCyclesDescription) {
+      emptyCyclesDescription.textContent = 'Your created cycles will appear here once you add them.';
+    }
+    return;
+  }
+
+  if (filteredCycles.length === 0) {
+    if (cyclesFolderList) cyclesFolderList.style.display = 'none';
+    if (emptyCyclesState) emptyCyclesState.style.display = 'flex';
+    if (emptyCyclesTitle) emptyCyclesTitle.textContent = 'No matching cycles';
+    if (emptyCyclesDescription) {
+      emptyCyclesDescription.textContent = 'No application cycles match your search filter.';
+    }
+    return;
+  }
+
+  if (emptyCyclesState) emptyCyclesState.style.display = 'none';
+  if (!cyclesFolderList) return;
+  cyclesFolderList.style.display = 'flex';
+  cyclesFolderList.innerHTML = '';
+
+  const folderMap = new Map();
+  filteredCycles.forEach(cycle => {
+    const folderTitle = getFolderDisplayTitle(cycle, cycle._collectionName);
+    if (!folderMap.has(folderTitle)) {
+      folderMap.set(folderTitle, []);
+    }
+    folderMap.get(folderTitle).push(cycle);
+  });
+
+  folderMap.forEach((cyclesInFolder, folderTitle) => {
+    const folderCard = document.createElement('div');
+    const isCollapsed = !query && collapsedFolders.has(folderTitle);
+    folderCard.className = `cycle-folder-card${isCollapsed ? ' collapsed' : ''}`;
+
+    const folderBtn = document.createElement('button');
+    folderBtn.type = 'button';
+    folderBtn.className = 'cycle-folder-header';
+    folderBtn.innerHTML = `
+      <svg class="cycle-folder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+      </svg>
+      <span>${folderTitle}</span>
+      <svg class="cycle-folder-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="m6 9 6 6 6-6"></path>
+      </svg>
+    `;
+
+    folderBtn.addEventListener('click', () => {
+      if (collapsedFolders.has(folderTitle)) {
+        collapsedFolders.delete(folderTitle);
+      } else {
+        collapsedFolders.add(folderTitle);
+      }
+      renderSidebarCyclesList();
+    });
+
+    const itemsContainer = document.createElement('div');
+    itemsContainer.className = 'cycle-folder-items';
+
+    cyclesInFolder.forEach(cycle => {
+      const cycleKey = getCycleUniqueKey(cycle);
+      const isSelected = cycleKey === selectedCycleKey;
+      const statusObj = computeCycleStatus(cycle);
+      const shortDegree = getShortDegreeType(cycle.qualificationType);
+      const opensLabel = formatDisplayDate(cycle.openingDate);
+
+      const itemBtn = document.createElement('button');
+      itemBtn.type = 'button';
+      itemBtn.className = `cycle-item-card${isSelected ? ' active' : ''}`;
+      itemBtn.innerHTML = `
+        <svg class="cycle-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+          <path d="M16 2v4M8 2v4M3 10h18"></path>
+        </svg>
+        <div class="cycle-item-body">
+          <div class="cycle-item-top">
+            <span class="cycle-item-title">${cycle.cycleName || 'Application Cycle'}</span>
+            <span class="cycle-status-pill ${statusObj.key}">${statusObj.label}</span>
+          </div>
+          <div class="cycle-item-meta">${shortDegree} &bull; Opens ${opensLabel}</div>
+        </div>
+      `;
+
+      itemBtn.addEventListener('click', () => {
+        selectedCycleKey = cycleKey;
+        renderSidebarCyclesList();
+        renderCycleConfigurationView(cycle);
+      });
+
+      itemsContainer.appendChild(itemBtn);
+    });
+
+    folderCard.appendChild(folderBtn);
+    folderCard.appendChild(itemsContainer);
+    cyclesFolderList.appendChild(folderCard);
+  });
+
+  const viewAllBtn = document.createElement('button');
+  viewAllBtn.type = 'button';
+  viewAllBtn.className = 'view-all-cycles-link';
+  viewAllBtn.innerHTML = `<span>View all cycles</span> <span>→</span>`;
+  viewAllBtn.addEventListener('click', () => {
+    if (sidebarCycleSearch) sidebarCycleSearch.value = '';
+    collapsedFolders.clear();
+    renderSidebarCyclesList();
+  });
+  cyclesFolderList.appendChild(viewAllBtn);
+}
+
+async function loadAllCyclesAndRenderWorkspace(preferredCycleKey = null) {
+  allPublishedCycles = await fetchAllPublishedCycles();
+  if (preferredCycleKey) {
+    selectedCycleKey = preferredCycleKey;
+  } else if (!selectedCycleKey && allPublishedCycles.length > 0) {
+    const defaultCycle = getDefaultSelectedCycle(allPublishedCycles);
+    selectedCycleKey = defaultCycle ? getCycleUniqueKey(defaultCycle) : null;
+  }
+  renderSidebarCyclesList();
+  syncCenterViewWithCycles();
+}
+
+if (sidebarCycleSearch) {
+  sidebarCycleSearch.addEventListener('input', () => {
+    renderSidebarCyclesList();
+  });
+}
+
+if (allCyclesFilterBtn) {
+  allCyclesFilterBtn.addEventListener('click', () => {
+    if (sidebarCycleSearch) sidebarCycleSearch.value = '';
+    collapsedFolders.clear();
+    renderSidebarCyclesList();
+    syncCenterViewWithCycles();
+  });
 }
 
 function saveBasicInfoToLocalStorage() {
@@ -855,6 +1228,7 @@ async function openCycleBuilder(e) {
   setupDateConstraints();
   populateAcademicYears();
   if (welcomeView) welcomeView.style.display = 'none';
+  if (activeCycleView) activeCycleView.style.display = 'none';
   if (rightSidebar) rightSidebar.style.display = 'none';
   if (mainWorkspace) mainWorkspace.classList.add('builder-active');
   if (cycleBuilderView) cycleBuilderView.style.display = 'block';
@@ -887,7 +1261,7 @@ function closeCycleBuilderAndReset(e) {
   if (cycleBuilderView) cycleBuilderView.style.display = 'none';
   if (mainWorkspace) mainWorkspace.classList.remove('builder-active');
   if (rightSidebar) rightSidebar.style.display = 'block';
-  if (welcomeView) welcomeView.style.display = 'flex';
+  syncCenterViewWithCycles();
 }
 
 document.querySelectorAll('.create-cycle-trigger').forEach(btn => {
@@ -1024,6 +1398,7 @@ if (publishCycleBtn) {
         openingDate: openingDateInput.value,
         closingDate: closingDateInput.value,
         isManuallyClosed: false,
+        applicationCount: 0,
         publishedAt: serverTimestamp(),
         formFieldsSnapshot: formFieldsSnapshot,
         selectedCoursesSnapshot: selectedCoursesSnapshot
@@ -1031,8 +1406,10 @@ if (publishCycleBtn) {
 
       await setDoc(doc(db, collectionName, cycleId), cyclePayload);
 
+      const newCycleKey = `${collectionName}::${cycleId}`;
       alert("Application cycle published successfully!");
       closeCycleBuilderAndReset();
+      await loadAllCyclesAndRenderWorkspace(newCycleKey);
 
     } catch (err) {
       console.error("Error publishing cycle:", err);
