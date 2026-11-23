@@ -373,46 +373,51 @@
       font-weight: 750;
     }
 
-    /* SIDEBAR FOLDER & CYCLE LIST STYLES */
+    /* SIDEBAR FOLDER & CYCLE LIST STYLES (PURE WHITE CLEAN LIST) */
     .cycles-folder-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 6px;
     }
 
     .cycle-folder-card {
-      background: #f5f9ff;
-      border: 1px solid #dceaff;
-      border-radius: 10px;
-      overflow: hidden;
+      background: #ffffff;
+      border: 0;
+      border-radius: 0;
+      overflow: visible;
     }
 
     .cycle-folder-header {
       width: 100%;
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
-      background: transparent;
+      gap: 9px;
+      padding: 10px 6px;
+      background: #ffffff;
       border: 0;
+      border-bottom: 1px solid #eef3f9;
       text-align: left;
       color: var(--navy);
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 750;
     }
 
+    .cycle-folder-header:hover {
+      background: #fafcff;
+    }
+
     .cycle-folder-icon {
-      width: 18px;
-      height: 18px;
-      color: var(--blue);
+      width: 16px;
+      height: 16px;
+      color: #5b789d;
       flex-shrink: 0;
     }
 
     .cycle-folder-chevron {
       margin-left: auto;
-      width: 16px;
-      height: 16px;
-      color: #6c88ad;
+      width: 15px;
+      height: 15px;
+      color: #8b9bb0;
       flex-shrink: 0;
       transition: transform 0.2s ease;
     }
@@ -424,8 +429,9 @@
     .cycle-folder-items {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      padding: 0 10px 12px;
+      gap: 0;
+      padding: 0;
+      background: #ffffff;
     }
 
     .cycle-folder-card.collapsed .cycle-folder-items {
@@ -437,29 +443,31 @@
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      padding: 10px 10px;
+      padding: 12px 10px 12px 12px;
       background: #ffffff;
-      border: 1px solid #e1ecfa;
-      border-radius: 8px;
+      border: 0;
+      border-left: 3px solid transparent;
+      border-bottom: 1px solid #eef3f9;
+      border-radius: 0;
       text-align: left;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      transition: background 0.15s ease, border-color 0.15s ease;
     }
 
     .cycle-item-card:hover {
-      border-color: #9bc3ff;
-      background: #fbfdff;
+      background: #fafcff;
     }
 
     .cycle-item-card.active {
-      border-color: var(--blue);
-      background: #f2f7ff;
-      box-shadow: 0 2px 6px rgba(8, 102, 245, 0.08);
+      background: var(--pale-blue);
+      border-left-color: var(--blue);
+      border-radius: 6px;
+      border-bottom-color: transparent;
     }
 
     .cycle-item-icon {
-      width: 17px;
-      height: 17px;
-      color: #5b789d;
+      width: 16px;
+      height: 16px;
+      color: #6f86a6;
       margin-top: 2px;
       flex-shrink: 0;
     }
@@ -474,7 +482,7 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 6px;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .cycle-item-title {
@@ -519,7 +527,7 @@
     }
 
     .cycle-item-meta {
-      color: #6f86a6;
+      color: #7c92b0;
       font-size: 11px;
       font-weight: 500;
       line-height: 1.35;
@@ -529,9 +537,9 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      margin-top: 4px;
-      padding: 4px 2px;
-      background: transparent;
+      margin-top: 10px;
+      padding: 4px 6px;
+      background: #ffffff;
       border: 0;
       color: var(--blue);
       font-size: 12.5px;
