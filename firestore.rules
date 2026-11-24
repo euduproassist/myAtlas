@@ -2,58 +2,98 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Pre-approved validation collections for account activation
-    match /pre_approved_admissions/{id} {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidSixDigitPin(pin) {
+      return pin is string && pin.matches('^[0-9]{6}$');
+    }
+
+    // Pre-approved staff lists (queried during activation before account creation)
+    match /pre_approved_admissions/{docId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isSignedIn();
     }
-
-    match /pre_approved_administrators/{id} {
+    match /pre_approved_administrators/{docId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isSignedIn();
     }
-
-    match /pre_approved_tech_support/{id} {
+    match /pre_approved_tech_support/{docId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isSignedIn();
     }
 
-    // Active personnel profile collections created upon successful activation
-    match /admissions_staff/{id} {
-      allow read, write: if request.auth != null;
+    // Active staff profiles (created on activation, read on sign-in)
+    match /admissions_staff/{uid} {
+      allow create: if isSignedIn() && request.auth.uid == uid;
+      allow read: if isSignedIn();
+      allow update, delete: if isSignedIn();
+    }
+    match /administrators/{uid} {
+      allow create: if isSignedIn() && request.auth.uid == uid;
+      allow read: if isSignedIn();
+      allow update, delete: if isSignedIn();
+    }
+    match /technical_support/{uid} {
+      allow create: if isSignedIn() && request.auth.uid == uid;
+      allow read: if isSignedIn();
+      allow update, delete: if isSignedIn();
     }
 
-    match /administrators/{id} {
-      allow read, write: if request.auth != null;
+    // 1. Application Cycle collections (e.g., 2025_application_cycle, 2026_application_cycle)
+    match /{cycleCollection}/{cycleId} {
+      allow read: if true;
+
+      allow create: if isSignedIn();
+      allow delete: if isSignedIn();
+      allow update: if isSignedIn() || (
+        resource.data.status == 'published' &&
+        resource.data.get('isManuallyClosed', false) != true &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['applicationCount']) &&
+        request.resource.data.applicationCount == resource.data.get('applicationCount', 0) + 1
+      );
     }
 
-    match /technical_support/{id} {
-      allow read, write: if request.auth != null;
-    }
-
-    // Automatic multi-year folder-based application cycle collections (e.g., 2026_application_cycle)
-    // Public read so apply.html can check open cycles; write restricted to authenticated admins
-    match /{collectionName}/{cycleId} {
-      allow read: if collectionName.matches('^[0-9]{4}(_[a-z0-9]+)*_application_cycle$');
-      allow write: if request.auth != null
-                   && collectionName.matches('^[0-9]{4}(_[a-z0-9]+)*_application_cycle$');
-    }
-
-    // Application Form Fields collection (used by Step 2 form customization)
+    // 2. Form field definitions
     match /application_form_fields/{fieldId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isSignedIn();
     }
 
-    // Master Courses collection for Step 3 filtering and selection
+    // 3. Master courses catalog
     match /master_courses/{courseId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isSignedIn();
     }
 
-    // Mail queue collection for Firebase Trigger Email extension
+    // 4. Saved student application drafts
+    match /draft_applications/{draftId} {
+      allow read, create, update, delete: if true;
+    }
+
+    // 5. Submitted / completed applications
+    match /complete_applications/{refNumber} {
+      allow create: if request.resource.data.referenceNumber is string &&
+                       request.resource.data.referenceNumber.size() > 0 &&
+                       isValidSixDigitPin(request.resource.data.pin) &&
+                       request.resource.data.status == 'Submitted';
+
+      allow read: if true;
+      allow update, delete: if isSignedIn();
+    }
+
+    // 6. Outgoing email queue
     match /mail/{mailId} {
-      allow create: if true;
+      allow create: if request.resource.data.to is string &&
+                       request.resource.data.to.size() > 3 &&
+                       request.resource.data.message is map;
+      allow read, update, delete: if isSignedIn();
+    }
+
+    // Default deny for everything else
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
