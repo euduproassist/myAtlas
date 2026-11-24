@@ -1,1 +1,76 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
 
+    // Pre-approved validation collections for account activation
+    match /pre_approved_admissions/{id} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /pre_approved_administrators/{id} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /pre_approved_tech_support/{id} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Active personnel profile collections created upon successful activation
+    match /admissions_staff/{id} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /administrators/{id} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /technical_support/{id} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Automatic multi-year folder-based application cycle collections (e.g., 2026_application_cycle)
+    // Public read so apply.html can check open cycles; write restricted to authenticated admins
+    // Allows unauthenticated applicants to increment applicationCount on submit
+    match /{collectionName}/{cycleId} {
+      allow read: if collectionName.matches('^[0-9]{4}(_[a-z0-9]+)*_application_cycle$');
+      allow create, delete: if request.auth != null
+                            && collectionName.matches('^[0-9]{4}(_[a-z0-9]+)*_application_cycle$');
+      allow update: if collectionName.matches('^[0-9]{4}(_[a-z0-9]+)*_application_cycle$')
+                    && (
+                      request.auth != null ||
+                      request.resource.data.diff(resource.data).affectedKeys().hasOnly(['applicationCount'])
+                    );
+    }
+
+    // Application Form Fields collection (used by Step 2 form customization)
+    match /application_form_fields/{fieldId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Master Courses collection for Step 3 filtering and selection
+    match /master_courses/{courseId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Draft student applications (auto-saved progress, deleted on final submission)
+    match /draft_applications/{draftId} {
+      allow read, create, update, delete: if true;
+    }
+
+    // Completed student applications
+    match /complete_applications/{appId} {
+      allow read, create: if true;
+      allow update, delete: if request.auth != null;
+    }
+
+    // Mail queue collection for Firebase Trigger Email extension
+    match /mail/{mailId} {
+      allow create: if true;
+    }
+  }
+}
