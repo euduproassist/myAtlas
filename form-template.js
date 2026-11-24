@@ -29,11 +29,21 @@ const BLUEPRINT_SECTIONS = {
   }
 };
 
+function escapeAttr(val) {
+  return String(val ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 /**
  * Main function to generate and inject the Application Preview inside Step 4
+ * or render the live student application form when `options` is provided.
  */
-export async function renderStep4ApplicationPreview(containerElementId = "builderStep4Preview") {
+export async function renderStep4ApplicationPreview(containerElementId = "builderStep4Preview", options = null) {
   let targetContainer = document.getElementById(containerElementId);
+  const isStudentMode = Boolean(options && options.studentMode);
 
   if (!targetContainer) {
     const step4 = document.getElementById("builderStep4");
@@ -46,12 +56,24 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
 
   targetContainer.innerHTML = `
     <div style="text-align: center; padding: 40px; color: #0866f5; font-size: 15px; font-weight: 600;">
-      Generating live application form preview from configured choices...
+      ${isStudentMode ? "Loading your application form..." : "Generating live application form preview from configured choices..."}
     </div>`;
 
-  const savedFieldsState = JSON.parse(localStorage.getItem("myAtlas_formFieldsState") || "{}");
-  const savedSelectedCourses = JSON.parse(localStorage.getItem("myAtlas_selectedCourses") || "[]");
-  const savedBasicInfo = JSON.parse(localStorage.getItem("myAtlas_basicInfo") || "{}");
+  const savedFieldsState = isStudentMode
+    ? (options.formFieldsSnapshot || {})
+    : JSON.parse(localStorage.getItem("myAtlas_formFieldsState") || "{}");
+
+  const savedSelectedCourses = isStudentMode
+    ? (options.selectedCoursesSnapshot || [])
+    : JSON.parse(localStorage.getItem("myAtlas_selectedCourses") || "[]");
+
+  const savedBasicInfo = isStudentMode
+    ? {
+        cycleName: options.cycleName || "Student Application Form",
+        academicYear: options.academicYear || "",
+        qualification: options.qualification || ""
+      }
+    : JSON.parse(localStorage.getItem("myAtlas_basicInfo") || "{}");
 
   try {
     const fieldsSnapshot = await getDocs(collection(db, "application_form_fields"));
@@ -60,6 +82,9 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
     fieldsSnapshot.forEach((docSnap) => {
       const fieldData = docSnap.data();
       const fieldId = docSnap.id;
+
+      // Documents section is completely hidden/excluded on the student side
+      if (isStudentMode && fieldData.section === "documents") return;
 
       const userState = savedFieldsState[fieldId];
       const isSelected = userState ? userState.isSelected : fieldData.isSelected;
@@ -92,6 +117,8 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
     } catch (e) {
       console.error("Error fetching master courses for preview:", e);
     }
+
+    const headerBadge = isStudentMode ? "Online Student Application" : "Live Form Preview";
 
     let formHtml = `
       <div class="application-form-preview-wrapper" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);">
@@ -135,12 +162,12 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
           }
         </style>
         <header style="border-bottom: 2px solid #f1f5f9; padding-bottom: 16px; margin-bottom: 28px;">
-          <span style="font-size: 11px; font-weight: 700; color: #0866f5; text-transform: uppercase; letter-spacing: 1px;">Live Form Preview</span>
+          <span style="font-size: 11px; font-weight: 700; color: #0866f5; text-transform: uppercase; letter-spacing: 1px;">${headerBadge}</span>
           <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin-top: 4px;">
-            ${savedBasicInfo.cycleName || "Student Application Form"}
+            ${escapeAttr(savedBasicInfo.cycleName || "Student Application Form")}
           </h2>
           <p style="font-size: 13px; color: #64748b; margin-top: 4px;">
-            Academic Year: <strong>${savedBasicInfo.academicYear || "N/A"}</strong> | Qualification: <strong>${savedBasicInfo.qualification || "N/A"}</strong>
+            Academic Year: <strong>${escapeAttr(savedBasicInfo.academicYear || "N/A")}</strong> | Qualification: <strong>${escapeAttr(savedBasicInfo.qualification || "N/A")}</strong>
           </p>
         </header>
         <form id="applicantPreviewForm" onsubmit="return false;" style="display: flex; flex-direction: column; gap: 28px;">
@@ -151,9 +178,12 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
       contact: activeFields.filter(f => f.section === "contact"),
       guardian: activeFields.filter(f => f.section === "guardian"),
       education_courses: activeFields.filter(f => f.section === "education_courses"),
-      additional_info: activeFields.filter(f => f.section === "additional_info"),
-      documents: activeFields.filter(f => f.section === "documents")
+      additional_info: activeFields.filter(f => f.section === "additional_info")
     };
+
+    if (!isStudentMode) {
+      sectionsGrouped.documents = activeFields.filter(f => f.section === "documents");
+    }
 
     Object.keys(sectionsGrouped).forEach((sectionKey) => {
       const fields = sectionsGrouped[sectionKey];
@@ -173,13 +203,13 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
       `;
 
       if (sectionKey === "education_courses") {
-        formHtml += renderEducationCoursesSectionHTML(fields, savedSelectedCourses, masterCoursesList, savedBasicInfo);
+        formHtml += renderEducationCoursesSectionHTML(fields, savedSelectedCourses, masterCoursesList, savedBasicInfo, isStudentMode);
       } else {
         if (fields.length === 0) {
           formHtml += `<p style="grid-column: 1 / -1; color: #94a3b8; font-size: 13px; font-style: italic;">No fields enabled for this section.</p>`;
         } else {
           fields.forEach(field => {
-            formHtml += renderIndividualFieldHTML(field, sectionKey);
+            formHtml += renderIndividualFieldHTML(field, sectionKey, isStudentMode);
           });
         }
       }
@@ -207,19 +237,20 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
 /**
  * Render Section 4 Educational Background & Course Selection
  */
-function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo) {
+function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo, isStudentMode = false) {
   let html = "";
   const fieldNamesSet = new Set(activeEducationFields.map(f => f.fieldName));
 
   // 1. Matric Status/Current Standing
   if (fieldNamesSet.has("Matric Status/Current Standing")) {
     const fieldObj = activeEducationFields.find(f => f.fieldName === "Matric Status/Current Standing");
-    const reqAsterisk = fieldObj?.requirement === "Required" ? `<span style="color: #e53b4d;">*</span>` : ``;
+    const isReq = fieldObj?.requirement === "Required";
+    const reqAsterisk = isReq ? `<span style="color: #e53b4d;">*</span>` : ``;
 
     html += `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
         <label style="font-size: 13px; font-weight: 700; color: #1e293b;">Matric Status/Current Standing ${reqAsterisk}</label>
-        <select id="matricStandingTrigger" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
+        <select id="matricStandingTrigger" data-field-name="Matric Status/Current Standing" data-required="${isReq}" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
           <option value="" disabled selected>Select option</option>
           <option value="Currently in Grade 12">Currently in Grade 12</option>
           <option value="Completed Matric">Completed Matric</option>
@@ -231,15 +262,15 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
             <div>
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Name of the school/institution ${reqAsterisk}</label>
-              <input type="text" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+              <input type="text" data-g12-field="schoolName" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
             <div>
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Country ${reqAsterisk}</label>
-              <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+              <input type="text" data-g12-field="country" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
             <div style="grid-column: 1 / -1;">
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Province ${reqAsterisk}</label>
-              <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+              <input type="text" data-g12-field="province" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
           </div>
 
@@ -279,19 +310,19 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
             <div>
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Name of the school/institution ${reqAsterisk}</label>
-              <input type="text" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+              <input type="text" data-matric-field="schoolName" placeholder="School Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
             <div>
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Country ${reqAsterisk}</label>
-              <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+              <input type="text" data-matric-field="country" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
             <div>
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Province ${reqAsterisk}</label>
-              <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+              <input type="text" data-matric-field="province" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
             <div>
               <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Year Completed/Matriculated ${reqAsterisk}</label>
-              <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+              <input type="number" data-matric-field="yearCompleted" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
             </div>
           </div>
 
@@ -331,12 +362,13 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
   // 2. Have you previously attended a tertiary institution?
   if (fieldNamesSet.has("Have you previously attended a tertiary institution?")) {
     const fieldObj = activeEducationFields.find(f => f.fieldName === "Have you previously attended a tertiary institution?");
-    const reqAsterisk = fieldObj?.requirement === "Required" ? `<span style="color: #e53b4d;">*</span>` : ``;
+    const isReq = fieldObj?.requirement === "Required";
+    const reqAsterisk = isReq ? `<span style="color: #e53b4d;">*</span>` : ``;
 
     html += `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
         <label style="font-size: 13px; font-weight: 700; color: #1e293b;">Have you previously attended a tertiary institution? ${reqAsterisk}</label>
-        <select id="tertiaryTrigger" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
+        <select id="tertiaryTrigger" data-field-name="Have you previously attended a tertiary institution?" data-required="${isReq}" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
           <option value="" disabled selected>Select option</option>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
@@ -347,15 +379,15 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
             <div class="tertiary-card" style="background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; position: relative;">
               <div style="grid-column: 1 / -1;">
                 <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Institution Name ${reqAsterisk}</label>
-                <input type="text" placeholder="University / College Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+                <input type="text" data-tertiary-field="institution" placeholder="University / College Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
               </div>
               <div>
                 <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Qualification / Programme ${reqAsterisk}</label>
-                <input type="text" placeholder="e.g. Diploma in IT" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+                <input type="text" data-tertiary-field="qualification" placeholder="e.g. Diploma in IT" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
               </div>
               <div>
                 <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Current / Final Status ${reqAsterisk}</label>
-                <select class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;">
+                <select data-tertiary-field="status" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;">
                   <option value="" disabled selected>Select option</option>
                   <option value="Completed">Completed</option>
                   <option value="Discontinued">Discontinued</option>
@@ -364,11 +396,11 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
               </div>
               <div>
                 <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Year Started ${reqAsterisk}</label>
-                <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+                <input type="number" data-tertiary-field="yearStarted" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
               </div>
               <div>
                 <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Year Completed ${reqAsterisk}</label>
-                <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+                <input type="number" data-tertiary-field="yearCompleted" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
               </div>
             </div>
           </div>
@@ -379,8 +411,8 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
   }
 
   // 3. Updated field name "What do you wish to study for" with Progressive Cascading Filters
-  if (fieldNamesSet.has("What do you wish to study for?")) {
-    html += renderCascadingCourseSelectionBlock(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo);
+  if (fieldNamesSet.has("What do you wish to study for?") || (isStudentMode && savedSelectedCourses.length > 0)) {
+    html += renderCascadingCourseSelectionBlock(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo, isStudentMode);
   }
 
   return html;
@@ -389,17 +421,25 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
 /**
  * Render Progressive Cascading Course Selection Block with Primary "What do you wish to study for" Dropdown
  */
-function renderCascadingCourseSelectionBlock(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo) {
+function renderCascadingCourseSelectionBlock(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo, isStudentMode = false) {
   if (!savedSelectedCourses || savedSelectedCourses.length === 0) {
+    if (isStudentMode) return "";
     return `
       <div style="grid-column: 1 / -1; margin-top: 14px; background: #fff5f5; border: 1px solid #feb2b2; padding: 14px; border-radius: 6px; color: #c53030; font-size: 13px;">
         ⚠️ No courses were selected in Step 3. Applicants will not see any course selection choices.
       </div>`;
   }
 
-  const validCourses = savedSelectedCourses.map(key => {
-    const parts = key.split("_");
-    const cName = parts[0] || key;
+  const validCourses = savedSelectedCourses.map(item => {
+    if (typeof item === "object" && item !== null) {
+      return {
+        course: item.course || "",
+        studyMode: item.studyMode || "Full-time",
+        campus: item.campus || "Main Campus"
+      };
+    }
+    const parts = String(item).split("_");
+    const cName = parts[0] || String(item);
     const sMode = parts[1] || "Full-time";
     const camp = parts[2] || "Main Campus";
 
@@ -408,21 +448,22 @@ function renderCascadingCourseSelectionBlock(activeEducationFields, savedSelecte
       studyMode: sMode,
       campus: camp
     };
-  });
+  }).filter(c => c.course);
 
   const activeAcademicYear = savedBasicInfo.academicYear || new Date().getFullYear().toString();
   const step1Qualification = savedBasicInfo.qualification || "";
-  
+
   const fieldObj = activeEducationFields.find(f => f.fieldName === "What do you wish to study for?");
-  const reqAsterisk = fieldObj?.requirement === "Required" ? `<span style="color: #e53b4d;">*</span>` : ``;
+  const isReq = fieldObj ? fieldObj.requirement === "Required" : true;
+  const reqAsterisk = isReq ? `<span style="color: #e53b4d;">*</span>` : ``;
 
   return `
-    <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 16px;" id="previewCascadingWrapper" data-courses='${JSON.stringify(validCourses)}'>
+    <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 16px;" id="previewCascadingWrapper" data-exclude-from-draft="true" data-courses='${escapeAttr(JSON.stringify(validCourses))}'>
       <div style="display: flex; flex-direction: column; gap: 6px;">
         <label style="font-size: 13px; font-weight: 700; color: #1e293b;">What do you wish to study for? ${reqAsterisk}</label>
-        <select id="whatDoYouWishToStudyTrigger" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
+        <select id="whatDoYouWishToStudyTrigger" data-required="${isReq}" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
           <option value="" disabled selected>Select option</option>
-          ${step1Qualification ? `<option value="${step1Qualification}">${step1Qualification}</option>` : ''}
+          ${step1Qualification ? `<option value="${escapeAttr(step1Qualification)}">${escapeAttr(step1Qualification)}</option>` : ''}
         </select>
       </div>
 
@@ -431,26 +472,26 @@ function renderCascadingCourseSelectionBlock(activeEducationFields, savedSelecte
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
           <div>
             <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Academic year</label>
-            <input type="text" id="preview_displayAcademicYear" class="control" value="${activeAcademicYear}" readonly style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#f1f5f9; color:#64748b; cursor:not-allowed;" />
+            <input type="text" id="preview_displayAcademicYear" class="control" value="${escapeAttr(activeAcademicYear)}" readonly style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#f1f5f9; color:#64748b; cursor:not-allowed;" />
           </div>
 
           <div>
-            <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Study mode</label>
-            <select id="preview_filterStudyMode" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;">
+            <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Study mode ${reqAsterisk}</label>
+            <select id="preview_filterStudyMode" data-required="${isReq}" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;">
               <option value="" disabled selected>Select option</option>
             </select>
           </div>
 
           <div>
-            <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Campus</label>
-            <select id="preview_filterCampus" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" disabled>
+            <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Campus ${reqAsterisk}</label>
+            <select id="preview_filterCampus" data-required="${isReq}" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" disabled>
               <option value="" disabled selected>Select option</option>
             </select>
           </div>
 
           <div>
-            <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Course</label>
-            <select id="preview_filterCourseDropdown" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" disabled>
+            <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Course ${reqAsterisk}</label>
+            <select id="preview_filterCourseDropdown" data-required="${isReq}" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" disabled>
               <option value="" disabled selected>Select option</option>
             </select>
           </div>
@@ -463,15 +504,16 @@ function renderCascadingCourseSelectionBlock(activeEducationFields, savedSelecte
 /**
  * Render individual field controls according to Blueprint Master Logic (Sections 1, 2, 3, 5, 6)
  */
-function renderIndividualFieldHTML(field, sectionKey) {
-  const reqAsterisk = field.requirement === "Required" ? `<span style="color: #e53b4d;">*</span>` : ``;
+function renderIndividualFieldHTML(field, sectionKey, isStudentMode = false) {
+  const isReq = field.requirement === "Required";
+  const reqAsterisk = isReq ? `<span style="color: #e53b4d;">*</span>` : ``;
   const fname = field.fieldName;
 
   if (fname.includes("Disability")) {
     return `
       <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
         <label style="font-size: 13px; font-weight: 700; color: #1e293b;">Do you have any disabilities? ${reqAsterisk}</label>
-        <select id="disabilityTrigger" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
+        <select id="disabilityTrigger" data-field-name="${escapeAttr(fname)}" data-required="${isReq}" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
           <option value="" disabled selected>Select option</option>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
@@ -491,39 +533,40 @@ function renderIndividualFieldHTML(field, sectionKey) {
 
   if (fname.includes("Residential Address") && !fname.includes("Postal")) {
     return `
-      <div style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
+      <div data-address-group="residential" style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
         <div style="grid-column: 1 / -1;">
           <label style="font-size: 13px; font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">Physical Residential Address ${reqAsterisk}</label>
-          <input type="text" placeholder="Street Address, Building, Unit" style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+          <input type="text" data-addr-part="street" data-required="${isReq}" placeholder="Street Address, Building, Unit" style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">City / Town ${reqAsterisk}</label>
-          <input type="text" placeholder="City" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+          <input type="text" data-addr-part="city" data-required="${isReq}" placeholder="City" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Province / State ${reqAsterisk}</label>
-          <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+          <input type="text" data-addr-part="province" data-required="${isReq}" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Postal Code ${reqAsterisk}</label>
-          <input type="text" placeholder="Code" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+          <input type="text" data-addr-part="postalCode" data-required="${isReq}" placeholder="Code" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Country of Residence ${reqAsterisk}</label>
-          <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+          <input type="text" data-addr-part="country" data-required="${isReq}" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
       </div>
     `;
   }
 
   if (fname.includes("Postal Address")) {
-    const triggerId = sectionKey === "guardian" ? "guardianPostalTrigger" : "contactPostalTrigger";
-    const blockId = sectionKey === "guardian" ? "guardianPostalBlock" : "contactPostalBlock";
+    const prefix = sectionKey === "guardian" ? "guardianPostal" : "contactPostal";
+    const triggerId = `${prefix}Trigger`;
+    const blockId = `${prefix}Block`;
 
     return `
-      <div style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
+      <div data-postal-group="${prefix}" style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px;">
         <label style="font-size: 13px; font-weight: 700; color: #1e293b;">Is the Postal address the same as residential address? ${reqAsterisk}</label>
-        <select id="${triggerId}" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
+        <select id="${triggerId}" data-required="${isReq}" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
           <option value="" disabled selected>Select option</option>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
@@ -532,23 +575,23 @@ function renderIndividualFieldHTML(field, sectionKey) {
         <div id="${blockId}" style="display: none; margin-top: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">
           <div style="grid-column: 1 / -1;">
             <label style="font-size: 13px; font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">Postal Address Line ${reqAsterisk}</label>
-            <input type="text" placeholder="P.O Box / Street Address" style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+            <input type="text" data-postal-part="street" placeholder="P.O Box / Street Address" style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
           </div>
           <div>
             <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">City / Town ${reqAsterisk}</label>
-            <input type="text" placeholder="City" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+            <input type="text" data-postal-part="city" placeholder="City" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
           </div>
           <div>
             <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Province / State ${reqAsterisk}</label>
-            <input type="text" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+            <input type="text" data-postal-part="province" placeholder="Province" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
           </div>
           <div>
             <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Postal Code ${reqAsterisk}</label>
-            <input type="text" placeholder="Postal Code" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+            <input type="text" data-postal-part="postalCode" placeholder="Postal Code" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
           </div>
           <div>
             <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Country ${reqAsterisk}</label>
-            <input type="text" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+            <input type="text" data-postal-part="country" placeholder="Country" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
           </div>
         </div>
       </div>
@@ -556,9 +599,10 @@ function renderIndividualFieldHTML(field, sectionKey) {
   }
 
   if (sectionKey === "documents") {
+    if (isStudentMode) return "";
     return `
       <div style="display: flex; flex-direction: column; gap: 6px; background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0;">
-        <label style="font-size: 13px; font-weight: 700; color: #1e293b;">${fname} ${reqAsterisk}</label>
+        <label style="font-size: 13px; font-weight: 700; color: #1e293b;">${escapeAttr(fname)} ${reqAsterisk}</label>
         <span style="font-size: 11px; color: #64748b;">PDF, PNG, JPG, JPEG</span>
         <input type="file" accept=".pdf,.png,.jpg,.jpeg" style="font-size: 12px; border: 1px dashed #93c5fd; border-radius: 6px; padding: 10px; background: #ffffff; cursor: pointer; margin-top: 4px;" />
       </div>
@@ -568,20 +612,40 @@ function renderIndividualFieldHTML(field, sectionKey) {
   if (fname.includes("Confirmation") || fname.includes("Consent") || fname.includes("Agreement")) {
     return `
       <div style="grid-column: 1 / -1; display: flex; align-items: flex-start; gap: 12px; background: #f8fafc; padding: 14px 16px; border-radius: 8px; border: 1px solid #e2e8f0;">
-        <input type="checkbox" style="width:18px; height:18px; margin-top:2px; cursor:pointer;" />
-        <label style="font-size: 13px; color: #1e293b; line-height: 1.4; font-weight: 500;">${fname} ${reqAsterisk}</label>
+        <input type="checkbox" class="final-declaration-checkbox" data-field-id="${escapeAttr(field.id)}" data-field-name="${escapeAttr(fname)}" data-required="${isReq}" style="width:18px; height:18px; margin-top:2px; cursor:pointer;" />
+        <label style="font-size: 13px; color: #1e293b; line-height: 1.4; font-weight: 500;">${escapeAttr(fname)} ${reqAsterisk}</label>
       </div>
     `;
   }
 
-  const isDate = fname.toLowerCase().includes("date");
-  const isEmail = fname.toLowerCase().includes("email");
+  const lowerName = fname.toLowerCase();
+  const isDate = lowerName.includes("date");
+  const isEmail = lowerName.includes("email");
   const inputType = isDate ? "date" : (isEmail ? "email" : "text");
+
+  let semanticTag = "";
+  if (lowerName.includes("id number") || lowerName === "sa id" || lowerName === "identity number") {
+    semanticTag = "saIdNumber";
+  } else if (lowerName.includes("passport")) {
+    semanticTag = "passportNumber";
+  } else if (isEmail && sectionKey !== "guardian") {
+    semanticTag = "applicantEmail";
+  }
 
   return `
     <div style="display: flex; flex-direction: column; gap: 6px;">
-      <label style="font-size: 13px; font-weight: 700; color: #1e293b; display: block;">${fname} ${reqAsterisk}</label>
-      <input type="${inputType}" placeholder="Enter ${fname}" style="width: 100%; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;" />
+      <label style="font-size: 13px; font-weight: 700; color: #1e293b; display: block;">${escapeAttr(fname)} ${reqAsterisk}</label>
+      <input
+        type="${inputType}"
+        class="standard-applicant-input"
+        data-section="${escapeAttr(sectionKey)}"
+        data-field-id="${escapeAttr(field.id)}"
+        data-field-name="${escapeAttr(fname)}"
+        data-semantic="${semanticTag}"
+        data-required="${isReq}"
+        placeholder="Enter ${escapeAttr(fname)}"
+        style="width: 100%; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;"
+      />
     </div>
   `;
 }
@@ -730,15 +794,15 @@ function attachFormEventListeners() {
         <button type="button" class="remove-card-btn" style="position: absolute; top: 14px; right: 14px; background: #fff5f5; border: 1px solid #feb2b2; color: #e53e3e; border-radius: 4px; padding: 4px 10px; font-size: 11px; cursor: pointer; font-weight: 600;">Remove</button>
         <div style="grid-column: 1 / -1;">
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Institution Name</label>
-          <input type="text" placeholder="University / College Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+          <input type="text" data-tertiary-field="institution" placeholder="University / College Name" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Qualification / Programme</label>
-          <input type="text" placeholder="e.g. Diploma in IT" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+          <input type="text" data-tertiary-field="qualification" placeholder="e.g. Diploma in IT" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Current / Final Status</label>
-          <select class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;">
+          <select data-tertiary-field="status" class="control" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;">
             <option value="" disabled selected>Select option</option>
             <option value="Completed">Completed</option>
             <option value="Discontinued">Discontinued</option>
@@ -747,11 +811,11 @@ function attachFormEventListeners() {
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Year Started</label>
-          <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+          <input type="number" data-tertiary-field="yearStarted" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
         <div>
           <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Year Completed</label>
-          <input type="number" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
+          <input type="number" data-tertiary-field="yearCompleted" placeholder="YYYY" style="width:100%; height:38px; border:1px solid #cbd5e1; border-radius:6px; padding:0 12px; background:#fff;" />
         </div>
       `;
       tertiaryContainer.appendChild(card);
