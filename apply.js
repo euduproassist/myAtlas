@@ -3,6 +3,8 @@ import { collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/f
 
 document.addEventListener('DOMContentLoaded', async () => {
     let selectedProgramWish = '';
+    // Maps qualificationType -> array of currently open cycle objects from Firestore
+    const activeCyclesByQualification = new Map();
 
     const programWishSelect = document.getElementById('program-wish-select');
     const studentNumberSelect = document.getElementById('student-number-select');
@@ -19,68 +21,89 @@ document.addEventListener('DOMContentLoaded', async () => {
     const saIdInput = document.getElementById('sa-id');
     const passportInput = document.getElementById('passport');
 
-    // Function to check Firestore and update dropdown states based on active cycles
+    // Helper matching admin-portal.js local date parsing (avoids UTC off-by-one issues)
+    function parseIsoDateOnly(dateStr) {
+        if (!dateStr || typeof dateStr !== 'string') return null;
+        const parts = dateStr.trim().split('-');
+        if (parts.length !== 3) return null;
+        const year = Number(parts[0]);
+        const month = Number(parts[1]) - 1;
+        const day = Number(parts[2]);
+        if (!year || month < 0 || !day) return null;
+        return new Date(year, month, day);
+    }
+
+    function getTodayDateOnly() {
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    }
+
+    // Query Firestore collections matching admin-portal.js (<year>_application_cycle)
     async function checkActiveCycles() {
         if (!programWishSelect) return;
 
         const currentYear = new Date().getFullYear();
-        const yearsToCheck = [currentYear, currentYear + 1];
-        const qualificationTypes = [
-            { value: "Undergraduate Degree", slug: "undergraduate" },
-            { value: "Postgraduate Degree", slug: "postgraduate" },
-            { value: "Research Degree", slug: "research" }
+        const candidateCollections = [
+            `${currentYear - 1}_application_cycle`,
+            `${currentYear}_application_cycle`,
+            `${currentYear + 1}_application_cycle`
         ];
 
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        const today = getTodayDateOnly();
+        activeCyclesByQualification.clear();
 
-        const activeQualifications = new Set();
+        for (const colName of candidateCollections) {
+            try {
+                const querySnapshot = await getDocs(collection(db, colName));
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
 
-        for (const yr of yearsToCheck) {
-            for (const qual of qualificationTypes) {
-                const collectionName = `${yr}_${qual.slug}_admissions`;
-                try {
-                    const querySnapshot = await getDocs(collection(db, collectionName));
-                    querySnapshot.forEach((docSnap) => {
-                        const data = docSnap.data();
-                        if (data.status === "published" && !data.isManuallyClosed) {
-                            if (data.openingDate && data.closingDate) {
-                                const openDate = new Date(data.openingDate);
-                                const closeDate = new Date(data.closingDate);
-                                openDate.setHours(0, 0, 0, 0);
-                                closeDate.setHours(23, 59, 59, 999);
+                    // Match admin-portal.js computeCycleStatus() logic
+                    if (data.status === "published" && data.isManuallyClosed !== true) {
+                        const openDate = parseIsoDateOnly(data.openingDate);
+                        const closeDate = parseIsoDateOnly(data.closingDate);
 
-                                if (today >= openDate && today <= closeDate) {
-                                    activeQualifications.add(qual.value);
-                                }
+                        const isAfterOpen = !openDate || today >= openDate;
+                        const isBeforeClose = !closeDate || today <= closeDate;
+
+                        if (isAfterOpen && isBeforeClose && data.qualificationType) {
+                            const qualKey = data.qualificationType.trim();
+                            if (!activeCyclesByQualification.has(qualKey)) {
+                                activeCyclesByQualification.set(qualKey, []);
                             }
+                            activeCyclesByQualification.get(qualKey).push({
+                                id: docSnap.id,
+                                _collectionName: colName,
+                                ...data
+                            });
                         }
-                    });
-                } catch (err) {
-                    // Collection might not exist yet; safe to ignore
-                }
+                    }
+                });
+            } catch (err) {
+                console.warn(`Could not read ${colName}:`, err);
             }
         }
 
-        // Loop through options and disable/blur if no active cycle exists
+        // Enable or disable dropdown options based on active published cycles
         for (let i = 0; i < programWishSelect.options.length; i++) {
             const opt = programWishSelect.options[i];
-            if (!opt.value) continue; // Skip the default prompt option
+            if (!opt.value) continue;
 
-            if (!activeQualifications.has(opt.value)) {
+            // Strip any previous suffix before re-evaluating
+            const baseLabel = opt.textContent.replace(/\s*\(Closed \/ Unavailable\)$/i, '').trim();
+
+            if (!activeCyclesByQualification.has(opt.value)) {
                 opt.disabled = true;
                 opt.classList.add('disabled-option');
-                if (!opt.textContent.includes('(Closed)')) {
-                    opt.textContent += ' (Closed / Unavailable)';
-                }
+                opt.textContent = `${baseLabel} (Closed / Unavailable)`;
             } else {
                 opt.disabled = false;
                 opt.classList.remove('disabled-option');
+                opt.textContent = baseLabel;
             }
         }
     }
 
-    // Run cycle availability check on load
     await checkActiveCycles();
 
     if (programWishSelect) {
@@ -115,16 +138,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     function handleProgramWishChange(value) {
         selectedProgramWish = value;
 
-        // Erase/reset all downstream selects, inputs, and radios completely
         if (studentNumberSelect) studentNumberSelect.value = "";
         if (returningSelect) returningSelect.value = "";
         if (saIdInput) saIdInput.value = "";
         if (passportInput) passportInput.value = "";
-        
-        const radios = document.querySelectorAll('input[name="popia_consent"]');
-        radios.forEach(radio => radio.checked = false);
 
-        // Hide all downstream cards completely
+        document.querySelectorAll('input[name="popia_consent"]').forEach(radio => radio.checked = false);
+
         step1Card.classList.add('hidden');
         portalCard.classList.add('hidden');
         step2Card.classList.add('hidden');
@@ -132,23 +152,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         step4Card.classList.add('hidden');
 
         if (value) {
+            // Save the matching open cycles for this qualification so the application form step can load them
+            const matchingCycles = activeCyclesByQualification.get(value) || [];
+            sessionStorage.setItem('myAtlas_activeCycles', JSON.stringify(matchingCycles));
+            sessionStorage.setItem('myAtlas_selectedQualification', value);
+
             step1Card.classList.remove('hidden');
             step1Card.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
             });
+        } else {
+            sessionStorage.removeItem('myAtlas_activeCycles');
+            sessionStorage.removeItem('myAtlas_selectedQualification');
         }
     }
 
     function handleStudentNumberChange(value) {
-        // Erase/reset all downstream selects, inputs, and radios completely when student number choice changes
         if (returningSelect) returningSelect.value = "";
         if (saIdInput) saIdInput.value = "";
         if (passportInput) passportInput.value = "";
-        
+
         document.querySelectorAll('input[name="popia_consent"]').forEach(r => r.checked = false);
 
-        // Hide and clear all downstream cards completely
         portalCard.classList.add('hidden');
         step2Card.classList.add('hidden');
         step3Card.classList.add('hidden');
@@ -170,13 +196,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function handleReturningChange(value) {
-        // Erase/reset all downstream inputs and radios completely when returning choice changes
         if (saIdInput) saIdInput.value = "";
         if (passportInput) passportInput.value = "";
-        
+
         document.querySelectorAll('input[name="popia_consent"]').forEach(r => r.checked = false);
 
-        // Hide and clear all downstream cards completely
         step3Card.classList.add('hidden');
         step4Card.classList.add('hidden');
 
@@ -198,7 +222,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function findApplication() {
         const id = saIdInput ? saIdInput.value.trim() : "";
         const passport = passportInput ? passportInput.value.trim() : "";
-        
+
         if (!id && !passport) {
             alert('Please enter your South African ID number or passport number.');
             return;
@@ -213,7 +237,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         if (selectedOption.value === 'accept') {
-            alert('later development still in operation');
+            const matchingCycles = activeCyclesByQualification.get(selectedProgramWish) || [];
+            if (matchingCycles.length === 0) {
+                alert('No open application cycle was found for this qualification.');
+                return;
+            }
+            sessionStorage.setItem('myAtlas_popiaAccepted', 'true');
+            alert(`POPIA accepted. Ready to load application form for: ${matchingCycles[0].cycleName}`);
         } else {
             alert('You must accept the POPIA terms to proceed with your application.');
         }
