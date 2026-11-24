@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (selectedOption && selectedOption.disabled) {
                 alert("This application cycle is currently closed or unavailable.");
                 e.target.value = "";
+                handleProgramWishChange("");
                 return;
             }
             handleProgramWishChange(e.target.value);
@@ -114,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function handleProgramWishChange(value) {
         selectedProgramWish = value;
 
-        // Reset all downstream selects and inputs when program choice changes
+        // Erase/reset all downstream selects, inputs, and radios completely
         if (studentNumberSelect) studentNumberSelect.value = "";
         if (returningSelect) returningSelect.value = "";
         if (saIdInput) saIdInput.value = "";
@@ -123,6 +124,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const radios = document.querySelectorAll('input[name="popia_consent"]');
         radios.forEach(radio => radio.checked = false);
 
+        // Hide all downstream cards completely
         step1Card.classList.add('hidden');
         portalCard.classList.add('hidden');
         step2Card.classList.add('hidden');
@@ -139,12 +141,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function handleStudentNumberChange(value) {
+        // Erase/reset all downstream selects, inputs, and radios completely when student number choice changes
         if (returningSelect) returningSelect.value = "";
         if (saIdInput) saIdInput.value = "";
         if (passportInput) passportInput.value = "";
         
         document.querySelectorAll('input[name="popia_consent"]').forEach(r => r.checked = false);
 
+        // Hide and clear all downstream cards completely
         portalCard.classList.add('hidden');
         step2Card.classList.add('hidden');
         step3Card.classList.add('hidden');
@@ -166,11 +170,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function handleReturningChange(value) {
+        // Erase/reset all downstream inputs and radios completely when returning choice changes
         if (saIdInput) saIdInput.value = "";
         if (passportInput) passportInput.value = "";
         
         document.querySelectorAll('input[name="popia_consent"]').forEach(r => r.checked = false);
 
+        // Hide and clear all downstream cards completely
         step3Card.classList.add('hidden');
         step4Card.classList.add('hidden');
 
