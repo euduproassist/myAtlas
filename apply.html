@@ -53,6 +53,10 @@
             flex-direction: column;
             flex: 1;
         }
+        .page.full-width-form-mode {
+            display: flex !important;
+            flex-direction: column !important;
+        }
         .page-content {
             width: 100%;
             padding-left: var(--page-padding);
@@ -189,6 +193,7 @@
             width: 100%;
             padding-top: clamp(20px, 3vw, 40px);
             padding-bottom: clamp(30px, 5vw, 70px);
+            flex: 1;
         }
         .card {
             width: 100%;
@@ -229,7 +234,6 @@
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
         }
-        /* Style for closed/unavailable dropdown options */
         option.disabled-option {
             color: #b0b8c1 !important;
             background-color: #f8f9fa !important;
@@ -343,6 +347,15 @@
             font-weight: bold;
             text-decoration: underline;
         }
+        .warning-alert {
+            background: #fff8e6;
+            border: 1px solid #ffe08a;
+            padding: 14px 18px;
+            border-radius: 7px;
+            color: #7c5800;
+            font-size: 0.92rem;
+            margin-top: 16px;
+        }
         .submit-btn {
             width: 100%;
             min-height: 46px;
@@ -360,6 +373,85 @@
         }
         .submit-btn:active {
             transform: scale(0.99);
+        }
+        .submit-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+        .draft-status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 16px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            color: #475569;
+        }
+        .pin-setup-card {
+            margin-top: 24px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 22px;
+        }
+        .pin-setup-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+        .pin-setup-card p {
+            font-size: 13px;
+            color: #475569;
+            margin-bottom: 14px;
+        }
+        .pin-input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .confirmation-wrapper {
+            min-height: 55vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 0;
+        }
+        .confirmation-box {
+            max-width: 560px;
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: clamp(24px, 4vw, 42px);
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+        }
+        .confirmation-icon {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background: #e7f1ff;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .confirmation-box h2 {
+            color: #0f172a;
+            font-size: 1.45rem;
+            margin-bottom: 10px;
+        }
+        .confirmation-box p {
+            color: #475569;
+            font-size: 0.98rem;
+            line-height: 1.65;
         }
         .hidden {
             display: none !important;
@@ -497,7 +589,7 @@
             }
         }
         @media (min-width: 1150px) {
-            .page {
+            .page:not(.full-width-form-mode) {
                 display: grid;
                 grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
                 grid-template-rows: auto auto;
@@ -505,12 +597,12 @@
                 max-width: 100%;
                 overflow-x: hidden;
             }
-            .site-header {
+            .page:not(.full-width-form-mode) .site-header {
                 grid-column: 1 / -1;
                 grid-row: 1;
                 width: 100%;
             }
-            .welcome-section {
+            .page:not(.full-width-form-mode) .welcome-section {
                 grid-column: 1;
                 grid-row: 2;
                 width: 100%;
@@ -519,13 +611,13 @@
                 border-right: 1px solid transparent;
                 min-height: calc(100vh - 74px);
             }
-            .welcome-inner {
+            .page:not(.full-width-form-mode) .welcome-inner {
                 width: 100%;
                 height: 100%;
                 padding-top: 25px;
                 padding-bottom: 25px;
             }
-            .application-section {
+            .page:not(.full-width-form-mode) .application-section {
                 grid-column: 2;
                 grid-row: 2;
                 width: 100%;
@@ -551,7 +643,7 @@
     </style>
 </head>
 <body>
-<div class="page">
+<div class="page" id="mainPageContainer">
     <header class="site-header">
         <div class="site-header-inner">
             <div class="logo-area">
@@ -572,7 +664,7 @@
             </button>
         </div>
     </header>
-    <section class="welcome-section">
+    <section class="welcome-section" id="welcomeSection">
         <div class="page-content welcome-inner">
             <h2>
                 Online Academic Application Process
@@ -636,7 +728,7 @@
             </div>
         </div>
     </section>
-    <main class="application-section">
+    <main class="application-section" id="applicationSection">
         <div class="page-content">
             <div class="card" id="program-select-card">
                 <div class="question-row">
@@ -775,6 +867,7 @@
                 >
                     Find My Application ➔
                 </button>
+                <div id="returning-search-feedback" class="hidden"></div>
             </div>
             <div
                 class="card hidden fade-in"
@@ -898,6 +991,70 @@
                 >
                     NEXT ➔
                 </button>
+            </div>
+
+            <!-- Live Application Form Container (shown after POPIA acceptance or Draft resume) -->
+            <div class="hidden fade-in" id="live-application-container">
+                <div class="draft-status-bar">
+                    <span><strong>Application Status:</strong> In Progress</span>
+                    <span id="draftSaveIndicator">Auto-save ready (enter ID/Passport or Email to start saving draft)</span>
+                </div>
+
+                <div id="liveFormMount"></div>
+
+                <div class="pin-setup-card" id="pinSetupSection">
+                    <h3>Create Your 6-Digit Student Portal PIN <span class="required-star">*</span></h3>
+                    <p>Create a strictly 6-digit numeric PIN (numbers only, e.g. 482910). You will use this PIN along with your Application Reference Number to check your application status.</p>
+                    <div class="pin-input-grid">
+                        <div>
+                            <label for="applicantPinInput" style="display:block; font-size:13px; font-weight:600; margin-bottom:5px;">6-Digit Numeric PIN <span class="required-star">*</span></label>
+                            <input
+                                type="password"
+                                id="applicantPinInput"
+                                class="form-control"
+                                inputmode="numeric"
+                                maxlength="6"
+                                pattern="[0-9]{6}"
+                                placeholder="Enter 6 digits"
+                                autocomplete="new-password"
+                            >
+                        </div>
+                        <div>
+                            <label for="applicantPinConfirmInput" style="display:block; font-size:13px; font-weight:600; margin-bottom:5px;">Confirm 6-Digit PIN <span class="required-star">*</span></label>
+                            <input
+                                type="password"
+                                id="applicantPinConfirmInput"
+                                class="form-control"
+                                inputmode="numeric"
+                                maxlength="6"
+                                pattern="[0-9]{6}"
+                                placeholder="Re-enter 6 digits"
+                                autocomplete="new-password"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 22px;">
+                    <button class="submit-btn" id="finalSubmitApplicationBtn" type="button">
+                        Submit Application ➔
+                    </button>
+                </div>
+            </div>
+
+            <!-- Centered Submission Confirmation Screen -->
+            <div class="confirmation-wrapper hidden fade-in" id="submission-confirmation-screen">
+                <div class="confirmation-box">
+                    <div class="confirmation-icon">
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <h2>Application Submitted Successfully</h2>
+                    <p>
+                        Thank you for submitting your application to Atlas College. Please check your email inbox (and spam/junk folder) to view your <strong>Application Reference Number</strong> and your <strong>6-digit PIN</strong>.
+                    </p>
+                </div>
             </div>
         </div>
     </main>
