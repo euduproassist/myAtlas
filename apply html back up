@@ -701,7 +701,7 @@
                     student number and PIN.
                     <br><br>
                     Click
-                    <a href="#ienabler-portal">
+                    <a href="#" onclick="return false;">
                         here
                     </a>
                     to access your myAtlas portal.
