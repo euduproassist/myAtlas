@@ -38,8 +38,8 @@ function escapeAttr(val) {
 }
 
 /**
- * Main function to generate and inject the Application Preview inside Step 4
- * or render the live student application form when `options` is provided.
+ * Generates and injects the Application Form inside Step 4 preview
+ * or renders the live student application form when `options.studentMode` is true.
  */
 export async function renderStep4ApplicationPreview(containerElementId = "builderStep4Preview", options = null) {
   let targetContainer = document.getElementById(containerElementId);
@@ -83,12 +83,17 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
       const fieldData = docSnap.data();
       const fieldId = docSnap.id;
 
-      // Documents section is completely hidden/excluded on the student side
+      // Documents are not collected via file upload in the student form
       if (isStudentMode && fieldData.section === "documents") return;
 
-      const userState = savedFieldsState[fieldId];
-      const isSelected = userState ? userState.isSelected : fieldData.isSelected;
-      const requirement = userState ? userState.requirement : fieldData.requirement;
+      const cycleOrBuilderState = savedFieldsState[fieldId];
+
+      // Student mode strictly follows the published cycle's snapshot for the selected degree
+      const isSelected = isStudentMode
+        ? Boolean(cycleOrBuilderState && cycleOrBuilderState.isSelected)
+        : (cycleOrBuilderState ? cycleOrBuilderState.isSelected : fieldData.isSelected);
+
+      const requirement = cycleOrBuilderState?.requirement || fieldData.requirement;
 
       if (isSelected) {
         activeFields.push({
@@ -104,13 +109,13 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
     let masterCoursesList = [];
     try {
       const masterSnapshot = await getDocs(collection(db, "master_courses"));
-      masterSnapshot.forEach(docSnap => {
+      masterSnapshot.forEach((docSnap) => {
         const d = docSnap.data();
         if (d.course) {
           masterCoursesList.push({
-            course: d.course || '',
-            studyMode: d.studyMode || 'Full-time',
-            campus: d.campus || 'Main Campus'
+            course: d.course || "",
+            studyMode: d.studyMode || "Full-time",
+            campus: d.campus || "Main Campus"
           });
         }
       });
@@ -123,7 +128,6 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
     let formHtml = `
       <div class="application-form-preview-wrapper" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);">
         <style>
-          /* Responsive, white-only styling scoped to the application form preview. */
           .application-form-preview-wrapper,
           .application-form-preview-wrapper * { box-sizing: border-box; }
           .application-form-preview-wrapper {
@@ -174,15 +178,15 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
     `;
 
     const sectionsGrouped = {
-      personal: activeFields.filter(f => f.section === "personal" || !f.section),
-      contact: activeFields.filter(f => f.section === "contact"),
-      guardian: activeFields.filter(f => f.section === "guardian"),
-      education_courses: activeFields.filter(f => f.section === "education_courses"),
-      additional_info: activeFields.filter(f => f.section === "additional_info")
+      personal: activeFields.filter((f) => f.section === "personal" || !f.section),
+      contact: activeFields.filter((f) => f.section === "contact"),
+      guardian: activeFields.filter((f) => f.section === "guardian"),
+      education_courses: activeFields.filter((f) => f.section === "education_courses"),
+      additional_info: activeFields.filter((f) => f.section === "additional_info")
     };
 
     if (!isStudentMode) {
-      sectionsGrouped.documents = activeFields.filter(f => f.section === "documents");
+      sectionsGrouped.documents = activeFields.filter((f) => f.section === "documents");
     }
 
     Object.keys(sectionsGrouped).forEach((sectionKey) => {
@@ -204,14 +208,12 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
 
       if (sectionKey === "education_courses") {
         formHtml += renderEducationCoursesSectionHTML(fields, savedSelectedCourses, masterCoursesList, savedBasicInfo, isStudentMode);
+      } else if (fields.length === 0) {
+        formHtml += `<p style="grid-column: 1 / -1; color: #94a3b8; font-size: 13px; font-style: italic;">No fields enabled for this section.</p>`;
       } else {
-        if (fields.length === 0) {
-          formHtml += `<p style="grid-column: 1 / -1; color: #94a3b8; font-size: 13px; font-style: italic;">No fields enabled for this section.</p>`;
-        } else {
-          fields.forEach(field => {
-            formHtml += renderIndividualFieldHTML(field, sectionKey, isStudentMode);
-          });
-        }
+        fields.forEach((field) => {
+          formHtml += renderIndividualFieldHTML(field, sectionKey, isStudentMode);
+        });
       }
 
       formHtml += `
@@ -227,23 +229,18 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
 
     targetContainer.innerHTML = formHtml;
     attachFormEventListeners();
-
   } catch (err) {
     console.error("Error generating application preview:", err);
     targetContainer.innerHTML = `<div style="padding: 20px; color: red; text-align: center;">Failed to generate form preview. Please check network connection.</div>`;
   }
 }
 
-/**
- * Render Section 4 Educational Background & Course Selection
- */
 function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo, isStudentMode = false) {
   let html = "";
-  const fieldNamesSet = new Set(activeEducationFields.map(f => f.fieldName));
+  const fieldNamesSet = new Set(activeEducationFields.map((f) => f.fieldName));
 
-  // 1. Matric Status/Current Standing
   if (fieldNamesSet.has("Matric Status/Current Standing")) {
-    const fieldObj = activeEducationFields.find(f => f.fieldName === "Matric Status/Current Standing");
+    const fieldObj = activeEducationFields.find((f) => f.fieldName === "Matric Status/Current Standing");
     const isReq = fieldObj?.requirement === "Required";
     const reqAsterisk = isReq ? `<span style="color: #e53b4d;">*</span>` : ``;
 
@@ -256,7 +253,6 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
           <option value="Completed Matric">Completed Matric</option>
         </select>
 
-        <!-- Sub-section for Currently in Grade 12 -->
         <div id="grade12SubSection" style="display: none; margin-top: 14px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; flex-direction: column; gap: 16px;">
           <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">High school education History</h4>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
@@ -304,7 +300,6 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
           </div>
         </div>
 
-        <!-- Sub-section for Completed Matric -->
         <div id="completedMatricSubSection" style="display: none; margin-top: 14px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; flex-direction: column; gap: 16px;">
           <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">High school education History</h4>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
@@ -359,9 +354,8 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
     `;
   }
 
-  // 2. Have you previously attended a tertiary institution?
   if (fieldNamesSet.has("Have you previously attended a tertiary institution?")) {
-    const fieldObj = activeEducationFields.find(f => f.fieldName === "Have you previously attended a tertiary institution?");
+    const fieldObj = activeEducationFields.find((f) => f.fieldName === "Have you previously attended a tertiary institution?");
     const isReq = fieldObj?.requirement === "Required";
     const reqAsterisk = isReq ? `<span style="color: #e53b4d;">*</span>` : ``;
 
@@ -410,7 +404,6 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
     `;
   }
 
-  // 3. Updated field name "What do you wish to study for" with Progressive Cascading Filters
   if (fieldNamesSet.has("What do you wish to study for?") || (isStudentMode && savedSelectedCourses.length > 0)) {
     html += renderCascadingCourseSelectionBlock(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo, isStudentMode);
   }
@@ -418,9 +411,6 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
   return html;
 }
 
-/**
- * Render Progressive Cascading Course Selection Block with Primary "What do you wish to study for" Dropdown
- */
 function renderCascadingCourseSelectionBlock(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo, isStudentMode = false) {
   if (!savedSelectedCourses || savedSelectedCourses.length === 0) {
     if (isStudentMode) return "";
@@ -430,7 +420,7 @@ function renderCascadingCourseSelectionBlock(activeEducationFields, savedSelecte
       </div>`;
   }
 
-  const validCourses = savedSelectedCourses.map(item => {
+  const validCourses = savedSelectedCourses.map((item) => {
     if (typeof item === "object" && item !== null) {
       return {
         course: item.course || "",
@@ -439,21 +429,17 @@ function renderCascadingCourseSelectionBlock(activeEducationFields, savedSelecte
       };
     }
     const parts = String(item).split("_");
-    const cName = parts[0] || String(item);
-    const sMode = parts[1] || "Full-time";
-    const camp = parts[2] || "Main Campus";
-
     return {
-      course: cName,
-      studyMode: sMode,
-      campus: camp
+      course: parts[0] || String(item),
+      studyMode: parts[1] || "Full-time",
+      campus: parts[2] || "Main Campus"
     };
-  }).filter(c => c.course);
+  }).filter((c) => c.course);
 
   const activeAcademicYear = savedBasicInfo.academicYear || new Date().getFullYear().toString();
   const step1Qualification = savedBasicInfo.qualification || "";
 
-  const fieldObj = activeEducationFields.find(f => f.fieldName === "What do you wish to study for?");
+  const fieldObj = activeEducationFields.find((f) => f.fieldName === "What do you wish to study for?");
   const isReq = fieldObj ? fieldObj.requirement === "Required" : true;
   const reqAsterisk = isReq ? `<span style="color: #e53b4d;">*</span>` : ``;
 
@@ -463,7 +449,7 @@ function renderCascadingCourseSelectionBlock(activeEducationFields, savedSelecte
         <label style="font-size: 13px; font-weight: 700; color: #1e293b;">What do you wish to study for? ${reqAsterisk}</label>
         <select id="whatDoYouWishToStudyTrigger" data-required="${isReq}" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
           <option value="" disabled selected>Select option</option>
-          ${step1Qualification ? `<option value="${escapeAttr(step1Qualification)}">${escapeAttr(step1Qualification)}</option>` : ''}
+          ${step1Qualification ? `<option value="${escapeAttr(step1Qualification)}">${escapeAttr(step1Qualification)}</option>` : ""}
         </select>
       </div>
 
@@ -501,9 +487,6 @@ function renderCascadingCourseSelectionBlock(activeEducationFields, savedSelecte
   `;
 }
 
-/**
- * Render individual field controls according to Blueprint Master Logic (Sections 1, 2, 3, 5, 6)
- */
 function renderIndividualFieldHTML(field, sectionKey, isStudentMode = false) {
   const isReq = field.requirement === "Required";
   const reqAsterisk = isReq ? `<span style="color: #e53b4d;">*</span>` : ``;
@@ -650,11 +633,7 @@ function renderIndividualFieldHTML(field, sectionKey, isStudentMode = false) {
   `;
 }
 
-/**
- * Attach dynamic event listeners for conditional logic and dynamic tables
- */
 function attachFormEventListeners() {
-  // 1. Disability Conditional Toggle & Multi-Add Logic
   const disabilityTrigger = document.getElementById("disabilityTrigger");
   const disabilityDetailsBlock = document.getElementById("disabilityDetailsBlock");
   const disabilityContainer = document.getElementById("disabilityContainer");
@@ -676,7 +655,6 @@ function attachFormEventListeners() {
         <button type="button" class="remove-disability-btn" style="background: #fff5f5; border: 1px solid #feb2b2; color: #e53e3e; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 12px;">✕</button>
       `;
       disabilityContainer.appendChild(row);
-
       row.querySelector(".remove-disability-btn").addEventListener("click", () => row.remove());
     });
   }
@@ -693,7 +671,6 @@ function attachFormEventListeners() {
     }
   });
 
-  // 2. Postal Address Conditional Toggles
   const setupPostalToggle = (triggerId, blockId) => {
     const trigger = document.getElementById(triggerId);
     const block = document.getElementById(blockId);
@@ -706,7 +683,6 @@ function attachFormEventListeners() {
   setupPostalToggle("contactPostalTrigger", "contactPostalBlock");
   setupPostalToggle("guardianPostalTrigger", "guardianPostalBlock");
 
-  // 3. Matric Standing Conditional Toggle (Currently in Grade 12 vs Completed Matric)
   const matricTrigger = document.getElementById("matricStandingTrigger");
   const grade12SubSection = document.getElementById("grade12SubSection");
   const completedMatricSubSection = document.getElementById("completedMatricSubSection");
@@ -727,7 +703,6 @@ function attachFormEventListeners() {
     });
   }
 
-  // 4. Dynamic Grade 11 Subject Rows
   const addGrade11SubjectBtn = document.getElementById("addGrade11SubjectBtn");
   const grade11SubjectsBody = document.getElementById("grade11SubjectsBody");
   if (addGrade11SubjectBtn && grade11SubjectsBody) {
@@ -744,7 +719,6 @@ function attachFormEventListeners() {
     });
   }
 
-  // 5. Dynamic Grade 12 Subject Rows
   const addGrade12SubjectBtn = document.getElementById("addGrade12SubjectBtn");
   const grade12SubjectsBody = document.getElementById("grade12SubjectsBody");
   if (addGrade12SubjectBtn && grade12SubjectsBody) {
@@ -768,12 +742,11 @@ function attachFormEventListeners() {
       if (tbody && tbody.querySelectorAll("tr").length > 1) {
         tr.remove();
       } else if (tr) {
-        tr.querySelectorAll("input").forEach(inp => inp.value = "");
+        tr.querySelectorAll("input").forEach((inp) => (inp.value = ""));
       }
     }
   });
 
-  // 6. Tertiary Institution Conditional Toggle & Dynamic Cards
   const tertiaryTrigger = document.getElementById("tertiaryTrigger");
   const tertiaryBlock = document.getElementById("tertiaryBlock");
   const tertiaryContainer = document.getElementById("tertiaryContainer");
@@ -819,22 +792,16 @@ function attachFormEventListeners() {
         </div>
       `;
       tertiaryContainer.appendChild(card);
-
       card.querySelector(".remove-card-btn").addEventListener("click", () => card.remove());
     });
   }
 
-  // 7. "What do you wish to study for" Trigger & Progressive Cascading Course Selection Filters
   const whatDoYouWishToStudyTrigger = document.getElementById("whatDoYouWishToStudyTrigger");
   const cascadingSubFieldsBlock = document.getElementById("cascadingSubFieldsBlock");
 
   if (whatDoYouWishToStudyTrigger && cascadingSubFieldsBlock) {
     whatDoYouWishToStudyTrigger.addEventListener("change", (e) => {
-      if (e.target.value) {
-        cascadingSubFieldsBlock.style.display = "flex";
-      } else {
-        cascadingSubFieldsBlock.style.display = "none";
-      }
+      cascadingSubFieldsBlock.style.display = e.target.value ? "flex" : "none";
     });
   }
 
@@ -847,10 +814,10 @@ function attachFormEventListeners() {
     const crSelect = document.getElementById("preview_filterCourseDropdown");
 
     if (smSelect && cpSelect && crSelect) {
-      const uniqueStudyModes = Array.from(new Set(validCourses.map(v => v.studyMode))).sort();
+      const uniqueStudyModes = Array.from(new Set(validCourses.map((v) => v.studyMode))).sort();
 
       smSelect.innerHTML = '<option value="" disabled selected>Select option</option>';
-      uniqueStudyModes.forEach(sm => {
+      uniqueStudyModes.forEach((sm) => {
         const opt = document.createElement("option");
         opt.value = sm;
         opt.textContent = sm;
@@ -866,10 +833,10 @@ function attachFormEventListeners() {
         crSelect.disabled = true;
 
         const matchingCampuses = Array.from(new Set(
-          validCourses.filter(v => v.studyMode === selectedSM).map(v => v.campus)
+          validCourses.filter((v) => v.studyMode === selectedSM).map((v) => v.campus)
         )).sort();
 
-        matchingCampuses.forEach(camp => {
+        matchingCampuses.forEach((camp) => {
           const opt = document.createElement("option");
           opt.value = camp;
           opt.textContent = camp;
@@ -885,10 +852,10 @@ function attachFormEventListeners() {
         crSelect.disabled = false;
 
         const matchingCourses = Array.from(new Set(
-          validCourses.filter(v => v.studyMode === selectedSM && v.campus === selectedCampus).map(v => v.course)
+          validCourses.filter((v) => v.studyMode === selectedSM && v.campus === selectedCampus).map((v) => v.course)
         )).sort();
 
-        matchingCourses.forEach(crs => {
+        matchingCourses.forEach((crs) => {
           const opt = document.createElement("option");
           opt.value = crs;
           opt.textContent = crs;
