@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#b9dcff">
+<title>TileyPop - Stage 1</title>
+
+<style>
+:root {
+    --blue: #0752e8;
+    --deep: #092b9c;
+    --navy: #08277e;
+    --light: #e7f1ff;
+    --border: #94baff;
+    --gold: #ffca25;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    color: var(--navy);
+    background: #d7eaff;
+    min-height: 100vh;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* BACKGROUND */
+
+.app {
+    width: 100%;
+    height: 100dvh;
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 50% 50%, #ffffff 0%, #edf5ff 45%, transparent 85%),
+        linear-gradient(135deg, #b5d9ff, #eaf4ff 50%, #c4e1ff);
+}
+
+.decoration {
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+    color: #70a5f0;
+    opacity: .22;
+    font-size: 75px;
+}
+
+.decoration.one { top: 5%; left: 2%; }
+.decoration.two { top: 38%; right: 16%; }
+.decoration.three { bottom: 4%; left: 30%; }
+.decoration.four { bottom: 10%; right: 17%; }
+
+/* ==========================
+   PHOTO SELECTION SCREEN
+========================== */
+
+#selectionScreen {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+    z-index: 2;
+}
+
+.selection-inner {
+    width: min(100%, 850px);
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.top-currency {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.currency-group {
+    display: flex;
+    gap: 10px;
+}
+
+.currency {
+    display: flex;
+    align-items: center;
+    border-radius: 40px;
+    background: linear-gradient(110deg, #2677ff, #063bb9);
+    border: 2px solid #a5ceff;
+    color: white;
+    padding: 4px 6px 4px 0;
+    box-shadow: 0 3px 7px #1747a655;
+    font-weight: 900;
+}
+
+.currency-icon {
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(#fff07b, #ffa600);
+    color: white;
+    font-size: 23px;
+    margin-right: 5px;
+}
+
+.currency-number {
+    font-size: 19px;
+}
+
+.add {
+    width: 31px;
+    height: 31px;
+    margin-left: 7px;
+    border-radius: 50%;
+    background: linear-gradient(#72f33d, #16a700);
+    border: 2px solid #c5ff9d;
+    color: white;
+    font-size: 25px;
+    font-weight: bold;
+    line-height: 20px;
+}
+
+.settings {
+    border: 2px solid white;
+    background: linear-gradient(white, #d9e8ff);
+    border-radius: 50%;
+    width: 47px;
+    height: 47px;
+    font-size: 27px;
+    color: #1947ae;
+}
+
+.brand {
+    margin: 20px 0 15px;
+}
+
+.logo {
+    font-size: clamp(43px, 10vw, 85px);
+    font-weight: 1000;
+    font-style: italic;
+    letter-spacing: -4px;
+    color: white;
+    -webkit-text-stroke: 2px #0641c9;
+    text-shadow: 3px 5px #062d98, 0 9px 12px #1749a655;
+}
+
+.logo span {
+    color: #ffb900;
+}
+
+.tagline {
+    font-size: clamp(17px, 3vw, 27px);
+    font-weight: 900;
+    margin-top: 5px;
+}
+
+.selection-title {
+    margin: 18px 0 5px;
+    font-size: clamp(27px, 5vw, 48px);
+    font-weight: 1000;
+}
+
+.subtitle {
+    color: #536cbd;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.stage-preview {
+    margin: 32px auto 0;
+    padding: 30px 15px 20px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 40% 60%;
+    align-items: center;
+    background: linear-gradient(120deg, white, #e6efff);
+    border: 2px solid var(--border);
+    border-radius: 28px;
+    box-shadow: 0 5px 10px #3767b855;
+}
+
+.stage-label {
+    position: absolute;
+    top: -19px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(#1ba7ff, #0752e9);
+    color: white;
+    padding: 8px 35px;
+    border-radius: 14px;
+    font-weight: 1000;
+    font-size: 21px;
+}
+
+.preview-image {
+    width: 100%;
+    max-width: 190px;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border: 6px solid white;
+    border-radius: 12px;
+    box-shadow: 0 4px 9px #294b8c66;
+    justify-self: center;
+}
+
+.stage-description {
+    border-left: 3px solid #91b3fa;
+    padding: 12px;
+}
+
+.stage-description h2 {
+    font-size: clamp(24px, 4vw, 40px);
+    white-space: nowrap;
+}
+
+.stage-description p {
+    margin-top: 8px;
+    color: #536cbd;
+    font-size: clamp(16px, 2.8vw, 24px);
+    font-weight: bold;
+}
+
+.choose-heading {
+    margin: 30px 0 15px;
+    font-size: clamp(22px, 4vw, 36px);
+}
+
+.photo-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.photo-option {
+    min-height: 175px;
+    padding: 20px 8px;
+    border: 2px solid var(--border);
+    border-radius: 25px;
+    background: linear-gradient(145deg, white, #e5efff);
+    box-shadow: 0 4px 8px #466aab55;
+    color: var(--navy);
+}
+
+.photo-option .symbol {
+    font-size: 50px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.photo-option h3 {
+    font-size: clamp(16px, 3vw, 23px);
+}
+
+.photo-option p {
+    color: #5168b9;
+    margin-top: 5px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.selection-footer {
+    padding: 22px;
+    font-weight: bold;
+    color: #5168b9;
+}
+
+/* ==========================
+   GAMEPLAY SCREEN
+========================== */
+
+#gameScreen {
+    display: none;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    padding: 9px;
+    grid-template-rows: 55px minmax(0, 1fr) 32px;
+    gap: 7px;
+}
+
+/* GAME HEADER */
+
+.game-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-width: 0;
+}
+
+.game-logo {
+    font-size: clamp(20px, 3vw, 34px);
+    font-weight: 1000;
+    font-style: italic;
+    color: white;
+    -webkit-text-stroke: 1px #0644ce;
+    text-shadow: 2px 3px #052d91;
+    white-space: nowrap;
+}
+
+.game-logo span {
+    color: #ffb900;
+}
+
+.game-mode {
+    text-align: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.game-mode strong {
+    display: block;
+    font-size: clamp(12px, 1.8vw, 18px);
+    color: #143ba2;
+}
+
+.game-mode small {
+    color: #6075bd;
+    font-weight: bold;
+}
+
+.stage-indicator {
+    padding: 5px 16px;
+    border-radius: 12px;
+    background: linear-gradient(#19aaff, #0751e9);
+    border: 2px solid #a6d9ff;
+    color: white;
+    font-weight: 1000;
+    font-size: clamp(14px, 2vw, 21px);
+    white-space: nowrap;
+}
+
+/* MAIN PLAY AREA */
+
+.play-area {
+    display: grid;
+    grid-template-columns: minmax(120px, 22%) minmax(0, 1fr) minmax(75px, 10%);
+    gap: clamp(7px, 1.2vw, 16px);
+    min-height: 0;
+}
+
+/* LEFT PIECE TRAY */
+
+.piece-panel {
+    min-height: 0;
+    background: linear-gradient(140deg, #567cc7, #3558a9);
+    border: 2px solid #a4c7ff;
+    border-radius: 17px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset 0 0 12px #ffffff33, 0 3px 7px #274b9955;
+}
+
+.panel-title {
+    color: white;
+    text-align: center;
+    font-size: clamp(10px, 1.5vw, 15px);
+    font-weight: 1000;
+    padding: 3px 0 8px;
+    flex-shrink: 0;
+}
+
+.piece-count {
+    color: #e1ebff;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.piece-tray {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: max-content;
+    align-content: start;
+    gap: 8px;
+    padding: 2px;
+}
+
+.piece-tray::-webkit-scrollbar {
+    width: 5px;
+}
+
+.piece-tray::-webkit-scrollbar-thumb {
+    background: #163b91;
+    border-radius: 10px;
+}
+
+.piece {
+    width: 100%;
+    aspect-ratio: 1;
+    border: 2px solid white;
+    border-radius: 7px;
+    background-repeat: no-repeat;
+    background-size: 300% 300%;
+    box-shadow: 0 3px 5px #09266b88;
+    cursor: grab;
+    touch-action: none;
+    position: relative;
+    transition: border-color .15s;
+}
+
+.piece:active {
+    cursor: grabbing;
+}
+
+.piece.empty {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* CENTRAL BOARD */
+
+.board-container {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.board-frame {
+    width: min(100%, calc(100dvh - 125px));
+    height: 100%;
+    max-height: 100%;
+    aspect-ratio: 1;
+    padding: clamp(5px, .8vw, 10px);
+    border-radius: clamp(15px, 2vw, 28px);
+    background: linear-gradient(140deg, #ffffff, #dbeaff);
+    border: 3px solid #3263c7;
+    box-shadow:
+        0 6px 0 #0739aa,
+        0 10px 13px #173d8a77,
+        inset 0 0 12px white;
+}
+
+.puzzle-board {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 3px;
+    background: #264e9b;
+    padding: 3px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.slot {
+    min-width: 0;
+    min-height: 0;
+    position: relative;
+    border: 2px solid #779bd9;
+    border-radius: 8px;
+    background:
+        linear-gradient(145deg, #e7f1ff, #d6e5fb);
+    box-shadow: inset 0 2px 7px #6e91c744;
+    overflow: hidden;
+    touch-action: none;
+}
+
+.slot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid #ffffff99;
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+.slot.correct {
+    border: 2px solid #52c879;
+    box-shadow: inset 0 0 0 2px #ffffff55;
+}
+
+.slot .piece {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 5px;
+    box-shadow: none;
+}
+
+.slot.drag-origin {
+    border-color: #ffbf27;
+}
+
+/* RIGHT TOOLBAR */
+
+.tools-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    gap: 7px;
+    background: linear-gradient(#1749ba, #082d91);
+    border-radius: 15px;
+    padding: 6px 3px;
+    box-shadow: 0 3px 7px #173d8a55;
+}
+
+.tool-button {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: white;
+    font-weight: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
+.tool-icon {
+    width: clamp(40px, 6vw, 68px);
+    height: clamp(40px, 6vw, 68px);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: clamp(22px, 4vw, 40px);
+    background: linear-gradient(145deg, #39d7ff, #0756e8);
+    border: 2px solid #6fe2ff;
+    box-shadow: inset 0 2px 5px #ffffff88, 0 3px 5px #001e6877;
+}
+
+.tool-button.hint .tool-icon {
+    background: linear-gradient(145deg, #ffdc47, #ff9900);
+    border-color: #ffe78a;
+}
+
+.tool-button small {
+    font-size: clamp(8px, 1.3vw, 12px);
+}
+
+/* FOOTER */
+
+.game-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #244aa8;
+    font-size: clamp(10px, 1.5vw, 14px);
+    font-weight: 900;
+    text-align: center;
+}
+
+/* ==========================
+   DRAGGING
+========================== */
+
+.drag-ghost {
+    position: fixed;
+    z-index: 1000;
+    width: 85px;
+    height: 85px;
+    border: 3px solid white;
+    border-radius: 9px;
+    background-repeat: no-repeat;
+    box-shadow: 0 7px 18px #001e7188;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: .97;
+}
+
+.slot.drop-target {
+    border: 3px solid #ffbd22;
+    background-color: #fff4bd;
+}
+
+/* ==========================
+   COMPLETION / DIALOG
+========================== */
+
+.overlay {
+    position: fixed;
+    z-index: 2000;
+    inset: 0;
+    background: #071d58a9;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    backdrop-filter: blur(5px);
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.dialog {
+    width: min(100%, 380px);
+    padding: 25px;
+    text-align: center;
+    background: linear-gradient(145deg, white, #e2efff);
+    border: 3px solid #a4c5ff;
+    border-radius: 25px;
+    box-shadow: 0 12px 35px #001c6b77;
+}
+
+.dialog h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.dialog p {
+    color: #5269b6;
+    font-weight: bold;
+    line-height: 1.5;
+    margin-bottom: 18px;
+}
+
+.dialog button {
+    border: 0;
+    border-radius: 30px;
+    padding: 13px 25px;
+    background: linear-gradient(#23aaff, #0751e8);
+    color: white;
+    font-weight: 1000;
+    font-size: 17px;
+    width: 100%;
+    margin-top: 6px;
+}
+
+.dialog button.secondary {
+    background: linear-gradient(#a8c6ff, #638ee8);
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 600px) {
+    .selection-inner {
+        padding: 13px;
+    }
+
+    .play-area {
+        grid-template-columns: minmax(95px, 23%) minmax(0, 1fr) 62px;
+        gap: 6px;
+    }
+
+    #gameScreen {
+        padding: 6px;
+        grid-template-rows: 43px minmax(0, 1fr) 23px;
+        gap: 5px;
+    }
+
+    .board-frame {
+        width: min(100%, calc(100dvh - 95px));
+        padding: 5px;
+    }
+
+    .piece-panel {
+        padding: 5px;
+    }
+
+    .piece-tray {
+        gap: 5px;
+    }
+
+    .tools-panel {
+        padding: 4px 2px;
+    }
+
+    .tool-icon {
+        width: 39px;
+        height: 39px;
+        font-size: 22px;
+        border-radius: 10px;
+    }
+}
+
+@media (max-width: 380px) {
+    .game-logo {
+        font-size: 18px;
+    }
+
+    .play-area {
+        grid-template-columns: 85px minmax(0, 1fr) 54px;
+    }
+
+    .tool-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 19px;
+    }
+
+    .panel-title {
+        font-size: 9px;
+    }
+
+    .stage-indicator {
+        padding: 4px 8px;
+    }
+}
+
+@media (orientation: portrait) and (max-width: 600px) {
+    #gameScreen {
+        width: 100dvh;
+        height: 100vw;
+        position: absolute;
+        left: 100%;
+        top: 0;
+        transform-origin: top left;
+        transform: rotate(90deg);
+    }
+}
+
+/* Reduce accidental selection on mobile */
+
+.piece, .slot, .tool-button {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="decoration one">✿</div>
+    <div class="decoration two">✿</div>
+    <div class="decoration three">✿</div>
+    <div class="decoration four">✿</div>
+
+    <!-- =================================
+         PHOTO SELECTION SCREEN
+    ================================== -->
+
+    <section id="selectionScreen">
+
+        <div class="selection-inner">
+
+            <div class="top-currency">
+
+                <div class="currency-group">
+
+                    <div class="currency">
+                        <div class="currency-icon">★</div>
+                        <span class="currency-number">1250</span>
+                        <button class="add">+</button>
+                    </div>
+
+                    <div class="currency">
+                        <div class="currency-icon">💎</div>
+                        <span class="currency-number">18</span>
+                        <button class="add">+</button>
+                    </div>
+
+                </div>
+
+                <button class="settings">⚙</button>
+
+            </div>
+
+            <div class="brand">
+
+                <div class="logo">
+                    Tiley<span>POP</span>
+                </div>
+
+                <p class="tagline">
+                    Pick • Remember • Rebuild
+                </p>
+
+            </div>
+
+            <h1 class="selection-title">Relaxed Mode</h1>
+            <p class="subtitle">No timer</p>
+
+            <div class="stage-preview">
+
+                <div class="stage-label">Stage 1</div>
+
+                <img
+                    id="selectionPreview"
+                    class="preview-image"
+                    src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=400&h=400&fit=crop"
+                    alt="Puzzle preview"
+                >
+
+                <div class="stage-description">
+                    <h2>3 × 3 · 9 Tiles</h2>
+                    <p>
+                        Take your time.<br>
+                        Solve at your own pace.
+                    </p>
+                </div>
+
+            </div>
+
+            <h2 class="choose-heading">
+                Choose your photograph
+            </h2>
+
+            <p class="subtitle">
+                Pick a picture you'd love to rebuild.
+            </p>
+
+            <div class="photo-options">
+
+                <button class="photo-option"
+                        onclick="document.getElementById('galleryInput').click()">
+
+                    <span class="symbol">▧</span>
+
+                    <h3>Choose from Gallery</h3>
+
+                    <p>
+                        Select a photo already saved on your device.
+                    </p>
+
+                </button>
+
+                <button class="photo-option"
+                        onclick="document.getElementById('uploadInput').click()">
+
+                    <span class="symbol">☁⬆</span>
+
+                    <h3>Upload a Photo</h3>
+
+                    <p>
+                        Import a picture from your device's storage.
+                    </p>
+
+                </button>
+
+            </div>
+
+            <input type="file"
+                   id="galleryInput"
+                   accept="image/*"
+                   hidden>
+
+            <input type="file"
+                   id="uploadInput"
+                   accept="image/*"
+                   hidden>
+
+            <div class="selection-footer">
+                ✓ Your stage progress stays saved
+                <br>
+                You can choose a different photograph at every stage.
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================
+         ACTUAL GAMEPLAY SCREEN
+    ================================== -->
+
+    <section id="gameScreen">
+
+        <!-- HEADER -->
+
+        <header class="game-header">
+
+            <div class="game-logo">
+                Tiley<span>POP</span>
+            </div>
+
+            <div class="game-mode">
+                <strong>RELAXED MODE</strong>
+                <small>No Timer</small>
+            </div>
+
+            <div class="stage-indicator">
+                Stage 1 · 3 × 3
+            </div>
+
+        </header>
+
+
+        <!-- MAIN GAME AREA -->
+
+        <main class="play-area">
+
+            <!-- LEFT: FRAGMENT TRAY -->
+
+            <section class="piece-panel">
+
+                <div class="panel-title">
+                    YOUR TILES
+                    <div class="piece-count" id="pieceCount">
+                        9 pieces remaining
+                    </div>
+                </div>
+
+                <div class="piece-tray" id="pieceTray">
+
+                    <!-- Fragments generated by JavaScript -->
+
+                </div>
+
+            </section>
+
+
+            <!-- CENTRE: EMPTY PUZZLE BOARD -->
+
+            <section class="board-container">
+
+                <div class="board-frame">
+
+                    <div class="puzzle-board" id="puzzleBoard">
+
+                        <div class="slot" data-slot="0"></div>
+                        <div class="slot" data-slot="1"></div>
+                        <div class="slot" data-slot="2"></div>
+
+                        <div class="slot" data-slot="3"></div>
+                        <div class="slot" data-slot="4"></div>
+                        <div class="slot" data-slot="5"></div>
+
+                        <div class="slot" data-slot="6"></div>
+                        <div class="slot" data-slot="7"></div>
+                        <div class="slot" data-slot="8"></div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- RIGHT: GAME TOOLS -->
+
+            <aside class="tools-panel">
+
+                <button class="tool-button"
+                        onclick="goHome()">
+
+                    <span class="tool-icon">⌂</span>
+                    <small>HOME</small>
+
+                </button>
+
+                <button class="tool-button"
+                        onclick="showGameDialog('Settings','Game settings will be available here.')">
+
+                    <span class="tool-icon">⚙</span>
+                    <small>SETTINGS</small>
+
+                </button>
+
+                <button class="tool-button hint"
+                        onclick="useHint()">
+
+                    <span class="tool-icon">🧲</span>
+                    <small>HINT <b id="hintCount">3</b></small>
+
+                </button>
+
+                <button class="tool-button"
+                        onclick="previewPuzzle()">
+
+                    <span class="tool-icon">◉</span>
+                    <small>PREVIEW</small>
+
+                </button>
+
+            </aside>
+
+        </main>
+
+
+        <!-- FOOTER -->
+
+        <footer class="game-footer">
+            Drag each square into its matching space
+        </footer>
+
+    </section>
+
+
+    <!-- =================================
+         DIALOG
+    ================================== -->
+
+    <div class="overlay" id="overlay">
+
+        <div class="dialog">
+
+            <h2 id="dialogTitle">TileyPop</h2>
+
+            <p id="dialogText"></p>
+
+            <button id="dialogPrimary"
+                    onclick="closeDialog()">
+                Okay
+            </button>
+
+            <button id="dialogSecondary"
+                    class="secondary"
+                    style="display:none"
+                    onclick="closeDialog()">
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+// ==========================================
+// TileyPop - STAGE 1 GAME ENGINE
+// Local MVP - No Backend
+// ==========================================
+
+const selectionScreen =
+    document.getElementById("selectionScreen");
+
+const gameScreen =
+    document.getElementById("gameScreen");
+
+const galleryInput =
+    document.getElementById("galleryInput");
+
+const uploadInput =
+    document.getElementById("uploadInput");
+
+const selectionPreview =
+    document.getElementById("selectionPreview");
+
+const pieceTray =
+    document.getElementById("pieceTray");
+
+const puzzleBoard =
+    document.getElementById("puzzleBoard");
+
+const pieceCount =
+    document.getElementById("pieceCount");
+
+const overlay =
+    document.getElementById("overlay");
+
+
+// GAME STATE
+
+const game = {
+
+    rows: 3,
+    columns: 3,
+
+    totalPieces: 9,
+
+    image: null,
+
+    imageCanvas: null,
+
+    fragments: [],
+
+    shuffledPieces: [],
+
+    // Each position stores the fragment currently placed there.
+    // null means the square is empty.
+
+    slots: Array(9).fill(null),
+
+    hints: 3,
+
+    completed: false
+
+};
+
+
+// ==========================================
+// PHOTO UPLOAD / GALLERY
+// ==========================================
+
+galleryInput.addEventListener("change", handlePhoto);
+uploadInput.addEventListener("change", handlePhoto);
+
+
+function handlePhoto(event) {
+
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+
+        showGameDialog(
+            "Invalid photograph",
+            "Please choose a valid image file."
+        );
+
+        event.target.value = "";
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+        const image = new Image();
+
+        image.onload = function() {
+
+            game.image = image;
+
+            selectionPreview.src = e.target.result;
+
+            // Automatically enter the game after upload.
+
+            startStageOne();
+
+        };
+
+        image.onerror = function() {
+
+            showGameDialog(
+                "Image error",
+                "We could not open that photograph. Please try another."
+            );
+
+        };
+
+        image.src = e.target.result;
+
+    };
+
+    reader.readAsDataURL(file);
+
+    event.target.value = "";
+
+}
+
+
+// ==========================================
+// CREATE THE IMAGE FRAGMENTS
+// ==========================================
+
+function prepareImage() {
+
+    const image = game.image;
+
+    const size = Math.min(
+        image.naturalWidth,
+        image.naturalHeight
+    );
+
+    // Centre-crop the original photograph to a square.
+
+    const sourceX =
+        (image.naturalWidth - size) / 2;
+
+    const sourceY =
+        (image.naturalHeight - size) / 2;
+
+    // Normalize the photograph to a square canvas.
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = 900;
+    canvas.height = 900;
+
+    const context = canvas.getContext("2d");
+
+    context.drawImage(
+        image,
+        sourceX,
+        sourceY,
+        size,
+        size,
+        0,
+        0,
+        900,
+        900
+    );
+
+    game.imageCanvas = canvas;
+
+    // Divide the square image into nine equal fragments.
+
+    game.fragments = [];
+
+    const tileSize = 300;
+
+    for (let row = 0; row < 3; row++) {
+
+        for (let col = 0; col < 3; col++) {
+
+            const tileCanvas =
+                document.createElement("canvas");
+
+            tileCanvas.width = tileSize;
+            tileCanvas.height = tileSize;
+
+            const tileContext =
+                tileCanvas.getContext("2d");
+
+            tileContext.drawImage(
+                canvas,
+                col * tileSize,
+                row * tileSize,
+                tileSize,
+                tileSize,
+                0,
+                0,
+                tileSize,
+                tileSize
+            );
+
+            game.fragments.push({
+
+                id: row * 3 + col,
+
+                image: tileCanvas.toDataURL("image/jpeg", 0.9),
+
+                row: row,
+                col: col
+
+            });
+
+        }
+
+    }
+
+}
+
+
+// ==========================================
+// SHUFFLE FRAGMENTS
+// ==========================================
+
+function shuffle(array) {
+
+    const result = [...array];
+
+    for (let i = result.length - 1; i > 0; i--) {
+
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [result[i], result[j]] =
+        [result[j], result[i]];
+
+    }
+
+    return result;
+
+}
+
+
+function createShuffledPieces() {
+
+    game.shuffledPieces = shuffle(game.fragments);
+
+    // Avoid starting with an already completed board.
+
+    if (
+        game.shuffledPieces.every(
+            (piece, index) => piece.id === index
+        )
+    ) {
+
+        game.shuffledPieces.reverse();
+
+    }
+
+}
+
+
+// ==========================================
+// START STAGE 1
+// ==========================================
+
+function startStageOne() {
+
+    prepareImage();
+
+    createShuffledPieces();
+
+    game.slots = Array(9).fill(null);
+
+    game.completed = false;
+
+    // Show gameplay automatically.
+
+    selectionScreen.style.display = "none";
+
+    gameScreen.style.display = "grid";
+
+    renderBoard();
+
+    renderTray();
+
+}
+
+
+// ==========================================
+// RENDER EMPTY BOARD
+// ==========================================
+
+function renderBoard() {
+
+    puzzleBoard.innerHTML = "";
+
+    game.slots.forEach((pieceId, index) => {
+
+        const slot = document.createElement("div");
+
+        slot.className = "slot";
+
+        slot.dataset.slot = index;
+
+        if (pieceId !== null) {
+
+            const piece = game.fragments[pieceId];
+
+            const tile = createTileElement(piece);
+
+            slot.appendChild(tile);
+
+            if (pieceId === index) {
+
+                slot.classList.add("correct");
+
+            }
+
+        }
+
+        puzzleBoard.appendChild(slot);
+
+    });
+
+}
+
+
+// ==========================================
+// CREATE A TILE ELEMENT
+// ==========================================
+
+function createTileElement(piece) {
+
+    const tile = document.createElement("div");
+
+    tile.className = "piece";
+
+    tile.dataset.piece = piece.id;
+
+    tile.style.backgroundImage =
+        `url("${piece.image}")`;
+
+    tile.style.backgroundSize = "100% 100%";
+
+    tile.style.backgroundPosition = "center";
+
+    return tile;
+
+}
+
+
+// ==========================================
+// RENDER LEFT FRAGMENT TRAY
+// ==========================================
+
+function renderTray() {
+
+    pieceTray.innerHTML = "";
+
+    // Find which pieces are already placed.
+
+    const placed = game.slots.filter(
+        pieceId => pieceId !== null
+    );
+
+    // Display only fragments that are not on the board.
+
+    game.shuffledPieces.forEach(piece => {
+
+        if (placed.includes(piece.id)) return;
+
+        const tile = createTileElement(piece);
+
+        pieceTray.appendChild(tile);
+
+    });
+
+    const remaining = 9 - placed.length;
+
+    pieceCount.textContent =
+        remaining + (remaining === 1
+            ? " piece remaining"
+            : " pieces remaining");
+
+}
+
+
+// ==========================================
+// DRAG AND DROP ENGINE
+// Mouse + Touch + Pen
+// ==========================================
+
+let drag = null;
+
+let ghost = null;
+
+
+function getTileUnderPointer(x, y) {
+
+    return document.elementFromPoint(x, y);
+
+}
+
+
+function startDragging(event) {
+
+    const tile = event.target.closest(".piece");
+
+    if (!tile || !gameScreen.contains(tile)) return;
+
+    if (game.completed) return;
+
+    event.preventDefault();
+
+    const pieceId = Number(tile.dataset.piece);
+
+    const sourceSlot = tile.closest(".slot");
+
+    const fromSlot = sourceSlot
+        ? Number(sourceSlot.dataset.slot)
+        : null;
+
+    drag = {
+
+        pieceId: pieceId,
+
+        fromSlot: fromSlot,
+
+        originalSlot: fromSlot,
+
+        pointerId: event.pointerId
+
+    };
+
+    // Remove it from its original board location
+    // while it is being moved.
+
+    if (fromSlot !== null) {
+
+        game.slots[fromSlot] = null;
+
+        sourceSlot.classList.add("drag-origin");
+
+    }
+
+    // Create the floating tile that follows the finger.
+
+    ghost = document.createElement("div");
+
+    ghost.className = "drag-ghost";
+
+    ghost.style.backgroundImage =
+        `url("${game.fragments[pieceId].image}")`;
+
+    document.body.appendChild(ghost);
+
+    moveGhost(event.clientX, event.clientY);
+
+    tile.style.opacity = "0.25";
+
+}
+
+
+function moveGhost(x, y) {
+
+    if (!ghost) return;
+
+    ghost.style.left = x + "px";
+
+    ghost.style.top = y + "px";
+
+}
+
+
+function moveDragging(event) {
+
+    if (!drag || event.pointerId !== drag.pointerId) return;
+
+    event.preventDefault();
+
+    moveGhost(event.clientX, event.clientY);
+
+    // Highlight the square currently under the finger.
+
+    document.querySelectorAll(".slot")
+        .forEach(slot => slot.classList.remove("drop-target"));
+
+    const target = getTileUnderPointer(
+        event.clientX,
+        event.clientY
+    );
+
+    const slot = target?.closest(".slot");
+
+    if (slot && puzzleBoard.contains(slot)) {
+
+        slot.classList.add("drop-target");
+
+    }
+
+}
+
+
+// ==========================================
+// DROP A TILE
+// ==========================================
+
+function finishDragging(event) {
+
+    if (!drag || event.pointerId !== drag.pointerId) return;
+
+    event.preventDefault();
+
+    const target = getTileUnderPointer(
+        event.clientX,
+        event.clientY
+    );
+
+    const targetSlot = target?.closest(".slot");
+
+    const pieceId = drag.pieceId;
+
+    const originalSlot = drag.originalSlot;
+
+    let placedSuccessfully = false;
+
+    if (
+        targetSlot &&
+        puzzleBoard.contains(targetSlot)
+    ) {
+
+        const targetIndex =
+            Number(targetSlot.dataset.slot);
+
+        const occupyingPiece =
+            game.slots[targetIndex];
+
+        // If the destination is occupied, return its
+        // existing fragment to the left-hand tray.
+
+        if (occupyingPiece !== null) {
+
+            game.slots[targetIndex] = null;
+
+        }
+
+        // Place the dragged fragment into its new position.
+
+        game.slots[targetIndex] = pieceId;
+
+        placedSuccessfully = true;
+
+    }
+
+    // If dropped outside the board, restore its previous
+    // location if it came from the board.
+
+    if (!placedSuccessfully && originalSlot !== null) {
+
+        game.slots[originalSlot] = pieceId;
+
+    }
+
+    // Remove the floating tile.
+
+    if (ghost) {
+
+        ghost.remove();
+
+        ghost = null;
+
+    }
+
+    drag = null;
+
+    document.querySelectorAll(".slot")
+        .forEach(slot => {
+
+            slot.classList.remove("drop-target");
+            slot.classList.remove("drag-origin");
+
+        });
+
+    renderBoard();
+
+    renderTray();
+
+    checkCompletion();
+
+}
+
+
+// LISTEN FOR POINTER EVENTS
+
+gameScreen.addEventListener(
+    "pointerdown",
+    startDragging
+);
+
+document.addEventListener(
+    "pointermove",
+    moveDragging,
+    { passive: false }
+);
+
+document.addEventListener(
+    "pointerup",
+    finishDragging
+);
+
+document.addEventListener(
+    "pointercancel",
+    finishDragging
+);
+
+
+// ==========================================
+// CHECK PUZZLE COMPLETION
+// ==========================================
+
+function checkCompletion() {
+
+    const completed =
+        game.slots.every(
+            (pieceId, index) => pieceId === index
+        );
+
+    if (!completed) return;
+
+    game.completed = true;
+
+    setTimeout(() => {
+
+        showCompletion();
+
+    }, 400);
+
+}
+
+
+function showCompletion() {
+
+    document.getElementById("dialogTitle").textContent =
+        "🎉 Puzzle Completed!";
+
+    document.getElementById("dialogText").textContent =
+        "Amazing! You successfully rebuilt your photograph. Stage 1 is complete.";
+
+    const primary =
+        document.getElementById("dialogPrimary");
+
+    primary.textContent = "Play Again";
+
+    primary.onclick = function() {
+
+        closeDialog();
+
+        createShuffledPieces();
+
+        game.slots = Array(9).fill(null);
+
+        game.completed = false;
+
+        renderBoard();
+
+        renderTray();
+
+    };
+
+    const secondary =
+        document.getElementById("dialogSecondary");
+
+    secondary.style.display = "block";
+
+    secondary.textContent = "Home";
+
+    secondary.onclick = function() {
+
+        closeDialog();
+
+        goHome();
+
+    };
+
+    overlay.classList.add("show");
+
+}
+
+
+// ==========================================
+// HINT
+// ==========================================
+
+function useHint() {
+
+    if (game.hints <= 0) {
+
+        showGameDialog(
+            "No hints remaining",
+            "You've used all three Stage 1 hints."
+        );
+
+        return;
+
+    }
+
+    // Find a fragment that is not currently in its
+    // correct position.
+
+    const incorrect = game.fragments.find(piece => {
+
+        return game.slots[piece.id] !== piece.id;
+
+    });
+
+    if (!incorrect) return;
+
+    // Return a fragment already occupying its correct
+    // position unchanged.
+
+    // Find the slot containing the needed fragment.
+
+    const currentPosition =
+        game.slots.indexOf(incorrect.id);
+
+    if (currentPosition !== -1) {
+
+        game.slots[currentPosition] = null;
+
+    }
+
+    // If the correct destination is occupied, remove it.
+    // Its fragment will return to the tray.
+
+    game.slots[incorrect.id] = incorrect.id;
+
+    game.hints--;
+
+    document.getElementById("hintCount").textContent =
+        game.hints;
+
+    renderBoard();
+
+    renderTray();
+
+    checkCompletion();
+
+}
+
+
+// ==========================================
+// PREVIEW
+// ==========================================
+
+function previewPuzzle() {
+
+    if (!game.image) return;
+
+    const imageURL =
+        game.image.src;
+
+    showGameDialog(
+        "Original Photograph",
+        "This is the photograph you're rebuilding. Close this message to continue your puzzle."
+    );
+
+}
+
+
+// ==========================================
+// HOME
+// ==========================================
+
+function goHome() {
+
+    gameScreen.style.display = "none";
+
+    selectionScreen.style.display = "block";
+
+    document.getElementById("dialogSecondary")
+        .style.display = "none";
+
+}
+
+
+// ==========================================
+// GENERAL DIALOG
+// ==========================================
+
+function showGameDialog(title, message) {
+
+    document.getElementById("dialogTitle").textContent =
+        title;
+
+    document.getElementById("dialogText").textContent =
+        message;
+
+    const primary =
+        document.getElementById("dialogPrimary");
+
+    primary.textContent = "Okay";
+
+    primary.onclick = closeDialog;
+
+    document.getElementById("dialogSecondary")
+        .style.display = "none";
+
+    overlay.classList.add("show");
+
+}
+
+
+function closeDialog() {
+
+    overlay.classList.remove("show");
+
+}
+
+
+// ==========================================
+// END GAME ENGINE
+// ==========================================
+
+</script>
+
+</body>
+  </html>
