@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#c9e5ff">
+<title>TileyPop - Stage 1</title>
+
+<style>
+:root {
+    --blue: #0754e9;
+    --deep: #092b91;
+    --navy: #071f78;
+    --light: #dcecff;
+    --border: #91b9ff;
+    --white: #fff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    background: #d8ebff;
+    color: var(--navy);
+    overscroll-behavior: none;
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#game {
+    width: 100%;
+    height: 100dvh;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 48% 45%, #fff 0%, #eff7ff 45%, transparent 80%),
+        linear-gradient(135deg, #a9d5ff, #e8f4ff 55%, #b9ddff);
+}
+
+/* BACKGROUND DECORATIONS */
+
+.decoration {
+    position: absolute;
+    z-index: 0;
+    color: #73a9f1;
+    opacity: .22;
+    pointer-events: none;
+    font-size: 75px;
+}
+
+.deco-one {
+    top: 20%;
+    left: 10px;
+    transform: rotate(25deg);
+}
+
+.deco-two {
+    right: 125px;
+    top: 16%;
+    transform: rotate(-20deg);
+}
+
+.deco-three {
+    bottom: 15px;
+    left: 20%;
+    transform: rotate(15deg);
+}
+
+/* TOP BAR */
+
+.topbar {
+    height: 66px;
+    min-height: 54px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 5px 16px;
+    position: relative;
+    z-index: 5;
+}
+
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    font-weight: 1000;
+    font-size: clamp(21px, 3.2vw, 37px);
+    font-style: italic;
+    letter-spacing: -1.5px;
+    color: white;
+    -webkit-text-stroke: 1px #0846d1;
+    text-shadow: 2px 3px 0 #092c9a, 0 4px 5px #3561a988;
+    white-space: nowrap;
+}
+
+.logo span {
+    color: #ffbb13;
+}
+
+.stage-pill {
+    padding: 7px 24px;
+    min-width: 120px;
+    border-radius: 18px;
+    border: 2px solid #8ac9ff;
+    background: linear-gradient(#23a8ff, #0750e8);
+    color: white;
+    font-weight: 1000;
+    font-size: clamp(15px, 2vw, 23px);
+    text-align: center;
+    box-shadow: 0 3px 6px #2658ad55;
+}
+
+.currencies {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.currency {
+    display: flex;
+    align-items: center;
+    height: 38px;
+    padding: 3px 5px;
+    gap: 6px;
+    border-radius: 30px;
+    background: linear-gradient(100deg, #2b79ff, #0640bd);
+    border: 1px solid #a3d3ff;
+    box-shadow: 0 2px 5px #2658ad55;
+    color: white;
+    font-size: 17px;
+    font-weight: 1000;
+}
+
+.currency-icon {
+    font-size: 25px;
+}
+
+.currency button {
+    width: 29px;
+    height: 29px;
+    border-radius: 50%;
+    border: 2px solid #aaff88;
+    background: linear-gradient(#62ee36, #159c00);
+    color: white;
+    font-size: 23px;
+    line-height: 20px;
+    font-weight: 1000;
+}
+
+.mode-label {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #4262b5;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* MAIN GAME LAYOUT */
+
+.game-layout {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns:
+        minmax(145px, 21%)
+        minmax(0, 1fr)
+        94px;
+    gap: clamp(8px, 1.5vw, 20px);
+    padding: 5px 12px 12px;
+}
+
+/* LEFT TILE TRAY */
+
+.tray {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 19px;
+    border: 2px solid #a4c3ff;
+    background: linear-gradient(145deg, #557cc8, #3656a6);
+    box-shadow: 0 4px 10px #234d9855;
+    padding: 9px;
+}
+
+.tray-heading {
+    color: white;
+    font-size: clamp(12px, 1.4vw, 16px);
+    font-weight: 1000;
+    text-align: center;
+    padding: 3px 0 9px;
+    flex-shrink: 0;
+}
+
+.tray-heading small {
+    display: block;
+    color: #d8e8ff;
+    font-size: 10px;
+    margin-top: 3px;
+    font-weight: 700;
+}
+
+.tray-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #173b8e transparent;
+    padding: 2px;
+}
+
+.tile-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+    align-content: start;
+}
+
+.tile {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    min-width: 0;
+    border-radius: 9px;
+    border: 2px solid #d7e8ff;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    box-shadow: 0 3px 5px #142e6b77;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+    transition: box-shadow .12s;
+}
+
+.tile:active {
+    cursor: grabbing;
+}
+
+.tile.dragging {
+    opacity: .28;
+}
+
+.tile.placed {
+    border-color: white;
+    border-radius: 7px;
+    box-shadow: none;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+}
+
+.tile-ghost {
+    position: fixed;
+    z-index: 1000;
+    width: 75px;
+    height: 75px;
+    border: 3px solid white;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px #001b5c88;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* BOARD */
+
+.board-area {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+}
+
+.board-frame {
+    position: relative;
+    width: min(100%, calc(100dvh - 115px));
+    max-width: 690px;
+    aspect-ratio: 1;
+    padding: clamp(6px, 1vw, 11px);
+    border-radius: clamp(20px, 3vw, 34px);
+    border: 5px solid #0b4ac5;
+    background: linear-gradient(145deg, #ffffff, #d9eaff);
+    box-shadow:
+        0 7px 0 #092f99,
+        0 10px 18px #163b8d66,
+        inset 0 0 0 3px white;
+}
+
+.board {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 3px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #244e9e;
+    border: 2px solid #244e9e;
+}
+
+.cell {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, #edf5ff, #d6e6ff);
+    border: 2px solid #8eafe8;
+    border-radius: 9px;
+    transition: background .12s, border-color .12s;
+}
+
+.cell.empty::after {
+    content: attr(data-number);
+    position: absolute;
+    color: #9bb5df;
+    font-weight: 900;
+    font-size: clamp(12px, 2vw, 23px);
+    pointer-events: none;
+    opacity: .55;
+}
+
+.cell.over {
+    background: #b5d6ff;
+    border: 3px solid #0755ec;
+}
+
+.cell.correct {
+    border-color: #fff;
+}
+
+.cell .tile {
+    z-index: 1;
+}
+
+.board-complete {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: #092d91b8;
+    border-radius: 17px;
+    padding: 15px;
+}
+
+.board-complete.show {
+    display: flex;
+}
+
+.complete-card {
+    width: min(90%, 340px);
+    padding: 22px;
+    text-align: center;
+    border-radius: 22px;
+    border: 2px solid white;
+    background: linear-gradient(145deg, #fff, #dceaff);
+    box-shadow: 0 8px 20px #001d6d77;
+}
+
+.complete-card h2 {
+    font-size: clamp(24px, 4vw, 36px);
+    color: #0647cf;
+}
+
+.complete-card p {
+    margin: 10px 0 16px;
+    color: #5268b4;
+    font-weight: 800;
+}
+
+.primary-button {
+    width: 100%;
+    padding: 12px;
+    color: white;
+    border: 0;
+    border-radius: 30px;
+    font-weight: 1000;
+    font-size: 17px;
+    background: linear-gradient(#25a9ff, #0750e9);
+    box-shadow: 0 3px 6px #234d9955;
+}
+
+/* RIGHT TOOLBAR */
+
+.tools {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    gap: 7px;
+    padding: 7px 5px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #1553d7, #082b8f);
+    box-shadow: 0 4px 10px #143b8b55;
+}
+
+.tool {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    border: 0;
+    background: transparent;
+    color: white;
+    font-size: clamp(10px, 1.3vw, 14px);
+    font-weight: 1000;
+    text-shadow: 0 2px 3px #001e77;
+}
+
+.tool-icon {
+    width: clamp(48px, 6.5vw, 69px);
+    height: clamp(48px, 6.5vw, 69px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 17px;
+    border: 2px solid #8ddaff;
+    background: linear-gradient(145deg, #40d9ff, #0865e7 75%);
+    box-shadow:
+        inset 0 2px 5px #ffffffaa,
+        0 4px 5px #001d6c77;
+    font-size: clamp(25px, 3.8vw, 39px);
+    color: white;
+}
+
+.tool.hint .tool-icon {
+    background: linear-gradient(145deg, #ffe45a, #ff9e00);
+    border-color: #fff0a2;
+}
+
+.hint-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+    background: #ef3e47;
+    border: 2px solid white;
+    color: white;
+    font-size: 12px;
+    text-shadow: none;
+}
+
+.hint-wrap {
+    position: relative;
+}
+
+/* BOTTOM INSTRUCTION */
+
+.instruction {
+    height: 29px;
+    min-height: 25px;
+    flex-shrink: 0;
+    text-align: center;
+    font-size: clamp(11px, 1.5vw, 15px);
+    font-weight: 900;
+    color: #3157a7;
+    padding: 3px 5px 5px;
+    position: relative;
+    z-index: 2;
+}
+
+/* POPUP */
+
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #061b54b9;
+    backdrop-filter: blur(5px);
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.dialog {
+    width: min(100%, 360px);
+    padding: 25px;
+    text-align: center;
+    border-radius: 24px;
+    background: linear-gradient(145deg, white, #e3efff);
+    border: 2px solid #a8c8ff;
+    box-shadow: 0 10px 30px #00194d88;
+}
+
+.dialog h2 {
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.dialog p {
+    color: #5267ae;
+    line-height: 1.5;
+    margin-bottom: 18px;
+    font-weight: 700;
+}
+
+.dialog button {
+    border: 0;
+    border-radius: 25px;
+    width: 100%;
+    padding: 12px;
+    color: white;
+    font-weight: 1000;
+    background: linear-gradient(#25a9ff, #0750e9);
+}
+
+/* INITIAL PHOTO PICKER */
+
+#photoStart {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(145deg, #b9ddff, #f4f9ff, #b8d9ff);
+}
+
+#photoStart.show {
+    display: flex;
+}
+
+.start-card {
+    width: min(100%, 430px);
+    text-align: center;
+    padding: 30px 24px;
+    border: 2px solid #9ebfff;
+    border-radius: 27px;
+    background: white;
+    box-shadow: 0 8px 20px #28569a44;
+}
+
+.start-card h1 {
+    font-size: 34px;
+    color: #0744c5;
+    margin-bottom: 8px;
+}
+
+.start-card p {
+    color: #5267ae;
+    line-height: 1.5;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.start-card button {
+    width: 100%;
+    border: 0;
+    border-radius: 28px;
+    padding: 14px;
+    color: white;
+    font-size: 17px;
+    font-weight: 1000;
+    background: linear-gradient(#25a9ff, #0750e9);
+}
+
+/* PORTRAIT NOTICE */
+
+#rotateNotice {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    background: linear-gradient(145deg, #c5e2ff, #f3f8ff);
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+}
+
+.rotate-card {
+    max-width: 300px;
+    color: #123a9e;
+}
+
+.rotate-card div {
+    font-size: 55px;
+    margin-bottom: 15px;
+}
+
+.rotate-card h2 {
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.rotate-card p {
+    color: #5267ae;
+    line-height: 1.5;
+    font-weight: 700;
+}
+
+/* SMALL LANDSCAPE SCREENS */
+
+@media (max-height: 520px) {
+    .topbar {
+        height: 47px;
+        min-height: 43px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+
+    .currency {
+        height: 31px;
+        font-size: 14px;
+    }
+
+    .currency-icon {
+        font-size: 20px;
+    }
+
+    .currency button {
+        height: 24px;
+        width: 24px;
+        font-size: 19px;
+    }
+
+    .game-layout {
+        grid-template-columns: minmax(125px, 19%) minmax(0, 1fr) 78px;
+        padding-top: 2px;
+        padding-bottom: 5px;
+    }
+
+    .tray {
+        padding: 5px;
+    }
+
+    .tray-heading {
+        padding-bottom: 4px;
+        font-size: 11px;
+    }
+
+    .tile-list {
+        gap: 5px;
+    }
+
+    .board-frame {
+        width: min(100%, calc(100dvh - 85px));
+        border-width: 4px;
+    }
+
+    .tools {
+        padding: 4px;
+    }
+
+    .tool-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 24px;
+    }
+
+    .instruction {
+        height: 21px;
+        min-height: 21px;
+        padding: 1px;
+    }
+}
+
+@media (max-width: 650px) and (orientation: landscape) {
+    .game-layout {
+        grid-template-columns: minmax(105px, 19%) minmax(0, 1fr) 67px;
+        gap: 6px;
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
+    .topbar {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .stage-pill {
+        min-width: 85px;
+        padding: 5px 9px;
+    }
+
+    .currencies {
+        gap: 4px;
+    }
+
+    .currency {
+        gap: 3px;
+        padding: 2px 4px;
+        font-size: 13px;
+    }
+
+    .currency-icon {
+        font-size: 18px;
+    }
+
+    .currency button {
+        width: 22px;
+        height: 22px;
+        font-size: 17px;
+    }
+
+    .tray {
+        padding: 5px;
+    }
+
+    .tray-heading {
+        font-size: 10px;
+    }
+
+    .tile-list {
+        gap: 5px;
+    }
+
+    .tools {
+        border-radius: 13px;
+    }
+
+    .tool-icon {
+        width: 39px;
+        height: 39px;
+        font-size: 22px;
+        border-radius: 12px;
+    }
+
+    .tool {
+        font-size: 9px;
+    }
+}
+
+@media (orientation: portrait) {
+    #rotateNotice {
+        display: flex;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+    <div class="decoration deco-one">✿</div>
+    <div class="decoration deco-two">✿</div>
+    <div class="decoration deco-three">✿</div>
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+
+        <div class="top-left">
+            <div class="logo">Tiley<span>Pop</span></div>
+            <div class="stage-pill">Stage 1</div>
+        </div>
+
+        <div class="currencies">
+
+            <div class="currency">
+                <span class="currency-icon">🪙</span>
+                <span id="coinAmount">1250</span>
+                <button onclick="message('Coins','Your coin shop will be available in a future version.')">+</button>
+            </div>
+
+            <div class="currency">
+                <span class="currency-icon">💎</span>
+                <span id="diamondAmount">18</span>
+                <button onclick="message('Diamonds','Your diamond shop will be available in a future version.')">+</button>
+            </div>
+
+        </div>
+
+        <div class="mode-label">RELAXED MODE · NO TIMER</div>
+
+    </header>
+
+    <!-- GAME AREA -->
+    <main class="game-layout">
+
+        <!-- LEFT SIDE: FRAGMENT TRAY -->
+        <section class="tray">
+
+            <div class="tray-heading">
+                YOUR PUZZLE PIECES
+                <small id="pieceCount">9 pieces remaining</small>
+            </div>
+
+            <div class="tray-scroll" id="trayScroll">
+                <div class="tile-list" id="tileList"></div>
+            </div>
+
+        </section>
+
+        <!-- CENTRE: EMPTY PUZZLE BOARD -->
+        <section class="board-area">
+
+            <div class="board-frame">
+
+                <div class="board" id="board">
+
+                    <div class="cell empty" data-index="0" data-number="1"></div>
+                    <div class="cell empty" data-index="1" data-number="2"></div>
+                    <div class="cell empty" data-index="2" data-number="3"></div>
+
+                    <div class="cell empty" data-index="3" data-number="4"></div>
+                    <div class="cell empty" data-index="4" data-number="5"></div>
+                    <div class="cell empty" data-index="5" data-number="6"></div>
+
+                    <div class="cell empty" data-index="6" data-number="7"></div>
+                    <div class="cell empty" data-index="7" data-number="8"></div>
+                    <div class="cell empty" data-index="8" data-number="9"></div>
+
+                </div>
+
+                <div class="board-complete" id="completeScreen">
+
+                    <div class="complete-card">
+                        <h2>🎉 Puzzle Complete!</h2>
+                        <p>You rebuilt your photograph. Excellent work!</p>
+                        <button class="primary-button" onclick="restartStage()">
+                            Play Again
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- RIGHT TOOLBAR -->
+        <aside class="tools">
+
+            <button class="tool" onclick="message('Home','Home navigation will be connected to the main menu.')">
+                <span class="tool-icon">⌂</span>
+                HOME
+            </button>
+
+            <button class="tool" onclick="message('Settings','Gameplay settings will be added here.')">
+                <span class="tool-icon">⚙</span>
+                SETTINGS
+            </button>
+
+            <button class="tool hint" onclick="useHint()">
+                <span class="hint-wrap">
+                    <span class="tool-icon">🧲</span>
+                    <span class="hint-count" id="hintCount">3</span>
+                </span>
+                HINT
+            </button>
+
+            <button class="tool" onclick="previewPuzzle()">
+                <span class="tool-icon">◉</span>
+                PREVIEW
+            </button>
+
+        </aside>
+
+    </main>
+
+    <footer class="instruction" id="instruction">
+        Drag each square into its matching space
+    </footer>
+
+</div>
+
+<!-- PHOTO PICKER FALLBACK -->
+<div id="photoStart">
+
+    <div class="start-card">
+
+        <h1>TileyPop</h1>
+
+        <p>
+            Choose a photograph to begin Stage 1.
+            Your picture will automatically be divided into
+            nine square puzzle pieces.
+        </p>
+
+        <button onclick="document.getElementById('photoInput').click()">
+            Choose Your Photograph
+        </button>
+
+    </div>
+
+</div>
+
+<input
+    type="file"
+    id="photoInput"
+    accept="image/*"
+    hidden
+>
+
+<!-- GENERAL DIALOG -->
+<div class="overlay" id="overlay">
+
+    <div class="dialog">
+
+        <h2 id="dialogTitle">TileyPop</h2>
+        <p id="dialogText"></p>
+
+        <button onclick="closeDialog()">Okay</button>
+
+    </div>
+
+</div>
+
+<!-- PORTRAIT NOTICE -->
+<div id="rotateNotice">
+
+    <div class="rotate-card">
+        <div>📱 ↻</div>
+        <h2>Rotate Your Device</h2>
+        <p>
+            TileyPop gameplay is designed for landscape mode.
+            Please turn your phone sideways to play.
+        </p>
+    </div>
+
+</div>
+
+<script>
+
+/* =========================================
+   TILEYPOP STAGE 1 GAME ENGINE
+   ========================================= */
+
+const SIZE = 3;
+const TOTAL = SIZE * SIZE;
+
+let sourceImage = null;
+let pieces = [];
+let occupied = Array(TOTAL).fill(null);
+let hints = 3;
+let completed = false;
+let previewTimer = null;
+let currentImageURL = null;
+
+const board = document.getElementById("board");
+const tileList = document.getElementById("tileList");
+const trayScroll = document.getElementById("trayScroll");
+
+/* =========================================
+   IMAGE INITIALIZATION
+   ========================================= */
+
+function initializeGame(imageSource) {
+
+    const image = new Image();
+
+    image.onload = function() {
+
+        sourceImage = image;
+
+        createPieces();
+        shufflePieces();
+        renderGame();
+
+        document.getElementById("photoStart")
+            .classList.remove("show");
+
+        document.getElementById("completeScreen")
+            .classList.remove("show");
+
+        completed = false;
+
+    };
+
+    image.onerror = function() {
+        message(
+            "Photo error",
+            "This photograph could not be opened. Please select another image."
+        );
+    };
+
+    image.src = imageSource;
+}
+
+/* =========================================
+   CREATE NINE SQUARE IMAGE FRAGMENTS
+   ========================================= */
+
+function createPieces() {
+
+    pieces = [];
+
+    const width = sourceImage.naturalWidth;
+    const height = sourceImage.naturalHeight;
+
+    // Centre-crop the photograph into a square.
+    const cropSize = Math.min(width, height);
+
+    const startX = (width - cropSize) / 2;
+    const startY = (height - cropSize) / 2;
+
+    for (let row = 0; row < SIZE; row++) {
+
+        for (let col = 0; col < SIZE; col++) {
+
+            const canvas = document.createElement("canvas");
+
+            // High-resolution square fragments.
+            canvas.width = 240;
+            canvas.height = 240;
+
+            const ctx = canvas.getContext("2d");
+
+            ctx.drawImage(
+                sourceImage,
+                startX + col * cropSize / SIZE,
+                startY + row * cropSize / SIZE,
+                cropSize / SIZE,
+                cropSize / SIZE,
+                0,
+                0,
+                240,
+                240
+            );
+
+            pieces.push({
+                id: row * SIZE + col,
+                correctIndex: row * SIZE + col,
+                image: canvas.toDataURL("image/jpeg", 0.88),
+                location: "tray"
+            });
+
+        }
+    }
+
+}
+
+/* =========================================
+   SHUFFLE PIECES
+   ========================================= */
+
+function shufflePieces() {
+
+    const order = pieces.slice();
+
+    // Fisher-Yates shuffle.
+    for (let i = order.length - 1; i > 0; i--) {
+
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [order[i], order[j]] = [order[j], order[i]];
+
+    }
+
+    // Avoid starting with a solved puzzle.
+    if (order.every((piece, index) => piece.id === index)) {
+        [order[0], order[1]] = [order[1], order[0]];
+    }
+
+    pieces = order;
+
+    pieces.forEach(piece => {
+        piece.location = "tray";
+    });
+
+    occupied = Array(TOTAL).fill(null);
+
+}
+
+/* =========================================
+   DRAW GAME
+   ========================================= */
+
+function renderGame() {
+
+    tileList.innerHTML = "";
+
+    board.querySelectorAll(".cell").forEach(cell => {
+
+        cell.innerHTML = "";
+        cell.classList.add("empty");
+        cell.classList.remove("over", "correct");
+
+    });
+
+    pieces.forEach(piece => {
+
+        if (piece.location === "tray") {
+
+            const tile = createTileElement(piece);
+
+            tileList.appendChild(tile);
+
+        }
+
+        else if (Number.isInteger(piece.location)) {
+
+            const cell = board.querySelector(
+                '[data-index="' + piece.location + '"]'
+            );
+
+            if (cell) {
+
+                const tile = createTileElement(piece);
+
+                tile.classList.add("placed");
+
+                cell.appendChild(tile);
+                cell.classList.remove("empty");
+
+            }
+
+        }
+
+    });
+
+    const remaining = pieces.filter(
+        piece => piece.location === "tray"
+    ).length;
+
+    document.getElementById("pieceCount").textContent =
+        remaining + (remaining === 1 ? " piece remaining" : " pieces remaining");
+
+    checkCompletion();
+
+}
+
+/* =========================================
+   CREATE DRAGGABLE TILE
+   ========================================= */
+
+function createTileElement(piece) {
+
+    const tile = document.createElement("div");
+
+    tile.className = "tile";
+    tile.dataset.pieceId = piece.id;
+
+    tile.style.backgroundImage =
+        'url("' + piece.image + '")';
+
+    tile.setAttribute("role", "button");
+    tile.setAttribute("aria-label", "Puzzle piece " + (piece.id + 1));
+    tile.setAttribute("tabindex", "0");
+
+    tile.addEventListener("pointerdown", startDrag);
+
+    return tile;
+}
+
+/* =========================================
+   POINTER DRAGGING
+   Supports mouse and touchscreen.
+   ========================================= */
+
+let drag = null;
+
+function startDrag(event) {
+
+    if (completed) return;
+
+    if (event.button !== undefined && event.button !== 0) return;
+
+    const tile = event.currentTarget;
+    const pieceId = Number(tile.dataset.pieceId);
+
+    const piece = pieces.find(p => p.id === pieceId);
+
+    if (!piece) return;
+
+    event.preventDefault();
+
+    const rect = tile.getBoundingClientRect();
+
+    const ghost = document.createElement("div");
+
+    ghost.className = "tile-ghost";
+    ghost.style.backgroundImage =
+        'url("' + piece.image + '")';
+
+    ghost.style.left = event.clientX + "px";
+    ghost.style.top = event.clientY + "px";
+
+    document.body.appendChild(ghost);
+
+    drag = {
+        pieceId: pieceId,
+        source: piece.location,
+        element: tile,
+        ghost: ghost,
+        pointerId: event.pointerId
+    };
+
+    tile.classList.add("dragging");
+
+    tile.setPointerCapture(event.pointerId);
+
+    tile.addEventListener("pointermove", moveDrag);
+    tile.addEventListener("pointerup", endDrag);
+    tile.addEventListener("pointercancel", cancelDrag);
+
+}
+
+function moveDrag(event) {
+
+    if (!drag || event.pointerId !== drag.pointerId) return;
+
+    event.preventDefault();
+
+    drag.ghost.style.left = event.clientX + "px";
+    drag.ghost.style.top = event.clientY + "px";
+
+    // Highlight the target board cell.
+    document.querySelectorAll(".cell").forEach(cell => {
+        cell.classList.remove("over");
+    });
+
+    drag.ghost.style.display = "none";
+
+    const target = document.elementFromPoint(
+        event.clientX,
+        event.clientY
+    );
+
+    drag.ghost.style.display = "block";
+
+    const cell = target && target.closest(".cell");
+
+    if (cell) {
+        cell.classList.add("over");
+    }
+
+}
+
+function endDrag(event) {
+
+    if (!drag || event.pointerId !== drag.pointerId) return;
+
+    event.preventDefault();
+
+    const target = document.elementFromPoint(
+        event.clientX,
+        event.clientY
+    );
+
+    const cell = target && target.closest(".cell");
+    const tray = target && target.closest(".tray");
+
+    const piece = pieces.find(
+        p => p.id === drag.pieceId
+    );
+
+    if (cell && piece) {
+
+        const targetIndex = Number(cell.dataset.index);
+
+        movePiece(piece, targetIndex);
+
+    }
+
+    else if (tray && piece) {
+
+        movePiece(piece, "tray");
+
+    }
+
+    finishDrag();
+
+    renderGame();
+
+}
+
+function cancelDrag() {
+
+    if (!drag) return;
+
+    finishDrag();
+    renderGame();
+
+}
+
+function finishDrag() {
+
+    if (!drag) return;
+
+    drag.ghost.remove();
+    drag.element.classList.remove("dragging");
+
+    document.querySelectorAll(".cell").forEach(cell => {
+        cell.classList.remove("over");
+    });
+
+    drag = null;
+
+}
+
+/* =========================================
+   MOVE / SWAP PIECES
+   ========================================= */
+
+function movePiece(piece, destination) {
+
+    const oldLocation = piece.location;
+
+    // Dropping into the same position does nothing.
+    if (oldLocation === destination) return;
+
+    // If the destination is occupied, swap the pieces.
+    if (Number.isInteger(destination)) {
+
+        const otherPiece = pieces.find(
+            p => p.location === destination
+        );
+
+        if (otherPiece && otherPiece.id !== piece.id) {
+
+            otherPiece.location = oldLocation;
+
+        }
+
+    }
+
+    piece.location = destination;
+
+    updateInstruction("Piece moved. You can move it again whenever you want.");
+
+}
+
+/* =========================================
+   CHECK PUZZLE COMPLETION
+   ========================================= */
+
+function checkCompletion() {
+
+    const allCorrect = pieces.every(piece => {
+        return piece.location === piece.correctIndex;
+    });
+
+    if (allCorrect && pieces.length === TOTAL) {
+
+        completed = true;
+
+        document.getElementById("instruction").textContent =
+            "Amazing! You completed Stage 1.";
+
+        document.getElementById("completeScreen")
+            .classList.add("show");
+
+    }
+
+}
+
+/* =========================================
+   HINT SYSTEM
+   Moves one piece to its correct position.
+   ========================================= */
+
+function useHint() {
+
+    if (completed) return;
+
+    if (hints <= 0) {
+
+        message(
+            "No hints remaining",
+            "You have used all three free hints for this stage."
+        );
+
+        return;
+    }
+
+    const incorrect = pieces.filter(piece => {
+        return piece.location !== piece.correctIndex;
+    });
+
+    if (!incorrect.length) return;
+
+    const piece = incorrect[
+        Math.floor(Math.random() * incorrect.length)
+    ];
+
+    // Move the correct piece into its matching cell.
+    const otherPiece = pieces.find(
+        p => p.location === piece.correctIndex
+    );
+
+    if (otherPiece) {
+        otherPiece.location = piece.location;
+    }
+
+    piece.location = piece.correctIndex;
+
+    hints--;
+
+    document.getElementById("hintCount").textContent = hints;
+
+    updateInstruction("A puzzle piece has been placed for you.");
+
+    renderGame();
+
+}
+
+/* =========================================
+   PREVIEW
+   Temporarily reveals the complete photo.
+   ========================================= */
+
+function previewPuzzle() {
+
+    if (!sourceImage) return;
+
+    const cells = board.querySelectorAll(".cell");
+
+    cells.forEach(cell => {
+
+        const index = Number(cell.dataset.index);
+
+        const row = Math.floor(index / SIZE);
+        const col = index % SIZE;
+
+        cell.style.backgroundImage =
+            'url("' + currentImageURLForPreview() + '")';
+
+        cell.style.backgroundSize =
+            (SIZE * 100) + "% " + (SIZE * 100) + "%";
+
+        cell.style.backgroundPosition =
+            (col * 50) + "% " + (row * 50) + "%";
+
+    });
+
+    updateInstruction("Preview: remember the complete photograph.");
+
+    clearTimeout(previewTimer);
+
+    previewTimer = setTimeout(() => {
+
+        cells.forEach(cell => {
+            cell.style.backgroundImage = "";
+            cell.style.backgroundSize = "";
+            cell.style.backgroundPosition = "";
+        });
+
+        updateInstruction("Drag each square into its matching space.");
+
+    }, 2500);
+
+}
+
+function currentImageURLForPreview() {
+
+    if (currentImageURL) return currentImageURL;
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = sourceImage.naturalWidth;
+    canvas.height = sourceImage.naturalHeight;
+
+    canvas.getContext("2d").drawImage(sourceImage, 0, 0);
+
+    return canvas.toDataURL("image/jpeg", 0.9);
+
+}
+
+/* =========================================
+   RESTART STAGE
+   ========================================= */
+
+function restartStage() {
+
+    if (!sourceImage) return;
+
+    clearTimeout(previewTimer);
+
+    hints = 3;
+
+    document.getElementById("hintCount").textContent = hints;
+
+    completed = false;
+
+    document.getElementById("completeScreen")
+        .classList.remove("show");
+
+    createPieces();
+    shufflePieces();
+    renderGame();
+
+    updateInstruction("Drag each square into its matching space.");
+
+}
+
+/* =========================================
+   PHOTO INPUT
+   ========================================= */
+
+document.getElementById("photoInput")
+    .addEventListener("change", function(event) {
+
+        const file = event.target.files[0];
+
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+
+            message(
+                "Invalid image",
+                "Please select a valid photograph."
+            );
+
+            return;
+        }
+
+        if (file.size > 20 * 1024 * 1024) {
+
+            message(
+                "Image too large",
+                "Please choose a photograph smaller than 20 MB."
+            );
+
+            return;
+        }
+
+        if (currentImageURL) {
+            URL.revokeObjectURL(currentImageURL);
+        }
+
+        currentImageURL = URL.createObjectURL(file);
+
+        initializeGame(currentImageURL);
+
+        event.target.value = "";
+
+    });
+
+/* =========================================
+   LOAD PHOTO FROM PREVIOUS SCREEN
+   ========================================= */
+
+function loadPreviousPhoto() {
+
+    const savedPhoto = sessionStorage.getItem(
+        "tileypop_selected_photo"
+    );
+
+    if (savedPhoto) {
+
+        initializeGame(savedPhoto);
+
+    } else {
+
+        document.getElementById("photoStart")
+            .classList.add("show");
+
+    }
+
+}
+
+/* =========================================
+   DIALOGS
+   ========================================= */
+
+function message(title, text) {
+
+    document.getElementById("dialogTitle").textContent =
+        title;
+
+    document.getElementById("dialogText").textContent =
+        text;
+
+    document.getElementById("overlay")
+        .classList.add("show");
+
+}
+
+function closeDialog() {
+
+    document.getElementById("overlay")
+        .classList.remove("show");
+
+}
+
+function updateInstruction(text) {
+
+    document.getElementById("instruction").textContent =
+        text;
+
+}
+
+/* =========================================
+   START GAME
+   ========================================= */
+
+loadPreviousPhoto();
+
+</script>
+
+</body>
+</html>
