@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#d9eaff">
+<title>TileyPop – Relaxed Mode</title>
+
+<style>
+:root {
+    --blue: #0754ed;
+    --dark-blue: #092c98;
+    --text-blue: #102d91;
+    --light-blue: #dceaff;
+    --border-blue: #9bbdff;
+    --gold: #ffc928;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    color: var(--text-blue);
+    background:
+        radial-gradient(ellipse at 50% 25%, #ffffff 0%, #f4f8ff 38%, transparent 75%),
+        linear-gradient(145deg, #c2ddff, #f4f8ff 45%, #d5e8ff);
+    overflow-x: hidden;
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+    position: relative;
+    width: 100%;
+    max-width: 1024px;
+    min-height: 100vh;
+    margin: auto;
+    padding: clamp(14px, 2.5vw, 26px) clamp(14px, 5vw, 55px) 0;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/* BACKGROUND DECORATIONS */
+
+.decoration {
+    position: absolute;
+    z-index: -1;
+    color: #77a9f5;
+    opacity: .30;
+    pointer-events: none;
+    font-size: clamp(55px, 10vw, 105px);
+}
+
+.piece-one {
+    top: 12%;
+    left: -25px;
+    transform: rotate(-25deg);
+}
+
+.piece-two {
+    top: 19%;
+    right: -25px;
+    transform: rotate(30deg);
+}
+
+.piece-three {
+    top: 55%;
+    left: -30px;
+    transform: rotate(25deg);
+}
+
+.piece-four {
+    top: 54%;
+    right: -20px;
+    transform: rotate(-20deg);
+}
+
+/* TOP BAR */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: relative;
+    z-index: 3;
+}
+
+.currency-group {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 2vw, 22px);
+}
+
+.currency {
+    display: flex;
+    align-items: center;
+    height: clamp(44px, 6.5vw, 65px);
+    min-width: 0;
+    padding: 4px 5px 4px 0;
+    border: 2px solid #8bb7ff;
+    border-radius: 50px;
+    background: linear-gradient(110deg, #246aff, #0742bd);
+    box-shadow: 0 4px 7px #315da955;
+    color: white;
+}
+
+.currency-symbol {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: clamp(43px, 6vw, 66px);
+    height: clamp(43px, 6vw, 66px);
+    margin-left: -3px;
+    border-radius: 50%;
+    font-size: clamp(24px, 4.5vw, 46px);
+    font-weight: 900;
+    text-shadow: 0 2px 3px #9a6500;
+}
+
+.coin-symbol {
+    background: radial-gradient(circle, #ffec7a, #ffae00 65%, #d77a00);
+    border: 3px solid #fff17d;
+    box-shadow: inset 0 0 0 2px #e98a00;
+}
+
+.gem-symbol {
+    color: #55eaff;
+    text-shadow: 0 2px 4px #0055a9;
+}
+
+.currency-amount {
+    padding: 0 9px;
+    font-size: clamp(17px, 3.2vw, 34px);
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.add-button {
+    width: clamp(35px, 5.3vw, 52px);
+    height: clamp(35px, 5.3vw, 52px);
+    border-radius: 50%;
+    border: 3px solid #aaff85;
+    color: white;
+    font-size: clamp(25px, 4vw, 37px);
+    font-weight: 900;
+    background: linear-gradient(#65ed36, #16a900);
+    text-shadow: 0 2px 2px #237b00;
+    box-shadow: 0 2px 5px #123d9977;
+    line-height: 1;
+}
+
+.settings-button {
+    flex-shrink: 0;
+    width: clamp(48px, 7.5vw, 80px);
+    height: clamp(48px, 7.5vw, 80px);
+    border-radius: 50%;
+    border: 2px solid white;
+    background: linear-gradient(#fff, #dceaff);
+    color: #2448a7;
+    font-size: clamp(27px, 4.5vw, 44px);
+    box-shadow: 0 3px 9px #4168ac44;
+}
+
+/* LOGO */
+
+.brand {
+    text-align: center;
+    margin: clamp(22px, 4vw, 42px) 0 8px;
+    position: relative;
+}
+
+.logo {
+    display: inline-block;
+    font-size: clamp(49px, 11.5vw, 115px);
+    line-height: 1;
+    letter-spacing: -5px;
+    font-weight: 1000;
+    font-style: italic;
+    color: white;
+    -webkit-text-stroke: 2px #0642d4;
+    text-shadow:
+        3px 4px 0 #00299e,
+        6px 8px 0 #062c94,
+        0 12px 12px #1645aa66;
+    transform: rotate(-2deg);
+}
+
+.logo .pop {
+    color: #ffb900;
+    -webkit-text-stroke: 2px #0740c9;
+}
+
+.logo-puzzle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: .68em;
+    height: .68em;
+    margin: 0 -2px;
+    border-radius: 50%;
+    color: #ffcc29;
+    background: #0744c5;
+    font-size: .48em;
+    vertical-align: .12em;
+    -webkit-text-stroke: 0;
+}
+
+.tagline {
+    margin-top: 14px;
+    font-size: clamp(17px, 3.7vw, 35px);
+    font-weight: 900;
+    color: #071e82;
+}
+
+.tagline span {
+    color: #ffbb00;
+}
+
+.yellow-line {
+    width: min(52%, 480px);
+    height: 5px;
+    border-radius: 50%;
+    background: #ffc629;
+    margin: 5px auto 0;
+    transform: rotate(-2deg);
+}
+
+/* MODE HEADING */
+
+.mode-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin: 10px 0 0;
+    text-align: center;
+}
+
+.mode-heading .line {
+    height: 3px;
+    flex: 1;
+    max-width: 190px;
+    background: #1451f4;
+    border-radius: 10px;
+}
+
+.mode-heading h1 {
+    font-size: clamp(27px, 6.7vw, 66px);
+    font-weight: 1000;
+    letter-spacing: -1.5px;
+    white-space: nowrap;
+}
+
+.no-timer {
+    text-align: center;
+    color: #596fca;
+    font-weight: 900;
+    font-size: clamp(18px, 3.5vw, 35px);
+    margin-top: -2px;
+}
+
+/* STAGE CARD */
+
+.stage-card {
+    position: relative;
+    margin: clamp(32px, 6vw, 65px) 2% 0;
+    padding: clamp(26px, 4.5vw, 48px) clamp(15px, 4vw, 40px);
+    min-height: 250px;
+    display: grid;
+    grid-template-columns: 42% 58%;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid #9dbdff;
+    border-radius: clamp(22px, 5vw, 44px);
+    background: linear-gradient(125deg, #ffffffed, #eaf2ffed);
+    box-shadow:
+        0 5px 10px #3767b866,
+        inset 0 0 15px #ffffff;
+}
+
+.stage-label {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(260px, 48%);
+    padding: 8px 15px;
+    border-radius: 17px;
+    background: linear-gradient(#20a9ff, #0751e9);
+    border: 2px solid #83c8ff;
+    color: white;
+    font-size: clamp(19px, 3.6vw, 35px);
+    font-weight: 1000;
+    text-align: center;
+    box-shadow: 0 3px 6px #2352b755;
+}
+
+.preview-frame {
+    width: 100%;
+    max-width: 255px;
+    aspect-ratio: 1;
+    justify-self: center;
+    padding: 9px;
+    border-radius: 16px;
+    background: white;
+    box-shadow: 0 4px 8px #264e9b77;
+    transform: rotate(-8deg);
+    border: 2px solid #d7e5ff;
+}
+
+.preview-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 9px;
+    object-fit: cover;
+    display: block;
+    background: linear-gradient(135deg, #6bb5ff, #f8d98d);
+}
+
+.stage-details {
+    text-align: center;
+    padding: 10px;
+    border-left: 3px solid #86aaff;
+}
+
+.stage-details h2 {
+    font-size: clamp(24px, 5.6vw, 56px);
+    font-weight: 1000;
+    white-space: nowrap;
+}
+
+.stage-details p {
+    margin-top: 12px;
+    color: #5168bf;
+    font-size: clamp(17px, 3.5vw, 35px);
+    line-height: 1.35;
+    font-weight: 900;
+}
+
+.journey-pill {
+    position: relative;
+    z-index: 1;
+    width: min(72%, 590px);
+    margin: -20px auto 0;
+    padding: 10px;
+    border: 2px solid #91b9ff;
+    border-radius: 50px;
+    background: linear-gradient(#e1eeff, #bcd5ff);
+    color: #082b91;
+    box-shadow: 0 3px 5px #4777c655;
+    font-weight: 1000;
+    font-size: clamp(16px, 3.1vw, 30px);
+    text-align: center;
+}
+
+/* PHOTO SELECTION */
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: clamp(25px, 4vw, 40px) 0 0;
+    text-align: center;
+}
+
+.section-heading .line {
+    height: 3px;
+    flex: 1;
+    max-width: 170px;
+    background: #164ef1;
+    border-radius: 10px;
+}
+
+.section-heading h2 {
+    font-size: clamp(23px, 5vw, 46px);
+    font-weight: 1000;
+    white-space: nowrap;
+}
+
+.section-subtitle {
+    text-align: center;
+    font-size: clamp(17px, 3.4vw, 32px);
+    font-weight: 900;
+    margin-top: 4px;
+}
+
+.photo-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(12px, 2.2vw, 23px);
+    margin: clamp(20px, 3vw, 30px) 0;
+}
+
+.photo-option {
+    min-width: 0;
+    min-height: 245px;
+    padding: clamp(15px, 3vw, 27px) 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 2px solid #a4c1ff;
+    border-radius: clamp(22px, 4vw, 40px);
+    background: linear-gradient(145deg, #ffffff, #eaf2ff);
+    box-shadow: 0 5px 8px #416ab655, inset 0 0 10px white;
+    color: var(--text-blue);
+    transition: transform .15s, box-shadow .15s;
+}
+
+.photo-option:active {
+    transform: scale(.97);
+    box-shadow: 0 2px 4px #416ab655;
+}
+
+.option-icon {
+    font-size: clamp(55px, 10vw, 100px);
+    line-height: 1.1;
+    margin-bottom: 9px;
+    filter: drop-shadow(0 3px 3px #5579bb66);
+}
+
+.gallery-icon {
+    color: #1655e9;
+}
+
+.upload-icon {
+    color: #0758eb;
+}
+
+.photo-option h3 {
+    font-size: clamp(17px, 3.3vw, 31px);
+    font-weight: 1000;
+    margin-bottom: 7px;
+}
+
+.photo-option p {
+    max-width: 270px;
+    font-size: clamp(14px, 2.6vw, 24px);
+    line-height: 1.3;
+    font-weight: 800;
+    color: #465fbd;
+}
+
+/* SAVED PROGRESS */
+
+.progress-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    padding: clamp(13px, 2vw, 20px);
+    margin: 0 2% 25px;
+    border: 2px solid #a1beff;
+    border-radius: 38px;
+    background: linear-gradient(110deg, #ffffff, #e7efff);
+    box-shadow: 0 3px 6px #4c75b944;
+}
+
+.progress-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: clamp(16px, 3vw, 27px);
+    font-weight: 1000;
+}
+
+.check-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #064be6;
+    color: white;
+    font-size: 23px;
+}
+
+.progress-card p {
+    color: #415ab7;
+    font-size: clamp(14px, 2.6vw, 23px);
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+/* BACK BUTTON */
+
+.bottom-area {
+    position: relative;
+    margin: 25px -55px 0;
+    padding: 0 30px 15px;
+}
+
+.back-button {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 26px;
+    min-width: 210px;
+    border: 2px solid #a3c2ff;
+    border-radius: 50px;
+    color: #0a329f;
+    background: linear-gradient(#fff, #e0ebff);
+    box-shadow: 0 4px 7px #315ba955;
+    font-size: clamp(20px, 3.7vw, 35px);
+    font-weight: 1000;
+}
+
+.back-button span {
+    font-size: 1.4em;
+    line-height: .8;
+}
+
+.footer-wave {
+    position: absolute;
+    z-index: -1;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 110px;
+    background: linear-gradient(110deg, #24baf9, #1674ff 55%, #7255ff);
+    clip-path: polygon(0 18%, 10% 30%, 22% 38%, 37% 42%, 53% 30%, 67% 36%, 82% 20%, 100% 0, 100% 100%, 0 100%);
+}
+
+.footer-text {
+    margin-top: 15px;
+    padding: 12px 0 5px;
+    color: white;
+    text-align: center;
+    font-size: clamp(14px, 2.5vw, 24px);
+    text-shadow: 0 2px 3px #164baf;
+}
+
+/* DIALOGS */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #071d58a8;
+    backdrop-filter: blur(5px);
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.dialog {
+    width: min(100%, 390px);
+    padding: 27px;
+    border-radius: 25px;
+    background: linear-gradient(145deg, white, #e5efff);
+    border: 2px solid #a6c5ff;
+    box-shadow: 0 12px 40px #001e6877;
+    text-align: center;
+}
+
+.dialog h2 {
+    font-size: 25px;
+    margin-bottom: 12px;
+}
+
+.dialog p {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #5267b6;
+    margin-bottom: 20px;
+}
+
+.dialog-close {
+    width: 100%;
+    border: none;
+    border-radius: 30px;
+    padding: 13px;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    background: linear-gradient(#249aff, #0750e8);
+}
+
+/* SELECTED PHOTO */
+
+.selected-message {
+    display: none;
+    margin: 0 auto 16px;
+    padding: 12px;
+    text-align: center;
+    color: #0752cf;
+    font-weight: 900;
+    background: #e0edff;
+    border: 1px solid #9bbdff;
+    border-radius: 15px;
+}
+
+.selected-message.show {
+    display: block;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 560px) {
+    .app {
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
+    .currency-group {
+        gap: 7px;
+    }
+
+    .currency-amount {
+        padding: 0 5px;
+    }
+
+    .logo {
+        letter-spacing: -3px;
+    }
+
+    .stage-card {
+        grid-template-columns: 40% 60%;
+        min-height: 175px;
+        padding: 30px 9px 17px;
+        gap: 3px;
+    }
+
+    .preview-frame {
+        padding: 5px;
+        border-radius: 10px;
+    }
+
+    .stage-details {
+        padding: 5px;
+        border-left-width: 2px;
+    }
+
+    .stage-details h2 {
+        font-size: clamp(19px, 5vw, 27px);
+    }
+
+    .stage-details p {
+        font-size: clamp(14px, 3.5vw, 19px);
+        margin-top: 7px;
+    }
+
+    .journey-pill {
+        width: 84%;
+        padding: 8px 5px;
+        margin-top: -15px;
+    }
+
+    .photo-option {
+        min-height: 190px;
+    }
+
+    .photo-option h3 {
+        font-size: clamp(15px, 3.5vw, 19px);
+    }
+
+    .photo-option p {
+        font-size: clamp(12px, 2.8vw, 15px);
+    }
+
+    .bottom-area {
+        margin-left: -13px;
+        margin-right: -13px;
+        padding-left: 20px;
+    }
+
+    .back-button {
+        min-width: 150px;
+        padding: 9px 18px;
+    }
+}
+
+@media (max-width: 360px) {
+    .currency-symbol {
+        width: 34px;
+        height: 34px;
+        font-size: 22px;
+    }
+
+    .currency {
+        height: 39px;
+    }
+
+    .currency-amount {
+        font-size: 15px;
+    }
+
+    .add-button {
+        width: 29px;
+        height: 29px;
+        font-size: 22px;
+    }
+
+    .settings-button {
+        width: 40px;
+        height: 40px;
+        font-size: 22px;
+    }
+
+    .stage-details h2 {
+        font-size: 18px;
+    }
+
+    .section-heading {
+        gap: 7px;
+    }
+
+    .section-heading h2 {
+        font-size: 20px;
+    }
+
+    .progress-title {
+        font-size: 14px;
+        gap: 7px;
+    }
+
+    .check-icon {
+        width: 29px;
+        height: 29px;
+        font-size: 18px;
+    }
+}
+
+@media (min-width: 800px) {
+    .app {
+        padding-bottom: 0;
+    }
+
+    .stage-card {
+        min-height: 260px;
+    }
+
+    .photo-option {
+        min-height: 255px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<main class="app">
+
+    <!-- DECORATIVE BACKGROUND -->
+    <div class="decoration piece-one">✿</div>
+    <div class="decoration piece-two">✿</div>
+    <div class="decoration piece-three">✿</div>
+    <div class="decoration piece-four">✿</div>
+
+    <!-- TOP CURRENCY BAR -->
+    <header class="topbar">
+
+        <div class="currency-group">
+
+            <div class="currency">
+                <div class="currency-symbol coin-symbol">★</div>
+                <span class="currency-amount" id="coins">1250</span>
+                <button class="add-button" onclick="showDialog('coins')">+</button>
+            </div>
+
+            <div class="currency">
+                <div class="currency-symbol gem-symbol">💎</div>
+                <span class="currency-amount" id="diamonds">18</span>
+                <button class="add-button" onclick="showDialog('diamonds')">+</button>
+            </div>
+
+        </div>
+
+        <button class="settings-button"
+                onclick="showDialog('settings')"
+                aria-label="Settings">⚙</button>
+
+    </header>
+
+    <!-- BRANDING -->
+    <section class="brand">
+
+        <div class="logo">
+            Tiley<span class="pop">P<span class="logo-puzzle">✿</span>P</span>
+        </div>
+
+        <p class="tagline">
+            Pick <span>•</span> Remember <span>•</span> Rebuild
+        </p>
+
+        <div class="yellow-line"></div>
+
+    </section>
+
+    <!-- MODE -->
+    <section>
+
+        <div class="mode-heading">
+            <div class="line"></div>
+            <h1>Relaxed Mode</h1>
+            <div class="line"></div>
+        </div>
+
+        <p class="no-timer">No timer</p>
+
+    </section>
+
+    <!-- STAGE INFORMATION -->
+    <section class="stage-card">
+
+        <div class="stage-label">Stage 1</div>
+
+        <div class="preview-frame">
+            <img
+                id="stagePreview"
+                class="preview-image"
+                alt="Selected puzzle photograph"
+                src="https://images.unsplash.com/photo-1552053831-71594a27632d?w=500&h=500&fit=crop"
+            >
+        </div>
+
+        <div class="stage-details">
+
+            <h2>3 × 3 · 9 Tiles</h2>
+
+            <p>
+                Take your time.<br>
+                Solve at your own pace.
+            </p>
+
+        </div>
+
+    </section>
+
+    <div class="journey-pill">
+        Your puzzle journey starts here
+    </div>
+
+    <!-- PHOTO SELECTION HEADING -->
+    <section>
+
+        <div class="section-heading">
+            <div class="line"></div>
+            <h2>Choose your photograph</h2>
+            <div class="line"></div>
+        </div>
+
+        <p class="section-subtitle">
+            Pick a picture you'd love to rebuild.
+        </p>
+
+    </section>
+
+    <!-- PHOTO OPTIONS -->
+    <section class="photo-options">
+
+        <button class="photo-option"
+                onclick="openGallery()">
+
+            <div class="option-icon gallery-icon">▧</div>
+
+            <h3>Choose from Gallery</h3>
+
+            <p>
+                Select a photo already<br>
+                saved on your device.
+            </p>
+
+        </button>
+
+        <button class="photo-option"
+                onclick="openUpload()">
+
+            <div class="option-icon upload-icon">☁⬆</div>
+
+            <h3>Upload a Photo</h3>
+
+            <p>
+                Import a picture from<br>
+                your device's storage.
+            </p>
+
+        </button>
+
+    </section>
+
+    <!-- HIDDEN FILE INPUTS -->
+    <input
+        type="file"
+        id="galleryInput"
+        accept="image/*"
+        hidden
+    >
+
+    <input
+        type="file"
+        id="uploadInput"
+        accept="image/*"
+        hidden
+    >
+
+    <!-- SELECTED PHOTO MESSAGE -->
+    <div class="selected-message" id="selectedMessage">
+        ✓ Photo selected successfully!
+    </div>
+
+    <!-- PROGRESS INFORMATION -->
+    <section class="progress-card">
+
+        <div class="progress-title">
+            <span class="check-icon">✓</span>
+            Your stage progress stays saved
+        </div>
+
+        <p>
+            You can choose a different photograph at every stage
+            <br>
+            without losing your progression.
+        </p>
+
+    </section>
+
+    <!-- BOTTOM AREA -->
+    <footer class="bottom-area">
+
+        <button class="back-button" onclick="goBack()">
+            <span>←</span> Back
+        </button>
+
+        <div class="footer-wave"></div>
+
+        <div class="footer-text">
+            Make Every Puzzle a Masterpiece ♡
+        </div>
+
+    </footer>
+
+</main>
+
+<!-- GENERAL DIALOG -->
+<div class="overlay" id="dialogOverlay">
+
+    <div class="dialog">
+
+        <h2 id="dialogTitle">TileyPop</h2>
+
+        <p id="dialogMessage"></p>
+
+        <button class="dialog-close"
+                onclick="closeDialog()">
+            Okay
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+// ======================================
+// TileyPop - LOCAL MVP
+// ======================================
+
+// LOCAL GAME DATA
+
+let gameData = {
+    coins: 1250,
+    diamonds: 18,
+    currentStage: 1,
+    selectedPhoto: null
+};
+
+// LOAD SAVED PROGRESS
+
+try {
+    const saved = JSON.parse(localStorage.getItem("tileypop_data"));
+
+    if (saved) {
+        gameData.coins = saved.coins ?? 1250;
+        gameData.diamonds = saved.diamonds ?? 18;
+        gameData.currentStage = saved.currentStage ?? 1;
+    }
+} catch (error) {
+    console.log("Starting new local game.");
+}
+
+// DISPLAY CURRENCY
+
+function updateCurrency() {
+    document.getElementById("coins").textContent =
+        gameData.coins;
+
+    document.getElementById("diamonds").textContent =
+        gameData.diamonds;
+}
+
+function saveProgress() {
+    localStorage.setItem(
+        "tileypop_data",
+        JSON.stringify({
+            coins: gameData.coins,
+            diamonds: gameData.diamonds,
+            currentStage: gameData.currentStage
+        })
+    );
+}
+
+updateCurrency();
+
+// ======================================
+// PHOTO SELECTION
+// ======================================
+
+function openGallery() {
+    document.getElementById("galleryInput").click();
+}
+
+function openUpload() {
+    document.getElementById("uploadInput").click();
+}
+
+// BOTH OPTIONS USE THE DEVICE'S IMAGE PICKER
+
+document.getElementById("galleryInput")
+    .addEventListener("change", handlePhoto);
+
+document.getElementById("uploadInput")
+    .addEventListener("change", handlePhoto);
+
+let currentPhotoURL = null;
+
+function handlePhoto(event) {
+
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    // Make sure the selected file is an image.
+
+    if (!file.type.startsWith("image/")) {
+        showMessage(
+            "Invalid file",
+            "Please select a valid photograph."
+        );
+        event.target.value = "";
+        return;
+    }
+
+    // Release the previous temporary image.
+
+    if (currentPhotoURL) {
+        URL.revokeObjectURL(currentPhotoURL);
+    }
+
+    // Create a local image preview.
+
+    currentPhotoURL = URL.createObjectURL(file);
+
+    gameData.selectedPhoto = currentPhotoURL;
+
+    document.getElementById("stagePreview").src =
+        currentPhotoURL;
+
+    document.getElementById("selectedMessage")
+        .classList.add("show");
+
+    // Save the image for the current page session only.
+    // The browser does not permanently save the file.
+
+    console.log("Selected photograph:", file.name);
+
+    // Reset file input so the same photo can be selected again.
+
+    event.target.value = "";
+}
+
+// ======================================
+// SETTINGS AND CURRENCY DIALOGS
+// ======================================
+
+function showDialog(type) {
+
+    const title = document.getElementById("dialogTitle");
+    const message = document.getElementById("dialogMessage");
+
+    if (type === "coins") {
+
+        title.textContent = "Your Coins";
+        message.textContent =
+            "You currently have " + gameData.coins +
+            " coins. The coin shop will be added in a future version.";
+
+    }
+
+    else if (type === "diamonds") {
+
+        title.textContent = "Your Diamonds";
+        message.textContent =
+            "You currently have " + gameData.diamonds +
+            " diamonds. The diamond shop will be added in a future version.";
+
+    }
+
+    else if (type === "settings") {
+
+        title.textContent = "Settings";
+        message.textContent =
+            "TileyPop settings will be available here. Enjoy your relaxed puzzle experience!";
+
+    }
+
+    document.getElementById("dialogOverlay")
+        .classList.add("show");
+}
+
+function showMessage(titleText, messageText) {
+
+    document.getElementById("dialogTitle").textContent =
+        titleText;
+
+    document.getElementById("dialogMessage").textContent =
+        messageText;
+
+    document.getElementById("dialogOverlay")
+        .classList.add("show");
+}
+
+function closeDialog() {
+
+    document.getElementById("dialogOverlay")
+        .classList.remove("show");
+}
+
+// CLOSE DIALOG WHEN BACKGROUND IS PRESSED
+
+document.getElementById("dialogOverlay")
+    .addEventListener("click", function(event) {
+
+        if (event.target === this) {
+            closeDialog();
+        }
+
+    });
+
+// ======================================
+// BACK BUTTON
+// ======================================
+
+function goBack() {
+
+    // In this standalone screen MVP, there is no
+    // previous screen yet.
+
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        showMessage(
+            "TileyPop",
+            "You're at the beginning of your puzzle journey!"
+        );
+    }
+}
+
+</script>
+
+</body>
+</html>
