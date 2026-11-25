@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
+    <title>Application Status | Atlas College</title>
+    <style>
+        /* =========================================================
+           1. RESET & GLOBAL STYLING (Matched to Admin Portal Specs)
+        ========================================================= */
+        :root {
+            --blue: #0866f5;
+            --blue-dark: #0647ad;
+            --navy: #071c72;
+            --text: #244b88;
+            --muted: #7897c5;
+            --border: #cfe3ff;
+            --border-light: #cfe3f7;
+            --pale-blue: #eaf5ff;
+            --line: #d8e8f8;
+            --red: #f35c63;
+            --white: #ffffff;
+            --shadow: 0 1px 4px rgba(24,76,125,.05);
+            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            --page-padding: clamp(18px, 5.5vw, 90px);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            width: 100%;
+            min-width: 0;
+            min-height: 100%;
+            overflow-x: clip;
+            scroll-behavior: smooth;
+            background: var(--white);
+        }
+
+        body {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: clip;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
+
+            font-size: 13.5px;
+            color: var(--text);
+            background: var(--white);
+
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        img, svg, video, canvas {
+            display: block;
+            max-width: 100%;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        p, h1, h2, h3, a, span {
+            overflow-wrap: break-word;
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 3px solid rgba(8,102,245,.22);
+            outline-offset: 3px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* =========================================================
+           2. HEADER (Matched to Admin Portal Specs)
+        ========================================================= */
+        .header {
+            width: 100%;
+            min-height: 80px;
+            padding: 0 var(--page-padding);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            background: rgba(255,255,255,.88);
+            border-bottom: 1px solid var(--line);
+
+            position: relative;
+            z-index: 20;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 0 0 auto;
+        }
+
+        .brand-logo {
+            width: clamp(95px, 9.5vw, 125px);
+            height: auto;
+            object-fit: contain;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .profile-icon-button {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border: 1px solid var(--border-light);
+            border-radius: 50%;
+            background: #ffffff;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .profile-icon-button:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+            transform: translateY(-1px);
+        }
+
+        .profile-icon-button svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* =========================================================
+           3. MAIN CONTAINER
+        ========================================================= */
+        .main {
+            width: 100%;
+            flex: 1;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            padding:
+                clamp(28px, 4.5vw, 65px)
+                var(--page-padding);
+
+            background: #ffffff;
+        }
+
+        /* =========================================================
+           4. AUTH VIEWS (SIGN IN / SIGN UP / FORGOT PASSWORD)
+        ========================================================= */
+        #loginView,
+        #signupView,
+        #forgotPasswordView {
+            width: 100%;
+            max-width: 580px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .auth-header-centered {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .auth-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .auth-title-icon {
+            width: 34px;
+            height: 34px;
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .auth-title-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .auth-title-row h1 {
+            margin: 0;
+            color: var(--navy);
+            font-size: clamp(20px, 2.2vw, 30px);
+            font-weight: 750;
+            line-height: 1.2;
+            letter-spacing: -.6px;
+        }
+
+        .auth-header-centered p {
+            margin: 0;
+            max-width: 440px;
+            color: #526e9e;
+            font-size: clamp(12px, 1.1vw, 14px);
+            line-height: 1.5;
+        }
+
+        .login-form-group {
+            width: 100%;
+            margin-bottom: 16px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .login-form-group label {
+            display: block;
+            color: var(--navy);
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .login-form-group label span {
+            color: var(--red);
+        }
+
+        .input-with-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .input-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .login-input {
+            width: 100%;
+            height: 40px;
+            padding: 0 38px 0 38px;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            color: var(--navy);
+            font-size: 13px;
+            font-weight: 400;
+            transition: var(--transition);
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(8, 102, 245, 0.09);
+        }
+
+        .login-input::placeholder {
+            color: #8fa6c2;
+            opacity: 1;
+        }
+
+        .password-toggle-btn {
+            position: absolute;
+            right: 10px;
+            background: transparent;
+            border: 0;
+            padding: 4px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .password-toggle-btn:hover {
+            color: var(--blue);
+        }
+
+        .password-toggle-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .forgot-pin-wrap {
+            width: 100%;
+            text-align: right;
+            margin-top: -4px;
+            margin-bottom: 20px;
+        }
+
+        .forgot-pin-wrap a {
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .forgot-pin-wrap a:hover {
+            color: var(--blue-dark);
+            text-decoration: underline;
+        }
+
+        .check-status-button {
+            width: 100%;
+            min-height: 42px;
+            padding: 10px 16px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--blue);
+            color: #ffffff;
+            font-size: 13.5px;
+            font-weight: 750;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 3px 10px rgba(8, 102, 245, 0.15);
+            transition: var(--transition);
+        }
+
+        .check-status-button:hover {
+            background: var(--blue-dark);
+            transform: translateY(-1.5px);
+            box-shadow: 0 5px 14px rgba(8, 102, 245, 0.2);
+        }
+
+        .check-status-button:active {
+            transform: translateY(0);
+        }
+
+        .check-status-button svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .login-divider-row {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 22px 0;
+            color: var(--navy);
+            font-size: clamp(12px, 1.1vw, 13.5px);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .login-divider-row::before,
+        .login-divider-row::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .auth-bottom-link-row {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: var(--navy);
+            font-size: clamp(12px, 1.1vw, 13.5px);
+            text-align: center;
+        }
+
+        .auth-bottom-link-row a {
+            color: var(--blue);
+            font-weight: 700;
+            text-decoration: underline;
+            transition: var(--transition);
+        }
+
+        .auth-bottom-link-row a:hover {
+            color: var(--blue-dark);
+        }
+
+        .back-signin-link {
+            color: var(--blue);
+            font-size: clamp(12px, 1.1vw, 13.5px);
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .back-signin-link:hover {
+            color: var(--blue-dark);
+            text-decoration: underline;
+        }
+
+        /* =========================================================
+           5. PORTAL DASHBOARD VIEW
+        ========================================================= */
+        #portalView {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .application-card {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 20px;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .application-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .application-info {
+            min-width: 0;
+        }
+
+        .application-number {
+            margin: 0;
+            color: var(--navy);
+            font-size: clamp(15px, 1.6vw, 19px);
+            font-weight: 750;
+        }
+
+        .application-number span {
+            color: var(--blue);
+        }
+
+        .application-details {
+            margin-top: 6px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 16px;
+            color: #526e9e;
+            font-size: clamp(11.5px, 1.1vw, 13px);
+        }
+
+        .application-details strong {
+            color: var(--navy);
+            font-weight: 700;
+        }
+
+        /* STATUS BADGE */
+        .status-badge {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 30px;
+            font-size: 11.5px;
+            font-weight: 750;
+            white-space: nowrap;
+        }
+
+        .status-badge::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .status-action { color: #c97700; border-color: #fde6c5; }
+        .status-review { color: var(--blue); border-color: #d1e2ff; }
+        .status-accepted { color: #147d4a; border-color: #ccefd8; }
+        .status-unsuccessful { color: #f35c63; border-color: #fcd5d5; }
+
+        /* CARDS */
+        .card {
+            width: 100%;
+            min-width: 0;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .card-header {
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .card-title h2 {
+            margin: 0;
+            color: var(--navy);
+            font-size: clamp(15px, 1.5vw, 18px);
+            line-height: 1.25;
+            font-weight: 750;
+        }
+
+        .card-title p {
+            margin: 4px 0 0;
+            color: #526e9e;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .card-body {
+            padding: 18px 20px;
+        }
+
+        /* REQUIREMENTS TABLE */
+        .requirements-list {
+            width: 100%;
+        }
+
+        .requirement {
+            width: 100%;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto auto;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .requirement:first-child { padding-top: 0; }
+        .requirement:last-child { padding-bottom: 0; border-bottom: 0; }
+
+        .requirement-info {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .requirement-icon {
+            width: 38px;
+            height: 38px;
+            flex: 0 0 38px;
+            border-radius: 8px;
+            background: var(--pale-blue);
+            border: 1px solid var(--border-light);
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .requirement-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .requirement-text h3 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 13px;
+            line-height: 1.35;
+            font-weight: 750;
+        }
+
+        .requirement-text p {
+            margin: 2px 0 0;
+            color: #526e9e;
+            font-size: 11.5px;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+
+        .requirement-status {
+            white-space: nowrap;
+            font-size: 11px;
+            font-weight: 750;
+            padding: 4px 9px;
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+        }
+
+        .received { color: #147d4a; border-color: #ccefd8; }
+        .required { color: #c97700; border-color: #fde6c5; }
+
+        .requirement-action {
+            min-width: 76px;
+            height: 32px;
+            padding: 0 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-light);
+            background: #ffffff;
+            color: var(--navy);
+            font-size: 11.5px;
+            font-weight: 750;
+            transition: var(--transition);
+        }
+
+        .requirement-action:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+            transform: translateY(-1px);
+        }
+
+        .requirement-action.primary {
+            border-color: var(--blue);
+            background: var(--blue);
+            color: #ffffff;
+        }
+
+        .requirement-action.primary:hover {
+            background: var(--blue-dark);
+            color: #ffffff;
+        }
+
+        /* =========================================================
+           6. MODALS & OVERLAYS
+        ========================================================= */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            background: rgba(7, 28, 114, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 480px;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            box-shadow: 0 16px 35px rgba(7,28,114,.12);
+            transform: translateY(10px) scale(0.98);
+            transition: transform 0.25s ease;
+        }
+
+        .modal-backdrop.open .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 16px;
+            font-weight: 750;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-modal {
+            width: 28px;
+            height: 28px;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            background: #ffffff;
+            color: var(--navy);
+            font-size: 16px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .upload-description {
+            margin: 0 0 14px;
+            color: #526e9e;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .drop-zone {
+            width: 100%;
+            min-height: 140px;
+            border: 1.5px dashed var(--border-light);
+            border-radius: 8px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            border-color: var(--blue);
+        }
+
+        .upload-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--pale-blue);
+            border: 1px solid var(--border-light);
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .upload-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .drop-zone strong { color: var(--navy); font-size: 12.5px; }
+        .drop-zone span { margin-top: 3px; color: #526e9e; font-size: 11px; }
+
+        .choose-file {
+            margin-top: 10px;
+            height: 32px;
+            padding: 0 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            background: #ffffff;
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 750;
+        }
+
+        #fileInput { display: none; }
+
+        .selected-file {
+            margin-top: 12px;
+            padding: 10px 12px;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            color: var(--navy);
+            font-size: 11px;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        .modal-actions {
+            margin-top: 16px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .modal-button {
+            height: 34px;
+            padding: 0 14px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 750;
+        }
+
+        .modal-button.cancel {
+            border: 1px solid var(--border-light);
+            background: #ffffff;
+            color: var(--navy);
+        }
+
+        .modal-button.save {
+            border: 0;
+            background: var(--blue);
+            color: #ffffff;
+        }
+
+        .document-preview {
+            width: 100%;
+            min-height: 100px;
+            padding: 16px;
+            border-radius: 6px;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .document-preview-icon {
+            width: 38px;
+            height: 38px;
+            margin: 0 auto 8px;
+            border-radius: 6px;
+            background: var(--pale-blue);
+            border: 1px solid var(--border-light);
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* =========================================================
+           7. TOAST NOTIFICATIONS
+        ========================================================= */
+        .toast-container {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 500;
+            width: min(340px, calc(100vw - 40px));
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .toast {
+            padding: 12px 14px;
+            border-radius: 8px;
+            background: var(--navy);
+            color: #ffffff;
+            box-shadow: 0 6px 20px rgba(7,28,114,.12);
+            font-size: 12px;
+            line-height: 1.45;
+            font-weight: 600;
+            animation: toastIn 0.25s ease forwards;
+        }
+
+        .toast.success { background: #147d4a; }
+        .toast.error { background: #bd3946; }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =========================================================
+           8. FOOTER (Matched to Admin Portal Specs)
+        ========================================================= */
+        .footer {
+            width: 100%;
+            min-height: 60px;
+            padding: 14px var(--page-padding);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+
+            position: relative;
+            z-index: 2;
+            border-top: 1px solid var(--line);
+            background: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .footer-left {
+            color: #708aa8;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .footer-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 12px;
+
+            color: #708aa8;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .footer-right a {
+            transition: var(--transition);
+        }
+
+        .footer-right a:hover {
+            color: var(--blue);
+        }
+
+        .footer-separator {
+            color: #a9bed8;
+        }
+
+        /* =========================================================
+           9. MEDIA QUERIES & RESPONSIVENESS
+        ========================================================= */
+        @media (max-width: 760px) {
+            .header { min-height: 64px; }
+            .main { padding-top: 38px; padding-bottom: 38px; }
+            .application-top { flex-direction: column; align-items: flex-start; }
+            .requirement { grid-template-columns: 1fr; gap: 10px; }
+            .requirement-status { justify-self: start; }
+            .requirement-action { width: 100%; }
+            .footer { padding-top: 18px; padding-bottom: 18px; }
+        }
+
+        @media (max-width: 480px) {
+            .header { min-height: 58px; padding: 0 16px; }
+            .brand-logo { width: 95px; }
+            .profile-icon-button { width: 34px; height: 34px; }
+            .main { padding: 30px 16px 28px; }
+            .footer { flex-direction: column; align-items: flex-start; gap: 10px; padding: 18px 16px; }
+            .footer-left { font-size: 11px; }
+            .footer-right { justify-content: flex-start; gap: 8px; font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+
+<div style="display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; width: 100%; background: #ffffff;">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="brand">
+            <a href="#" aria-label="Atlas College home" class="logo-link">
+                <img class="brand-logo" src="assets/logos.png" alt="Atlas College">
+            </a>
+        </div>
+        <div class="header-right">
+            <button class="profile-icon-button hidden" type="button" id="profileButton" aria-label="Log Out / Profile" title="Return to Login">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN VIEWS -->
+    <main class="main">
+
+        <!-- VIEW 1: SIGN IN SCREEN -->
+        <section id="loginView">
+            <div class="auth-header-centered">
+                <div class="auth-title-row">
+                    <div class="auth-title-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    </div>
+                    <h1>Sign In</h1>
+                </div>
+                <p>Enter your email address and password to access your application dashboard.</p>
+            </div>
+
+            <div class="login-form-group">
+                <label for="loginEmailInput">Email Address <span>*</span></label>
+                <div class="input-with-icon">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </span>
+                    <input type="email" id="loginEmailInput" class="login-input" placeholder="Enter your email address" autocomplete="email">
+                </div>
+            </div>
+
+            <div class="login-form-group" style="margin-bottom: 5px;">
+                <label for="loginPasswordInput">Password <span>*</span></label>
+                <div class="input-with-icon">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </span>
+                    <input type="password" id="loginPasswordInput" class="login-input" placeholder="Enter your password" autocomplete="current-password">
+                    <button type="button" class="password-toggle-btn" data-toggle-password="loginPasswordInput" aria-label="Toggle password visibility">
+                        <svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="forgot-pin-wrap">
+                <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+            </div>
+
+            <button type="button" class="check-status-button" id="signInBtn">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Sign In
+            </button>
+
+            <div class="login-divider-row">or</div>
+
+            <div class="auth-bottom-link-row">
+                <span>Don't have an account?</span>
+                <a href="#" id="goToSignUpLink">Sign Up</a>
+            </div>
+        </section>
+
+        <!-- VIEW 2: CREATE ACCOUNT / SIGN UP SCREEN -->
+        <section id="signupView" class="hidden">
+            <div class="auth-header-centered">
+                <div class="auth-title-row">
+                    <div class="auth-title-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    </div>
+                    <h1>Create Account</h1>
+                </div>
+                <p>Fill in the details below to create your applicant account.</p>
+            </div>
+
+            <div class="login-form-group">
+                <label for="signupNameInput">Full Name <span>*</span></label>
+                <div class="input-with-icon">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </span>
+                    <input type="text" id="signupNameInput" class="login-input" placeholder="Enter your full name" autocomplete="name">
+                </div>
+            </div>
+
+            <div class="login-form-group">
+                <label for="signupEmailInput">Email Address <span>*</span></label>
+                <div class="input-with-icon">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </span>
+                    <input type="email" id="signupEmailInput" class="login-input" placeholder="Enter your email address" autocomplete="email">
+                </div>
+            </div>
+
+            <div class="login-form-group">
+                <label for="signupPasswordInput">Password <span>*</span></label>
+                <div class="input-with-icon">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </span>
+                    <input type="password" id="signupPasswordInput" class="login-input" placeholder="Enter your password" autocomplete="new-password">
+                    <button type="button" class="password-toggle-btn" data-toggle-password="signupPasswordInput" aria-label="Toggle password visibility">
+                        <svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="login-form-group" style="margin-bottom: 20px;">
+                <label for="signupConfirmPasswordInput">Confirm Password <span>*</span></label>
+                <div class="input-with-icon">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </span>
+                    <input type="password" id="signupConfirmPasswordInput" class="login-input" placeholder="Confirm your password" autocomplete="new-password">
+                    <button type="button" class="password-toggle-btn" data-toggle-password="signupConfirmPasswordInput" aria-label="Toggle password visibility">
+                        <svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <button type="button" class="check-status-button" id="createAccountBtn">
+                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                Create Account
+            </button>
+
+            <div class="login-divider-row">or</div>
+
+            <div class="auth-bottom-link-row">
+                <span>Already have an account?</span>
+                <a href="#" id="goToSignInFromSignUp">Sign In</a>
+            </div>
+        </section>
+
+        <!-- VIEW 3: FORGOT PASSWORD SCREEN -->
+        <section id="forgotPasswordView" class="hidden">
+            <div class="auth-header-centered">
+                <div class="auth-title-row">
+                    <div class="auth-title-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
+                    </div>
+                    <h1>Forgot Password?</h1>
+                </div>
+                <p>Enter your email address and we'll send you instructions to reset your password.</p>
+            </div>
+
+            <div class="login-form-group" style="margin-bottom: 20px;">
+                <label for="forgotEmailInput">Email Address <span>*</span></label>
+                <div class="input-with-icon">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </span>
+                    <input type="email" id="forgotEmailInput" class="login-input" placeholder="Enter your email address" autocomplete="email">
+                </div>
+            </div>
+
+            <button type="button" class="check-status-button" id="sendResetLinkBtn">
+                <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Send Reset Link
+            </button>
+
+            <div class="login-divider-row">or</div>
+
+            <div class="auth-bottom-link-row">
+                <a href="#" id="backToSignInFromForgot" class="back-signin-link" style="text-decoration: none;">Back to Sign In</a>
+            </div>
+        </section>
+
+        <!-- VIEW 4: PORTAL DASHBOARD (Hidden initially) -->
+        <div id="portalView" class="hidden">
+            <section class="application-card" id="applicationCard">
+                <div class="application-top">
+                    <div class="application-info">
+                        <p class="application-number">
+                            Application Reference:
+                            <span id="applicationReference">ATL-2026-10482</span>
+                        </p>
+                        <div class="application-details">
+                            <span>Programme: <strong id="programmeName">Information Technology</strong></span>
+                            <span>Intake: <strong id="intakeName">2026</strong></span>
+                            <span>Submitted: <strong id="submittedDate">18 August 2026</strong></span>
+                        </div>
+                    </div>
+                    <div class="status-badge status-action" id="mainStatusBadge">Status: Action Required</div>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h2>Required Documents</h2>
+                        <p>Please upload the required verification items.</p>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="requirements-list" id="requirementsList">
+                        <div class="requirement" id="requirement-id">
+                            <div class="requirement-info">
+                                <div class="requirement-icon">
+                                    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M13 10h5"/><path d="M13 14h4"/></svg>
+                                </div>
+                                <div class="requirement-text">
+                                    <h3>ID / Passport</h3>
+                                    <p id="idDescription">Government-issued identity document</p>
+                                </div>
+                            </div>
+                            <span class="requirement-status required" id="idStatus">Required</span>
+                            <button type="button" class="requirement-action primary" id="idAction" data-document="id">Upload</button>
+                        </div>
+                        <div class="requirement" id="requirement-matric">
+                            <div class="requirement-info">
+                                <div class="requirement-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4z"/><path d="M6 10v5"/><path d="M18 10v5"/><path d="M6 15c2 2 4 3 6 3s4-1 6-3"/></svg>
+                                </div>
+                                <div class="requirement-text">
+                                    <h3>Matric Certificate</h3>
+                                    <p id="matricDescription">Final school certificate</p>
+                                </div>
+                            </div>
+                            <span class="requirement-status required" id="matricStatus">Required</span>
+                            <button type="button" class="requirement-action primary" id="matricAction" data-document="matric">Upload</button>
+                        </div>
+                        <div class="requirement" id="requirement-results">
+                            <div class="requirement-info">
+                                <div class="requirement-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5z"/><path d="M14 3v5h5"/><path d="M8 13h8"/><path d="M8 17h6"/></svg>
+                                </div>
+                                <div class="requirement-text">
+                                    <h3>Latest School Results</h3>
+                                    <p id="resultsDescription">Most recent academic records</p>
+                                </div>
+                            </div>
+                            <span class="requirement-status required" id="resultsStatus">Required</span>
+                            <button type="button" class="requirement-action primary" id="resultsAction" data-document="results">Upload</button>
+                        </div>
+                        <div class="requirement" id="requirement-address">
+                            <div class="requirement-info">
+                                <div class="requirement-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M4 10l8-6 8 6"/><path d="M6 9v10h12V9"/><path d="M9 19v-5h6v5"/></svg>
+                                </div>
+                                <div class="requirement-text">
+                                    <h3>Proof of Address</h3>
+                                    <p id="addressDescription">Recent document showing residence</p>
+                                </div>
+                            </div>
+                            <span class="requirement-status required" id="addressStatus">Required</span>
+                            <button type="button" class="requirement-action primary" id="addressAction" data-document="address">Upload</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-left">
+            © 2026 Atlas College. All rights reserved.
+        </div>
+        <nav class="footer-right" aria-label="Footer navigation">
+            <a href="#" id="privacyLink">Privacy Policy</a>
+            <span class="footer-separator">|</span>
+            <a href="#" id="termsLink">Terms &amp; Conditions</a>
+            <span class="footer-separator">|</span>
+            <a href="#" id="supportLink">Help</a>
+        </nav>
+    </footer>
+
+    <!-- UPLOAD MODAL -->
+    <div class="modal-backdrop" id="uploadModal">
+        <div class="modal" role="dialog" aria-modal="true">
+            <div class="modal-header">
+                <h2 id="uploadModalTitle">Upload Document</h2>
+                <button type="button" class="close-modal" id="closeUploadModal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="upload-description" id="uploadDescription">Upload your required document below.</p>
+                <div class="drop-zone" id="dropZone">
+                    <div class="upload-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 16V4"/><path d="M8 8l4-4 4 4"/><path d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
+                    </div>
+                    <strong>Choose a document</strong>
+                    <span>PDF, JPG or PNG</span>
+                    <button type="button" class="choose-file" id="chooseFileButton">Choose File</button>
+                    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png">
+                </div>
+                <div class="selected-file hidden" id="selectedFile"></div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-button cancel" id="cancelUpload">Cancel</button>
+                    <button type="button" class="modal-button save" id="saveDocument">Save Document</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DOCUMENT VIEW MODAL -->
+    <div class="modal-backdrop" id="documentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Document</h2>
+                <button type="button" class="close-modal" id="closeDocumentModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="document-preview">
+                    <div class="document-preview-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10l4 4v14H5z"></path><path d="M14 3v5h5"></path></svg>
+                    </div>
+                    <strong id="viewDocumentName">Document.pdf</strong>
+                    <br>
+                    <small id="viewDocumentDetails" style="color: #526e9e;">Uploaded document</small>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-button cancel" id="closeDocumentButton">Close</button>
+                    <button type="button" class="modal-button save" id="replaceDocumentButton">Replace Document</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOASTS -->
+    <div class="toast-container" id="toastContainer"></div>
+
+</div>
+
+<script src="applicant.js"></script>
+</body>
+  </html>
