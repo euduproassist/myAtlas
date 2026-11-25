@@ -199,9 +199,11 @@
         }
 
         /* =========================================================
-           4. CHECK STATUS / LOGIN VIEW
+           4. AUTH VIEWS (SIGN IN / SIGN UP / FORGOT PASSWORD)
         ========================================================= */
-        #loginView {
+        #loginView,
+        #signupView,
+        #forgotPasswordView {
             width: 100%;
             max-width: 580px;
             margin: auto;
@@ -212,39 +214,45 @@
             animation: fadeUp 0.6s ease both;
         }
 
-        .login-hero-row {
+        .auth-header-centered {
             width: 100%;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 20px;
+            text-align: center;
             margin-bottom: 28px;
-            text-align: left;
         }
 
-        .login-icon-box {
-            width: clamp(52px, 6.2vw, 75px);
-            height: clamp(52px, 6.2vw, 75px);
-            flex: 0 0 clamp(52px, 6.2vw, 75px);
-            background: linear-gradient(145deg, #eaf5ff, #dfeeff);
-            border-radius: 15px;
+        .auth-title-row {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--blue);
+            gap: 12px;
+            margin-bottom: 10px;
         }
 
-        .login-icon-box svg {
-            width: 42%;
-            height: 42%;
+        .auth-title-icon {
+            width: 34px;
+            height: 34px;
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .auth-title-icon svg {
+            width: 100%;
+            height: 100%;
             fill: none;
             stroke: currentColor;
-            stroke-width: 1.8;
+            stroke-width: 1.6;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
 
-        .login-hero-text h1 {
-            margin: 0 0 6px;
+        .auth-title-row h1 {
+            margin: 0;
             color: var(--navy);
             font-size: clamp(20px, 2.2vw, 30px);
             font-weight: 750;
@@ -252,8 +260,9 @@
             letter-spacing: -.6px;
         }
 
-        .login-hero-text p {
+        .auth-header-centered p {
             margin: 0;
+            max-width: 440px;
             color: #526e9e;
             font-size: clamp(12px, 1.1vw, 14px);
             line-height: 1.5;
@@ -310,7 +319,7 @@
         .login-input {
             width: 100%;
             height: 40px;
-            padding: 0 13px 0 38px;
+            padding: 0 38px 0 38px;
             background: #ffffff;
             border: 1px solid var(--border-light);
             border-radius: 8px;
@@ -329,6 +338,33 @@
         .login-input::placeholder {
             color: #8fa6c2;
             opacity: 1;
+        }
+
+        .password-toggle-btn {
+            position: absolute;
+            right: 10px;
+            background: transparent;
+            border: 0;
+            padding: 4px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .password-toggle-btn:hover {
+            color: var(--blue);
+        }
+
+        .password-toggle-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .forgot-pin-wrap {
@@ -409,32 +445,38 @@
             background: var(--border);
         }
 
-        .apply-row-bottom {
+        .auth-bottom-link-row {
             width: 100%;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 16px;
+            justify-content: center;
+            gap: 6px;
             color: var(--navy);
             font-size: clamp(12px, 1.1vw, 13.5px);
+            text-align: center;
         }
 
-        .btn-apply-light {
-            min-height: 40px;
-            padding: 0 20px;
-            background: var(--pale-blue);
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
+        .auth-bottom-link-row a {
             color: var(--blue);
-            font-size: 13px;
+            font-weight: 700;
+            text-decoration: underline;
+            transition: var(--transition);
+        }
+
+        .auth-bottom-link-row a:hover {
+            color: var(--blue-dark);
+        }
+
+        .back-signin-link {
+            color: var(--blue);
+            font-size: clamp(12px, 1.1vw, 13.5px);
             font-weight: 700;
             transition: var(--transition);
         }
 
-        .btn-apply-light:hover {
-            background: #dff0ff;
+        .back-signin-link:hover {
             color: var(--blue-dark);
-            transform: translateY(-1px);
+            text-decoration: underline;
         }
 
         /* =========================================================
@@ -722,27 +764,6 @@
             gap: 10px;
         }
 
-        .modal-header h2 .recover-icon-mini {
-            width: 28px;
-            height: 28px;
-            background: var(--pale-blue);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--blue);
-        }
-
-        .modal-header h2 .recover-icon-mini svg {
-            width: 15px;
-            height: 15px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 1.8;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
         .close-modal {
             width: 28px;
             height: 28px;
@@ -764,58 +785,6 @@
 
         .modal-body {
             padding: 20px;
-        }
-
-        .recover-prompt-text {
-            margin: 0 0 14px;
-            color: var(--navy);
-            font-size: 12.5px;
-            line-height: 1.5;
-            font-weight: 600;
-        }
-
-        .recover-info-box {
-            margin-top: 15px;
-            padding: 12px 14px;
-            background: var(--pale-blue);
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            color: var(--text);
-            font-size: 11.5px;
-            line-height: 1.5;
-        }
-
-        .recover-info-box svg {
-            width: 16px;
-            height: 16px;
-            color: var(--blue);
-            flex: 0 0 16px;
-            margin-top: 1px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .btn-recover-submit {
-            width: 100%;
-            min-height: 40px;
-            margin-top: 16px;
-            border: 0;
-            border-radius: 8px;
-            background: var(--blue);
-            color: #ffffff;
-            font-size: 13px;
-            font-weight: 750;
-            transition: var(--transition);
-        }
-
-        .btn-recover-submit:hover {
-            background: var(--blue-dark);
         }
 
         .upload-description {
@@ -1028,7 +997,6 @@
 
         .footer-right a {
             transition: var(--transition);
-
         }
 
         .footer-right a:hover {
@@ -1049,8 +1017,6 @@
             .requirement { grid-template-columns: 1fr; gap: 10px; }
             .requirement-status { justify-self: start; }
             .requirement-action { width: 100%; }
-            .login-hero-row { flex-direction: column; text-align: center; }
-            .apply-row-bottom { flex-direction: column; gap: 10px; text-align: center; }
             .footer { padding-top: 18px; padding-bottom: 18px; }
         }
 
@@ -1086,56 +1052,164 @@
     <!-- MAIN VIEWS -->
     <main class="main">
 
-        <!-- VIEW 1: CHECK STATUS LOGIN SCREEN -->
+        <!-- VIEW 1: SIGN IN SCREEN -->
         <section id="loginView">
-            <div class="login-hero-row">
-                <div class="login-icon-box" aria-hidden="true">
-                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <div class="auth-header-centered">
+                <div class="auth-title-row">
+                    <div class="auth-title-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    </div>
+                    <h1>Sign In</h1>
                 </div>
-                <div class="login-hero-text">
-                    <h1>Track Application Status</h1>
-                    <p>Enter your application reference and 5-digit PIN to check the status of your application.</p>
-                </div>
+                <p>Enter your email address and password to access your application dashboard.</p>
             </div>
 
             <div class="login-form-group">
-                <label for="loginRefInput">Application Reference Number <span>*</span></label>
+                <label for="loginEmailInput">Email Address <span>*</span></label>
                 <div class="input-with-icon">
                     <span class="input-icon">
-                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                     </span>
-                    <input type="text" id="loginRefInput" class="login-input" placeholder="e.g. ATL-2026-10482" autocomplete="off">
+                    <input type="email" id="loginEmailInput" class="login-input" placeholder="Enter your email address" autocomplete="email">
                 </div>
             </div>
 
             <div class="login-form-group" style="margin-bottom: 5px;">
-                <label for="loginPinInput">5-Digit PIN <span>*</span></label>
+                <label for="loginPasswordInput">Password <span>*</span></label>
                 <div class="input-with-icon">
                     <span class="input-icon">
                         <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                     </span>
-                    <input type="password" id="loginPinInput" class="login-input" placeholder="Enter your 5-digit PIN" maxlength="5" inputmode="numeric" autocomplete="off">
+                    <input type="password" id="loginPasswordInput" class="login-input" placeholder="Enter your password" autocomplete="current-password">
+                    <button type="button" class="password-toggle-btn" data-toggle-password="loginPasswordInput" aria-label="Toggle password visibility">
+                        <svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    </button>
                 </div>
             </div>
 
             <div class="forgot-pin-wrap">
-                <a href="#" id="forgotPinLink">Forgot PIN or Reference Number?</a>
+                <a href="#" id="forgotPasswordLink">Forgot Password?</a>
             </div>
 
-            <button type="button" class="check-status-button" id="checkStatusBtn">
+            <button type="button" class="check-status-button" id="signInBtn">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                Check Status
+                Sign In
             </button>
 
             <div class="login-divider-row">or</div>
 
-            <div class="apply-row-bottom">
-                <span>Need to start a new application?</span>
-                <button type="button" class="btn-apply-light">Apply Now</button>
+            <div class="auth-bottom-link-row">
+                <span>Don't have an account?</span>
+                <a href="#" id="goToSignUpLink">Sign Up</a>
             </div>
         </section>
 
-        <!-- VIEW 2: PORTAL DASHBOARD (Hidden initially) -->
+        <!-- VIEW 2: CREATE ACCOUNT / SIGN UP SCREEN -->
+        <section id="signupView" class="hidden">
+            <div class="auth-header-centered">
+                <div class="auth-title-row">
+                    <div class="auth-title-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    </div>
+                    <h1>Create Account</h1>
+                </div>
+                <p>Fill in the details below to create your applicant account.</p>
+            </div>
+
+            <div class="login-form-group">
+                <label for="signupNameInput">Full Name <span>*</span></label>
+                <div class="input-with-icon">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </span>
+                    <input type="text" id="signupNameInput" class="login-input" placeholder="Enter your full name" autocomplete="name">
+                </div>
+            </div>
+
+            <div class="login-form-group">
+                <label for="signupEmailInput">Email Address <span>*</span></label>
+                <div class="input-with-icon">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </span>
+                    <input type="email" id="signupEmailInput" class="login-input" placeholder="Enter your email address" autocomplete="email">
+                </div>
+            </div>
+
+            <div class="login-form-group">
+                <label for="signupPasswordInput">Password <span>*</span></label>
+                <div class="input-with-icon">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </span>
+                    <input type="password" id="signupPasswordInput" class="login-input" placeholder="Enter your password" autocomplete="new-password">
+                    <button type="button" class="password-toggle-btn" data-toggle-password="signupPasswordInput" aria-label="Toggle password visibility">
+                        <svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="login-form-group" style="margin-bottom: 20px;">
+                <label for="signupConfirmPasswordInput">Confirm Password <span>*</span></label>
+                <div class="input-with-icon">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </span>
+                    <input type="password" id="signupConfirmPasswordInput" class="login-input" placeholder="Confirm your password" autocomplete="new-password">
+                    <button type="button" class="password-toggle-btn" data-toggle-password="signupConfirmPasswordInput" aria-label="Toggle password visibility">
+                        <svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <button type="button" class="check-status-button" id="createAccountBtn">
+                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                Create Account
+            </button>
+
+            <div class="login-divider-row">or</div>
+
+            <div class="auth-bottom-link-row">
+                <span>Already have an account?</span>
+                <a href="#" id="goToSignInFromSignUp">Sign In</a>
+            </div>
+        </section>
+
+        <!-- VIEW 3: FORGOT PASSWORD SCREEN -->
+        <section id="forgotPasswordView" class="hidden">
+            <div class="auth-header-centered">
+                <div class="auth-title-row">
+                    <div class="auth-title-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1"/></svg>
+                    </div>
+                    <h1>Forgot Password?</h1>
+                </div>
+                <p>Enter your email address and we'll send you instructions to reset your password.</p>
+            </div>
+
+            <div class="login-form-group" style="margin-bottom: 20px;">
+                <label for="forgotEmailInput">Email Address <span>*</span></label>
+                <div class="input-with-icon">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </span>
+                    <input type="email" id="forgotEmailInput" class="login-input" placeholder="Enter your email address" autocomplete="email">
+                </div>
+            </div>
+
+            <button type="button" class="check-status-button" id="sendResetLinkBtn">
+                <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Send Reset Link
+            </button>
+
+            <div class="login-divider-row">or</div>
+
+            <div class="auth-bottom-link-row">
+                <a href="#" id="backToSignInFromForgot" class="back-signin-link" style="text-decoration: none;">Back to Sign In</a>
+            </div>
+        </section>
+
+        <!-- VIEW 4: PORTAL DASHBOARD (Hidden initially) -->
         <div id="portalView" class="hidden">
             <section class="application-card" id="applicationCard">
                 <div class="application-top">
@@ -1236,40 +1310,6 @@
         </nav>
     </footer>
 
-    <!-- RECOVER CREDENTIALS MODAL -->
-    <div class="modal-backdrop" id="recoverModal">
-        <div class="modal" role="dialog" aria-modal="true">
-            <div class="modal-header">
-                <h2>
-                    <div class="recover-icon-mini">
-                        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    </div>
-                    Recover Login Credentials
-                </h2>
-                <button type="button" class="close-modal" id="closeRecoverModal" aria-label="Close">×</button>
-            </div>
-            <div class="modal-body">
-                <p class="recover-prompt-text">Enter the National ID or Passport number you used during application:</p>
-                
-                <div class="login-form-group" style="margin-bottom: 0;">
-                    <div class="input-with-icon">
-                        <span class="input-icon">
-                            <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M13 10h5"/><path d="M13 14h4"/></svg>
-                        </span>
-                        <input type="text" id="recoverIdInput" class="login-input" placeholder="Enter ID or Passport number" autocomplete="off">
-                    </div>
-                </div>
-
-                <button type="button" class="btn-recover-submit" id="submitRecoverBtn">SEND LOGIN DETAILS</button>
-
-                <div class="recover-info-box">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                    <span>We will email your Application Reference Number and PIN to the email address on file.</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- UPLOAD MODAL -->
     <div class="modal-backdrop" id="uploadModal">
         <div class="modal" role="dialog" aria-modal="true">
@@ -1366,13 +1406,19 @@
     }
 
     const loginView = document.getElementById("loginView");
+    const signupView = document.getElementById("signupView");
+    const forgotPasswordView = document.getElementById("forgotPasswordView");
     const portalView = document.getElementById("portalView");
     const profileButton = document.getElementById("profileButton");
-    const checkStatusBtn = document.getElementById("checkStatusBtn");
-    const forgotPinLink = document.getElementById("forgotPinLink");
-    const recoverModal = document.getElementById("recoverModal");
-    const closeRecoverModal = document.getElementById("closeRecoverModal");
-    const submitRecoverBtn = document.getElementById("submitRecoverBtn");
+
+    const signInBtn = document.getElementById("signInBtn");
+    const createAccountBtn = document.getElementById("createAccountBtn");
+    const sendResetLinkBtn = document.getElementById("sendResetLinkBtn");
+
+    const forgotPasswordLink = document.getElementById("forgotPasswordLink");
+    const goToSignUpLink = document.getElementById("goToSignUpLink");
+    const goToSignInFromSignUp = document.getElementById("goToSignInFromSignUp");
+    const backToSignInFromForgot = document.getElementById("backToSignInFromForgot");
 
     const applicationReference = document.getElementById("applicationReference");
     const programmeName = document.getElementById("programmeName");
@@ -1380,43 +1426,101 @@
     const mainStatusBadge = document.getElementById("mainStatusBadge");
     const toastContainer = document.getElementById("toastContainer");
 
-    // NAVIGATION LOGIC
-    checkStatusBtn.addEventListener("click", () => {
+    function showAuthView(viewToShow) {
         loginView.classList.add("hidden");
+        signupView.classList.add("hidden");
+        forgotPasswordView.classList.add("hidden");
+        portalView.classList.add("hidden");
+        profileButton.classList.add("hidden");
+
+        viewToShow.classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // AUTH NAVIGATION LOGIC
+    goToSignUpLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        showAuthView(signupView);
+    });
+
+    goToSignInFromSignUp.addEventListener("click", (e) => {
+        e.preventDefault();
+        showAuthView(loginView);
+    });
+
+    forgotPasswordLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        showAuthView(forgotPasswordView);
+    });
+
+    backToSignInFromForgot.addEventListener("click", (e) => {
+        e.preventDefault();
+        showAuthView(loginView);
+    });
+
+    signInBtn.addEventListener("click", () => {
+        loginView.classList.add("hidden");
+        signupView.classList.add("hidden");
+        forgotPasswordView.classList.add("hidden");
         portalView.classList.remove("hidden");
         profileButton.classList.remove("hidden");
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    profileButton.addEventListener("click", () => {
-        portalView.classList.add("hidden");
-        profileButton.classList.add("hidden");
-        loginView.classList.remove("hidden");
+    createAccountBtn.addEventListener("click", () => {
+        const fullName = document.getElementById("signupNameInput").value.trim();
+        const email = document.getElementById("signupEmailInput").value.trim();
+        const password = document.getElementById("signupPasswordInput").value;
+        const confirmPassword = document.getElementById("signupConfirmPasswordInput").value;
+
+        if (!fullName || !email || !password || !confirmPassword) {
+            showToast("Please fill in all required fields.", "error");
+            return;
+        }
+        if (password !== confirmPassword) {
+            showToast("Passwords do not match.", "error");
+            return;
+        }
+
+        application.applicant = fullName;
+        saveApplication();
+        showToast("Account created successfully.", "success");
+
+        loginView.classList.add("hidden");
+        signupView.classList.add("hidden");
+        forgotPasswordView.classList.add("hidden");
+        portalView.classList.remove("hidden");
+        profileButton.classList.remove("hidden");
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    // RECOVER MODAL LOGIC
-    forgotPinLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        recoverModal.classList.add("open");
-        document.body.style.overflow = "hidden";
-    });
-
-    closeRecoverModal.addEventListener("click", () => {
-        recoverModal.classList.remove("open");
-        document.body.style.overflow = "";
-    });
-
-    submitRecoverBtn.addEventListener("click", () => {
-        const idInput = document.getElementById("recoverIdInput").value.trim();
-        if (!idInput) {
-            showToast("Please enter your ID or Passport number.", "error");
+    sendResetLinkBtn.addEventListener("click", () => {
+        const email = document.getElementById("forgotEmailInput").value.trim();
+        if (!email) {
+            showToast("Please enter your email address.", "error");
             return;
         }
-        recoverModal.classList.remove("open");
-        document.body.style.overflow = "";
-        document.getElementById("recoverIdInput").value = "";
-        showToast("Login details sent to your email on file successfully.", "success");
+        document.getElementById("forgotEmailInput").value = "";
+        showToast("Password reset instructions sent to your email.", "success");
+        showAuthView(loginView);
+    });
+
+    profileButton.addEventListener("click", () => {
+        showAuthView(loginView);
+    });
+
+    // PASSWORD VISIBILITY TOGGLE
+    const eyeOffSvg = '<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+    const eyeOnSvg = '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+
+    document.querySelectorAll("[data-toggle-password]").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const targetInput = document.getElementById(btn.dataset.togglePassword);
+            if (!targetInput) return;
+            const isHidden = targetInput.type === "password";
+            targetInput.type = isHidden ? "text" : "password";
+            btn.innerHTML = isHidden ? eyeOnSvg : eyeOffSvg;
+        });
     });
 
     function renderBasicInformation() {
@@ -1637,7 +1741,7 @@
         }, 3000);
     }
 
-    [recoverModal, uploadModal, documentModal].forEach(modal => {
+    [uploadModal, documentModal].forEach(modal => {
         modal.addEventListener("click", event => {
             if (event.target === modal) closeModal(modal);
         });
@@ -1645,8 +1749,6 @@
 
     document.addEventListener("keydown", event => {
         if (event.key === "Escape") {
-            recoverModal.classList.remove("open");
-            document.body.style.overflow = "";
             [uploadModal, documentModal].forEach(modal => closeModal(modal));
         }
     });
