@@ -1,579 +1,312 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-    <meta name="theme-color" content="#38a9ef">
-
-    <title>TileyPop</title>
-
-    <style>
-
-        /* =====================================
-           1. GLOBAL SETTINGS
-        ===================================== */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #38a9ef;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-        }
-
-        button {
-            font-family: inherit;
-            cursor: pointer;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        /* =====================================
-           2. FULL SCREEN APPLICATION
-        ===================================== */
-
-        #app {
-            position: fixed;
-            inset: 0;
-
-            width: 100%;
-            height: 100%;
-            height: 100dvh;
-
-            overflow: hidden;
-        }
-
-        #home-screen {
-            position: relative;
-
-            width: 100%;
-            height: 100%;
-            height: 100dvh;
-
-            overflow: hidden;
-            isolation: isolate;
-        }
-
-        /* =====================================
-           3. FULL SCREEN BACKGROUND
-        ===================================== */
-
-        .home-background {
-            position: absolute;
-            inset: 0;
-
-            width: 100%;
-            height: 100%;
-
-            object-fit: cover;
-            object-position: center center;
-
-            z-index: -1;
-            pointer-events: none;
-
-            -webkit-user-drag: none;
-        }
-
-        /* =====================================
-           4. RESPONSIVE INTERFACE LAYER
-        ===================================== */
-
-        .home-interface {
-            position: absolute;
-            inset: 0;
-
-            width: 100%;
-            height: 100%;
-
-            padding-top: max(2%, env(safe-area-inset-top));
-            padding-left: max(3%, env(safe-area-inset-left));
-            padding-right: max(3%, env(safe-area-inset-right));
-            padding-bottom: max(2%, env(safe-area-inset-bottom));
-
-            pointer-events: none;
-        }
-
-        .home-interface button {
-            pointer-events: auto;
-        }
-
-        /* =====================================
-           5. TOP BAR
-        ===================================== */
-
-        .top-bar {
-            position: absolute;
-
-            top: max(2.5%, env(safe-area-inset-top));
-            left: 3%;
-            right: 3%;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 10px;
-        }
-
-        /* =====================================
-           6. COIN AND DIAMOND CONTAINER
-        ===================================== */
-
-        .currency-container {
-            display: flex;
-            align-items: center;
-
-            gap: clamp(6px, 2vw, 15px);
-
-            min-width: 0;
-        }
-
-        .currency-counter {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: clamp(3px, 1vw, 8px);
-
-            width: clamp(100px, 30vw, 145px);
-            height: clamp(36px, 5.5vh, 49px);
-
-            padding: 3px 6px;
-
-            background: rgba(28, 119, 195, 0.91);
-
-            border: 2px solid #ffffff;
-            border-radius: 40px;
-
-            box-shadow:
-                0 3px 7px rgba(0, 60, 120, 0.25),
-                inset 0 2px 3px rgba(255, 255, 255, 0.25);
-        }
-
-        /* =====================================
-           7. CURRENCY IMAGES
-        ===================================== */
-
-        .currency-icon {
-            width: clamp(25px, 5vh, 38px);
-            height: clamp(25px, 5vh, 38px);
-
-            object-fit: contain;
-
-            flex-shrink: 0;
-        }
-
-        .currency-amount {
-            flex: 1;
-            min-width: 0;
-
-            color: #ffffff;
-
-            font-size: clamp(12px, 2.2vh, 18px);
-            font-weight: 900;
-
-            text-align: center;
-
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-
-            text-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
-        }
-
-        /* =====================================
-           8. GREEN PLUS BUTTONS
-        ===================================== */
-
-        .currency-add-button {
-            width: clamp(22px, 4vh, 31px);
-            height: clamp(22px, 4vh, 31px);
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            flex-shrink: 0;
-
-            border: 2px solid #ffffff;
-            border-radius: 50%;
-
-            background: linear-gradient(
-                180deg,
-                #72ed78,
-                #18b941
-            );
-
-            color: #ffffff;
-
-            font-size: clamp(16px, 2.8vh, 22px);
-            font-weight: 900;
-
-            line-height: 1;
-
-            box-shadow: 0 2px 5px rgba(0, 80, 30, 0.3);
-        }
-
-        /* =====================================
-           9. SETTINGS BUTTON
-        ===================================== */
-
-        .settings-button {
-            width: clamp(39px, 6vh, 51px);
-            height: clamp(39px, 6vh, 51px);
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            flex-shrink: 0;
-
-            border: 2px solid #ffffff;
-            border-radius: 50%;
-
-            background: linear-gradient(
-                180deg,
-                #ffffff,
-                #dcefff
-            );
-
-            color: #278bd0;
-
-            font-size: clamp(22px, 3.5vh, 30px);
-
-            box-shadow:
-                0 3px 8px rgba(0, 65, 130, 0.25);
-        }
-
-        /* =====================================
-           10. PLAY NOW BUTTON
-        ===================================== */
-
-        .main-actions {
-            position: absolute;
-
-            left: 0;
-            right: 0;
-
-            /*
-               Positioned above the bottom artwork
-               and its love message.
-            */
-
-            bottom: clamp(12%, 15vh, 19%);
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding-left: 5%;
-            padding-right: 5%;
-        }
-
-        .play-button {
-            width: min(82%, 350px);
-
-            min-height: clamp(53px, 8vh, 74px);
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            gap: 12px;
-
-            padding: 10px 20px;
-
-            border: 3px solid #ffffff;
-            border-radius: 22px;
-
-            background: linear-gradient(
-                180deg,
-                #72ee7b 0%,
-                #2bd052 55%,
-                #13a83e 100%
-            );
-
-            color: #ffffff;
-
-            font-size: clamp(19px, 3.5vh, 28px);
-            font-weight: 900;
-
-            letter-spacing: 1px;
-
-            text-shadow: 0 2px 3px rgba(0, 90, 30, 0.35);
-
-            box-shadow:
-                0 6px 0 #087e32,
-                0 9px 16px rgba(0, 65, 30, 0.3);
-        }
-
-        .play-icon {
-            font-size: 0.85em;
-        }
-
-        /* =====================================
-           11. SMALL PHONE SCREENS
-        ===================================== */
-
-        @media (max-width: 360px) {
-
-            .top-bar {
-                left: 2%;
-                right: 2%;
-            }
-
-            .currency-container {
-                gap: 5px;
-            }
-
-            .currency-counter {
-                width: clamp(88px, 29vw, 105px);
-                gap: 3px;
-                padding: 3px 4px;
-            }
-
-            .currency-amount {
-                font-size: 11px;
-            }
-
-            .currency-icon {
-                width: 25px;
-                height: 25px;
-            }
-
-            .currency-add-button {
-                width: 22px;
-                height: 22px;
-            }
-
-            .settings-button {
-                width: 39px;
-                height: 39px;
-            }
-
-            .play-button {
-                width: 86%;
-            }
-        }
-
-        /* =====================================
-           12. SHORT PHONE SCREENS
-        ===================================== */
-
-        @media (max-height: 600px) {
-
-            .currency-counter {
-                height: 36px;
-            }
-
-            .settings-button {
-                width: 38px;
-                height: 38px;
-            }
-
-            .play-button {
-                min-height: 47px;
-                font-size: 18px;
-            }
-
-            .main-actions {
-                bottom: 12%;
-            }
-        }
-
-        /* =====================================
-           13. WIDE PHONE SCREENS
-        ===================================== */
-
-        @media (min-width: 600px) {
-
-            .currency-counter {
-                width: 155px;
-                height: 52px;
-            }
-
-            .settings-button {
-                width: 54px;
-                height: 54px;
-            }
-
-            .play-button {
-                width: min(55%, 360px);
-            }
-        }
-
-        /* =====================================
-           14. LANDSCAPE SCREEN ADJUSTMENTS
-        ===================================== */
-
-        @media (orientation: landscape) {
-
-            .top-bar {
-                top: 3%;
-            }
-
-            .main-actions {
-                bottom: 10%;
-            }
-
-            .play-button {
-                width: min(40%, 300px);
-                min-height: 46px;
-            }
-
-        }
-
-        /* =====================================
-           15. PREVENT UNWANTED SELECTION
-        ===================================== */
-
-        img {
-            -webkit-user-drag: none;
-        }
-
-        button:focus-visible {
-            outline: 3px solid #ffffff;
-            outline-offset: 4px;
-        }
-
-    </style>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>TileyPop</title>
+  <style>
+    :root {
+      /* Reference artboard matches the 9:16 portrait composition */
+      --stage-ratio: 9 / 16;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #45a9f5;
+      font-family: "Fredoka", "Nunito", "Trebuchet MS", system-ui, -apple-system, sans-serif;
+      user-select: none;
+    }
+
+    /* Full-bleed edge-to-edge backdrop so no empty bars ever appear */
+    .viewport-backdrop {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 50% 24%, rgba(255, 255, 255, 0.55) 0%, rgba(135, 214, 255, 0.25) 42%, rgba(56, 152, 240, 0.78) 100%);
+    }
+
+    /* Stretched atmospheric backdrop layer for extreme aspect ratios */
+    .ambient-bg {
+      position: absolute;
+      inset: -6%;
+      width: 112%;
+      height: 112%;
+      background-image: url("./assets/home-background.webp");
+      background-size: cover;
+      background-position: center;
+      filter: blur(18px) saturate(1.15);
+      opacity: 0.75;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Locked reference stage: keeps artwork, HUD, settings, and CTA aligned together */
+    .home-stage {
+      position: relative;
+      z-index: 1;
+      width: min(100vw, calc(100dvh * (9 / 16)));
+      height: min(100dvh, calc(100vw * (16 / 9)));
+      max-width: 100vw;
+      max-height: 100dvh;
+      aspect-ratio: var(--stage-ratio);
+      overflow: hidden;
+      background-image: url("./assets/home-background.webp");
+      background-size: 100% 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      box-shadow: 0 18px 48px rgba(10, 48, 102, 0.28);
+      /* Container query unit lets every child scale proportionally with the stage */
+      container-type: size;
+    }
+
+    /* 1 container-query width unit (1cqw) = 1% of the active stage width */
+    .hud-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Top HUD Row: Coins + Diamonds on left, Settings on right */
+    .top-bar {
+      position: absolute;
+      top: 2.3%;
+      left: 3.4%;
+      right: 3.4%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2.2cqw;
+      pointer-events: auto;
+    }
+
+    .currencies {
+      display: flex;
+      align-items: center;
+      gap: 2.4cqw;
+    }
+
+    .currency-pill {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      height: 6.4cqw;
+      min-width: 22.5cqw;
+      padding: 0 2.6cqw 0 7.4cqw;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(17, 62, 118, 0.84) 0%, rgba(10, 39, 79, 0.92) 100%);
+      border: 0.42cqw solid rgba(255, 255, 255, 0.82);
+      box-shadow:
+        0 0.7cqw 0 rgba(7, 27, 56, 0.55),
+        inset 0 0.35cqw 0.6cqw rgba(255, 255, 255, 0.25);
+    }
+
+    .currency-icon {
+      position: absolute;
+      left: -1.1cqw;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8.4cqw;
+      height: 8.4cqw;
+      object-fit: contain;
+      filter: drop-shadow(0 0.45cqw 0.6cqw rgba(0, 0, 0, 0.35));
+      pointer-events: none;
+    }
+
+    .currency-value {
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 3.6cqw;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      text-shadow: 0 0.3cqw 0 rgba(4, 20, 44, 0.75);
+      margin-right: 1.4cqw;
+    }
+
+    .plus-btn {
+      margin-left: auto;
+      width: 4.8cqw;
+      height: 4.8cqw;
+      border-radius: 50%;
+      border: 0.35cqw solid #ffffff;
+      background: linear-gradient(180deg, #6ef236 0%, #37b80c 58%, #228704 100%);
+      box-shadow:
+        0 0.45cqw 0 #155c02,
+        inset 0 0.25cqw 0.35cqw rgba(255, 255, 255, 0.65);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.12s ease, filter 0.12s ease;
+    }
+
+    .plus-btn:active {
+      transform: translateY(0.3cqw) scale(0.96);
+      filter: brightness(1.06);
+    }
+
+    .plus-btn::before,
+    .plus-btn::after {
+      content: "";
+      position: absolute;
+      background: #ffffff;
+      border-radius: 999px;
+      box-shadow: 0 0.18cqw 0 rgba(16, 76, 2, 0.75);
+    }
+
+    .plus-btn::before {
+      width: 2.35cqw;
+      height: 0.65cqw;
+    }
+
+    .plus-btn::after {
+      width: 0.65cqw;
+      height: 2.35cqw;
+    }
+
+    /* Circular Settings Button on Top-Right */
+    .settings-btn {
+      width: 8.6cqw;
+      height: 8.6cqw;
+      border-radius: 50%;
+      border: 0.45cqw solid #ffffff;
+      background: linear-gradient(180deg, #57b9ff 0%, #247be5 60%, #1454ad 100%);
+      box-shadow:
+        0 0.65cqw 0 rgba(10, 40, 84, 0.65),
+        inset 0 0.3cqw 0.5cqw rgba(255, 255, 255, 0.5);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.12s ease, filter 0.12s ease;
+    }
+
+    .settings-btn:active {
+      transform: translateY(0.3cqw) scale(0.96);
+      filter: brightness(1.06);
+    }
+
+    .gear-icon {
+      width: 5.2cqw;
+      height: 5.2cqw;
+      fill: #ffffff;
+      filter: drop-shadow(0 0.22cqw 0 rgba(10, 39, 82, 0.65));
+    }
+
+    /* Play Now CTA positioned cleanly below the puzzle showcase & above the bottom message */
+    .play-cta-wrap {
+      position: absolute;
+      left: 50%;
+      top: 72.2%;
+      transform: translateX(-50%);
+      width: 56%;
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    .play-now-btn {
+      position: relative;
+      width: 100%;
+      height: 11.4cqw;
+      border-radius: 999px;
+      border: 0.55cqw solid #ffffff;
+      background: linear-gradient(180deg, #ffd43b 0%, #ffa800 52%, #eb7600 100%);
+      box-shadow:
+        0 1.05cqw 0 #a84800,
+        0 1.5cqw 2.4cqw rgba(15, 56, 110, 0.32),
+        inset 0 0.55cqw 0.9cqw rgba(255, 250, 210, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2.2cqw;
+      cursor: pointer;
+      transition: transform 0.12s ease, filter 0.12s ease;
+    }
+
+    .play-now-btn:active {
+      transform: translateY(0.55cqw) scale(0.98);
+      filter: brightness(1.05);
+    }
+
+    .play-triangle {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 2.55cqw 0 2.55cqw 4.1cqw;
+      border-color: transparent transparent transparent #ffffff;
+      filter: drop-shadow(0 0.3cqw 0 rgba(145, 56, 0, 0.7));
+      transform: translateX(0.25cqw);
+    }
+
+    .play-now-text {
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 5.5cqw;
+      line-height: 1;
+      letter-spacing: 0.01em;
+      text-shadow:
+        0 0.35cqw 0 #b85100,
+        0 0.5cqw 0.4cqw rgba(92, 34, 0, 0.45);
+    }
+  </style>
 </head>
-
 <body>
+  <div class="viewport-backdrop">
+    <div class="ambient-bg" aria-hidden="true"></div>
 
-    <main id="app">
-
-        <section id="home-screen">
-
-            <!-- Full screen background artwork -->
-
-            <img
-                src="assets/home-background.webp"
-                alt=""
-                class="home-background"
-                draggable="false"
-            >
-
-            <!-- Interface elements -->
-
-            <div class="home-interface">
-
-                <!-- TOP BAR -->
-
-                <header class="top-bar">
-
-                    <div class="currency-container">
-
-                        <!-- COIN COUNTER -->
-
-                        <div class="currency-counter" id="coin-counter">
-
-                            <img
-                                src="assets/coin.webp"
-                                alt="Coin"
-                                class="currency-icon"
-                            >
-
-                            <span
-                                class="currency-amount"
-                                id="coin-balance"
-                            >0</span>
-
-                            <button
-                                type="button"
-                                class="currency-add-button"
-                                id="add-coins"
-                                aria-label="Get more coins"
-                            >
-                                +
-                            </button>
-
-                        </div>
-
-                        <!-- DIAMOND COUNTER -->
-
-                        <div class="currency-counter" id="diamond-counter">
-
-                            <img
-                                src="assets/diamond.webp"
-                                alt="Diamond"
-                                class="currency-icon"
-                            >
-
-                            <span
-                                class="currency-amount"
-                                id="diamond-balance"
-                            >0</span>
-
-                            <button
-                                type="button"
-                                class="currency-add-button"
-                                id="add-diamonds"
-                                aria-label="Get more diamonds"
-                            >
-                                +
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                    <!-- SETTINGS -->
-
-                    <button
-                        type="button"
-                        class="settings-button"
-                        id="settings-button"
-                        aria-label="Settings"
-                    >
-                        <span aria-hidden="true">⚙</span>
-                    </button>
-
-                </header>
-
-                <!-- PLAY BUTTON -->
-
-                <section class="main-actions">
-
-                    <button
-                        type="button"
-                        class="play-button"
-                        id="play-now"
-                    >
-
-                        <span class="play-icon" aria-hidden="true">
-                            ▶
-                        </span>
-
-                        <span>PLAY NOW</span>
-
-                    </button>
-
-                </section>
-
+    <main class="home-stage" aria-label="TileyPop Home Screen">
+      <div class="hud-layer">
+        <header class="top-bar">
+          <div class="currencies">
+            <div class="currency-pill" aria-label="Coins: 1250">
+              <img class="currency-icon" src="./assets/coin.webp" alt="Coin" />
+              <span class="currency-value">1250</span>
+              <button type="button" class="plus-btn" aria-label="Add Coins"></button>
             </div>
 
-        </section>
+            <div class="currency-pill" aria-label="Diamonds: 18">
+              <img class="currency-icon" src="./assets/diamond.webp" alt="Diamond" />
+              <span class="currency-value">18</span>
+              <button type="button" class="plus-btn" aria-label="Add Diamonds"></button>
+            </div>
+          </div>
 
+          <button type="button" class="settings-btn" aria-label="Settings">
+            <svg class="gear-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.48.48 0 0 0 .12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.26.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/>
+            </svg>
+          </button>
+        </header>
+      </div>
+
+      <div class="play-cta-wrap">
+        <button type="button" class="play-now-btn" aria-label="Play Now">
+          <span class="play-triangle" aria-hidden="true"></span>
+          <span class="play-now-text">Play Now</span>
+        </button>
+      </div>
     </main>
+  </div>
 
+  <script src="./game.js"></script>
 </body>
-
 </html>
