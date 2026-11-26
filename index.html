@@ -24,26 +24,27 @@
       user-select: none;
     }
 
-    /* Full-screen scene that expands to fill the entire viewport on any device */
+    /* Full-bleed scene with undistorted cover framing on every screen */
     .home-scene {
       position: relative;
       width: 100vw;
       height: 100dvh;
       overflow: hidden;
       background-image: url("./assets/home-background.webp");
-      background-size: 100% 100%;
+      background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      /* Responsive scaling unit driven by the smaller viewport dimension */
-      --u: min(1vw, 1.7778dvh);
+      /* Reference artboard unit so elements scale proportionally without stretching */
+      --u: min(1vw, 0.5625dvh);
     }
 
     /* Top HUD Row: Coins + Diamonds on left, Settings on right */
     .top-bar {
       position: absolute;
-      top: min(2.3dvh, calc(2.3 * var(--u)));
-      left: min(3.4vw, calc(3.4 * var(--u)));
-      right: min(3.4vw, calc(3.4 * var(--u)));
+      top: calc(2.3 * var(--u));
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(93.2 * var(--u));
       display: flex;
       align-items: center;
       justify-content: space-between;
