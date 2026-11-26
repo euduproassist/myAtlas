@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>TileyPop</title>
   <style>
+    /* =====================================================================
+       SHARED BASE STYLES (ALL DEVICES)
+       ===================================================================== */
     *,
     *::before,
     *::after {
@@ -19,93 +22,118 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: #45a9f5;
+      background-color: #55b2f8;
       font-family: "Fredoka", "Nunito", "Trebuchet MS", system-ui, -apple-system, sans-serif;
       user-select: none;
     }
 
-    /* Full-bleed scene with undistorted cover framing on every screen */
-    .home-scene {
+    .screen-shell {
       position: relative;
       width: 100vw;
       height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        linear-gradient(180deg, #62b9fc 0%, #9ad6ff 58%, #3597eb 92%, #1d76cf 100%);
+    }
+
+    .screen-shell::before {
+      content: "";
+      position: absolute;
+      inset: -10%;
+      background-image: url("./assets/home-background.webp");
+      background-size: cover;
+      background-position: center;
+      filter: blur(22px) brightness(1.06) saturate(1.1);
+      opacity: 0.55;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Artboard keeps exact reference proportions without stretching artwork */
+    .tiley-frame {
+      position: relative;
+      z-index: 1;
+      height: 100dvh;
+      aspect-ratio: 9 / 16;
+      max-width: 100vw;
       overflow: hidden;
       background-image: url("./assets/home-background.webp");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      /* Reference artboard unit so elements scale proportionally without stretching */
-      --u: min(1vw, 0.5625dvh);
+      box-shadow: 0 20px 55px rgba(9, 44, 94, 0.32);
+      --u: calc(100dvh / 160);
     }
 
-    /* Top HUD Row: Coins + Diamonds on left, Settings on right */
     .top-bar {
       position: absolute;
-      top: calc(2.3 * var(--u));
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(93.2 * var(--u));
+      top: calc(3.6 * var(--u));
+      left: calc(5.2 * var(--u));
+      right: calc(5.2 * var(--u));
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: calc(2.2 * var(--u));
-      z-index: 2;
+      gap: calc(3 * var(--u));
+      z-index: 3;
     }
 
     .currencies {
       display: flex;
       align-items: center;
-      gap: calc(2.4 * var(--u));
+      gap: calc(3.6 * var(--u));
     }
 
     .currency-pill {
       position: relative;
       display: inline-flex;
       align-items: center;
-      height: calc(6.4 * var(--u));
-      min-width: calc(22.5 * var(--u));
-      padding: 0 calc(2.6 * var(--u)) 0 calc(7.4 * var(--u));
+      height: calc(10.2 * var(--u));
+      min-width: calc(35 * var(--u));
+      padding: 0 calc(3.2 * var(--u)) 0 calc(11.5 * var(--u));
       border-radius: 999px;
-      background: linear-gradient(180deg, rgba(17, 62, 118, 0.84) 0%, rgba(10, 39, 79, 0.92) 100%);
-      border: calc(0.42 * var(--u)) solid rgba(255, 255, 255, 0.82);
+      background: linear-gradient(180deg, rgba(22, 74, 138, 0.86) 0%, rgba(12, 46, 92, 0.92) 100%);
+      border: calc(0.65 * var(--u)) solid rgba(255, 255, 255, 0.88);
       box-shadow:
-        0 calc(0.7 * var(--u)) 0 rgba(7, 27, 56, 0.55),
-        inset 0 calc(0.35 * var(--u)) calc(0.6 * var(--u)) rgba(255, 255, 255, 0.25);
+        0 calc(1.1 * var(--u)) 0 rgba(8, 30, 62, 0.55),
+        inset 0 calc(0.5 * var(--u)) calc(0.9 * var(--u)) rgba(255, 255, 255, 0.25);
     }
 
     .currency-icon {
       position: absolute;
-      left: calc(-1.1 * var(--u));
+      left: calc(-1.8 * var(--u));
       top: 50%;
       transform: translateY(-50%);
-      width: calc(8.4 * var(--u));
-      height: calc(8.4 * var(--u));
+      width: calc(13.2 * var(--u));
+      height: calc(13.2 * var(--u));
       object-fit: contain;
-      filter: drop-shadow(0 calc(0.45 * var(--u)) calc(0.6 * var(--u)) rgba(0, 0, 0, 0.35));
+      filter: drop-shadow(0 calc(0.65 * var(--u)) calc(0.9 * var(--u)) rgba(0, 0, 0, 0.35));
       pointer-events: none;
     }
 
     .currency-value {
       color: #ffffff;
       font-weight: 800;
-      font-size: calc(3.6 * var(--u));
+      font-size: calc(5.6 * var(--u));
       line-height: 1;
       letter-spacing: 0.02em;
-      text-shadow: 0 calc(0.3 * var(--u)) 0 rgba(4, 20, 44, 0.75);
-      margin-right: calc(1.4 * var(--u));
+      text-shadow: 0 calc(0.45 * var(--u)) 0 rgba(4, 20, 44, 0.75);
+      margin-right: calc(2.2 * var(--u));
     }
 
     .plus-btn {
       position: relative;
       margin-left: auto;
-      width: calc(4.8 * var(--u));
-      height: calc(4.8 * var(--u));
+      width: calc(7.4 * var(--u));
+      height: calc(7.4 * var(--u));
       border-radius: 50%;
-      border: calc(0.35 * var(--u)) solid #ffffff;
-      background: linear-gradient(180deg, #6ef236 0%, #37b80c 58%, #228704 100%);
+      border: calc(0.55 * var(--u)) solid #ffffff;
+      background: linear-gradient(180deg, #74f53d 0%, #38ba0d 58%, #218704 100%);
       box-shadow:
-        0 calc(0.45 * var(--u)) 0 #155c02,
-        inset 0 calc(0.25 * var(--u)) calc(0.35 * var(--u)) rgba(255, 255, 255, 0.65);
+        0 calc(0.7 * var(--u)) 0 #145902,
+        inset 0 calc(0.35 * var(--u)) calc(0.5 * var(--u)) rgba(255, 255, 255, 0.65);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -114,7 +142,7 @@
     }
 
     .plus-btn:active {
-      transform: translateY(calc(0.3 * var(--u))) scale(0.96);
+      transform: translateY(calc(0.45 * var(--u))) scale(0.96);
       filter: brightness(1.06);
     }
 
@@ -124,29 +152,28 @@
       position: absolute;
       background: #ffffff;
       border-radius: 999px;
-      box-shadow: 0 calc(0.18 * var(--u)) 0 rgba(16, 76, 2, 0.75);
+      box-shadow: 0 calc(0.25 * var(--u)) 0 rgba(16, 76, 2, 0.75);
     }
 
     .plus-btn::before {
-      width: calc(2.35 * var(--u));
-      height: calc(0.65 * var(--u));
+      width: calc(3.6 * var(--u));
+      height: calc(1 * var(--u));
     }
 
     .plus-btn::after {
-      width: calc(0.65 * var(--u));
-      height: calc(2.35 * var(--u));
+      width: calc(1 * var(--u));
+      height: calc(3.6 * var(--u));
     }
 
-    /* Circular Settings Button on Top-Right */
     .settings-btn {
-      width: calc(8.6 * var(--u));
-      height: calc(8.6 * var(--u));
+      width: calc(13.4 * var(--u));
+      height: calc(13.4 * var(--u));
       border-radius: 50%;
-      border: calc(0.45 * var(--u)) solid #ffffff;
-      background: linear-gradient(180deg, #57b9ff 0%, #247be5 60%, #1454ad 100%);
+      border: calc(0.7 * var(--u)) solid #ffffff;
+      background: linear-gradient(180deg, #5ec0ff 0%, #247be5 60%, #1454ad 100%);
       box-shadow:
-        0 calc(0.65 * var(--u)) 0 rgba(10, 40, 84, 0.65),
-        inset 0 calc(0.3 * var(--u)) calc(0.5 * var(--u)) rgba(255, 255, 255, 0.5);
+        0 calc(1 * var(--u)) 0 rgba(10, 40, 84, 0.65),
+        inset 0 calc(0.45 * var(--u)) calc(0.8 * var(--u)) rgba(255, 255, 255, 0.5);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -156,48 +183,47 @@
     }
 
     .settings-btn:active {
-      transform: translateY(calc(0.3 * var(--u))) scale(0.96);
+      transform: translateY(calc(0.45 * var(--u))) scale(0.96);
       filter: brightness(1.06);
     }
 
     .gear-icon {
-      width: calc(5.2 * var(--u));
-      height: calc(5.2 * var(--u));
+      width: calc(8.1 * var(--u));
+      height: calc(8.1 * var(--u));
       fill: #ffffff;
-      filter: drop-shadow(0 calc(0.22 * var(--u)) 0 rgba(10, 39, 82, 0.65));
+      filter: drop-shadow(0 calc(0.35 * var(--u)) 0 rgba(10, 39, 82, 0.65));
     }
 
-    /* Play Now CTA positioned below the puzzle showcase & above the bottom message */
     .play-cta-wrap {
       position: absolute;
       left: 50%;
       top: 72.2%;
       transform: translateX(-50%);
-      width: calc(56 * var(--u));
-      z-index: 2;
+      width: calc(87 * var(--u));
+      z-index: 3;
     }
 
     .play-now-btn {
       position: relative;
       width: 100%;
-      height: calc(11.4 * var(--u));
+      height: calc(17.8 * var(--u));
       border-radius: 999px;
-      border: calc(0.55 * var(--u)) solid #ffffff;
-      background: linear-gradient(180deg, #ffd43b 0%, #ffa800 52%, #eb7600 100%);
+      border: calc(0.85 * var(--u)) solid #ffffff;
+      background: linear-gradient(180deg, #ffd63d 0%, #ffa800 52%, #eb7600 100%);
       box-shadow:
-        0 calc(1.05 * var(--u)) 0 #a84800,
-        0 calc(1.5 * var(--u)) calc(2.4 * var(--u)) rgba(15, 56, 110, 0.32),
-        inset 0 calc(0.55 * var(--u)) calc(0.9 * var(--u)) rgba(255, 250, 210, 0.85);
+        0 calc(1.6 * var(--u)) 0 #a84800,
+        0 calc(2.3 * var(--u)) calc(3.6 * var(--u)) rgba(15, 56, 110, 0.32),
+        inset 0 calc(0.85 * var(--u)) calc(1.4 * var(--u)) rgba(255, 250, 210, 0.85);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: calc(2.2 * var(--u));
+      gap: calc(3.4 * var(--u));
       cursor: pointer;
       transition: transform 0.12s ease, filter 0.12s ease;
     }
 
     .play-now-btn:active {
-      transform: translateY(calc(0.55 * var(--u))) scale(0.98);
+      transform: translateY(calc(0.8 * var(--u))) scale(0.98);
       filter: brightness(1.05);
     }
 
@@ -205,56 +231,137 @@
       width: 0;
       height: 0;
       border-style: solid;
-      border-width: calc(2.55 * var(--u)) 0 calc(2.55 * var(--u)) calc(4.1 * var(--u));
+      border-width: calc(4 * var(--u)) 0 calc(4 * var(--u)) calc(6.4 * var(--u));
       border-color: transparent transparent transparent #ffffff;
-      filter: drop-shadow(0 calc(0.3 * var(--u)) 0 rgba(145, 56, 0, 0.7));
-      transform: translateX(calc(0.25 * var(--u)));
+      filter: drop-shadow(0 calc(0.45 * var(--u)) 0 rgba(145, 56, 0, 0.7));
+      transform: translateX(calc(0.4 * var(--u)));
     }
 
     .play-now-text {
       color: #ffffff;
       font-weight: 900;
-      font-size: calc(5.5 * var(--u));
+      font-size: calc(8.6 * var(--u));
       line-height: 1;
       letter-spacing: 0.01em;
       text-shadow:
-        0 calc(0.35 * var(--u)) 0 #b85100,
-        0 calc(0.5 * var(--u)) calc(0.4 * var(--u)) rgba(92, 34, 0, 0.45);
+        0 calc(0.55 * var(--u)) 0 #b85100,
+        0 calc(0.8 * var(--u)) calc(0.6 * var(--u)) rgba(92, 34, 0, 0.45);
+    }
+
+    /* =====================================================================
+       1. PHONE PROFILE (ANDROID & IPHONE PORTRAIT / COMPACT)
+       ===================================================================== */
+    body[data-device="phone"] .tiley-frame {
+      width: 100vw;
+      height: 100dvh;
+      max-width: 100vw;
+      aspect-ratio: auto;
+      border-radius: 0;
+      --u: min(calc(100vw / 90), calc(100dvh / 160));
+    }
+
+    /* =====================================================================
+       2. TABLET & IPAD PROFILE
+       ===================================================================== */
+    body[data-device="tablet"] .tiley-frame {
+      height: 98dvh;
+      width: calc(98dvh * (9 / 16));
+      max-width: 96vw;
+      border-radius: calc(4 * var(--u));
+      --u: calc(98dvh / 160);
+    }
+
+    /* =====================================================================
+       3. LAPTOP & DESKTOP PROFILE
+       ===================================================================== */
+    body[data-device="desktop"] .tiley-frame {
+      height: 98dvh;
+      width: calc(98dvh * (9 / 16));
+      max-width: 94vw;
+      border-radius: calc(4.5 * var(--u));
+      --u: calc(98dvh / 160);
+    }
+
+    /* =====================================================================
+       4. PLASMA / LARGE TV PROFILE
+       ===================================================================== */
+    body[data-device="plasma"] .tiley-frame {
+      height: 96dvh;
+      width: calc(96dvh * (9 / 16));
+      max-width: 92vw;
+      border-radius: calc(5 * var(--u));
+      --u: calc(96dvh / 160);
     }
   </style>
 </head>
-<body>
-  <main class="home-scene" aria-label="TileyPop Home Screen">
-    <header class="top-bar">
-      <div class="currencies">
-        <div class="currency-pill" aria-label="Coins: 1250">
-          <img class="currency-icon" src="./assets/coin.webp" alt="Coin" />
-          <span class="currency-value">1250</span>
-          <button type="button" class="plus-btn" aria-label="Add Coins"></button>
+<body data-device="desktop">
+  <div class="screen-shell">
+    <main class="tiley-frame" aria-label="TileyPop Home Screen">
+      <header class="top-bar">
+        <div class="currencies">
+          <div class="currency-pill" aria-label="Coins: 1250">
+            <img class="currency-icon" src="./assets/coin.webp" alt="Coin" />
+            <span class="currency-value">1250</span>
+            <button type="button" class="plus-btn" aria-label="Add Coins"></button>
+          </div>
+
+          <div class="currency-pill" aria-label="Diamonds: 18">
+            <img class="currency-icon" src="./assets/diamond.webp" alt="Diamond" />
+            <span class="currency-value">18</span>
+            <button type="button" class="plus-btn" aria-label="Add Diamonds"></button>
+          </div>
         </div>
 
-        <div class="currency-pill" aria-label="Diamonds: 18">
-          <img class="currency-icon" src="./assets/diamond.webp" alt="Diamond" />
-          <span class="currency-value">18</span>
-          <button type="button" class="plus-btn" aria-label="Add Diamonds"></button>
-        </div>
+        <button type="button" class="settings-btn" aria-label="Settings">
+          <svg class="gear-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.48.48 0 0 0 .12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.26.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/>
+          </svg>
+        </button>
+      </header>
+
+      <div class="play-cta-wrap">
+        <button type="button" class="play-now-btn" aria-label="Play Now">
+          <span class="play-triangle" aria-hidden="true"></span>
+          <span class="play-now-text">Play Now</span>
+        </button>
       </div>
+    </main>
+  </div>
 
-      <button type="button" class="settings-btn" aria-label="Settings">
-        <svg class="gear-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87a.48.48 0 0 0 .12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.26.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/>
-        </svg>
-      </button>
-    </header>
+  <script>
+    /* Selects the matching device profile inside this single index.html */
+    (function applyDeviceProfile() {
+      const ua = navigator.userAgent || "";
+      const w = window.innerWidth;
+      const isIPad = /iPad/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
+      const isPhone = /Android.*Mobile|iPhone|iPod/i.test(ua) || w <= 520;
+      const isTablet = isIPad || (/Android/i.test(ua) && !/Mobile/i.test(ua)) || (w > 520 && w <= 1024 && navigator.maxTouchPoints > 1);
+      const isPlasma = w >= 1920;
 
-    <div class="play-cta-wrap">
-      <button type="button" class="play-now-btn" aria-label="Play Now">
-        <span class="play-triangle" aria-hidden="true"></span>
-        <span class="play-now-text">Play Now</span>
-      </button>
-    </div>
-  </main>
+      let profile = "desktop";
+      if (isPhone) profile = "phone";
+      else if (isTablet) profile = "tablet";
+      else if (isPlasma) profile = "plasma";
 
+      document.body.setAttribute("data-device", profile);
+    })();
+
+    window.addEventListener("resize", () => {
+      const w = window.innerWidth;
+      const ua = navigator.userAgent || "";
+      const isIPad = /iPad/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
+      const isPhone = /Android.*Mobile|iPhone|iPod/i.test(ua) || w <= 520;
+      const isTablet = isIPad || (/Android/i.test(ua) && !/Mobile/i.test(ua)) || (w > 520 && w <= 1024 && navigator.maxTouchPoints > 1);
+      const isPlasma = w >= 1920;
+
+      let profile = "desktop";
+      if (isPhone) profile = "phone";
+      else if (isTablet) profile = "tablet";
+      else if (isPlasma) profile = "plasma";
+
+      document.body.setAttribute("data-device", profile);
+    });
+  </script>
   <script src="./game.js"></script>
 </body>
 </html>
