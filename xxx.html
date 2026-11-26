@@ -12,6 +12,7 @@
         :root {
             --ui-black: #000000;
             --ui-charcoal: #0a0a0a;
+            --ui-sky-bg: #bfe6ff;
             --safe-area-top: env(safe-area-inset-top, 0px);
             --safe-area-bottom: env(safe-area-inset-bottom, 0px);
             --safe-area-left: env(safe-area-inset-left, 0px);
@@ -32,7 +33,7 @@
             height: 100%;
             height: 100vh;
             height: 100dvh;
-            background-color: var(--ui-black);
+            background-color: var(--ui-sky-bg);
             overflow: hidden !important;
         }
 
@@ -70,10 +71,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             object-position: center center;
             z-index: 0;
-            background-color: var(--ui-charcoal);
+            background-color: var(--ui-sky-bg);
         }
     </style>
 </head>
@@ -82,7 +83,7 @@
     <div class="viewport-container" id="app-root">
         <!-- Splash -->
         <section class="stage is-active" id="screen-splash">
-            <img src="https://euduproassist.github.io/myAtlas/assets/home-background.webp" class="bg-layer" alt="Splash Background">
+            <img src="https://euduproassist.github.io/myAtlas/assets/home-background.webp" class="bg-layer" alt="TileyPop Splash Background">
         </section>
     </div>
 
