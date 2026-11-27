@@ -12,10 +12,14 @@ import {
     updateDoc,
     addDoc,
     collection,
+    query,
+    where,
+    getDocs,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const ACCOUNTS_COLLECTION = "applicant_accounts";
+const COMPLETE_APPLICATION_COLLECTION = "complete_application";
 const MAIL_COLLECTION = "mail";
 
 function normalizeEmailId(email) {
@@ -30,6 +34,8 @@ const loginView = document.getElementById("loginView");
 const signupView = document.getElementById("signupView");
 const forgotPasswordView = document.getElementById("forgotPasswordView");
 const portalView = document.getElementById("portalView");
+const portalTitle = document.getElementById("portalTitle");
+const portalSubtitle = document.getElementById("portalSubtitle");
 const profileButton = document.getElementById("profileButton");
 const startApplicationBtn = document.getElementById("startApplicationBtn");
 
@@ -98,13 +104,66 @@ function showAuthView(viewToShow) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function enterPortalDashboard() {
+async function hasUserApplied(user) {
+    const email = (user?.email || "").trim().toLowerCase();
+    const uid = user?.uid || "";
+
+    if (uid) {
+        const byUidDocSnap = await getDoc(doc(db, COMPLETE_APPLICATION_COLLECTION, uid));
+        if (byUidDocSnap.exists()) {
+            return true;
+        }
+    }
+
+    if (email) {
+        const byEmailDocSnap = await getDoc(doc(db, COMPLETE_APPLICATION_COLLECTION, normalizeEmailId(email)));
+        if (byEmailDocSnap.exists()) {
+            return true;
+        }
+
+        const emailQuery = query(
+            collection(db, COMPLETE_APPLICATION_COLLECTION),
+            where("email", "==", email)
+        );
+        const emailQuerySnap = await getDocs(emailQuery);
+        if (!emailQuerySnap.empty) {
+            return true;
+        }
+    }
+
+    if (uid) {
+        const uidQuery = query(
+            collection(db, COMPLETE_APPLICATION_COLLECTION),
+            where("uid", "==", uid)
+        );
+        const uidQuerySnap = await getDocs(uidQuery);
+        if (!uidQuerySnap.empty) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+async function enterPortalDashboard(user = auth.currentUser) {
     allowPortalNavigation = true;
     loginView.classList.add("hidden");
     signupView.classList.add("hidden");
     forgotPasswordView.classList.add("hidden");
     portalView.classList.remove("hidden");
     profileButton.classList.remove("hidden");
+
+    const alreadyApplied = await hasUserApplied(user);
+    if (alreadyApplied) {
+        if (portalTitle) portalTitle.textContent = "u already applied please";
+        if (portalSubtitle) portalSubtitle.textContent = "Your application is already recorded in our system.";
+        if (startApplicationBtn) startApplicationBtn.classList.add("hidden");
+    } else {
+        if (portalTitle) portalTitle.textContent = "No Applications Found";
+        if (portalSubtitle) portalSubtitle.textContent = "You have not submitted any applications yet.";
+        if (startApplicationBtn) startApplicationBtn.classList.remove("hidden");
+    }
+
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -507,7 +566,7 @@ signInBtn.addEventListener("click", async () => {
             }
         }
 
-        enterPortalDashboard();
+        await enterPortalDashboard(credential.user);
         showToast("Signed in successfully.", "success");
     } catch (error) {
         showToast("Invalid email or password.", "error");
