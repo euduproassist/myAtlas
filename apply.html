@@ -250,47 +250,6 @@
             font-size: clamp(0.85rem, 1vw, 0.95rem);
             margin-bottom: 20px;
         }
-        .form-group {
-            width: 100%;
-            margin-bottom: 18px;
-        }
-        .form-group label {
-            display: block;
-            font-size: clamp(0.82rem, 1vw, 0.92rem);
-            font-weight: 600;
-            margin-bottom: 7px;
-        }
-        .form-control {
-            width: 100%;
-            min-height: 46px;
-            padding: 11px 13px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            background: #ffffff;
-            color: var(--text-main);
-            font-size: clamp(0.88rem, 1vw, 0.96rem);
-            outline: none;
-        }
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
-        }
-        .or-divider {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin: 10px 0 20px;
-            color: #777;
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
-        .or-divider::before,
-        .or-divider::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: var(--border-color);
-        }
         .popia-box {
             width: 100%;
             border: 1px solid var(--border-color);
@@ -328,20 +287,6 @@
             height: 17px;
             accent-color: var(--primary-color);
             cursor: pointer;
-        }
-        .portal-alert {
-            background: #e7f1ff;
-            border: 1px solid #b8daff;
-            padding: clamp(16px, 2vw, 25px);
-            border-radius: 7px;
-            color: #004085;
-            font-size: clamp(0.88rem, 1vw, 0.98rem);
-            line-height: 1.7;
-        }
-        .portal-alert a {
-            color: var(--primary-color);
-            font-weight: bold;
-            text-decoration: underline;
         }
         .submit-btn {
             width: 100%;
@@ -661,120 +606,6 @@
                         *
                     </span>
                 </div>
-            </div>
-            <div
-                class="card hidden fade-in"
-                id="step1-card"
-            >
-                <div class="question-row">
-                    <label for="student-number-select">
-                        Do you already have a student number?
-                    </label>
-                    <select id="student-number-select">
-                        <option value="">
-                            --- Please select ---
-                        </option>
-                        <option value="yes">
-                            Yes
-                        </option>
-                        <option value="no">
-                            No
-                        </option>
-                    </select>
-                    <span class="required-star">
-                        *
-                    </span>
-                </div>
-            </div>
-            <div
-                class="card hidden fade-in"
-                id="portal-redirect-card"
-            >
-                <div class="portal-alert">
-                    <strong>
-                        Welcome back.
-                    </strong>
-                    <br>
-                    You already have a student number.
-                    Please proceed to log into your online
-                    student application portal using your
-                    student number and PIN.
-                    <br><br>
-                    Click
-                    <a href="#" onclick="return false;">
-                        here
-                    </a>
-                    to access your myAtlas portal.
-                </div>
-            </div>
-            <div
-                class="card hidden fade-in"
-                id="step2-card"
-            >
-                <div class="question-row">
-                    <label for="returning-select">
-                        Are you returning to complete an application?
-                    </label>
-                    <select id="returning-select">
-                        <option value="">
-                            --- Please select ---
-                        </option>
-                        <option value="yes">
-                            Yes
-                        </option>
-                        <option value="no">
-                            No
-                        </option>
-                    </select>
-                    <span class="required-star">
-                        *
-                    </span>
-                </div>
-            </div>
-            <div
-                class="card hidden fade-in"
-                id="step3-card"
-            >
-                <div class="form-title">
-                    Find Your Application
-                </div>
-                <div class="form-description">
-                    Please enter the identification details
-                    you used when starting your application.
-                </div>
-                <div class="form-group">
-                    <label for="sa-id">
-                        South African ID Number
-                    </label>
-                    <input
-                        type="text"
-                        id="sa-id"
-                        class="form-control"
-                        placeholder="Enter your ID number"
-                    >
-                </div>
-                <div class="or-divider">
-                    OR
-                </div>
-                <div class="form-group">
-                    <label for="passport">
-                        Passport Number
-                        (if no ID number)
-                    </label>
-                    <input
-                        type="text"
-                        id="passport"
-                        class="form-control"
-                        placeholder="Enter your passport number"
-                    >
-                </div>
-                <button
-                    class="submit-btn"
-                    id="find-app-btn"
-                    type="button"
-                >
-                    Find My Application ➔
-                </button>
             </div>
             <div
                 class="card hidden fade-in"
