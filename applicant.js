@@ -31,18 +31,21 @@ function normalizeEmailId(email) {
 // =========================================================
 const pageLoadingOverlay = document.getElementById("pageLoadingOverlay");
 const pageShell = document.getElementById("pageShell");
+const mainContainer = document.getElementById("mainContainer");
 const loginView = document.getElementById("loginView");
 const signupView = document.getElementById("signupView");
 const forgotPasswordView = document.getElementById("forgotPasswordView");
 const portalView = document.getElementById("portalView");
+const applicationFlowView = document.getElementById("applicationFlowView");
 const portalTitle = document.getElementById("portalTitle");
 const portalSubtitle = document.getElementById("portalSubtitle");
 const profileButton = document.getElementById("profileButton");
 const startApplicationBtn = document.getElementById("startApplicationBtn");
-const startApplicationFlow = document.getElementById("startApplicationFlow");
-const programWishSelect = document.getElementById("program-wish-select");
-const popiaContinueBtn = document.getElementById("popia-continue-btn");
-const step4Card = document.getElementById("step4-card");
+
+// Application Flow DOM (from apply.js)
+const programWishSelect = document.getElementById('program-wish-select');
+const popiaContinueBtn = document.getElementById('popia-continue-btn');
+const step4Card = document.getElementById('step4-card');
 
 const signInBtn = document.getElementById("signInBtn");
 const createAccountBtn = document.getElementById("createAccountBtn");
@@ -74,9 +77,25 @@ let allowPortalNavigation = false;
 let windowLoaded = document.readyState === "complete";
 let initialAuthResolved = false;
 
+// Application Flow State (from apply.js)
 let selectedProgramWish = '';
 const activeCyclesByQualification = new Map();
 
+function tryRevealPage() {
+    if (!windowLoaded || !initialAuthResolved) return;
+    pageLoadingOverlay?.classList.add("hidden");
+    pageLoadingOverlay?.setAttribute("aria-busy", "false");
+    pageShell?.classList.remove("hidden");
+}
+
+window.addEventListener("load", () => {
+    windowLoaded = true;
+    tryRevealPage();
+});
+
+// =========================================================
+// APPLICATION FLOW LOGIC (From apply.js)
+// =========================================================
 function setCardVisible(cardEl, visible) {
     if (!cardEl) return;
     cardEl.classList.toggle('hidden', !visible);
@@ -240,18 +259,6 @@ if (popiaContinueBtn) {
     popiaContinueBtn.addEventListener('click', handlePopiaContinue);
 }
 
-function tryRevealPage() {
-    if (!windowLoaded || !initialAuthResolved) return;
-    pageLoadingOverlay?.classList.add("hidden");
-    pageLoadingOverlay?.setAttribute("aria-busy", "false");
-    pageShell?.classList.remove("hidden");
-}
-
-window.addEventListener("load", () => {
-    windowLoaded = true;
-    tryRevealPage();
-});
-
 // =========================================================
 // FOOTER & BASE NAVIGATION
 // =========================================================
@@ -276,12 +283,11 @@ document.getElementById("supportLink").addEventListener("click", (e) => {
 
 startApplicationBtn.addEventListener("click", async (e) => {
     e.preventDefault();
-    setCardVisible(startApplicationFlow, true);
+    portalView.classList.add("hidden");
+    applicationFlowView.classList.remove("hidden");
+    mainContainer?.classList.add("apply-flow-active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
     await checkActiveCycles();
-    startApplicationFlow?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-    });
 });
 
 function showAuthView(viewToShow) {
@@ -289,6 +295,8 @@ function showAuthView(viewToShow) {
     signupView.classList.add("hidden");
     forgotPasswordView.classList.add("hidden");
     portalView.classList.add("hidden");
+    applicationFlowView.classList.add("hidden");
+    mainContainer?.classList.remove("apply-flow-active");
     profileButton.classList.add("hidden");
 
     viewToShow.classList.remove("hidden");
@@ -341,6 +349,8 @@ async function enterPortalDashboard(user = auth.currentUser) {
     loginView.classList.add("hidden");
     signupView.classList.add("hidden");
     forgotPasswordView.classList.add("hidden");
+    applicationFlowView.classList.add("hidden");
+    mainContainer?.classList.remove("apply-flow-active");
     portalView.classList.remove("hidden");
     profileButton.classList.remove("hidden");
 
@@ -349,7 +359,6 @@ async function enterPortalDashboard(user = auth.currentUser) {
         if (portalTitle) portalTitle.textContent = "u already applied please";
         if (portalSubtitle) portalSubtitle.textContent = "Your application is already recorded in our system.";
         if (startApplicationBtn) startApplicationBtn.classList.add("hidden");
-        setCardVisible(startApplicationFlow, false);
     } else {
         if (portalTitle) portalTitle.textContent = "No Applications Found";
         if (portalSubtitle) portalSubtitle.textContent = "You have not submitted any applications yet.";
@@ -796,12 +805,15 @@ onAuthStateChanged(auth, async (user) => {
         }
 
         const isOnPortal = !portalView.classList.contains("hidden");
-        if (isOnPortal || !allowPortalNavigation) {
+        const isOnApplyFlow = !applicationFlowView.classList.contains("hidden");
+        if (isOnPortal || isOnApplyFlow || !allowPortalNavigation) {
             allowPortalNavigation = false;
             loginView.classList.remove("hidden");
             signupView.classList.add("hidden");
             forgotPasswordView.classList.add("hidden");
             portalView.classList.add("hidden");
+            applicationFlowView.classList.add("hidden");
+            mainContainer?.classList.remove("apply-flow-active");
             profileButton.classList.add("hidden");
         }
     } finally {
