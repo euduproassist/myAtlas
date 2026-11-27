@@ -3,14 +3,17 @@ import { collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.0/f
 
 document.addEventListener('DOMContentLoaded', async () => {
     let selectedProgramWish = '';
-    // Maps qualificationType -> array of currently open cycle objects from Firestore
     const activeCyclesByQualification = new Map();
 
     const programWishSelect = document.getElementById('program-wish-select');
     const popiaContinueBtn = document.getElementById('popia-continue-btn');
     const step4Card = document.getElementById('step4-card');
 
-    // Helper matching admin-portal.js local date parsing (avoids UTC off-by-one issues)
+    function setCardVisible(cardEl, visible) {
+        if (!cardEl) return;
+        cardEl.classList.toggle('hidden', !visible);
+    }
+
     function parseIsoDateOnly(dateStr) {
         if (!dateStr || typeof dateStr !== 'string') return null;
         const parts = dateStr.trim().split('-');
@@ -41,11 +44,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             radio.checked = false;
         });
 
-        step4Card.classList.add('hidden');
+        setCardVisible(step4Card, false);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Query Firestore collections matching admin-portal.js (<year>_application_cycle)
     async function checkActiveCycles() {
         if (!programWishSelect) return;
 
@@ -65,7 +67,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 querySnapshot.forEach((docSnap) => {
                     const data = docSnap.data();
 
-                    // Match admin-portal.js computeCycleStatus() logic
                     if (data.status === "published" && data.isManuallyClosed !== true) {
                         const openDate = parseIsoDateOnly(data.openingDate);
                         const closeDate = parseIsoDateOnly(data.closingDate);
@@ -91,12 +92,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        // Enable or disable dropdown options based on active published cycles
         for (let i = 0; i < programWishSelect.options.length; i++) {
             const opt = programWishSelect.options[i];
             if (!opt.value) continue;
 
-            // Strip any previous suffix before re-evaluating
             const baseLabel = opt.textContent.replace(/\s*\(Closed \/ Unavailable\)$/i, '').trim();
 
             if (!activeCyclesByQualification.has(opt.value)) {
@@ -133,24 +132,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     function handleProgramWishChange(value) {
         selectedProgramWish = value;
 
-        document.querySelectorAll('input[name="popia_consent"]').forEach(radio => radio.checked = false);
-        step4Card.classList.add('hidden');
+        document.querySelectorAll('input[name="popia_consent"]').forEach((radio) => {
+            radio.checked = false;
+        });
 
-        if (value) {
-            // Save the matching open cycles for this qualification so the application form step can load them
-            const matchingCycles = activeCyclesByQualification.get(value) || [];
-            sessionStorage.setItem('myAtlas_activeCycles', JSON.stringify(matchingCycles));
-            sessionStorage.setItem('myAtlas_selectedQualification', value);
-
-            step4Card.classList.remove('hidden');
-            step4Card.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        } else {
+        if (!value) {
+            setCardVisible(step4Card, false);
             sessionStorage.removeItem('myAtlas_activeCycles');
             sessionStorage.removeItem('myAtlas_selectedQualification');
+            return;
         }
+
+        const matchingCycles = activeCyclesByQualification.get(value) || [];
+        sessionStorage.setItem('myAtlas_activeCycles', JSON.stringify(matchingCycles));
+        sessionStorage.setItem('myAtlas_selectedQualification', value);
+
+        setCardVisible(step4Card, true);
+        step4Card?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
     }
 
     function handlePopiaContinue() {
