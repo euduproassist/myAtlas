@@ -29,6 +29,7 @@ function normalizeEmailId(email) {
 // =========================================================
 // DOM REFERENCES
 // =========================================================
+const pageLoadingOverlay = document.getElementById("pageLoadingOverlay");
 const pageShell = document.getElementById("pageShell");
 const loginView = document.getElementById("loginView");
 const signupView = document.getElementById("signupView");
@@ -66,6 +67,20 @@ const otpBoxes = Array.from(document.querySelectorAll("#otpInputs .otp-box"));
 
 let pendingOtpSession = null;
 let allowPortalNavigation = false;
+let windowLoaded = document.readyState === "complete";
+let initialAuthResolved = false;
+
+function tryRevealPage() {
+    if (!windowLoaded || !initialAuthResolved) return;
+    pageLoadingOverlay?.classList.add("hidden");
+    pageLoadingOverlay?.setAttribute("aria-busy", "false");
+    pageShell?.classList.remove("hidden");
+}
+
+window.addEventListener("load", () => {
+    windowLoaded = true;
+    tryRevealPage();
+});
 
 // =========================================================
 // FOOTER & BASE NAVIGATION
@@ -587,29 +602,34 @@ profileButton.addEventListener("click", async () => {
 
 // Dashboard guard: if user is not genuinely authorized/authenticated, silently kick back to Sign In with no alert
 onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        const signedInEmail = (user.email || "").trim().toLowerCase();
-        if (signedInEmail) {
-            const accountSnap = await getDoc(doc(db, ACCOUNTS_COLLECTION, normalizeEmailId(signedInEmail)));
-            if (accountSnap.exists() && accountSnap.data().activated === false) {
-                allowPortalNavigation = false;
-                await signOut(auth);
-                showAuthView(loginView);
-                return;
+    try {
+        if (user) {
+            const signedInEmail = (user.email || "").trim().toLowerCase();
+            if (signedInEmail) {
+                const accountSnap = await getDoc(doc(db, ACCOUNTS_COLLECTION, normalizeEmailId(signedInEmail)));
+                if (accountSnap.exists() && accountSnap.data().activated === false) {
+                    allowPortalNavigation = false;
+                    await signOut(auth);
+                    showAuthView(loginView);
+                    return;
+                }
             }
+            await enterPortalDashboard(user);
+            return;
         }
-        await enterPortalDashboard(user);
-        return;
-    }
 
-    const isOnPortal = !portalView.classList.contains("hidden");
-    if (isOnPortal || !allowPortalNavigation) {
-        allowPortalNavigation = false;
-        loginView.classList.remove("hidden");
-        signupView.classList.add("hidden");
-        forgotPasswordView.classList.add("hidden");
-        portalView.classList.add("hidden");
-        profileButton.classList.add("hidden");
+        const isOnPortal = !portalView.classList.contains("hidden");
+        if (isOnPortal || !allowPortalNavigation) {
+            allowPortalNavigation = false;
+            loginView.classList.remove("hidden");
+            signupView.classList.add("hidden");
+            forgotPasswordView.classList.add("hidden");
+            portalView.classList.add("hidden");
+            profileButton.classList.add("hidden");
+        }
+    } finally {
+        initialAuthResolved = true;
+        tryRevealPage();
     }
 });
 
