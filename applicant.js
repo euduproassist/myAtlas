@@ -37,6 +37,7 @@ const signupView = document.getElementById("signupView");
 const forgotPasswordView = document.getElementById("forgotPasswordView");
 const portalView = document.getElementById("portalView");
 const applicationFlowView = document.getElementById("applicationFlowView");
+const closeApplicationFlowBtn = document.getElementById("closeApplicationFlowBtn");
 const portalTitle = document.getElementById("portalTitle");
 const portalSubtitle = document.getElementById("portalSubtitle");
 const profileButton = document.getElementById("profileButton");
@@ -258,6 +259,15 @@ if (programWishSelect) {
 if (popiaContinueBtn) {
     popiaContinueBtn.addEventListener('click', handlePopiaContinue);
 }
+
+closeApplicationFlowBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    clearApplicationSession();
+    applicationFlowView.classList.add('hidden');
+    mainContainer?.classList.remove('apply-flow-active');
+    portalView.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 
 // =========================================================
 // FOOTER & BASE NAVIGATION
