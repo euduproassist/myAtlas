@@ -650,6 +650,34 @@
             color: var(--primary-color);
         }
 
+        .apply-flow-top-bar {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 14px;
+            padding-left: clamp(16px, 3vw, 60px);
+            padding-right: clamp(16px, 3vw, 60px);
+        }
+
+        .apply-flow-close-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            color: var(--text-main);
+            font-size: 18px;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .apply-flow-close-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
         .page {
             width: 100%;
             display: flex;
@@ -1530,6 +1558,9 @@
 
         <!-- VIEW 5: APPLICATION PROCESS VIEW (Hidden until Start a New Application is clicked) -->
         <section id="applicationFlowView" class="hidden" aria-label="Online Academic Application Process">
+            <div class="apply-flow-top-bar">
+                <button type="button" class="apply-flow-close-btn" id="closeApplicationFlowBtn" aria-label="Close application process" title="Close">×</button>
+            </div>
             <div class="page">
                 <section class="welcome-section">
                     <div class="page-content welcome-inner">
