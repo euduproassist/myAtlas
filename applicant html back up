@@ -24,6 +24,17 @@
             --shadow: 0 1px 4px rgba(24,76,125,.05);
             --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             --page-padding: clamp(18px, 5.5vw, 90px);
+
+            --primary-color: #0056b3;
+            --primary-hover: #004085;
+            --primary-light: #e7f1ff;
+            --bg-color: #ffffff;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #555555;
+            --border-color: #d1d8e0;
+            --danger: #d9534f;
+            --transition-speed: 0.3s ease;
         }
 
         *,
@@ -109,6 +120,37 @@
 
         .hidden {
             display: none !important;
+        }
+
+        .page-loading-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 900;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            transition: opacity 0.25s ease;
+        }
+
+        .page-loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .page-loading-spinner {
+            width: 42px;
+            height: 42px;
+            border: 3.5px solid var(--pale-blue);
+            border-top-color: var(--blue);
+            border-radius: 50%;
+            animation: pageSpin 0.8s linear infinite;
+        }
+
+        @keyframes pageSpin {
+            to { transform: rotate(360deg); }
         }
 
         .page-shell {
@@ -212,6 +254,11 @@
                 var(--page-padding);
 
             background: #ffffff;
+        }
+
+        .main.apply-flow-active {
+            padding: 0;
+            align-items: stretch;
         }
 
         /* =========================================================
@@ -507,232 +554,475 @@
         }
 
         /* =========================================================
-           5. PORTAL DASHBOARD VIEW
+           5. PORTAL DASHBOARD VIEW (NO APPLICATIONS FOUND)
         ========================================================= */
         #portalView {
             width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
+            max-width: 640px;
+            margin: auto;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-        }
-
-        .application-card {
-            width: 100%;
-            background: #ffffff;
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            padding: 20px;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px 0;
             animation: fadeUp 0.6s ease both;
         }
 
-        .application-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .application-info {
-            min-width: 0;
-        }
-
-        .application-number {
-            margin: 0;
-            color: var(--navy);
-            font-size: clamp(15px, 1.6vw, 19px);
-            font-weight: 750;
-        }
-
-        .application-number span {
-            color: var(--blue);
-        }
-
-        .application-details {
-            margin-top: 6px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 6px 16px;
-            color: #526e9e;
-            font-size: clamp(11.5px, 1.1vw, 13px);
-        }
-
-        .application-details strong {
-            color: var(--navy);
-            font-weight: 700;
-        }
-
-        /* STATUS BADGE */
-        .status-badge {
-            flex: 0 0 auto;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border: 1px solid var(--border-light);
-            border-radius: 30px;
-            font-size: 11.5px;
-            font-weight: 750;
-            white-space: nowrap;
-        }
-
-        .status-badge::before {
-            content: "";
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: currentColor;
-        }
-
-        .status-action { color: #c97700; border-color: #fde6c5; }
-        .status-review { color: var(--blue); border-color: #d1e2ff; }
-        .status-accepted { color: #147d4a; border-color: #ccefd8; }
-        .status-unsuccessful { color: #f35c63; border-color: #fcd5d5; }
-
-        /* CARDS */
-        .card {
-            width: 100%;
-            min-width: 0;
-            background: #ffffff;
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            animation: fadeUp 0.6s ease both;
-        }
-
-        .card-header {
-            padding: 18px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            border-bottom: 1px solid var(--line);
-        }
-
-        .card-title h2 {
-            margin: 0;
-            color: var(--navy);
-            font-size: clamp(15px, 1.5vw, 18px);
-            line-height: 1.25;
-            font-weight: 750;
-        }
-
-        .card-title p {
-            margin: 4px 0 0;
-            color: #526e9e;
-            font-size: 12px;
-            line-height: 1.45;
-        }
-
-        .card-body {
-            padding: 18px 20px;
-        }
-
-        /* REQUIREMENTS TABLE */
-        .requirements-list {
-            width: 100%;
-        }
-
-        .requirement {
-            width: 100%;
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) auto auto;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 0;
-            border-bottom: 1px solid var(--line);
-        }
-
-        .requirement:first-child { padding-top: 0; }
-        .requirement:last-child { padding-bottom: 0; border-bottom: 0; }
-
-        .requirement-info {
-            min-width: 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .requirement-icon {
-            width: 38px;
-            height: 38px;
-            flex: 0 0 38px;
-            border-radius: 8px;
-            background: var(--pale-blue);
-            border: 1px solid var(--border-light);
-            color: var(--blue);
+        .empty-state-icon {
+            width: 74px;
+            height: 74px;
+            margin: 0 auto 20px;
+            color: #4f94ff;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .requirement-icon svg {
-            width: 18px;
-            height: 18px;
+        .empty-state-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .empty-state-title {
+            margin: 0;
+            color: var(--navy);
+            font-size: clamp(18px, 1.8vw, 22px);
+            font-weight: 750;
+            line-height: 1.3;
+        }
+
+        .empty-state-subtitle {
+            margin: 8px 0 22px;
+            color: #6f86a8;
+            font-size: clamp(12.5px, 1.15vw, 14px);
+            line-height: 1.5;
+        }
+
+        .start-application-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 40px;
+            padding: 0 20px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--blue);
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 3px 10px rgba(8, 102, 245, 0.16);
+            transition: var(--transition);
+        }
+
+        .start-application-btn:hover {
+            background: var(--blue-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 14px rgba(8, 102, 245, 0.22);
+        }
+
+        .start-application-btn:active {
+            transform: translateY(0);
+        }
+
+        .start-application-btn svg {
+            width: 15px;
+            height: 15px;
             fill: none;
             stroke: currentColor;
-            stroke-width: 1.8;
+            stroke-width: 2;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
 
-        .requirement-text h3 {
-            margin: 0;
-            color: var(--navy);
-            font-size: 13px;
-            line-height: 1.35;
-            font-weight: 750;
+        /* =========================================================
+           5B. APPLICATION FLOW VIEW (From apply.html)
+        ========================================================= */
+        #applicationFlowView {
+            width: 100%;
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
         }
 
-        .requirement-text p {
-            margin: 2px 0 0;
-            color: #526e9e;
-            font-size: 11.5px;
-            line-height: 1.4;
-            overflow-wrap: anywhere;
+        #applicationFlowView a {
+            color: var(--primary-color);
         }
 
-        .requirement-status {
-            white-space: nowrap;
-            font-size: 11px;
-            font-weight: 750;
-            padding: 4px 9px;
-            border: 1px solid var(--border-light);
-            border-radius: 20px;
+        .apply-flow-top-bar {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 14px;
+            padding-left: clamp(16px, 3vw, 60px);
+            padding-right: clamp(16px, 3vw, 60px);
         }
 
-        .received { color: #147d4a; border-color: #ccefd8; }
-        .required { color: #c97700; border-color: #fde6c5; }
-
-        .requirement-action {
-            min-width: 76px;
+        .apply-flow-close-btn {
+            width: 32px;
             height: 32px;
-            padding: 0 12px;
             border-radius: 6px;
-            border: 1px solid var(--border-light);
+            border: 1px solid var(--border-color);
             background: #ffffff;
-            color: var(--navy);
-            font-size: 11.5px;
-            font-weight: 750;
-            transition: var(--transition);
+            color: var(--text-main);
+            font-size: 18px;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .requirement-action:hover {
-            border-color: var(--blue);
-            color: var(--blue);
-            transform: translateY(-1px);
+        .apply-flow-close-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
         }
 
-        .requirement-action.primary {
-            border-color: var(--blue);
-            background: var(--blue);
-            color: #ffffff;
+        .page {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
         }
 
-        .requirement-action.primary:hover {
-            background: var(--blue-dark);
-            color: #ffffff;
+        .page-content {
+            width: 100%;
+            padding-left: clamp(16px, 3vw, 60px);
+            padding-right: clamp(16px, 3vw, 60px);
+        }
+
+        .welcome-section {
+            width: 100%;
+            background: #ffffff;
+            border-bottom: 1px solid transparent;
+        }
+
+        .welcome-inner {
+            width: 100%;
+            padding-top: clamp(12px, 2vw, 25px);
+            padding-bottom: clamp(28px, 4vw, 55px);
+            background: #ffffff;
+            border: 1px solid transparent;
+        }
+
+        .welcome-section h1 {
+            color: #173d70;
+            font-size: clamp(1.55rem, 3vw, 2.5rem);
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .welcome-section h2 {
+            color: var(--primary-color);
+            font-size: clamp(1.15rem, 2vw, 1.55rem);
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .welcome-intro {
+            max-width: 1100px;
+            color: #44566c;
+            font-size: clamp(0.9rem, 1.2vw, 1rem);
+        }
+
+        .process-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: clamp(15px, 2vw, 30px);
+            margin-top: 22px;
+        }
+
+        .process-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .process-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: #42546a;
+            font-size: clamp(0.85rem, 1vw, 0.98rem);
+        }
+
+        .process-number {
+            flex-shrink: 0;
+            width: 27px;
+            height: 27px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .application-section {
+            width: 100%;
+            padding-top: clamp(20px, 3vw, 40px);
+            padding-bottom: clamp(30px, 5vw, 70px);
+        }
+
+        .card {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 9px;
+            padding: clamp(18px, 2.5vw, 32px);
+            margin-bottom: clamp(16px, 2vw, 25px);
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.035);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .question-row {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: clamp(0.9rem, 1.2vw, 1rem);
+            font-weight: 600;
+        }
+
+        .question-row label {
+            flex: 1 1 300px;
+        }
+
+        .question-row select {
+            min-width: 190px;
+            padding: 10px 13px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background: white;
+            color: var(--text-main);
+            cursor: pointer;
+            outline: none;
+        }
+
+        .question-row select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+        }
+
+        /* Style for closed/unavailable dropdown options */
+        option.disabled-option {
+            color: #b0b8c1 !important;
+            background-color: #f8f9fa !important;
+            filter: blur(0.3px);
+            font-style: italic;
+        }
+
+        .required-star {
+            color: var(--danger);
+        }
+
+        .form-title {
+            color: var(--primary-color);
+            font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .form-description {
+            color: var(--text-muted);
+            font-size: clamp(0.85rem, 1vw, 0.95rem);
+            margin-bottom: 20px;
+        }
+
+        .popia-box {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            background: #fafbfc;
+            padding: clamp(15px, 2vw, 25px);
+            border-radius: 5px;
+            height: clamp(180px, 25vw, 300px);
+            overflow-y: auto;
+            font-size: clamp(0.82rem, 1vw, 0.92rem);
+            margin-bottom: 20px;
+        }
+
+        .popia-box p {
+            margin-bottom: 10px;
+        }
+
+        .consent-title {
+            font-size: clamp(0.88rem, 1vw, 0.96rem);
+            margin-bottom: 10px;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 30px;
+            margin-bottom: 20px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 7px 0;
+        }
+
+        .radio-option input {
+            width: 17px;
+            height: 17px;
+            accent-color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            width: 100%;
+            min-height: 46px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.99);
+        }
+
+        .fade-in {
+            animation: fadeIn var(--transition-speed) forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-7px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+            .question-row {
+                align-items: stretch;
+                flex-direction: column;
+            }
+            .question-row label {
+                flex: none;
+            }
+            .question-row select {
+                width: 100%;
+                min-width: 0;
+            }
+            .radio-group {
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .welcome-inner {
+                padding-top: 10px;
+                padding-bottom: 25px;
+            }
+            .card {
+                padding: 17px;
+                border-radius: 7px;
+            }
+            .popia-box {
+                height: 220px;
+            }
+        }
+
+        @media (max-width: 350px) {
+            .process-item {
+                gap: 8px;
+            }
+            .process-number {
+                width: 24px;
+                height: 24px;
+                font-size: 0.7rem;
+            }
+            .card {
+                padding: 14px;
+            }
+            .submit-btn {
+                font-size: 0.86rem;
+            }
+        }
+
+        @media (min-width: 1600px) {
+            .welcome-inner,
+            .application-section {
+                padding-top: 25px;
+                padding-bottom: 65px;
+            }
+        }
+
+        @media (min-width: 1150px) {
+            .page {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                grid-template-rows: auto;
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+            .welcome-section {
+                grid-column: 1;
+                grid-row: 1;
+                width: 100%;
+                min-width: 0;
+                border-bottom: none;
+                border-right: 1px solid transparent;
+                min-height: 100vh;
+            }
+            .welcome-inner {
+                width: 100%;
+                height: 100%;
+                padding-top: 25px;
+                padding-bottom: 25px;
+            }
+            .application-section {
+                grid-column: 2;
+                grid-row: 1;
+                width: 100%;
+                min-width: 0;
+                padding-top: 18px;
+                padding-bottom: 30px;
+            }
+            .application-section .page-content {
+                width: 100%;
+                min-width: 0;
+            }
+            .application-section .card {
+                width: 100%;
+            }
+            .process-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .process-column {
+                gap: 10px;
+            }
         }
 
         /* =========================================================
@@ -755,21 +1045,6 @@
         .modal-backdrop.open {
             opacity: 1;
             pointer-events: auto;
-        }
-
-        .modal {
-            width: 100%;
-            max-width: 480px;
-            background: #ffffff;
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            box-shadow: 0 16px 35px rgba(7,28,114,.12);
-            transform: translateY(10px) scale(0.98);
-            transition: transform 0.25s ease;
-        }
-
-        .modal-backdrop.open .modal {
-            transform: translateY(0) scale(1);
         }
 
         /* Colorless / Transparent-Styled JOptionPane Pop-Up Card */
@@ -963,177 +1238,6 @@
             background: rgba(8, 102, 245, 0.22);
         }
 
-        .modal-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--line);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-        .modal-header h2 {
-            margin: 0;
-            color: var(--navy);
-            font-size: 16px;
-            font-weight: 750;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .close-modal {
-            width: 28px;
-            height: 28px;
-            border: 1px solid var(--border-light);
-            border-radius: 6px;
-            background: #ffffff;
-            color: var(--navy);
-            font-size: 16px;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .close-modal:hover {
-            border-color: var(--blue);
-            color: var(--blue);
-        }
-
-        .modal-body {
-            padding: 20px;
-        }
-
-        .upload-description {
-            margin: 0 0 14px;
-            color: #526e9e;
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .drop-zone {
-            width: 100%;
-            min-height: 140px;
-            border: 1.5px dashed var(--border-light);
-            border-radius: 8px;
-            background: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            text-align: center;
-            transition: var(--transition);
-        }
-
-        .drop-zone:hover,
-        .drop-zone.dragover {
-            border-color: var(--blue);
-        }
-
-        .upload-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: var(--pale-blue);
-            border: 1px solid var(--border-light);
-            color: var(--blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 8px;
-        }
-
-        .upload-icon svg {
-            width: 18px;
-            height: 18px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 1.8;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .drop-zone strong { color: var(--navy); font-size: 12.5px; }
-        .drop-zone span { margin-top: 3px; color: #526e9e; font-size: 11px; }
-
-        .choose-file {
-            margin-top: 10px;
-            height: 32px;
-            padding: 0 12px;
-            border: 1px solid var(--border-light);
-            border-radius: 6px;
-            background: #ffffff;
-            color: var(--blue);
-            font-size: 11px;
-            font-weight: 750;
-        }
-
-        #fileInput { display: none; }
-
-        .selected-file {
-            margin-top: 12px;
-            padding: 10px 12px;
-            background: #ffffff;
-            border: 1px solid var(--border-light);
-            border-radius: 6px;
-            color: var(--navy);
-            font-size: 11px;
-            font-weight: 600;
-            overflow-wrap: anywhere;
-        }
-
-        .modal-actions {
-            margin-top: 16px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-        }
-
-        .modal-button {
-            height: 34px;
-            padding: 0 14px;
-            border-radius: 6px;
-            font-size: 11.5px;
-            font-weight: 750;
-        }
-
-        .modal-button.cancel {
-            border: 1px solid var(--border-light);
-            background: #ffffff;
-            color: var(--navy);
-        }
-
-        .modal-button.save {
-            border: 0;
-            background: var(--blue);
-            color: #ffffff;
-        }
-
-        .document-preview {
-            width: 100%;
-            min-height: 100px;
-            padding: 16px;
-            border-radius: 6px;
-            background: #ffffff;
-            border: 1px solid var(--border-light);
-            text-align: center;
-        }
-
-        .document-preview-icon {
-            width: 38px;
-            height: 38px;
-            margin: 0 auto 8px;
-            border-radius: 6px;
-            background: var(--pale-blue);
-            border: 1px solid var(--border-light);
-            color: var(--blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
         /* =========================================================
            7. TOAST NOTIFICATIONS
         ========================================================= */
@@ -1231,10 +1335,7 @@
         @media (max-width: 760px) {
             .header { min-height: 64px; }
             .main { padding-top: 38px; padding-bottom: 38px; }
-            .application-top { flex-direction: column; align-items: flex-start; }
-            .requirement { grid-template-columns: 1fr; gap: 10px; }
-            .requirement-status { justify-self: start; }
-            .requirement-action { width: 100%; }
+            .main.apply-flow-active { padding: 0; }
             .footer { padding-top: 18px; padding-bottom: 18px; }
         }
 
@@ -1243,6 +1344,7 @@
             .brand-logo { width: 95px; }
             .profile-icon-button { width: 34px; height: 34px; }
             .main { padding: 30px 16px 28px; }
+            .main.apply-flow-active { padding: 0; }
             .footer { flex-direction: column; align-items: flex-start; gap: 10px; padding: 18px 16px; }
             .footer-left { font-size: 11px; }
             .footer-right { justify-content: flex-start; gap: 8px; font-size: 11px; }
@@ -1251,7 +1353,11 @@
 </head>
 <body>
 
-<div class="page-shell" id="pageShell">
+<div class="page-loading-overlay" id="pageLoadingOverlay" aria-live="polite" aria-busy="true">
+    <div class="page-loading-spinner" aria-hidden="true"></div>
+</div>
+
+<div class="page-shell hidden" id="pageShell">
 
     <!-- HEADER -->
     <header class="header">
@@ -1268,7 +1374,7 @@
     </header>
 
     <!-- MAIN VIEWS -->
-    <main class="main">
+    <main class="main" id="mainContainer">
 
         <!-- VIEW 1: SIGN IN SCREEN -->
         <section id="loginView">
@@ -1428,89 +1534,234 @@
         </section>
 
         <!-- VIEW 4: PORTAL DASHBOARD (Hidden initially) -->
-        <div id="portalView" class="hidden">
-            <section class="application-card" id="applicationCard">
-                <div class="application-top">
-                    <div class="application-info">
-                        <p class="application-number">
-                            Application Reference:
-                            <span id="applicationReference">ATL-2026-10482</span>
-                        </p>
-                        <div class="application-details">
-                            <span>Programme: <strong id="programmeName">Information Technology</strong></span>
-                            <span>Intake: <strong id="intakeName">2026</strong></span>
-                            <span>Submitted: <strong id="submittedDate">18 August 2026</strong></span>
-                        </div>
-                    </div>
-                    <div class="status-badge status-action" id="mainStatusBadge">Status: Action Required</div>
-                </div>
-            </section>
+        <section id="portalView" class="hidden" aria-label="Applications overview">
+            <div class="empty-state-icon" aria-hidden="true">
+                <svg viewBox="0 0 72 72" fill="none">
+                    <path d="M22 14H42L52 24V54C52 56.2091 50.2091 58 48 58H22C19.7909 58 18 56.2091 18 54V18C18 15.7909 19.7909 14 22 14Z" fill="#eaf5ff" stroke="#5b9bff" stroke-width="2.4" stroke-linejoin="round"/>
+                    <path d="M42 14V24H52" stroke="#5b9bff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="25" y1="27" x2="36" y2="27" stroke="#7cb0ff" stroke-width="2.4" stroke-linecap="round"/>
+                    <line x1="25" y1="34" x2="34" y2="34" stroke="#7cb0ff" stroke-width="2.4" stroke-linecap="round"/>
+                    <circle cx="43" cy="43" r="9.5" fill="#ffffff" stroke="#2f80ed" stroke-width="2.5"/>
+                    <line x1="49.8" y1="49.8" x2="55.5" y2="55.5" stroke="#2f80ed" stroke-width="2.6" stroke-linecap="round"/>
+                    <line x1="55" y1="11" x2="58" y2="8" stroke="#5b9bff" stroke-width="2.2" stroke-linecap="round"/>
+                    <line x1="59" y1="15" x2="63" y2="14" stroke="#5b9bff" stroke-width="2.2" stroke-linecap="round"/>
+                    <line x1="53" y1="7" x2="54" y2="4" stroke="#5b9bff" stroke-width="2.2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h2 class="empty-state-title" id="portalTitle">No Applications Found</h2>
+            <p class="empty-state-subtitle" id="portalSubtitle">You have not submitted any applications yet.</p>
+            <button type="button" class="start-application-btn" id="startApplicationBtn">
+                <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                Start a New Application
+            </button>
+        </section>
 
-            <section class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <h2>Required Documents</h2>
-                        <p>Please upload the required verification items.</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="requirements-list" id="requirementsList">
-                        <div class="requirement" id="requirement-id">
-                            <div class="requirement-info">
-                                <div class="requirement-icon">
-                                    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8" cy="12" r="2"/><path d="M13 10h5"/><path d="M13 14h4"/></svg>
+        <!-- VIEW 5: APPLICATION PROCESS VIEW (Hidden until Start a New Application is clicked) -->
+        <section id="applicationFlowView" class="hidden" aria-label="Online Academic Application Process">
+            <div class="apply-flow-top-bar">
+                <button type="button" class="apply-flow-close-btn" id="closeApplicationFlowBtn" aria-label="Close application process" title="Close">×</button>
+            </div>
+            <div class="page">
+                <section class="welcome-section">
+                    <div class="page-content welcome-inner">
+                        <h2>
+                            Online Academic Application Process
+                        </h2>
+                        <p class="welcome-intro">
+                            To ensure a smooth and successful application, please
+                            follow the steps below. You will need to provide accurate
+                            and complete information and have your identification
+                            documents and academic records ready before you begin.
+                        </p>
+                        <div class="process-grid">
+                            <div class="process-column">
+                                <div class="process-item">
+                                    <span class="process-number">1</span>
+                                    <span>
+                                        Complete the online application form.
+                                    </span>
                                 </div>
-                                <div class="requirement-text">
-                                    <h3>ID / Passport</h3>
-                                    <p id="idDescription">Government-issued identity document</p>
+                                <div class="process-item">
+                                    <span class="process-number">2</span>
+                                    <span>
+                                        Provide the required supporting documents.
+                                    </span>
                                 </div>
-                            </div>
-                            <span class="requirement-status required" id="idStatus">Required</span>
-                            <button type="button" class="requirement-action primary" id="idAction" data-document="id">Upload</button>
-                        </div>
-                        <div class="requirement" id="requirement-matric">
-                            <div class="requirement-info">
-                                <div class="requirement-icon">
-                                    <svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4z"/><path d="M6 10v5"/><path d="M18 10v5"/><path d="M6 15c2 2 4 3 6 3s4-1 6-3"/></svg>
+                                <div class="process-item">
+                                    <span class="process-number">3</span>
+                                    <span>
+                                        Wait for your application to be reviewed.
+                                    </span>
                                 </div>
-                                <div class="requirement-text">
-                                    <h3>Matric Certificate</h3>
-                                    <p id="matricDescription">Final school certificate</p>
+                                <div class="process-item">
+                                    <span class="process-number">4</span>
+                                    <span>
+                                        Receive your admission decision via email.
+                                    </span>
                                 </div>
-                            </div>
-                            <span class="requirement-status required" id="matricStatus">Required</span>
-                            <button type="button" class="requirement-action primary" id="matricAction" data-document="matric">Upload</button>
-                        </div>
-                        <div class="requirement" id="requirement-results">
-                            <div class="requirement-info">
-                                <div class="requirement-icon">
-                                    <svg viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5z"/><path d="M14 3v5h5"/><path d="M8 13h8"/><path d="M8 17h6"/></svg>
-                                </div>
-                                <div class="requirement-text">
-                                    <h3>Latest School Results</h3>
-                                    <p id="resultsDescription">Most recent academic records</p>
-                                </div>
-                            </div>
-                            <span class="requirement-status required" id="resultsStatus">Required</span>
-                            <button type="button" class="requirement-action primary" id="resultsAction" data-document="results">Upload</button>
-                        </div>
-                        <div class="requirement" id="requirement-address">
-                            <div class="requirement-info">
-                                <div class="requirement-icon">
-                                    <svg viewBox="0 0 24 24"><path d="M4 10l8-6 8 6"/><path d="M6 9v10h12V9"/><path d="M9 19v-5h6v5"/></svg>
-                                </div>
-                                <div class="requirement-text">
-                                    <h3>Proof of Address</h3>
-                                    <p id="addressDescription">Recent document showing residence</p>
+                                <div class="process-item">
+                                    <span class="process-number">5</span>
+                                    <span>
+                                        Follow the next steps to register and enrol
+                                    </span>
                                 </div>
                             </div>
-                            <span class="requirement-status required" id="addressStatus">Required</span>
-                            <button type="button" class="requirement-action primary" id="addressAction" data-document="address">Upload</button>
                         </div>
                     </div>
+                </section>
+                <div class="application-section">
+                    <div class="page-content">
+                        <div class="card" id="program-select-card">
+                            <div class="question-row">
+                                <label for="program-wish-select">
+                                    What do you wish to apply for?
+                                </label>
+                                <select id="program-wish-select">
+                                    <option value="">
+                                        --- Select option ---
+                                    </option>
+                                    <option value="Undergraduate Degree">
+                                        Undergraduate degree
+                                    </option>
+                                    <option value="Postgraduate Degree">
+                                        Postgraduate degree
+                                    </option>
+                                    <option value="Research Degree">
+                                        Master's & Doctoral degree
+                                    </option>
+                                </select>
+                                <span class="required-star">
+                                    *
+                                </span>
+                            </div>
+                        </div>
+                        <div
+                            class="card hidden fade-in"
+                            id="step4-card"
+                        >
+                            <div class="form-title">
+                                POPIA – Privacy Notice
+                            </div>
+                            <div class="form-description">
+                                Please read the privacy notice below before
+                                continuing with your application.
+                            </div>
+                            <div class="popia-box">
+                                <p>
+                                    <strong>
+                                        POPIA Privacy Notice
+                                    </strong>
+                                </p>
+                                <p>
+                                    <strong>
+                                        1. Introduction
+                                    </strong>
+                                    <br>
+                                    Atlas College is committed to protecting
+                                    your personal information in accordance
+                                    with the Protection of Personal Information
+                                    Act (POPIA).
+                                </p>
+                                <p>
+                                    This notice explains how we collect, use,
+                                    store and protect your personal information
+                                    when you apply to study at our college.
+                                </p>
+                                <p>
+                                    <strong>
+                                        2. Information We Collect
+                                    </strong>
+                                    <br>
+                                    We may collect personal details including
+                                    your name, identity number, passport number,
+                                    contact details, academic history and
+                                    supporting documentation.
+                                </p>
+                                <p>
+                                    <strong>
+                                        3. Purpose of Collection
+                                    </strong>
+                                    <br>
+                                    Personal information is collected for the
+                                    purpose of processing your application,
+                                    communicating with you regarding your
+                                    application, maintaining student records
+                                    and fulfilling applicable legal and
+                                    regulatory requirements.
+                                </p>
+                                <p>
+                                    <strong>
+                                        4. Protection of Information
+                                    </strong>
+                                    <br>
+                                    Atlas College takes reasonable measures
+                                    to protect personal information against
+                                    unauthorised access, loss, misuse,
+                                    alteration or disclosure.
+                                </p>
+                                <p>
+                                    <strong>
+                                        5. Applicant Rights
+                                    </strong>
+                                    <br>
+                                    Applicants may have rights relating to
+                                    access to, correction of and protection
+                                    of their personal information as provided
+                                    for under applicable legislation.
+                                </p>
+                                <p>
+                                    <strong>
+                                        6. Contact
+                                    </strong>
+                                    <br>
+                                    If you have questions regarding the
+                                    processing of your personal information,
+                                    please contact the Atlas College
+                                    admissions office.
+                                </p>
+                            </div>
+                            <div class="consent-title">
+                                <strong>
+                                    Consent & Agreement
+                                </strong>
+                                <br>
+                                Please select one of the options below
+                                to continue.
+                            </div>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input
+                                        type="radio"
+                                        name="popia_consent"
+                                        value="accept"
+                                    >
+                                    <span>
+                                        I accept
+                                    </span>
+                                </label>
+                                <label class="radio-option">
+                                    <input
+                                        type="radio"
+                                        name="popia_consent"
+                                        value="decline"
+                                    >
+                                    <span>
+                                        I do not accept
+                                    </span>
+                                </label>
+                            </div>
+                            <button
+                                class="submit-btn"
+                                id="popia-continue-btn"
+                                type="button"
+                            >
+                                NEXT ➔
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
 
     </main>
 
@@ -1527,57 +1778,6 @@
             <a href="#" id="supportLink">Help</a>
         </nav>
     </footer>
-
-    <!-- UPLOAD MODAL -->
-    <div class="modal-backdrop" id="uploadModal">
-        <div class="modal" role="dialog" aria-modal="true">
-            <div class="modal-header">
-                <h2 id="uploadModalTitle">Upload Document</h2>
-                <button type="button" class="close-modal" id="closeUploadModal" aria-label="Close">×</button>
-            </div>
-            <div class="modal-body">
-                <p class="upload-description" id="uploadDescription">Upload your required document below.</p>
-                <div class="drop-zone" id="dropZone">
-                    <div class="upload-icon">
-                        <svg viewBox="0 0 24 24"><path d="M12 16V4"/><path d="M8 8l4-4 4 4"/><path d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
-                    </div>
-                    <strong>Choose a document</strong>
-                    <span>PDF, JPG or PNG</span>
-                    <button type="button" class="choose-file" id="chooseFileButton">Choose File</button>
-                    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png">
-                </div>
-                <div class="selected-file hidden" id="selectedFile"></div>
-                <div class="modal-actions">
-                    <button type="button" class="modal-button cancel" id="cancelUpload">Cancel</button>
-                    <button type="button" class="modal-button save" id="saveDocument">Save Document</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- DOCUMENT VIEW MODAL -->
-    <div class="modal-backdrop" id="documentModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>Document</h2>
-                <button type="button" class="close-modal" id="closeDocumentModal">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="document-preview">
-                    <div class="document-preview-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10l4 4v14H5z"></path><path d="M14 3v5h5"></path></svg>
-                    </div>
-                    <strong id="viewDocumentName">Document.pdf</strong>
-                    <br>
-                    <small id="viewDocumentDetails" style="color: #526e9e;">Uploaded document</small>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="modal-button cancel" id="closeDocumentButton">Close</button>
-                    <button type="button" class="modal-button save" id="replaceDocumentButton">Replace Document</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </div>
 
