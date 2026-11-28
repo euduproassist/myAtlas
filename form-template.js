@@ -31,6 +31,25 @@ const BLUEPRINT_SECTIONS = {
 
 let globalDelegatedListenerAttached = false;
 
+function formatStudentFormTitle(qualificationType) {
+  const cleaned = String(qualificationType || "").trim();
+  if (!cleaned) {
+    return "Student Application Form";
+  }
+  if (cleaned === "Undergraduate Degree") {
+    return "Undergraduate Degree Applications";
+  }
+  if (cleaned === "Postgraduate Degree") {
+    return "Postgraduate Degree Applications";
+  }
+  if (cleaned === "Research Degree") {
+    return "Master's & Doctoral Degree Applications";
+  }
+  return cleaned.toLowerCase().endsWith("applications")
+    ? cleaned
+    : `${cleaned} Applications`;
+}
+
 function normalizeCourseItems(cycleData, savedSelectedCourses, masterCoursesList) {
   if (Array.isArray(cycleData?.selectedCoursesSnapshot) && cycleData.selectedCoursesSnapshot.length > 0) {
     return cycleData.selectedCoursesSnapshot.map(item => ({
@@ -144,6 +163,10 @@ export async function renderApplicationForm(targetContainer, cycleData = null, o
       qualification: cycleData?.qualificationType || savedBasicInfo.qualification || ""
     };
 
+    const formHeadingTitle = isPreview
+      ? effectiveBasicInfo.cycleName
+      : formatStudentFormTitle(effectiveBasicInfo.qualification);
+
     const resolvedCourses = normalizeCourseItems(cycleData, savedSelectedCourses, masterCoursesList);
 
     let formHtml = `
@@ -189,7 +212,7 @@ export async function renderApplicationForm(targetContainer, cycleData = null, o
         <header style="border-bottom: 2px solid #f1f5f9; padding-bottom: 16px; margin-bottom: 28px;">
           <span style="font-size: 11px; font-weight: 700; color: #0866f5; text-transform: uppercase; letter-spacing: 1px;">${isPreview ? "Live Form Preview" : "Application Form"}</span>
           <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin-top: 4px;">
-            ${effectiveBasicInfo.cycleName}
+            ${formHeadingTitle}
           </h2>
           <p style="font-size: 13px; color: #64748b; margin-top: 4px;">
             Academic Year: <strong>${effectiveBasicInfo.academicYear}</strong> | Qualification: <strong>${effectiveBasicInfo.qualification || "N/A"}</strong>
