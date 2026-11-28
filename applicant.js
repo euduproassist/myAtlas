@@ -1,4 +1,5 @@
 import { auth, db } from "./firebase-config.js";
+import { renderApplicationForm } from "./form-template.js";
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -38,15 +39,19 @@ const forgotPasswordView = document.getElementById("forgotPasswordView");
 const portalView = document.getElementById("portalView");
 const applicationFlowView = document.getElementById("applicationFlowView");
 const closeApplicationFlowBtn = document.getElementById("closeApplicationFlowBtn");
+const qualificationAndPopiaWrapper = document.getElementById("qualificationAndPopiaWrapper");
+const applicationFormStage = document.getElementById("applicationFormStage");
+const dynamicApplicationFormContainer = document.getElementById("dynamicApplicationFormContainer");
+const backToQualificationBtn = document.getElementById("backToQualificationBtn");
 const portalTitle = document.getElementById("portalTitle");
 const portalSubtitle = document.getElementById("portalSubtitle");
 const profileButton = document.getElementById("profileButton");
 const startApplicationBtn = document.getElementById("startApplicationBtn");
 
-// Application Flow DOM (from apply.js)
-const programWishSelect = document.getElementById('program-wish-select');
-const popiaContinueBtn = document.getElementById('popia-continue-btn');
-const step4Card = document.getElementById('step4-card');
+// Application Flow DOM
+const programWishSelect = document.getElementById("program-wish-select");
+const popiaContinueBtn = document.getElementById("popia-continue-btn");
+const step4Card = document.getElementById("step4-card");
 
 const signInBtn = document.getElementById("signInBtn");
 const createAccountBtn = document.getElementById("createAccountBtn");
@@ -78,8 +83,9 @@ let allowPortalNavigation = false;
 let windowLoaded = document.readyState === "complete";
 let initialAuthResolved = false;
 
-// Application Flow State (from apply.js)
-let selectedProgramWish = '';
+// Application Flow State
+let selectedProgramWish = "";
+let activeSelectedCycle = null;
 const activeCyclesByQualification = new Map();
 
 function tryRevealPage() {
@@ -95,16 +101,22 @@ window.addEventListener("load", () => {
 });
 
 // =========================================================
-// APPLICATION FLOW LOGIC (From apply.js)
+// APPLICATION FLOW LOGIC
 // =========================================================
 function setCardVisible(cardEl, visible) {
     if (!cardEl) return;
-    cardEl.classList.toggle('hidden', !visible);
+    cardEl.classList.toggle("hidden", !visible);
+}
+
+function showQualificationAndPopiaStep() {
+    applicationFormStage?.classList.add("hidden");
+    qualificationAndPopiaWrapper?.classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function parseIsoDateOnly(dateStr) {
-    if (!dateStr || typeof dateStr !== 'string') return null;
-    const parts = dateStr.trim().split('-');
+    if (!dateStr || typeof dateStr !== "string") return null;
+    const parts = dateStr.trim().split("-");
     if (parts.length !== 3) return null;
     const year = Number(parts[0]);
     const month = Number(parts[1]) - 1;
@@ -119,21 +131,27 @@ function getTodayDateOnly() {
 }
 
 function clearApplicationSession() {
-    selectedProgramWish = '';
-    sessionStorage.removeItem('myAtlas_activeCycles');
-    sessionStorage.removeItem('myAtlas_selectedQualification');
-    sessionStorage.removeItem('myAtlas_popiaAccepted');
+    selectedProgramWish = "";
+    activeSelectedCycle = null;
+    sessionStorage.removeItem("myAtlas_activeCycles");
+    sessionStorage.removeItem("myAtlas_selectedQualification");
+    sessionStorage.removeItem("myAtlas_popiaAccepted");
+    sessionStorage.removeItem("myAtlas_activeCycleData");
 
     if (programWishSelect) {
-        programWishSelect.value = '';
+        programWishSelect.value = "";
     }
 
     document.querySelectorAll('input[name="popia_consent"]').forEach((radio) => {
         radio.checked = false;
     });
 
+    if (dynamicApplicationFormContainer) {
+        dynamicApplicationFormContainer.innerHTML = "";
+    }
+
     setCardVisible(step4Card, false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showQualificationAndPopiaStep();
 }
 
 async function checkActiveCycles() {
@@ -184,15 +202,15 @@ async function checkActiveCycles() {
         const opt = programWishSelect.options[i];
         if (!opt.value) continue;
 
-        const baseLabel = opt.textContent.replace(/\s*\(Closed \/ Unavailable\)$/i, '').trim();
+        const baseLabel = opt.textContent.replace(/\s*\(Closed \/ Unavailable\)$/i, "").trim();
 
         if (!activeCyclesByQualification.has(opt.value)) {
             opt.disabled = true;
-            opt.classList.add('disabled-option');
+            opt.classList.add("disabled-option");
             opt.textContent = `${baseLabel} (Closed / Unavailable)`;
         } else {
             opt.disabled = false;
-            opt.classList.remove('disabled-option');
+            opt.classList.remove("disabled-option");
             opt.textContent = baseLabel;
         }
     }
@@ -200,6 +218,7 @@ async function checkActiveCycles() {
 
 function handleProgramWishChange(value) {
     selectedProgramWish = value;
+    activeSelectedCycle = null;
 
     document.querySelectorAll('input[name="popia_consent"]').forEach((radio) => {
         radio.checked = false;
@@ -207,47 +226,58 @@ function handleProgramWishChange(value) {
 
     if (!value) {
         setCardVisible(step4Card, false);
-        sessionStorage.removeItem('myAtlas_activeCycles');
-        sessionStorage.removeItem('myAtlas_selectedQualification');
+        sessionStorage.removeItem("myAtlas_activeCycles");
+        sessionStorage.removeItem("myAtlas_selectedQualification");
+        sessionStorage.removeItem("myAtlas_activeCycleData");
         return;
     }
 
     const matchingCycles = activeCyclesByQualification.get(value) || [];
-    sessionStorage.setItem('myAtlas_activeCycles', JSON.stringify(matchingCycles));
-    sessionStorage.setItem('myAtlas_selectedQualification', value);
+    sessionStorage.setItem("myAtlas_activeCycles", JSON.stringify(matchingCycles));
+    sessionStorage.setItem("myAtlas_selectedQualification", value);
 
     setCardVisible(step4Card, true);
     step4Card?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+        behavior: "smooth",
+        block: "start"
     });
 }
 
-function handlePopiaContinue() {
+async function handlePopiaContinue() {
     const selectedOption = document.querySelector('input[name="popia_consent"]:checked');
     if (!selectedOption) {
-        alert('Please select whether you accept or do not accept the POPIA terms to continue.');
+        showToast("Please select whether you accept or do not accept the POPIA terms to continue.", "error");
         return;
     }
-    if (selectedOption.value === 'accept') {
+
+    if (selectedOption.value === "accept") {
         const matchingCycles = activeCyclesByQualification.get(selectedProgramWish) || [];
         if (matchingCycles.length === 0) {
-            alert('No open application cycle was found for this qualification.');
+            showToast("No open application cycle was found for this qualification.", "error");
             return;
         }
-        sessionStorage.setItem('myAtlas_popiaAccepted', 'true');
-        alert(`POPIA accepted. Ready to load application form for: ${matchingCycles[0].cycleName}`);
+
+        const chosenCycle = matchingCycles[0];
+        activeSelectedCycle = chosenCycle;
+        sessionStorage.setItem("myAtlas_popiaAccepted", "true");
+        sessionStorage.setItem("myAtlas_activeCycleData", JSON.stringify(chosenCycle));
+
+        qualificationAndPopiaWrapper?.classList.add("hidden");
+        applicationFormStage?.classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        await renderApplicationForm(dynamicApplicationFormContainer, chosenCycle, { isPreview: false });
     } else {
         clearApplicationSession();
-        alert('You did not accept the POPIA terms. Your session has been cleared.');
+        showToast("You did not accept the POPIA terms. Your session has been cleared.", "error");
     }
 }
 
 if (programWishSelect) {
-    programWishSelect.addEventListener('change', (e) => {
+    programWishSelect.addEventListener("change", (e) => {
         const selectedOption = e.target.options[e.target.selectedIndex];
         if (selectedOption && selectedOption.disabled) {
-            alert("This application cycle is currently closed or unavailable.");
+            showToast("This application cycle is currently closed or unavailable.", "error");
             e.target.value = "";
             handleProgramWishChange("");
             return;
@@ -257,16 +287,21 @@ if (programWishSelect) {
 }
 
 if (popiaContinueBtn) {
-    popiaContinueBtn.addEventListener('click', handlePopiaContinue);
+    popiaContinueBtn.addEventListener("click", handlePopiaContinue);
 }
 
-closeApplicationFlowBtn?.addEventListener('click', (e) => {
+backToQualificationBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    showQualificationAndPopiaStep();
+});
+
+closeApplicationFlowBtn?.addEventListener("click", (e) => {
     e.preventDefault();
     clearApplicationSession();
-    applicationFlowView.classList.add('hidden');
-    mainContainer?.classList.remove('apply-flow-active');
-    portalView.classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    applicationFlowView.classList.add("hidden");
+    mainContainer?.classList.remove("apply-flow-active");
+    portalView.classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 // =========================================================
@@ -293,6 +328,7 @@ document.getElementById("supportLink").addEventListener("click", (e) => {
 
 startApplicationBtn.addEventListener("click", async (e) => {
     e.preventDefault();
+    clearApplicationSession();
     portalView.classList.add("hidden");
     applicationFlowView.classList.remove("hidden");
     mainContainer?.classList.add("apply-flow-active");
@@ -389,7 +425,6 @@ goToSignInFromSignUp.addEventListener("click", (e) => {
     showAuthView(loginView);
 });
 
-// Forgot password is disabled for now
 forgotPasswordLink.addEventListener("click", (e) => {
     e.preventDefault();
 });
@@ -494,7 +529,6 @@ function closeOtpPopup() {
 closeOtpBtn.addEventListener("click", closeOtpPopup);
 cancelOtpBtn.addEventListener("click", closeOtpPopup);
 
-// 6-Block OTP Box Navigation & Paste Support
 otpBoxes.forEach((box, idx) => {
     box.addEventListener("input", () => {
         box.value = box.value.replace(/[^0-9]/g, "").slice(0, 1);
@@ -610,7 +644,6 @@ createAccountBtn.addEventListener("click", async () => {
         if (existingSnap.exists()) {
             const existingData = existingSnap.data();
 
-            // Email already exists and account is active -> inform and redirect to Sign In
             if (existingData.activated === true) {
                 showToast("An active account with this email already exists. Redirecting to Sign In.", "error");
                 document.getElementById("loginEmailInput").value = email;
@@ -618,7 +651,6 @@ createAccountBtn.addEventListener("click", async () => {
                 return;
             }
 
-            // Email exists but never confirmed OTP -> use the NEW password entered now, refresh OTP, open colorless OTP card
             const otpCode = generateSixDigitOtp();
             await updateDoc(accountRef, {
                 firstName,
@@ -644,7 +676,6 @@ createAccountBtn.addEventListener("click", async () => {
             return;
         }
 
-        // Brand-new account registration -> store pending record, send OTP, open colorless 6-block OTP card
         const otpCode = generateSixDigitOtp();
         await setDoc(accountRef, {
             firstName,
@@ -706,12 +737,10 @@ verifyOtpBtn.addEventListener("click", async () => {
             return;
         }
 
-        // Create or update Firebase Authentication account using the latest password
         try {
             await createUserWithEmailAndPassword(auth, pendingOtpSession.email, activePassword);
         } catch (authErr) {
             if (authErr.code === "auth/email-already-in-use") {
-                // If an unverified auth user already existed from an earlier attempt, sign in briefly or note update
                 try {
                     await signInWithEmailAndPassword(auth, pendingOtpSession.email, activePassword);
                 } catch (_) {
@@ -731,7 +760,6 @@ verifyOtpBtn.addEventListener("click", async () => {
             activatedAt: serverTimestamp()
         }, { merge: true });
 
-        // Sign out so user signs in through the Sign In screen
         await signOut(auth);
 
         const verifiedEmail = pendingOtpSession.email;
@@ -796,7 +824,6 @@ profileButton.addEventListener("click", async () => {
     showAuthView(loginView);
 });
 
-// Dashboard guard: if user is not genuinely authorized/authenticated, silently kick back to Sign In with no alert
 onAuthStateChanged(auth, async (user) => {
     try {
         if (user) {
