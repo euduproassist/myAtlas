@@ -225,7 +225,7 @@ export async function renderApplicationForm(targetContainer, cycleData = null, o
       `;
 
       if (sectionKey === "education_courses") {
-        formHtml += renderEducationCoursesSectionHTML(fields, resolvedCourses, effectiveBasicInfo);
+        formHtml += renderEducationCoursesSectionHTML(fields, resolvedCourses, effectiveBasicInfo, isPreview);
       } else {
         if (fields.length === 0) {
           formHtml += `<p style="grid-column: 1 / -1; color: #94a3b8; font-size: 13px; font-style: italic;">No fields enabled for this section.</p>`;
@@ -276,7 +276,7 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
 /**
  * Render Section 4 Educational Background & Course Selection
  */
-function renderEducationCoursesSectionHTML(activeEducationFields, resolvedCourses, effectiveBasicInfo) {
+function renderEducationCoursesSectionHTML(activeEducationFields, resolvedCourses, effectiveBasicInfo, isPreview = false) {
   let html = "";
   const fieldNamesSet = new Set(activeEducationFields.map(f => f.fieldName));
 
@@ -449,7 +449,7 @@ function renderEducationCoursesSectionHTML(activeEducationFields, resolvedCourse
 
   // 3. "What do you wish to study for?" with Progressive Cascading Filters
   if (fieldNamesSet.has("What do you wish to study for?")) {
-    html += renderCascadingCourseSelectionBlock(activeEducationFields, resolvedCourses, effectiveBasicInfo);
+    html += renderCascadingCourseSelectionBlock(activeEducationFields, resolvedCourses, effectiveBasicInfo, isPreview);
   }
 
   return html;
@@ -458,7 +458,7 @@ function renderEducationCoursesSectionHTML(activeEducationFields, resolvedCourse
 /**
  * Render Progressive Cascading Course Selection Block
  */
-function renderCascadingCourseSelectionBlock(activeEducationFields, resolvedCourses, effectiveBasicInfo) {
+function renderCascadingCourseSelectionBlock(activeEducationFields, resolvedCourses, effectiveBasicInfo, isPreview = false) {
   if (!resolvedCourses || resolvedCourses.length === 0) {
     return `
       <div style="grid-column: 1 / -1; margin-top: 14px; background: #fff5f5; border: 1px solid #feb2b2; padding: 14px; border-radius: 6px; color: #c53030; font-size: 13px;">
@@ -472,17 +472,24 @@ function renderCascadingCourseSelectionBlock(activeEducationFields, resolvedCour
   const reqAsterisk = fieldObj?.requirement === "Required" ? `<span style="color: #e53b4d;">*</span>` : ``;
   const escapedCoursesJson = JSON.stringify(resolvedCourses).replace(/'/g, "&#39;");
 
+  const isApplicantLocked = !isPreview && Boolean(qualificationLabel);
+  const subFieldsDisplay = isApplicantLocked ? "flex" : "none";
+
   return `
     <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 16px;" id="previewCascadingWrapper" data-courses='${escapedCoursesJson}'>
       <div style="display: flex; flex-direction: column; gap: 6px;">
         <label style="font-size: 13px; font-weight: 700; color: #1e293b;">What do you wish to study for? ${reqAsterisk}</label>
-        <select id="whatDoYouWishToStudyTrigger" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
-          <option value="" disabled selected>Select option</option>
-          ${qualificationLabel ? `<option value="${qualificationLabel}">${qualificationLabel}</option>` : ""}
-        </select>
+        ${
+          isApplicantLocked
+            ? `<input type="text" id="whatDoYouWishToStudyTrigger" class="control" value="${qualificationLabel}" readonly style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #f1f5f9; color: #64748b; cursor: not-allowed;" />`
+            : `<select id="whatDoYouWishToStudyTrigger" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
+                <option value="" disabled selected>Select option</option>
+                ${qualificationLabel ? `<option value="${qualificationLabel}">${qualificationLabel}</option>` : ""}
+              </select>`
+        }
       </div>
 
-      <div id="cascadingSubFieldsBlock" style="display: none; margin-top: 10px; flex-direction: column; gap: 16px;">
+      <div id="cascadingSubFieldsBlock" style="display: ${subFieldsDisplay}; margin-top: 10px; flex-direction: column; gap: 16px;">
         <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 0;">Course Selection Details</h4>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
           <div>
@@ -784,7 +791,7 @@ function attachFormEventListeners(scopeEl = document) {
   const whatDoYouWishToStudyTrigger = scopeEl.querySelector("#whatDoYouWishToStudyTrigger");
   const cascadingSubFieldsBlock = scopeEl.querySelector("#cascadingSubFieldsBlock");
 
-  if (whatDoYouWishToStudyTrigger && cascadingSubFieldsBlock) {
+  if (whatDoYouWishToStudyTrigger && cascadingSubFieldsBlock && whatDoYouWishToStudyTrigger.tagName === "SELECT") {
     whatDoYouWishToStudyTrigger.addEventListener("change", (e) => {
       cascadingSubFieldsBlock.style.display = e.target.value ? "flex" : "none";
     });
