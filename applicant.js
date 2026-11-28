@@ -50,6 +50,8 @@ const startApplicationBtn = document.getElementById("startApplicationBtn");
 
 // Application Flow DOM
 const programWishSelect = document.getElementById("program-wish-select");
+const academicYearCard = document.getElementById("academic-year-card");
+const academicYearSelect = document.getElementById("academic-year-select");
 const popiaContinueBtn = document.getElementById("popia-continue-btn");
 const step4Card = document.getElementById("step4-card");
 
@@ -85,6 +87,7 @@ let initialAuthResolved = false;
 
 // Application Flow State
 let selectedProgramWish = "";
+let selectedAcademicYear = "";
 let activeSelectedCycle = null;
 const activeCyclesByQualification = new Map();
 
@@ -130,11 +133,40 @@ function getTodayDateOnly() {
     return new Date(now.getFullYear(), now.getMonth(), now.getDate());
 }
 
+function extractCycleAcademicYear(cycle, collectionName = "") {
+    if (cycle?.academicYear !== undefined && cycle?.academicYear !== null && String(cycle.academicYear).trim() !== "") {
+        return String(cycle.academicYear).trim();
+    }
+    const match = String(collectionName || cycle?._collectionName || "").match(/^([0-9]{4})_/);
+    return match ? match[1] : "";
+}
+
+function resetAcademicYearAndPopia() {
+    selectedAcademicYear = "";
+    activeSelectedCycle = null;
+
+    if (academicYearSelect) {
+        academicYearSelect.innerHTML = `<option value="">--- Select academic year ---</option>`;
+        academicYearSelect.value = "";
+    }
+
+    document.querySelectorAll('input[name="popia_consent"]').forEach((radio) => {
+        radio.checked = false;
+    });
+
+    setCardVisible(academicYearCard, false);
+    setCardVisible(step4Card, false);
+    sessionStorage.removeItem("myAtlas_selectedAcademicYear");
+    sessionStorage.removeItem("myAtlas_activeCycleData");
+}
+
 function clearApplicationSession() {
     selectedProgramWish = "";
+    selectedAcademicYear = "";
     activeSelectedCycle = null;
     sessionStorage.removeItem("myAtlas_activeCycles");
     sessionStorage.removeItem("myAtlas_selectedQualification");
+    sessionStorage.removeItem("myAtlas_selectedAcademicYear");
     sessionStorage.removeItem("myAtlas_popiaAccepted");
     sessionStorage.removeItem("myAtlas_activeCycleData");
 
@@ -142,15 +174,12 @@ function clearApplicationSession() {
         programWishSelect.value = "";
     }
 
-    document.querySelectorAll('input[name="popia_consent"]').forEach((radio) => {
-        radio.checked = false;
-    });
+    resetAcademicYearAndPopia();
 
     if (dynamicApplicationFormContainer) {
         dynamicApplicationFormContainer.innerHTML = "";
     }
 
-    setCardVisible(step4Card, false);
     showQualificationAndPopiaStep();
 }
 
@@ -182,13 +211,15 @@ async function checkActiveCycles() {
 
                     if (isAfterOpen && isBeforeClose && data.qualificationType) {
                         const qualKey = data.qualificationType.trim();
+                        const resolvedYear = extractCycleAcademicYear(data, colName);
                         if (!activeCyclesByQualification.has(qualKey)) {
                             activeCyclesByQualification.set(qualKey, []);
                         }
                         activeCyclesByQualification.get(qualKey).push({
                             id: docSnap.id,
                             _collectionName: colName,
-                            ...data
+                            ...data,
+                            academicYear: resolvedYear || data.academicYear || ""
                         });
                     }
                 }
@@ -218,17 +249,11 @@ async function checkActiveCycles() {
 
 function handleProgramWishChange(value) {
     selectedProgramWish = value;
-    activeSelectedCycle = null;
-
-    document.querySelectorAll('input[name="popia_consent"]').forEach((radio) => {
-        radio.checked = false;
-    });
+    resetAcademicYearAndPopia();
 
     if (!value) {
-        setCardVisible(step4Card, false);
         sessionStorage.removeItem("myAtlas_activeCycles");
         sessionStorage.removeItem("myAtlas_selectedQualification");
-        sessionStorage.removeItem("myAtlas_activeCycleData");
         return;
     }
 
@@ -236,7 +261,58 @@ function handleProgramWishChange(value) {
     sessionStorage.setItem("myAtlas_activeCycles", JSON.stringify(matchingCycles));
     sessionStorage.setItem("myAtlas_selectedQualification", value);
 
-    setCardVisible(step4Card, true);
+    const openYears = Array.from(
+        new Set(
+            matchingCycles
+                .map((c) => extractCycleAcademicYear(c))
+                .filter(Boolean)
+        )
+    ).sort();
+
+    if (academicYearSelect) {
+        academicYearSelect.innerHTML = `<option value="">--- Select academic year ---</option>`;
+        openYears.forEach((yr) => {
+            const opt = document.createElement("option");
+            opt.value = yr;
+            opt.textContent = yr;
+            academicYearSelect.appendChild(opt);
+        });
+    }
+
+    setCardVisible(academicYearCard, true);
+    academicYearCard?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+function handleAcademicYearChange(yearValue) {
+    selectedAcademicYear = yearValue;
+    activeSelectedCycle = null;
+
+    document.querySelectorAll('input[name="popia_consent"]').forEach((radio) => {
+        radio.checked = false;
+    });
+
+    if (!yearValue) {
+        setCardVisible(step4Card, false);
+        sessionStorage.removeItem("myAtlas_selectedAcademicYear");
+        sessionStorage.removeItem("myAtlas_activeCycleData");
+        return;
+    }
+
+    const matchingCycles = activeCyclesByQualification.get(selectedProgramWish) || [];
+    const matchedCycle = matchingCycles.find(
+        (c) => extractCycleAcademicYear(c) === yearValue
+    ) || null;
+
+    activeSelectedCycle = matchedCycle;
+    sessionStorage.setItem("myAtlas_selectedAcademicYear", yearValue);
+    if (matchedCycle) {
+        sessionStorage.setItem("myAtlas_activeCycleData", JSON.stringify(matchedCycle));
+    }
+
+    setCardVisible(step4Card, Boolean(matchedCycle));
     step4Card?.scrollIntoView({
         behavior: "smooth",
         block: "start"
@@ -244,6 +320,16 @@ function handleProgramWishChange(value) {
 }
 
 async function handlePopiaContinue() {
+    if (!selectedProgramWish) {
+        showToast("Please select what you wish to apply for first.", "error");
+        return;
+    }
+
+    if (!selectedAcademicYear) {
+        showToast("Please select an academic year to continue.", "error");
+        return;
+    }
+
     const selectedOption = document.querySelector('input[name="popia_consent"]:checked');
     if (!selectedOption) {
         showToast("Please select whether you accept or do not accept the POPIA terms to continue.", "error");
@@ -252,21 +338,31 @@ async function handlePopiaContinue() {
 
     if (selectedOption.value === "accept") {
         const matchingCycles = activeCyclesByQualification.get(selectedProgramWish) || [];
-        if (matchingCycles.length === 0) {
-            showToast("No open application cycle was found for this qualification.", "error");
+        const chosenCycle =
+            activeSelectedCycle ||
+            matchingCycles.find((c) => extractCycleAcademicYear(c) === selectedAcademicYear) ||
+            null;
+
+        if (!chosenCycle) {
+            showToast("No open application cycle was found for this qualification and academic year.", "error");
             return;
         }
 
-        const chosenCycle = matchingCycles[0];
-        activeSelectedCycle = chosenCycle;
+        const normalizedCycle = {
+            ...chosenCycle,
+            qualificationType: selectedProgramWish,
+            academicYear: selectedAcademicYear
+        };
+
+        activeSelectedCycle = normalizedCycle;
         sessionStorage.setItem("myAtlas_popiaAccepted", "true");
-        sessionStorage.setItem("myAtlas_activeCycleData", JSON.stringify(chosenCycle));
+        sessionStorage.setItem("myAtlas_activeCycleData", JSON.stringify(normalizedCycle));
 
         qualificationAndPopiaWrapper?.classList.add("hidden");
         applicationFormStage?.classList.remove("hidden");
         window.scrollTo({ top: 0, behavior: "smooth" });
 
-        await renderApplicationForm(dynamicApplicationFormContainer, chosenCycle, { isPreview: false });
+        await renderApplicationForm(dynamicApplicationFormContainer, normalizedCycle, { isPreview: false });
     } else {
         clearApplicationSession();
         showToast("You did not accept the POPIA terms. Your session has been cleared.", "error");
@@ -283,6 +379,12 @@ if (programWishSelect) {
             return;
         }
         handleProgramWishChange(e.target.value);
+    });
+}
+
+if (academicYearSelect) {
+    academicYearSelect.addEventListener("change", (e) => {
+        handleAcademicYearChange(e.target.value);
     });
 }
 
