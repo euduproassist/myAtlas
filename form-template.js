@@ -29,74 +29,126 @@ const BLUEPRINT_SECTIONS = {
   }
 };
 
-/**
- * Main function to generate and inject the Application Preview inside Step 4
- */
-export async function renderStep4ApplicationPreview(containerElementId = "builderStep4Preview") {
-  let targetContainer = document.getElementById(containerElementId);
+let globalDelegatedListenerAttached = false;
 
-  if (!targetContainer) {
-    const step4 = document.getElementById("builderStep4");
-    if (!step4) return;
-    targetContainer = document.createElement("div");
-    targetContainer.id = containerElementId;
-    targetContainer.style.marginTop = "24px";
-    step4.insertBefore(targetContainer, step4.querySelector(".actions"));
+function normalizeCourseItems(cycleData, savedSelectedCourses, masterCoursesList) {
+  if (Array.isArray(cycleData?.selectedCoursesSnapshot) && cycleData.selectedCoursesSnapshot.length > 0) {
+    return cycleData.selectedCoursesSnapshot.map(item => ({
+      course: item.course || "",
+      studyMode: item.studyMode || "Full-time",
+      campus: item.campus || "Main Campus",
+      academicYear: item.academicYear || cycleData.academicYear || ""
+    })).filter(item => item.course);
   }
 
-  targetContainer.innerHTML = `
-    <div style="text-align: center; padding: 40px; color: #0866f5; font-size: 15px; font-weight: 600;">
-      Generating live application form preview from configured choices...
-    </div>`;
+  if (Array.isArray(savedSelectedCourses) && savedSelectedCourses.length > 0) {
+    return savedSelectedCourses.map(key => {
+      if (typeof key === "object" && key !== null) {
+        return {
+          course: key.course || "",
+          studyMode: key.studyMode || "Full-time",
+          campus: key.campus || "Main Campus",
+          academicYear: key.academicYear || cycleData?.academicYear || ""
+        };
+      }
+      const parts = String(key).split("_");
+      return {
+        course: parts[0] || String(key),
+        studyMode: parts[1] || "Full-time",
+        campus: parts[2] || "Main Campus",
+        academicYear: cycleData?.academicYear || ""
+      };
+    }).filter(item => item.course);
+  }
 
+  return Array.isArray(masterCoursesList) ? masterCoursesList : [];
+}
+
+/**
+ * Renders the application form into any target DOM element.
+ * When `cycleData` (from a published application cycle document) is supplied,
+ * it uses `formFieldsSnapshot`, `selectedCoursesSnapshot`, `cycleName`,
+ * `academicYear`, and `qualificationType` directly from that cycle.
+ */
+export async function renderApplicationForm(targetContainer, cycleData = null, options = {}) {
+  if (!targetContainer) return;
+
+  const isPreview = Boolean(options.isPreview);
   const savedFieldsState = JSON.parse(localStorage.getItem("myAtlas_formFieldsState") || "{}");
   const savedSelectedCourses = JSON.parse(localStorage.getItem("myAtlas_selectedCourses") || "[]");
   const savedBasicInfo = JSON.parse(localStorage.getItem("myAtlas_basicInfo") || "{}");
 
+  targetContainer.innerHTML = `
+    <div style="text-align: center; padding: 40px; color: #0866f5; font-size: 15px; font-weight: 600;">
+      ${isPreview ? "Generating live application form preview..." : "Loading application form..."}
+    </div>`;
+
   try {
-    const fieldsSnapshot = await getDocs(collection(db, "application_form_fields"));
-    const activeFields = [];
+    let activeFields = [];
 
-    fieldsSnapshot.forEach((docSnap) => {
-      const fieldData = docSnap.data();
-      const fieldId = docSnap.id;
+    if (cycleData && Array.isArray(cycleData.formFieldsSnapshot)) {
+      activeFields = cycleData.formFieldsSnapshot
+        .filter(f => f && f.fieldName)
+        .map((f, idx) => ({
+          id: f.fieldId || `field_${idx}`,
+          fieldName: f.fieldName,
+          section: f.section || "personal",
+          requirement: f.requirement || "Optional",
+          fieldBehaviour: f.fieldBehaviour || "Standard",
+          order: typeof f.order === "number" ? f.order : idx
+        }));
+    } else {
+      const fieldsSnapshot = await getDocs(collection(db, "application_form_fields"));
+      fieldsSnapshot.forEach((docSnap) => {
+        const fieldData = docSnap.data();
+        const fieldId = docSnap.id;
 
-      const userState = savedFieldsState[fieldId];
-      const isSelected = userState ? userState.isSelected : fieldData.isSelected;
-      const requirement = userState ? userState.requirement : fieldData.requirement;
+        const userState = savedFieldsState[fieldId];
+        const isSelected = userState ? userState.isSelected : fieldData.isSelected;
+        const requirement = userState ? userState.requirement : fieldData.requirement;
 
-      if (isSelected) {
-        activeFields.push({
-          id: fieldId,
-          ...fieldData,
-          requirement
-        });
-      }
-    });
+        if (isSelected) {
+          activeFields.push({
+            id: fieldId,
+            ...fieldData,
+            requirement
+          });
+        }
+      });
+    }
 
     activeFields.sort((a, b) => (a.order || 0) - (b.order || 0));
 
     let masterCoursesList = [];
-    try {
-      const masterSnapshot = await getDocs(collection(db, "master_courses"));
-      masterSnapshot.forEach(docSnap => {
-        const d = docSnap.data();
-        if (d.course) {
-          masterCoursesList.push({
-            course: d.course || '',
-            studyMode: d.studyMode || 'Full-time',
-            campus: d.campus || 'Main Campus'
-          });
-        }
-      });
-    } catch (e) {
-      console.error("Error fetching master courses for preview:", e);
+    if (!cycleData?.selectedCoursesSnapshot && savedSelectedCourses.length === 0) {
+      try {
+        const masterSnapshot = await getDocs(collection(db, "master_courses"));
+        masterSnapshot.forEach(docSnap => {
+          const d = docSnap.data();
+          if (d.course) {
+            masterCoursesList.push({
+              course: d.course || "",
+              studyMode: d.studyMode || "Full-time",
+              campus: d.campus || "Main Campus"
+            });
+          }
+        });
+      } catch (e) {
+        console.error("Error fetching master courses:", e);
+      }
     }
+
+    const effectiveBasicInfo = {
+      cycleName: cycleData?.cycleName || savedBasicInfo.cycleName || "Student Application Form",
+      academicYear: cycleData?.academicYear || savedBasicInfo.academicYear || new Date().getFullYear().toString(),
+      qualification: cycleData?.qualificationType || savedBasicInfo.qualification || ""
+    };
+
+    const resolvedCourses = normalizeCourseItems(cycleData, savedSelectedCourses, masterCoursesList);
 
     let formHtml = `
       <div class="application-form-preview-wrapper" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);">
         <style>
-          /* Responsive, white-only styling scoped to the application form preview. */
           .application-form-preview-wrapper,
           .application-form-preview-wrapper * { box-sizing: border-box; }
           .application-form-preview-wrapper {
@@ -135,12 +187,12 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
           }
         </style>
         <header style="border-bottom: 2px solid #f1f5f9; padding-bottom: 16px; margin-bottom: 28px;">
-          <span style="font-size: 11px; font-weight: 700; color: #0866f5; text-transform: uppercase; letter-spacing: 1px;">Live Form Preview</span>
+          <span style="font-size: 11px; font-weight: 700; color: #0866f5; text-transform: uppercase; letter-spacing: 1px;">${isPreview ? "Live Form Preview" : "Application Form"}</span>
           <h2 style="font-size: 22px; font-weight: 800; color: #0f172a; margin-top: 4px;">
-            ${savedBasicInfo.cycleName || "Student Application Form"}
+            ${effectiveBasicInfo.cycleName}
           </h2>
           <p style="font-size: 13px; color: #64748b; margin-top: 4px;">
-            Academic Year: <strong>${savedBasicInfo.academicYear || "N/A"}</strong> | Qualification: <strong>${savedBasicInfo.qualification || "N/A"}</strong>
+            Academic Year: <strong>${effectiveBasicInfo.academicYear}</strong> | Qualification: <strong>${effectiveBasicInfo.qualification || "N/A"}</strong>
           </p>
         </header>
         <form id="applicantPreviewForm" onsubmit="return false;" style="display: flex; flex-direction: column; gap: 28px;">
@@ -159,7 +211,7 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
       const fields = sectionsGrouped[sectionKey];
       const sectionMeta = BLUEPRINT_SECTIONS[sectionKey] || { title: sectionKey, icon: "" };
 
-      if (fields.length === 0 && sectionKey === "education_courses" && savedSelectedCourses.length === 0) {
+      if (fields.length === 0 && sectionKey === "education_courses" && resolvedCourses.length === 0) {
         return;
       }
 
@@ -173,7 +225,7 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
       `;
 
       if (sectionKey === "education_courses") {
-        formHtml += renderEducationCoursesSectionHTML(fields, savedSelectedCourses, masterCoursesList, savedBasicInfo);
+        formHtml += renderEducationCoursesSectionHTML(fields, resolvedCourses, effectiveBasicInfo);
       } else {
         if (fields.length === 0) {
           formHtml += `<p style="grid-column: 1 / -1; color: #94a3b8; font-size: 13px; font-style: italic;">No fields enabled for this section.</p>`;
@@ -196,18 +248,35 @@ export async function renderStep4ApplicationPreview(containerElementId = "builde
     `;
 
     targetContainer.innerHTML = formHtml;
-    attachFormEventListeners();
-
+    attachFormEventListeners(targetContainer);
   } catch (err) {
-    console.error("Error generating application preview:", err);
-    targetContainer.innerHTML = `<div style="padding: 20px; color: red; text-align: center;">Failed to generate form preview. Please check network connection.</div>`;
+    console.error("Error generating application form:", err);
+    targetContainer.innerHTML = `<div style="padding: 20px; color: red; text-align: center;">Failed to generate application form. Please check your network connection.</div>`;
   }
+}
+
+/**
+ * Main function to generate and inject the Application Preview inside Step 4 (Admin Builder)
+ */
+export async function renderStep4ApplicationPreview(containerElementId = "builderStep4Preview") {
+  let targetContainer = document.getElementById(containerElementId);
+
+  if (!targetContainer) {
+    const step4 = document.getElementById("builderStep4");
+    if (!step4) return;
+    targetContainer = document.createElement("div");
+    targetContainer.id = containerElementId;
+    targetContainer.style.marginTop = "24px";
+    step4.insertBefore(targetContainer, step4.querySelector(".actions"));
+  }
+
+  await renderApplicationForm(targetContainer, null, { isPreview: true });
 }
 
 /**
  * Render Section 4 Educational Background & Course Selection
  */
-function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo) {
+function renderEducationCoursesSectionHTML(activeEducationFields, resolvedCourses, effectiveBasicInfo) {
   let html = "";
   const fieldNamesSet = new Set(activeEducationFields.map(f => f.fieldName));
 
@@ -378,51 +447,38 @@ function renderEducationCoursesSectionHTML(activeEducationFields, savedSelectedC
     `;
   }
 
-  // 3. Updated field name "What do you wish to study for" with Progressive Cascading Filters
+  // 3. "What do you wish to study for?" with Progressive Cascading Filters
   if (fieldNamesSet.has("What do you wish to study for?")) {
-    html += renderCascadingCourseSelectionBlock(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo);
+    html += renderCascadingCourseSelectionBlock(activeEducationFields, resolvedCourses, effectiveBasicInfo);
   }
 
   return html;
 }
 
 /**
- * Render Progressive Cascading Course Selection Block with Primary "What do you wish to study for" Dropdown
+ * Render Progressive Cascading Course Selection Block
  */
-function renderCascadingCourseSelectionBlock(activeEducationFields, savedSelectedCourses, masterCoursesList, savedBasicInfo) {
-  if (!savedSelectedCourses || savedSelectedCourses.length === 0) {
+function renderCascadingCourseSelectionBlock(activeEducationFields, resolvedCourses, effectiveBasicInfo) {
+  if (!resolvedCourses || resolvedCourses.length === 0) {
     return `
       <div style="grid-column: 1 / -1; margin-top: 14px; background: #fff5f5; border: 1px solid #feb2b2; padding: 14px; border-radius: 6px; color: #c53030; font-size: 13px;">
-        ⚠️ No courses were selected in Step 3. Applicants will not see any course selection choices.
+        No courses are configured for this application cycle.
       </div>`;
   }
 
-  const validCourses = savedSelectedCourses.map(key => {
-    const parts = key.split("_");
-    const cName = parts[0] || key;
-    const sMode = parts[1] || "Full-time";
-    const camp = parts[2] || "Main Campus";
-
-    return {
-      course: cName,
-      studyMode: sMode,
-      campus: camp
-    };
-  });
-
-  const activeAcademicYear = savedBasicInfo.academicYear || new Date().getFullYear().toString();
-  const step1Qualification = savedBasicInfo.qualification || "";
-  
+  const activeAcademicYear = effectiveBasicInfo.academicYear || new Date().getFullYear().toString();
+  const qualificationLabel = effectiveBasicInfo.qualification || "";
   const fieldObj = activeEducationFields.find(f => f.fieldName === "What do you wish to study for?");
   const reqAsterisk = fieldObj?.requirement === "Required" ? `<span style="color: #e53b4d;">*</span>` : ``;
+  const escapedCoursesJson = JSON.stringify(resolvedCourses).replace(/'/g, "&#39;");
 
   return `
-    <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 16px;" id="previewCascadingWrapper" data-courses='${JSON.stringify(validCourses)}'>
+    <div style="grid-column: 1 / -1; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; display: flex; flex-direction: column; gap: 16px;" id="previewCascadingWrapper" data-courses='${escapedCoursesJson}'>
       <div style="display: flex; flex-direction: column; gap: 6px;">
         <label style="font-size: 13px; font-weight: 700; color: #1e293b;">What do you wish to study for? ${reqAsterisk}</label>
         <select id="whatDoYouWishToStudyTrigger" class="control" style="max-width: 340px; height: 40px; border: 1px solid #cbd5e1; border-radius: 6px; padding: 0 12px; background: #ffffff; color: #0f172a;">
           <option value="" disabled selected>Select option</option>
-          ${step1Qualification ? `<option value="${step1Qualification}">${step1Qualification}</option>` : ''}
+          ${qualificationLabel ? `<option value="${qualificationLabel}">${qualificationLabel}</option>` : ""}
         </select>
       </div>
 
@@ -586,15 +642,23 @@ function renderIndividualFieldHTML(field, sectionKey) {
   `;
 }
 
+function createSubjectRowHtml() {
+  return `
+    <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+    <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+    <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
+    <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-subject-row" style="background:#fff5f5; border:1px solid #feb2b2; color:#e53e3e; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
+  `;
+}
+
 /**
  * Attach dynamic event listeners for conditional logic and dynamic tables
  */
-function attachFormEventListeners() {
-  // 1. Disability Conditional Toggle & Multi-Add Logic
-  const disabilityTrigger = document.getElementById("disabilityTrigger");
-  const disabilityDetailsBlock = document.getElementById("disabilityDetailsBlock");
-  const disabilityContainer = document.getElementById("disabilityContainer");
-  const addDisabilityBtn = document.getElementById("addDisabilityBtn");
+function attachFormEventListeners(scopeEl = document) {
+  const disabilityTrigger = scopeEl.querySelector("#disabilityTrigger");
+  const disabilityDetailsBlock = scopeEl.querySelector("#disabilityDetailsBlock");
+  const disabilityContainer = scopeEl.querySelector("#disabilityContainer");
+  const addDisabilityBtn = scopeEl.querySelector("#addDisabilityBtn");
 
   if (disabilityTrigger && disabilityDetailsBlock) {
     disabilityTrigger.addEventListener("change", (e) => {
@@ -612,27 +676,12 @@ function attachFormEventListeners() {
         <button type="button" class="remove-disability-btn" style="background: #fff5f5; border: 1px solid #feb2b2; color: #e53e3e; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 12px;">✕</button>
       `;
       disabilityContainer.appendChild(row);
-
-      row.querySelector(".remove-disability-btn").addEventListener("click", () => row.remove());
     });
   }
 
-  document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("remove-disability-btn")) {
-      const row = e.target.closest(".disability-row");
-      if (disabilityContainer && disabilityContainer.querySelectorAll(".disability-row").length > 1) {
-        row.remove();
-      } else if (row) {
-        const input = row.querySelector("input");
-        if (input) input.value = "";
-      }
-    }
-  });
-
-  // 2. Postal Address Conditional Toggles
   const setupPostalToggle = (triggerId, blockId) => {
-    const trigger = document.getElementById(triggerId);
-    const block = document.getElementById(blockId);
+    const trigger = scopeEl.querySelector(`#${triggerId}`);
+    const block = scopeEl.querySelector(`#${blockId}`);
     if (trigger && block) {
       trigger.addEventListener("change", (e) => {
         block.style.display = e.target.value === "No" ? "grid" : "none";
@@ -642,10 +691,9 @@ function attachFormEventListeners() {
   setupPostalToggle("contactPostalTrigger", "contactPostalBlock");
   setupPostalToggle("guardianPostalTrigger", "guardianPostalBlock");
 
-  // 3. Matric Standing Conditional Toggle (Currently in Grade 12 vs Completed Matric)
-  const matricTrigger = document.getElementById("matricStandingTrigger");
-  const grade12SubSection = document.getElementById("grade12SubSection");
-  const completedMatricSubSection = document.getElementById("completedMatricSubSection");
+  const matricTrigger = scopeEl.querySelector("#matricStandingTrigger");
+  const grade12SubSection = scopeEl.querySelector("#grade12SubSection");
+  const completedMatricSubSection = scopeEl.querySelector("#completedMatricSubSection");
 
   if (matricTrigger && grade12SubSection && completedMatricSubSection) {
     matricTrigger.addEventListener("change", (e) => {
@@ -663,57 +711,32 @@ function attachFormEventListeners() {
     });
   }
 
-  // 4. Dynamic Grade 11 Subject Rows
-  const addGrade11SubjectBtn = document.getElementById("addGrade11SubjectBtn");
-  const grade11SubjectsBody = document.getElementById("grade11SubjectsBody");
+  const addGrade11SubjectBtn = scopeEl.querySelector("#addGrade11SubjectBtn");
+  const grade11SubjectsBody = scopeEl.querySelector("#grade11SubjectsBody");
   if (addGrade11SubjectBtn && grade11SubjectsBody) {
     addGrade11SubjectBtn.addEventListener("click", () => {
       const tr = document.createElement("tr");
       tr.style.borderBottom = "1px solid #f1f5f9";
-      tr.innerHTML = `
-        <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
-        <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
-        <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
-        <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-subject-row" style="background:#fff5f5; border:1px solid #feb2b2; color:#e53e3e; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
-      `;
+      tr.innerHTML = createSubjectRowHtml();
       grade11SubjectsBody.appendChild(tr);
     });
   }
 
-  // 5. Dynamic Grade 12 Subject Rows
-  const addGrade12SubjectBtn = document.getElementById("addGrade12SubjectBtn");
-  const grade12SubjectsBody = document.getElementById("grade12SubjectsBody");
+  const addGrade12SubjectBtn = scopeEl.querySelector("#addGrade12SubjectBtn");
+  const grade12SubjectsBody = scopeEl.querySelector("#grade12SubjectsBody");
   if (addGrade12SubjectBtn && grade12SubjectsBody) {
     addGrade12SubjectBtn.addEventListener("click", () => {
       const tr = document.createElement("tr");
       tr.style.borderBottom = "1px solid #f1f5f9";
-      tr.innerHTML = `
-        <td style="padding: 8px 14px;"><input type="text" placeholder="Subject Name" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
-        <td style="padding: 8px 14px;"><input type="number" placeholder="%" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
-        <td style="padding: 8px 14px;"><input type="text" placeholder="Level" style="width:100%; height:34px; border:1px solid #cbd5e1; border-radius:4px; padding:0 8px;" /></td>
-        <td style="padding: 8px 14px; text-align: center;"><button type="button" class="remove-subject-row" style="background:#fff5f5; border:1px solid #feb2b2; color:#e53e3e; border-radius:4px; padding:4px 8px; cursor:pointer;">✕</button></td>
-      `;
+      tr.innerHTML = createSubjectRowHtml();
       grade12SubjectsBody.appendChild(tr);
     });
   }
 
-  document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("remove-subject-row")) {
-      const tr = e.target.closest("tr");
-      const tbody = tr.parentNode;
-      if (tbody && tbody.querySelectorAll("tr").length > 1) {
-        tr.remove();
-      } else if (tr) {
-        tr.querySelectorAll("input").forEach(inp => inp.value = "");
-      }
-    }
-  });
-
-  // 6. Tertiary Institution Conditional Toggle & Dynamic Cards
-  const tertiaryTrigger = document.getElementById("tertiaryTrigger");
-  const tertiaryBlock = document.getElementById("tertiaryBlock");
-  const tertiaryContainer = document.getElementById("tertiaryContainer");
-  const addTertiaryCardBtn = document.getElementById("addTertiaryCardBtn");
+  const tertiaryTrigger = scopeEl.querySelector("#tertiaryTrigger");
+  const tertiaryBlock = scopeEl.querySelector("#tertiaryBlock");
+  const tertiaryContainer = scopeEl.querySelector("#tertiaryContainer");
+  const addTertiaryCardBtn = scopeEl.querySelector("#addTertiaryCardBtn");
 
   if (tertiaryTrigger && tertiaryBlock) {
     tertiaryTrigger.addEventListener("change", (e) => {
@@ -755,32 +778,25 @@ function attachFormEventListeners() {
         </div>
       `;
       tertiaryContainer.appendChild(card);
-
-      card.querySelector(".remove-card-btn").addEventListener("click", () => card.remove());
     });
   }
 
-  // 7. "What do you wish to study for" Trigger & Progressive Cascading Course Selection Filters
-  const whatDoYouWishToStudyTrigger = document.getElementById("whatDoYouWishToStudyTrigger");
-  const cascadingSubFieldsBlock = document.getElementById("cascadingSubFieldsBlock");
+  const whatDoYouWishToStudyTrigger = scopeEl.querySelector("#whatDoYouWishToStudyTrigger");
+  const cascadingSubFieldsBlock = scopeEl.querySelector("#cascadingSubFieldsBlock");
 
   if (whatDoYouWishToStudyTrigger && cascadingSubFieldsBlock) {
     whatDoYouWishToStudyTrigger.addEventListener("change", (e) => {
-      if (e.target.value) {
-        cascadingSubFieldsBlock.style.display = "flex";
-      } else {
-        cascadingSubFieldsBlock.style.display = "none";
-      }
+      cascadingSubFieldsBlock.style.display = e.target.value ? "flex" : "none";
     });
   }
 
-  const cascadingWrapper = document.getElementById("previewCascadingWrapper");
+  const cascadingWrapper = scopeEl.querySelector("#previewCascadingWrapper");
   if (cascadingWrapper) {
     const validCourses = JSON.parse(cascadingWrapper.dataset.courses || "[]");
 
-    const smSelect = document.getElementById("preview_filterStudyMode");
-    const cpSelect = document.getElementById("preview_filterCampus");
-    const crSelect = document.getElementById("preview_filterCourseDropdown");
+    const smSelect = scopeEl.querySelector("#preview_filterStudyMode");
+    const cpSelect = scopeEl.querySelector("#preview_filterCampus");
+    const crSelect = scopeEl.querySelector("#preview_filterCourseDropdown");
 
     if (smSelect && cpSelect && crSelect) {
       const uniqueStudyModes = Array.from(new Set(validCourses.map(v => v.studyMode))).sort();
@@ -832,5 +848,36 @@ function attachFormEventListeners() {
         });
       });
     }
+  }
+
+  if (!globalDelegatedListenerAttached) {
+    globalDelegatedListenerAttached = true;
+    document.addEventListener("click", (e) => {
+      if (e.target.classList.contains("remove-disability-btn")) {
+        const row = e.target.closest(".disability-row");
+        const container = row?.parentElement;
+        if (container && container.querySelectorAll(".disability-row").length > 1) {
+          row.remove();
+        } else if (row) {
+          const input = row.querySelector("input");
+          if (input) input.value = "";
+        }
+      }
+
+      if (e.target.classList.contains("remove-subject-row")) {
+        const tr = e.target.closest("tr");
+        const tbody = tr?.parentElement;
+        if (tbody && tbody.querySelectorAll("tr").length > 1) {
+          tr.remove();
+        } else if (tr) {
+          tr.querySelectorAll("input").forEach(inp => inp.value = "");
+        }
+      }
+
+      if (e.target.classList.contains("remove-card-btn")) {
+        const card = e.target.closest(".tertiary-card");
+        if (card) card.remove();
+      }
+    });
   }
 }
