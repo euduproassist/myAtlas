@@ -12,48 +12,15 @@ import {
     updateDoc,
     addDoc,
     collection,
+    query,
+    where,
+    getDocs,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-const STORAGE_KEY = "atlas_college_application_v1";
 const ACCOUNTS_COLLECTION = "applicant_accounts";
+const COMPLETE_APPLICATION_COLLECTION = "complete_application";
 const MAIL_COLLECTION = "mail";
-
-const defaultApplication = {
-    reference: "ATL-2026-10482",
-    applicant: "Thabo Mokoena",
-    programme: "Information Technology",
-    intake: "2026",
-    studyMode: "Full-time",
-    submittedDate: "18 August 2026",
-    documents: { id: null, matric: null, results: null, address: null },
-    payment: { paid: true, amount: 250, method: "Card", receipt: "ATL-PAY-481902", date: new Date().toISOString() },
-    decision: null
-};
-
-let application = loadApplication();
-
-function loadApplication() {
-    try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultApplication));
-            return structuredClone(defaultApplication);
-        }
-        const parsed = JSON.parse(stored);
-        return {
-            ...structuredClone(defaultApplication),
-            ...parsed,
-            documents: { ...defaultApplication.documents, ...(parsed.documents || {}) }
-        };
-    } catch (error) {
-        return structuredClone(defaultApplication);
-    }
-}
-
-function saveApplication() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(application));
-}
 
 function normalizeEmailId(email) {
     return encodeURIComponent(email.trim().toLowerCase());
@@ -62,12 +29,24 @@ function normalizeEmailId(email) {
 // =========================================================
 // DOM REFERENCES
 // =========================================================
+const pageLoadingOverlay = document.getElementById("pageLoadingOverlay");
 const pageShell = document.getElementById("pageShell");
+const mainContainer = document.getElementById("mainContainer");
 const loginView = document.getElementById("loginView");
 const signupView = document.getElementById("signupView");
 const forgotPasswordView = document.getElementById("forgotPasswordView");
 const portalView = document.getElementById("portalView");
+const applicationFlowView = document.getElementById("applicationFlowView");
+const closeApplicationFlowBtn = document.getElementById("closeApplicationFlowBtn");
+const portalTitle = document.getElementById("portalTitle");
+const portalSubtitle = document.getElementById("portalSubtitle");
 const profileButton = document.getElementById("profileButton");
+const startApplicationBtn = document.getElementById("startApplicationBtn");
+
+// Application Flow DOM (from apply.js)
+const programWishSelect = document.getElementById('program-wish-select');
+const popiaContinueBtn = document.getElementById('popia-continue-btn');
+const step4Card = document.getElementById('step4-card');
 
 const signInBtn = document.getElementById("signInBtn");
 const createAccountBtn = document.getElementById("createAccountBtn");
@@ -78,10 +57,6 @@ const goToSignUpLink = document.getElementById("goToSignUpLink");
 const goToSignInFromSignUp = document.getElementById("goToSignInFromSignUp");
 const backToSignInFromForgot = document.getElementById("backToSignInFromForgot");
 
-const applicationReference = document.getElementById("applicationReference");
-const programmeName = document.getElementById("programmeName");
-const submittedDate = document.getElementById("submittedDate");
-const mainStatusBadge = document.getElementById("mainStatusBadge");
 const toastContainer = document.getElementById("toastContainer");
 
 // Password Requirement Pop-Up (JOptionPane style, colorless)
@@ -100,6 +75,199 @@ const otpBoxes = Array.from(document.querySelectorAll("#otpInputs .otp-box"));
 
 let pendingOtpSession = null;
 let allowPortalNavigation = false;
+let windowLoaded = document.readyState === "complete";
+let initialAuthResolved = false;
+
+// Application Flow State (from apply.js)
+let selectedProgramWish = '';
+const activeCyclesByQualification = new Map();
+
+function tryRevealPage() {
+    if (!windowLoaded || !initialAuthResolved) return;
+    pageLoadingOverlay?.classList.add("hidden");
+    pageLoadingOverlay?.setAttribute("aria-busy", "false");
+    pageShell?.classList.remove("hidden");
+}
+
+window.addEventListener("load", () => {
+    windowLoaded = true;
+    tryRevealPage();
+});
+
+// =========================================================
+// APPLICATION FLOW LOGIC (From apply.js)
+// =========================================================
+function setCardVisible(cardEl, visible) {
+    if (!cardEl) return;
+    cardEl.classList.toggle('hidden', !visible);
+}
+
+function parseIsoDateOnly(dateStr) {
+    if (!dateStr || typeof dateStr !== 'string') return null;
+    const parts = dateStr.trim().split('-');
+    if (parts.length !== 3) return null;
+    const year = Number(parts[0]);
+    const month = Number(parts[1]) - 1;
+    const day = Number(parts[2]);
+    if (!year || month < 0 || !day) return null;
+    return new Date(year, month, day);
+}
+
+function getTodayDateOnly() {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+}
+
+function clearApplicationSession() {
+    selectedProgramWish = '';
+    sessionStorage.removeItem('myAtlas_activeCycles');
+    sessionStorage.removeItem('myAtlas_selectedQualification');
+    sessionStorage.removeItem('myAtlas_popiaAccepted');
+
+    if (programWishSelect) {
+        programWishSelect.value = '';
+    }
+
+    document.querySelectorAll('input[name="popia_consent"]').forEach((radio) => {
+        radio.checked = false;
+    });
+
+    setCardVisible(step4Card, false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function checkActiveCycles() {
+    if (!programWishSelect) return;
+
+    const currentYear = new Date().getFullYear();
+    const candidateCollections = [
+        `${currentYear - 1}_application_cycle`,
+        `${currentYear}_application_cycle`,
+        `${currentYear + 1}_application_cycle`
+    ];
+
+    const today = getTodayDateOnly();
+    activeCyclesByQualification.clear();
+
+    for (const colName of candidateCollections) {
+        try {
+            const querySnapshot = await getDocs(collection(db, colName));
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+
+                if (data.status === "published" && data.isManuallyClosed !== true) {
+                    const openDate = parseIsoDateOnly(data.openingDate);
+                    const closeDate = parseIsoDateOnly(data.closingDate);
+
+                    const isAfterOpen = !openDate || today >= openDate;
+                    const isBeforeClose = !closeDate || today <= closeDate;
+
+                    if (isAfterOpen && isBeforeClose && data.qualificationType) {
+                        const qualKey = data.qualificationType.trim();
+                        if (!activeCyclesByQualification.has(qualKey)) {
+                            activeCyclesByQualification.set(qualKey, []);
+                        }
+                        activeCyclesByQualification.get(qualKey).push({
+                            id: docSnap.id,
+                            _collectionName: colName,
+                            ...data
+                        });
+                    }
+                }
+            });
+        } catch (err) {
+            console.warn(`Could not read ${colName}:`, err);
+        }
+    }
+
+    for (let i = 0; i < programWishSelect.options.length; i++) {
+        const opt = programWishSelect.options[i];
+        if (!opt.value) continue;
+
+        const baseLabel = opt.textContent.replace(/\s*\(Closed \/ Unavailable\)$/i, '').trim();
+
+        if (!activeCyclesByQualification.has(opt.value)) {
+            opt.disabled = true;
+            opt.classList.add('disabled-option');
+            opt.textContent = `${baseLabel} (Closed / Unavailable)`;
+        } else {
+            opt.disabled = false;
+            opt.classList.remove('disabled-option');
+            opt.textContent = baseLabel;
+        }
+    }
+}
+
+function handleProgramWishChange(value) {
+    selectedProgramWish = value;
+
+    document.querySelectorAll('input[name="popia_consent"]').forEach((radio) => {
+        radio.checked = false;
+    });
+
+    if (!value) {
+        setCardVisible(step4Card, false);
+        sessionStorage.removeItem('myAtlas_activeCycles');
+        sessionStorage.removeItem('myAtlas_selectedQualification');
+        return;
+    }
+
+    const matchingCycles = activeCyclesByQualification.get(value) || [];
+    sessionStorage.setItem('myAtlas_activeCycles', JSON.stringify(matchingCycles));
+    sessionStorage.setItem('myAtlas_selectedQualification', value);
+
+    setCardVisible(step4Card, true);
+    step4Card?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+
+function handlePopiaContinue() {
+    const selectedOption = document.querySelector('input[name="popia_consent"]:checked');
+    if (!selectedOption) {
+        alert('Please select whether you accept or do not accept the POPIA terms to continue.');
+        return;
+    }
+    if (selectedOption.value === 'accept') {
+        const matchingCycles = activeCyclesByQualification.get(selectedProgramWish) || [];
+        if (matchingCycles.length === 0) {
+            alert('No open application cycle was found for this qualification.');
+            return;
+        }
+        sessionStorage.setItem('myAtlas_popiaAccepted', 'true');
+        alert(`POPIA accepted. Ready to load application form for: ${matchingCycles[0].cycleName}`);
+    } else {
+        clearApplicationSession();
+        alert('You did not accept the POPIA terms. Your session has been cleared.');
+    }
+}
+
+if (programWishSelect) {
+    programWishSelect.addEventListener('change', (e) => {
+        const selectedOption = e.target.options[e.target.selectedIndex];
+        if (selectedOption && selectedOption.disabled) {
+            alert("This application cycle is currently closed or unavailable.");
+            e.target.value = "";
+            handleProgramWishChange("");
+            return;
+        }
+        handleProgramWishChange(e.target.value);
+    });
+}
+
+if (popiaContinueBtn) {
+    popiaContinueBtn.addEventListener('click', handlePopiaContinue);
+}
+
+closeApplicationFlowBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    clearApplicationSession();
+    applicationFlowView.classList.add('hidden');
+    mainContainer?.classList.remove('apply-flow-active');
+    portalView.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 
 // =========================================================
 // FOOTER & BASE NAVIGATION
@@ -123,24 +291,90 @@ document.getElementById("supportLink").addEventListener("click", (e) => {
     showToast("Help section will be connected later.");
 });
 
+startApplicationBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    portalView.classList.add("hidden");
+    applicationFlowView.classList.remove("hidden");
+    mainContainer?.classList.add("apply-flow-active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    await checkActiveCycles();
+});
+
 function showAuthView(viewToShow) {
     loginView.classList.add("hidden");
     signupView.classList.add("hidden");
     forgotPasswordView.classList.add("hidden");
     portalView.classList.add("hidden");
+    applicationFlowView.classList.add("hidden");
+    mainContainer?.classList.remove("apply-flow-active");
     profileButton.classList.add("hidden");
 
     viewToShow.classList.remove("hidden");
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function enterPortalDashboard() {
+async function hasUserApplied(user) {
+    const email = (user?.email || "").trim().toLowerCase();
+    const uid = user?.uid || "";
+
+    if (uid) {
+        const byUidDocSnap = await getDoc(doc(db, COMPLETE_APPLICATION_COLLECTION, uid));
+        if (byUidDocSnap.exists()) {
+            return true;
+        }
+    }
+
+    if (email) {
+        const byEmailDocSnap = await getDoc(doc(db, COMPLETE_APPLICATION_COLLECTION, normalizeEmailId(email)));
+        if (byEmailDocSnap.exists()) {
+            return true;
+        }
+
+        const emailQuery = query(
+            collection(db, COMPLETE_APPLICATION_COLLECTION),
+            where("email", "==", email)
+        );
+        const emailQuerySnap = await getDocs(emailQuery);
+        if (!emailQuerySnap.empty) {
+            return true;
+        }
+    }
+
+    if (uid) {
+        const uidQuery = query(
+            collection(db, COMPLETE_APPLICATION_COLLECTION),
+            where("uid", "==", uid)
+        );
+        const uidQuerySnap = await getDocs(uidQuery);
+        if (!uidQuerySnap.empty) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+async function enterPortalDashboard(user = auth.currentUser) {
     allowPortalNavigation = true;
     loginView.classList.add("hidden");
     signupView.classList.add("hidden");
     forgotPasswordView.classList.add("hidden");
+    applicationFlowView.classList.add("hidden");
+    mainContainer?.classList.remove("apply-flow-active");
     portalView.classList.remove("hidden");
     profileButton.classList.remove("hidden");
+
+    const alreadyApplied = await hasUserApplied(user);
+    if (alreadyApplied) {
+        if (portalTitle) portalTitle.textContent = "u already applied please";
+        if (portalSubtitle) portalSubtitle.textContent = "Your application is already recorded in our system.";
+        if (startApplicationBtn) startApplicationBtn.classList.add("hidden");
+    } else {
+        if (portalTitle) portalTitle.textContent = "No Applications Found";
+        if (portalSubtitle) portalSubtitle.textContent = "You have not submitted any applications yet.";
+        if (startApplicationBtn) startApplicationBtn.classList.remove("hidden");
+    }
+
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -497,9 +731,6 @@ verifyOtpBtn.addEventListener("click", async () => {
             activatedAt: serverTimestamp()
         }, { merge: true });
 
-        application.applicant = activeFirstName;
-        saveApplication();
-
         // Sign out so user signs in through the Sign In screen
         await signOut(auth);
 
@@ -544,14 +775,9 @@ signInBtn.addEventListener("click", async () => {
                 showToast("Please verify your OTP first to activate your account.", "error");
                 return;
             }
-            if (data.firstName) {
-                application.applicant = data.firstName;
-                saveApplication();
-            }
         }
 
-        updateInterface();
-        enterPortalDashboard();
+        await enterPortalDashboard(credential.user);
         showToast("Signed in successfully.", "success");
     } catch (error) {
         showToast("Invalid email or password.", "error");
@@ -571,20 +797,43 @@ profileButton.addEventListener("click", async () => {
 });
 
 // Dashboard guard: if user is not genuinely authorized/authenticated, silently kick back to Sign In with no alert
-onAuthStateChanged(auth, (user) => {
-    const isOnPortal = !portalView.classList.contains("hidden");
-    if (!user && (isOnPortal || !allowPortalNavigation)) {
-        allowPortalNavigation = false;
-        loginView.classList.remove("hidden");
-        signupView.classList.add("hidden");
-        forgotPasswordView.classList.add("hidden");
-        portalView.classList.add("hidden");
-        profileButton.classList.add("hidden");
+onAuthStateChanged(auth, async (user) => {
+    try {
+        if (user) {
+            const signedInEmail = (user.email || "").trim().toLowerCase();
+            if (signedInEmail) {
+                const accountSnap = await getDoc(doc(db, ACCOUNTS_COLLECTION, normalizeEmailId(signedInEmail)));
+                if (accountSnap.exists() && accountSnap.data().activated === false) {
+                    allowPortalNavigation = false;
+                    await signOut(auth);
+                    showAuthView(loginView);
+                    return;
+                }
+            }
+            await enterPortalDashboard(user);
+            return;
+        }
+
+        const isOnPortal = !portalView.classList.contains("hidden");
+        const isOnApplyFlow = !applicationFlowView.classList.contains("hidden");
+        if (isOnPortal || isOnApplyFlow || !allowPortalNavigation) {
+            allowPortalNavigation = false;
+            loginView.classList.remove("hidden");
+            signupView.classList.add("hidden");
+            forgotPasswordView.classList.add("hidden");
+            portalView.classList.add("hidden");
+            applicationFlowView.classList.add("hidden");
+            mainContainer?.classList.remove("apply-flow-active");
+            profileButton.classList.add("hidden");
+        }
+    } finally {
+        initialAuthResolved = true;
+        tryRevealPage();
     }
 });
 
 // =========================================================
-// PASSWORD VISIBILITY TOGGLE & PORTAL DOCUMENT LOGIC
+// PASSWORD VISIBILITY TOGGLE & TOASTS
 // =========================================================
 const eyeOffSvg = '<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
 const eyeOnSvg = '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
@@ -599,214 +848,6 @@ document.querySelectorAll("[data-toggle-password]").forEach((btn) => {
     });
 });
 
-function renderBasicInformation() {
-    applicationReference.textContent = application.reference;
-    programmeName.textContent = application.programme;
-    submittedDate.textContent = application.submittedDate;
-}
-
-const documentConfig = {
-    id: { name: "ID / Passport", description: "Government-issued identity document" },
-    matric: { name: "Matric Certificate", description: "Final school certificate" },
-    results: { name: "Latest School Results", description: "Most recent academic records" },
-    address: { name: "Proof of Address", description: "Recent document showing residence" }
-};
-
-let currentDocumentType = null;
-let selectedFile = null;
-
-const uploadModal = document.getElementById("uploadModal");
-const documentModal = document.getElementById("documentModal");
-
-function openModal(modal) {
-    modal.classList.add("open");
-    document.body.style.overflow = "hidden";
-}
-
-function closeModal(modal) {
-    modal.classList.remove("open");
-    if (!passwordReqModal.classList.contains("open") && !otpModal.classList.contains("open")) {
-        document.body.style.overflow = "";
-    }
-}
-
-const uploadModalTitle = document.getElementById("uploadModalTitle");
-const uploadDescription = document.getElementById("uploadDescription");
-const fileInput = document.getElementById("fileInput");
-const selectedFileBox = document.getElementById("selectedFile");
-
-function openUploadModal(type) {
-    currentDocumentType = type;
-    selectedFile = null;
-    fileInput.value = "";
-    selectedFileBox.textContent = "";
-    selectedFileBox.classList.add("hidden");
-
-    const config = documentConfig[type];
-    uploadModalTitle.textContent = "Upload " + config.name;
-    uploadDescription.textContent = "Upload your " + config.name.toLowerCase() + " below. Accepted formats: PDF, JPG, PNG.";
-    openModal(uploadModal);
-}
-
-document.querySelectorAll("[data-document]").forEach((button) => {
-    button.addEventListener("click", () => {
-        const type = button.dataset.document;
-        if (application.documents[type]) {
-            openDocumentModal(type);
-        } else {
-            openUploadModal(type);
-        }
-    });
-});
-
-document.getElementById("chooseFileButton").addEventListener("click", () => {
-    fileInput.click();
-});
-
-fileInput.addEventListener("change", (event) => {
-    const file = event.target.files[0];
-    if (file) selectFile(file);
-});
-
-function selectFile(file) {
-    const allowedTypes = ["application/pdf", "image/jpeg", "image/png"];
-    if (!allowedTypes.includes(file.type)) {
-        showToast("Please choose a PDF, JPG or PNG file.", "error");
-        fileInput.value = "";
-        return;
-    }
-    if (file.size > 2 * 1024 * 1024) {
-        showToast("Please use a file smaller than 2 MB.", "error");
-        fileInput.value = "";
-        return;
-    }
-    selectedFile = file;
-    selectedFileBox.textContent = file.name + " • " + formatFileSize(file.size);
-    selectedFileBox.classList.remove("hidden");
-}
-
-function formatFileSize(bytes) {
-    if (bytes < 1024) return bytes + " B";
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-    return (bytes / (1024 * 1024)).toFixed(1) + " MB";
-}
-
-const dropZone = document.getElementById("dropZone");
-dropZone.addEventListener("dragover", (e) => { e.preventDefault(); dropZone.classList.add("dragover"); });
-dropZone.addEventListener("dragleave", () => { dropZone.classList.remove("dragover"); });
-dropZone.addEventListener("drop", (e) => {
-    e.preventDefault();
-    dropZone.classList.remove("dragover");
-    if (e.dataTransfer.files[0]) selectFile(e.dataTransfer.files[0]);
-});
-
-document.getElementById("saveDocument").addEventListener("click", () => {
-    if (!selectedFile) {
-        showToast("Please choose a document first.", "error");
-        return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-        application.documents[currentDocumentType] = {
-            name: selectedFile.name,
-            type: selectedFile.type,
-            size: selectedFile.size,
-            data: reader.result,
-            uploadedAt: new Date().toISOString()
-        };
-        saveApplication();
-        closeModal(uploadModal);
-        showToast(documentConfig[currentDocumentType].name + " uploaded successfully.", "success");
-        updateInterface();
-    };
-    reader.readAsDataURL(selectedFile);
-});
-
-function openDocumentModal(type) {
-    const documentData = application.documents[type];
-    if (!documentData) {
-        openUploadModal(type);
-        return;
-    }
-    document.getElementById("viewDocumentName").textContent = documentData.name;
-    document.getElementById("viewDocumentDetails").textContent = "Uploaded " + formatFileSize(documentData.size);
-    currentDocumentType = type;
-    openModal(documentModal);
-}
-
-document.getElementById("replaceDocumentButton").addEventListener("click", () => {
-    closeModal(documentModal);
-    openUploadModal(currentDocumentType);
-});
-
-document.getElementById("closeUploadModal").addEventListener("click", () => closeModal(uploadModal));
-document.getElementById("cancelUpload").addEventListener("click", () => closeModal(uploadModal));
-document.getElementById("closeDocumentModal").addEventListener("click", () => closeModal(documentModal));
-document.getElementById("closeDocumentButton").addEventListener("click", () => closeModal(documentModal));
-
-function getDocumentCount() {
-    return Object.values(application.documents).filter(Boolean).length;
-}
-
-function allDocumentsUploaded() {
-    return getDocumentCount() === 4;
-}
-
-function getApplicationState() {
-    if (application.decision === "accepted") return "accepted";
-    if (application.decision === "unsuccessful") return "unsuccessful";
-    if (allDocumentsUploaded()) return "review";
-    return "action";
-}
-
-function updateMainStatus() {
-    const state = getApplicationState();
-    mainStatusBadge.className = "status-badge";
-    if (state === "action") {
-        mainStatusBadge.classList.add("status-action");
-        mainStatusBadge.textContent = "Status: Action Required";
-    } else if (state === "review") {
-        mainStatusBadge.classList.add("status-review");
-        mainStatusBadge.textContent = "Status: Under Review";
-    } else if (state === "accepted") {
-        mainStatusBadge.classList.add("status-accepted");
-        mainStatusBadge.textContent = "Status: Accepted";
-    } else if (state === "unsuccessful") {
-        mainStatusBadge.classList.add("status-unsuccessful");
-        mainStatusBadge.textContent = "Status: Unsuccessful";
-    }
-}
-
-function renderRequirement(type) {
-    const data = application.documents[type];
-    const status = document.getElementById(type + "Status");
-    const action = document.getElementById(type + "Action");
-    const description = document.getElementById(type + "Description");
-
-    if (data) {
-        status.className = "requirement-status received";
-        status.textContent = "Received";
-        action.className = "requirement-action";
-        action.textContent = "View";
-        description.textContent = data.name + " • " + formatFileSize(data.size);
-    } else {
-        status.className = "requirement-status required";
-        status.textContent = "Required";
-        action.className = "requirement-action primary";
-        action.textContent = "Upload";
-        description.textContent = documentConfig[type].description;
-    }
-}
-
-function updateInterface() {
-    renderBasicInformation();
-    renderRequirement("id");
-    renderRequirement("matric");
-    renderRequirement("results");
-    renderRequirement("address");
-    updateMainStatus();
-}
-
 function showToast(message, type = "success") {
     const toast = document.createElement("div");
     toast.className = "toast " + type;
@@ -818,17 +859,3 @@ function showToast(message, type = "success") {
         setTimeout(() => toast.remove(), 250);
     }, 3000);
 }
-
-[uploadModal, documentModal].forEach((modal) => {
-    modal.addEventListener("click", (event) => {
-        if (event.target === modal) closeModal(modal);
-    });
-});
-
-document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-        [uploadModal, documentModal].forEach((modal) => closeModal(modal));
-    }
-});
-
-updateInterface();
