@@ -32,7 +32,7 @@ service cloud.firestore {
     }
 
     // Automatic multi-year folder-based application cycle collections (e.g., 2026_application_cycle)
-    // Public read so apply.html can check open cycles; write restricted to authenticated admins
+    // Public read so applicants can check open cycles and load saved cycle fields/courses
     match /{collectionName}/{cycleId} {
       allow read: if collectionName.matches('^[0-9]{4}(_[a-z0-9]+)*_application_cycle$');
       allow write: if request.auth != null
@@ -59,9 +59,7 @@ service cloud.firestore {
 
     // Completed applications collection checked on applicant portal sign-in
     match /complete_application/{appId} {
-      allow read: if request.auth != null;
-      allow create, update: if request.auth != null;
-      allow delete: if request.auth != null;
+      allow read, create, update, delete: if request.auth != null;
     }
 
     // Mail queue collection for Firebase Trigger Email extension
